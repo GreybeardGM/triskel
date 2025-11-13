@@ -1,0 +1,25 @@
+{
+  "id": "triskel",
+  "title": "Triskel",
+  "description": "Triskel Playtest",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.350"
+  },
+  "authors": [
+    {
+      "name": "GreybeardGM"
+    }
+  ],
+  "esmodules": [
+    "module/triskel.js"
+  ],
+  "styles": [
+    "styles/triskel.css"
+  ],
+  "packs": [],
+  "languages": [],
+  "templateVersion": 1,
+  "template": "template.json"
+}
