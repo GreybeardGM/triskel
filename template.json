@@ -1,0 +1,66 @@
+{
+  "Actor": {
+    "templates": {
+      "triskelBase": {
+        "system": {
+          "details": {
+            "biography": "",
+            "notes": ""
+          }
+        }
+      }
+    },
+    "types": {
+      "character": {
+        "templates": ["triskelBase"],
+        "system": {
+          "reserves": {
+            "power": {
+              "label": "Power",
+              "min": 0,
+              "value": 5,
+              "max": 5,
+              "strain": {
+                "s1": false,
+                "s2": false,
+                "s3": false,
+                "s4": false,
+                "s5": false
+              }
+            },
+            "grace": {
+              "label": "Grace",
+              "min": 0,
+              "value": 5,
+              "max": 5,
+              "strain": {
+                "s1": false,
+                "s2": false,
+                "s3": false,
+                "s4": false,
+                "s5": false
+              }
+            },
+            "will": {
+              "label": "Will",
+              "min": 0,
+              "value": 5,
+              "max": 5,
+              "strain": {
+                "s1": false,
+                "s2": false,
+                "s3": false,
+                "s4": false,
+                "s5": false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "Item": {
+    "types": {},
+    "templates": {}
+  }
+}
