@@ -1,0 +1,43 @@
+<form class="sheet triskel-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <h1>
+      <input name="name" type="text" value="{{actor.name}}">
+    </h1>
+  </header>
+
+  <section class="sheet-body">
+    <div class="triskel-main-grid">
+      <div class="triskel-fields">
+        <h2>Reserves</h2>
+
+        {{!-- Power --}}
+        <div class="reserve-row">
+          <label>Power</label>
+          <input type="number" name="system.reserves.power.min"   value="{{system.reserves.power.min}}">
+          <input type="number" name="system.reserves.power.value" value="{{system.reserves.power.value}}">
+          <input type="number" name="system.reserves.power.max"   value="{{system.reserves.power.max}}">
+        </div>
+
+        {{!-- Grace --}}
+        <div class="reserve-row">
+          <label>Grace</label>
+          <input type="number" name="system.reserves.grace.min"   value="{{system.reserves.grace.min}}">
+          <input type="number" name="system.reserves.grace.value" value="{{system.reserves.grace.value}}">
+          <input type="number" name="system.reserves.grace.max"   value="{{system.reserves.grace.max}}">
+        </div>
+
+        {{!-- Will --}}
+        <div class="reserve-row">
+          <label>Will</label>
+          <input type="number" name="system.reserves.will.min"   value="{{system.reserves.will.min}}">
+          <input type="number" name="system.reserves.will.value" value="{{system.reserves.will.value}}">
+          <input type="number" name="system.reserves.will.max"   value="{{system.reserves.will.max}}">
+        </div>
+      </div>
+
+      <div class="triskel-graphic">
+        {{> "systems/triskel/templates/actor/partials/triskel-reserves.hbs" system.reserves }}
+      </div>
+    </div>
+  </section>
+</form>
