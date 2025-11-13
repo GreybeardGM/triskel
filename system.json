@@ -3,6 +3,7 @@
   "title": "Triskel",
   "description": "Triskel Playtest",
   "version": "0.1.0",
+  "type": "system",
   "compatibility": {
     "minimum": "13",
     "verified": "13.350"
@@ -18,6 +19,10 @@
   "styles": [
     "styles/triskel.css"
   ],
+  "packs": [],
+  "languages": [],
+  "templateVersion": 1,
+  "template": "template.json",
   "url": "https://github.com/GreybeardGM/triskel",
   "manifest": "https://raw.githubusercontent.com/GreybeardGM/triskel/main/system.json",
   "download": "https://github.com/GreybeardGM/triskel/archive/refs/heads/main.zip"
