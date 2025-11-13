@@ -1,5 +1,5 @@
 // module/actor/triskel-character-sheet.js
-export class TriskelCharacterSheet extends ActorSheet {
+export class TriskelActor extends ActorSheet {
   get template() {
     return "systems/triskel/templates/actor/character-sheet.hbs";
   }
