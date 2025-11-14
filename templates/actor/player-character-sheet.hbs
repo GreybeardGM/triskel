@@ -1,76 +1,70 @@
-<form
-  class="triskel sheet actor character"
-  autocomplete="off"
-  data-application-part="form"
->
-  <header class="sheet-header">
-    <div class="profile-img">
-      <img src="{{actor.img}}" name="actor.img" alt="{{actor.name}}" data-edit="img" />
-    </div>
-    <div class="header-fields">
-      <h1 class="charname">
-        <input name="actor.name" type="text" value="{{actor.name}}" />
-      </h1>
-    </div>
-  </header>
+<header class="sheet-header">
+  <div class="profile-img">
+    <img src="{{actor.img}}" name="actor.img" alt="{{actor.name}}" data-edit="img" />
+  </div>
+  <div class="header-fields">
+    <h1 class="charname">
+      <input name="actor.name" type="text" value="{{actor.name}}" />
+    </h1>
+  </div>
+</header>
 
-  <main class="sheet-body">
-    <section class="reserves">
-      <h2>Reserves</h2>
-      <div class="reserve-grid">
-        {{#each reserves as |reserve key|}}
-          <article class="reserve" data-reserve="{{key}}">
-            <header>
-              <h3 class="reserve-name">{{key}}</h3>
-            </header>
-            <div class="reserve-fields">
-              <label>
-                <span>Minimum</span>
-                <input
-                  type="number"
-                  data-dtype="Number"
-                  name="system.reserves.{{key}}.min"
-                  value="{{reserve.min}}"
-                />
-              </label>
-              <label>
-                <span>Wert</span>
-                <input
-                  type="number"
-                  data-dtype="Number"
-                  name="system.reserves.{{key}}.value"
-                  value="{{reserve.value}}"
-                />
-              </label>
-              <label>
-                <span>Maximum</span>
-                <input
-                  type="number"
-                  data-dtype="Number"
-                  name="system.reserves.{{key}}.max"
-                  value="{{reserve.max}}"
-                />
-              </label>
+<main class="sheet-body">
+  <section class="reserves">
+    <h2>Reserves</h2>
+    <div class="reserve-grid">
+      {{#each reserves as |reserve key|}}
+        <article class="reserve" data-reserve="{{key}}">
+          <header>
+            <h3 class="reserve-name">{{key}}</h3>
+          </header>
+          <div class="reserve-fields">
+            <label>
+              <span>Minimum</span>
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.reserves.{{key}}.min"
+                value="{{reserve.min}}"
+              />
+            </label>
+            <label>
+              <span>Wert</span>
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.reserves.{{key}}.value"
+                value="{{reserve.value}}"
+              />
+            </label>
+            <label>
+              <span>Maximum</span>
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.reserves.{{key}}.max"
+                value="{{reserve.max}}"
+              />
+            </label>
+          </div>
+          <footer class="reserve-strain">
+            <span>Belastung</span>
+            <div class="strain-track">
+              {{#each reserve.strain as |checked strainKey|}}
+                <label class="strain-step">
+                  <input
+                    type="checkbox"
+                    name="system.reserves.{{../key}}.strain.{{strainKey}}"
+                    data-dtype="Boolean"
+                    {{checked checked}}
+                  />
+                  <span>{{strainKey}}</span>
+                </label>
+              {{/each}}
             </div>
-            <footer class="reserve-strain">
-              <span>Belastung</span>
-              <div class="strain-track">
-                {{#each reserve.strain as |checked strainKey|}}
-                  <label class="strain-step">
-                    <input
-                      type="checkbox"
-                      name="system.reserves.{{../key}}.strain.{{strainKey}}"
-                      data-dtype="Boolean"
-                      {{checked checked}}
-                    />
-                    <span>{{strainKey}}</span>
-                  </label>
-                {{/each}}
-              </div>
-            </footer>
-          </article>
-        {{/each}}
-      </div>
-    </section>
-  </main>
-</form>
+          </footer>
+        </article>
+      {{/each}}
+    </div>
+  </section>
+</main>
