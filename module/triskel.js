@@ -7,7 +7,7 @@ import { PlayerCharacterDataModel } from "./actor/data/player-character-data.js"
 Hooks.once("init", function() {
   console.log("Triskel | Initializing Triskel system");
 
-  CONFIG.Actor.documentClass = TriskelActor;
+  /*CONFIG.Actor.documentClass = TriskelActor;
   CONFIG.Actor.typeClasses ??= {};
   CONFIG.Actor.typeClasses.character = PlayerCharacter;
   CONFIG.Actor.typeClasses.npc ??= TriskelActor;
@@ -15,12 +15,11 @@ Hooks.once("init", function() {
   CONFIG.Actor.dataModels ??= {};
   CONFIG.Actor.dataModels.base ??= TriskelActorDataModel;
   CONFIG.Actor.dataModels.character = PlayerCharacterDataModel;
-  CONFIG.Actor.dataModels.npc ??= TriskelActorDataModel;
+  CONFIG.Actor.dataModels.npc ??= TriskelActorDataModel;*/
 
   Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
     types: ["character"],
-    sheetClass: foundry.applications.sheets.ActorSheetV2,
     label: "Player Character"
   });
 
