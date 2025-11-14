@@ -22,15 +22,30 @@
             <div class="reserve-fields">
               <label>
                 <span>Minimum</span>
-                <input type="number" name="system.reserves.{{key}}.min" value="{{reserve.min}}" />
+                <input
+                  type="number"
+                  data-dtype="Number"
+                  name="system.reserves.{{key}}.min"
+                  value="{{reserve.min}}"
+                />
               </label>
               <label>
                 <span>Wert</span>
-                <input type="number" name="system.reserves.{{key}}.value" value="{{reserve.value}}" />
+                <input
+                  type="number"
+                  data-dtype="Number"
+                  name="system.reserves.{{key}}.value"
+                  value="{{reserve.value}}"
+                />
               </label>
               <label>
                 <span>Maximum</span>
-                <input type="number" name="system.reserves.{{key}}.max" value="{{reserve.max}}" />
+                <input
+                  type="number"
+                  data-dtype="Number"
+                  name="system.reserves.{{key}}.max"
+                  value="{{reserve.max}}"
+                />
               </label>
             </div>
             <footer class="reserve-strain">
@@ -41,6 +56,7 @@
                     <input
                       type="checkbox"
                       name="system.reserves.{{../key}}.strain.{{strainKey}}"
+                      data-dtype="Boolean"
                       {{checked checked}}
                     />
                     <span>{{strainKey}}</span>
