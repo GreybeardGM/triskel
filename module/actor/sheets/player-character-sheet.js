@@ -24,7 +24,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.actor ??= this.actor;
-    context.document ??= this.actor;
     context.system ??= this.actor.system;
     const reserves = context.system.reserves ?? {};
     context.reserves = reserves;
