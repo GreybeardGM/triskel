@@ -16,8 +16,8 @@
       "reserves": {
         "power": {
           "min": 0,
-          "value": 0,
-          "max": 0,
+          "value": 7,
+          "max": 12,
           "strain": {
             "s1": false,
             "s2": false,
@@ -28,8 +28,8 @@
         },
         "grace": {
           "min": 0,
-          "value": 0,
-          "max": 0,
+          "value": 7,
+          "max": 12,
           "strain": {
             "s1": false,
             "s2": false,
@@ -40,8 +40,8 @@
         },
         "will": {
           "min": 0,
-          "value": 0,
-          "max": 0,
+          "value": 7,
+          "max": 12,
           "strain": {
             "s1": false,
             "s2": false,
