@@ -14,6 +14,6 @@ Hooks.once("init", function() {
 
   // Actor-Typen deklarieren (optional, aber sauber)
   CONFIG.Actor.typeLabels = {
-    character: "Triskel Character"
+    character: "Player Character"
   };
 });
