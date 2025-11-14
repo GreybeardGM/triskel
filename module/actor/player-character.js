@@ -15,8 +15,8 @@ export class PlayerCharacter extends TriskelActor {
       const reserveSource = (sourceReserves[type] ??= {});
       const reserve = (reserves[type] ??= reserveSource);
       reserve.min ??= 0;
-      reserve.max ??= 0;
-      reserve.value ??= reserve.min ?? 0;
+      reserve.max ??= 12;
+      reserve.value ??= 12;
 
       const strain = (reserve.strain ??= {});
       for (let index = 1; index <= 5; index += 1) {
@@ -35,9 +35,9 @@ export class PlayerCharacter extends TriskelActor {
       const reserve = reserves[type];
       if (!reserve) continue;
 
-      const min = reserve.min : 0;
-      const max = reserve.max : 12;
-      const value = reserve.value : 12;
+      const min = reserve.min;
+      const max = reserve.max;
+      const value = reserve.value;
 
       value = foundry.utils.clamp(value, min, max);
     }
