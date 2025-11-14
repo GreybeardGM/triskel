@@ -20,7 +20,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.actor ??= this.actor;
     context.document ??= this.actor;
     context.system ??= this.actor.system;
-    context.reserves = context.system.reserves ?? {};
+    const reserves = context.system.reserves ?? context.system.system?.reserves ?? {};
+    context.reserves = reserves;
     return context;
   }
 }

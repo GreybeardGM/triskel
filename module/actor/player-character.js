@@ -7,9 +7,13 @@ export class PlayerCharacter extends TriskelActor {
   prepareBaseData() {
     super.prepareBaseData();
 
+    const sourceSystem = (this._source.system ??= {});
+    const sourceReserves = (sourceSystem.reserves ??= {});
+
     const reserves = (this.system.reserves ??= {});
     for (const type of RESERVE_TYPES) {
-      const reserve = (reserves[type] ??= {});
+      const reserveSource = (sourceReserves[type] ??= {});
+      const reserve = (reserves[type] ??= reserveSource);
       reserve.min ??= 0;
       reserve.max ??= 0;
       reserve.value ??= reserve.min ?? 0;
