@@ -14,7 +14,7 @@
     <section class="reserves">
       <h2>Reserves</h2>
       <div class="reserve-grid">
-        {{#each reserves as |reserve key|}}
+        {{#each actor.system.reserves as |reserve key|}}
           <article class="reserve" data-reserve="{{key}}">
             <header>
               <h3 class="reserve-name">{{key}}</h3>
