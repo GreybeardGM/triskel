@@ -11,3 +11,4 @@ export class TriskelActor extends Actor {
 
     // Platz für globale Ableitungen,
   }
+}
