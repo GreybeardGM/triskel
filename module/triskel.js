@@ -1,5 +1,5 @@
 import { TriskelActor } from "./actor/triskel-actor.js";
-import { TriskelCharacterSheet } from "./actor/sheets/triskel-character-sheet.js";
+import { PlayerCharacterSheet } from "./actor/sheets/player-character-sheet.js";
 
 Hooks.once("init", function() {
   console.log("Triskel | Initializing Triskel system");
@@ -7,7 +7,7 @@ Hooks.once("init", function() {
   // Actor-Dokumentklasse setzen
   CONFIG.Actor.documentClass = TriskelActor;
 
-  Actors.registerSheet("triskel", TriskelCharacterSheet, {
+  Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
     types: ["character"]
   });
