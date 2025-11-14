@@ -4,54 +4,50 @@
 
     "templates": {
       "triskelBase": {
-        "system": {
-          "details": {
-            "biography": "",
-            "notes": ""
-          }
+        "details": {
+          "biography": "",
+          "notes": ""
         }
       }
     },
 
     "character": {
       "templates": ["triskelBase"],
-      "system": {
-        "reserves": {
-          "power": {
-            "min": 0,
-            "value": 0,
-            "max": 0,
-            "strain": {
-              "s1": false,
-              "s2": false,
-              "s3": false,
-              "s4": false,
-              "s5": false
-            }
-          },
-          "grace": {
-            "min": 0,
-            "value": 0,
-            "max": 0,
-            "strain": {
-              "s1": false,
-              "s2": false,
-              "s3": false,
-              "s4": false,
-              "s5": false
-            }
-          },
-          "will": {
-            "min": 0,
-            "value": 0,
-            "max": 0,
-            "strain": {
-              "s1": false,
-              "s2": false,
-              "s3": false,
-              "s4": false,
-              "s5": false
-            }
+      "reserves": {
+        "power": {
+          "min": 0,
+          "value": 0,
+          "max": 0,
+          "strain": {
+            "s1": false,
+            "s2": false,
+            "s3": false,
+            "s4": false,
+            "s5": false
+          }
+        },
+        "grace": {
+          "min": 0,
+          "value": 0,
+          "max": 0,
+          "strain": {
+            "s1": false,
+            "s2": false,
+            "s3": false,
+            "s4": false,
+            "s5": false
+          }
+        },
+        "will": {
+          "min": 0,
+          "value": 0,
+          "max": 0,
+          "strain": {
+            "s1": false,
+            "s2": false,
+            "s3": false,
+            "s4": false,
+            "s5": false
           }
         }
       }
@@ -59,7 +55,7 @@
 
     "npc": {
       "templates": ["triskelBase"],
-      "system": {}
+      "reserves": {}
     }
   },
 
