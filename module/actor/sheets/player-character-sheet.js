@@ -16,4 +16,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.reserves = context.system.reserves ?? {};
     return context;
   }
+
+  async getData(options) {
+    const context = await super.getData(options);
+    context.system ??= this.actor.system;
+    context.reserves = context.system.reserves ?? {};
+    return context;
+  }
 }
