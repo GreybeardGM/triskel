@@ -8,9 +8,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       classes: ["triskel", "sheet", "actor", "character"],
       window: {
         title: "Triskel | Player Character"
+      },
+      form: {
+        submitOnChange: true
       }
-    },
-    { inplace: false }
+    }
   );
 
   static PARTS = {
