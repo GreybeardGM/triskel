@@ -6,16 +6,18 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     super.DEFAULT_OPTIONS,
     {
       classes: ["triskel", "sheet", "actor", "character"],
-      window: {
-        title: "Triskel | Player Character"
+      form: {
+        submitOnChange: true
+      },
+      actor: {
+        type: 'character'
       }
     }
   );
 
   static PARTS = {
-    ...super.PARTS,
-    form: {
-      ...super.PARTS.form,
+    reserves: {
+      id: "reserves",
       template: "systems/triskel/templates/actor/player-character-sheet.hbs"
     }
   };
