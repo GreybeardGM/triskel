@@ -14,7 +14,8 @@
     }
   ],
   "esmodules": [
-    "module/triskel.js"
+    "module/triskel.js",
+    "module/actor/sheets/triskel-character-sheet.js"
   ],
   "styles": [
     "styles/triskel.css"
