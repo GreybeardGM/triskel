@@ -7,8 +7,8 @@ import { PlayerCharacterDataModel } from "./actor/data/player-character-data.js"
 Hooks.once("init", function() {
   console.log("Triskel | Initializing Triskel system");
 
-  /*CONFIG.Actor.documentClass = TriskelActor;
-  CONFIG.Actor.typeClasses ??= {};
+  CONFIG.Actor.documentClass = TriskelActor;
+  /*CONFIG.Actor.typeClasses ??= {};
   CONFIG.Actor.typeClasses.character = PlayerCharacter;
   CONFIG.Actor.typeClasses.npc ??= TriskelActor;
 
