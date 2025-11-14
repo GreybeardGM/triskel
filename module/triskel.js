@@ -12,16 +12,16 @@ Hooks.once("init", function() {
   CONFIG.Actor.typeClasses.character = PlayerCharacter;
   CONFIG.Actor.typeClasses.npc ??= TriskelActor;
 
-  CONFIG.Actor.systemDataModels ??= {};
+  /*CONFIG.Actor.systemDataModels ??= {};
   CONFIG.Actor.systemDataModels.base ??= TriskelActorDataModel;
   CONFIG.Actor.systemDataModels.character = PlayerCharacterDataModel;
-  CONFIG.Actor.systemDataModels.npc ??= TriskelActorDataModel;
+  CONFIG.Actor.systemDataModels.npc ??= TriskelActorDataModel;*/
 
   Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
     types: ["character"],
     sheetClass: foundry.applications.sheets.ActorSheetV2,
-    label: "Triskel Player Character"
+    label: "Player Character"
   });
 
   CONFIG.Actor.typeLabels = {
