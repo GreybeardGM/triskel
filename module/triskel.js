@@ -12,7 +12,7 @@ Hooks.once("init", function() {
   Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
     types: ["character"],
-    sheetClass: PlayerCharacterSheet,
+    sheetClass: foundry.applications.sheets.ActorSheetV2,
     label: "Triskel Player Character"
   });
 
