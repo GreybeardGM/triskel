@@ -1,59 +1,68 @@
 {
   "Actor": {
     "types": ["character", "npc"],
+
     "templates": {
       "triskelBase": {
-        "details": {
-          "biography": "",
-          "notes": ""
+        "system": {
+          "details": {
+            "biography": "",
+            "notes": ""
+          }
         }
       }
     },
+
     "character": {
       "templates": ["triskelBase"],
-      "reserves": {
-        "power": {
-          "min": 0,
-          "value": 0,
-          "max": 0,
-          "strain": {
-            "s1": false,
-            "s2": false,
-            "s3": false,
-            "s4": false,
-            "s5": false
-          }
-        },
-        "grace": {
-          "min": 0,
-          "value": 0,
-          "max": 0,
-          "strain": {
-            "s1": false,
-            "s2": false,
-            "s3": false,
-            "s4": false,
-            "s5": false
-          }
-        },
-        "will": {
-          "min": 0,
-          "value": 0,
-          "max": 0,
-          "strain": {
-            "s1": false,
-            "s2": false,
-            "s3": false,
-            "s4": false,
-            "s5": false
+      "system": {
+        "reserves": {
+          "power": {
+            "min": 0,
+            "value": 0,
+            "max": 0,
+            "strain": {
+              "s1": false,
+              "s2": false,
+              "s3": false,
+              "s4": false,
+              "s5": false
+            }
+          },
+          "grace": {
+            "min": 0,
+            "value": 0,
+            "max": 0,
+            "strain": {
+              "s1": false,
+              "s2": false,
+              "s3": false,
+              "s4": false,
+              "s5": false
+            }
+          },
+          "will": {
+            "min": 0,
+            "value": 0,
+            "max": 0,
+            "strain": {
+              "s1": false,
+              "s2": false,
+              "s3": false,
+              "s4": false,
+              "s5": false
+            }
           }
         }
       }
     },
+
     "npc": {
-      "templates": ["triskelBase"]
+      "templates": ["triskelBase"],
+      "system": {}
     }
   },
+
   "Item": {
     "types": [],
     "templates": {}
