@@ -35,11 +35,11 @@ export class PlayerCharacter extends TriskelActor {
       const reserve = reserves[type];
       if (!reserve) continue;
 
-      const min = Number.isFinite(reserve.min) ? reserve.min : 0;
-      const max = Number.isFinite(reserve.max) ? reserve.max : min;
-      const value = Number.isFinite(reserve.value) ? reserve.value : min;
+      const min = reserve.min : 0;
+      const max = reserve.max : 12;
+      const value = reserve.value : 12;
 
-      reserve.value = foundry.utils.clamp(value, min, max);
+      value = foundry.utils.clamp(value, min, max);
     }
   }
 }
