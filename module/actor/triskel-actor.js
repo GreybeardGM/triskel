@@ -1,19 +1,17 @@
-// module/actor/triskel-character-sheet.js
-export class TriskelActor extends ActorSheet {
-  get template() {
-    return "systems/triskel/templates/actor/character-sheet.hbs";
+export class TriskelActor extends Actor {
+  /** @override */
+  prepareBaseData() {
+    super.prepareBaseData();
+    // Hier später allgemeine Sachen für alle Actor rein
   }
 
-  async getData(options) {
-    const data = await super.getData(options);
-    const r = data.system.reserves;
+  /** @override */
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    const system = this.system;
 
-    data.triskel = {
-      powerValue: Number(r.power?.value ?? 0),
-      graceValue: Number(r.grace?.value ?? 0),
-      willValue: Number(r.will?.value ?? 0)
-    };
-
-    return data;
+    // Platz für globale Ableitungen,
+    // aber NICHTs Reserves-spezifisches hier,
+    // damit NPCs / Monster später nicht automatisch Pools kriegen.
   }
 }
