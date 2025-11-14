@@ -1,8 +1,26 @@
-export class PlayerCharacterSheet extends ActorSheet {
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["triskel", "sheet", "actor", "character"],
+const { ActorSheetV2 } = foundry.applications.sheets;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
+    classes: ["triskel", "sheet", "actor", "character"],
+    window: {
+      title: "Triskel | Player Character"
+    }
+  });
+
+  static PARTS = foundry.utils.mergeObject(super.PARTS, {
+    form: {
       template: "systems/triskel/templates/actor/player-character-sheet.hbs"
-    });
+    }
+  });
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.actor ??= this.actor;
+    context.document ??= this.actor;
+    context.system ??= this.actor.system;
+    context.reserves = context.system.reserves ?? {};
+    return context;
   }
 }
