@@ -12,10 +12,10 @@ Hooks.once("init", function() {
   CONFIG.Actor.typeClasses.character = PlayerCharacter;
   CONFIG.Actor.typeClasses.npc ??= TriskelActor;
 
-  /*CONFIG.Actor.systemDataModels ??= {};
-  CONFIG.Actor.systemDataModels.base ??= TriskelActorDataModel;
-  CONFIG.Actor.systemDataModels.character = PlayerCharacterDataModel;
-  CONFIG.Actor.systemDataModels.npc ??= TriskelActorDataModel;*/
+  CONFIG.Actor.dataModels ??= {};
+  CONFIG.Actor.dataModels.base ??= TriskelActorDataModel;
+  CONFIG.Actor.dataModels.character = PlayerCharacterDataModel;
+  CONFIG.Actor.dataModels.npc ??= TriskelActorDataModel;
 
   Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
