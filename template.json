@@ -15,7 +15,6 @@
       "templates": ["triskelBase"],
       "reserves": {
         "power": {
-          "min": 0,
           "value": 0,
           "max": 0,
           "strain": {
@@ -27,7 +26,6 @@
           }
         },
         "grace": {
-          "min": 0,
           "value": 0,
           "max": 0,
           "strain": {
@@ -39,7 +37,6 @@
           }
         },
         "will": {
-          "min": 0,
           "value": 0,
           "max": 0,
           "strain": {
