@@ -8,14 +8,6 @@ Hooks.once("init", function() {
   console.log("Triskel | Initializing Triskel system");
 
   CONFIG.Actor.documentClass = TriskelActor;
-  /*CONFIG.Actor.typeClasses ??= {};
-  CONFIG.Actor.typeClasses.character = PlayerCharacter;
-  CONFIG.Actor.typeClasses.npc ??= TriskelActor;
-
-  CONFIG.Actor.dataModels ??= {};
-  CONFIG.Actor.dataModels.base ??= TriskelActorDataModel;
-  CONFIG.Actor.dataModels.character = PlayerCharacterDataModel;
-  CONFIG.Actor.dataModels.npc ??= TriskelActorDataModel;*/
 
   Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
