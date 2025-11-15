@@ -36,15 +36,14 @@
           </label>
         </div>
         <footer class="reserve-strain">
-          <span>Belastung</span>
+          <span>Strain</span>
           <div class="strain-track">
-            {{#each reserve.strain as |checked strainKey|}}
+            {{#each reserve.strain as |ischecked strainKey|}}
               <label class="strain-step">
                 <input
                   type="checkbox"
                   name="system.reserves.{{key}}.strain.{{strainKey}}"
-                  data-dtype="Boolean"
-                  {{checked checked}}
+                  {{checked ischecked}}
                 />
                 <span>{{strainKey}}</span>
               </label>
