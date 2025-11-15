@@ -16,9 +16,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   );
 
   static PARTS = {
+    info: {
+      id: "info",
+      template: "systems/triskel/templates/actor/player-character-info.hbs"
+    }
     reserves: {
       id: "reserves",
-      template: "systems/triskel/templates/actor/player-character-sheet.hbs"
+      template: "systems/triskel/templates/actor/reserves.hbs"
     }
   };
 
