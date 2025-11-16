@@ -7,7 +7,7 @@ Hooks.once("init", function() {
 
   // Klassen mit Typen verknüpfen
   CONFIG.Actor.documentClass = TriskelActor;
-  CONFIG.Actor.typeClasses.character = PlayerCharacter;
+  CONFIG.Actor.sheetClasses.character = PlayerCharacter;
 
   // Sheets registrieren
   Actors.registerSheet("triskel", PlayerCharacterSheet, {
