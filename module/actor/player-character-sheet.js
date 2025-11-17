@@ -50,7 +50,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         rollData: this.actor.getRollData()
       }
     );
-  };
+
+    return context;
+  }
 
   static async #onEditImage(event, target) {
     const field = target.dataset.field || "img";
