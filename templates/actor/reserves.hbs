@@ -3,7 +3,7 @@
   <div class="reserve-grid">
     {{#each reserves as |reserve key|}}
       <div class="reserve-container">
-        <div class="reserve-bar">
+        <div class="reserve-bar {{key}}">
           {{#each reserves.segments as |segmentClass segmentNumber|}}
             <div class="{{segmentClass reserve-box}}">{{segmentNumber}}</div>
           {{/each}}
