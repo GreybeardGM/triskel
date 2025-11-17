@@ -37,20 +37,19 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const context = await super._prepareContext(options);
     context.actor ??= this.actor;
     context.system ??= this.actor.system;
-    context.system.details ??= {};
-    context.system.details.notes ??= "";
+
+    // Reserves
     const reserves = context.system.reserves ?? {};
     context.reserves = reserves;
-    context.owner ??= this.actor.isOwner;
-    context.editable ??= this.isEditable;
+
+    // Notizen für Editor vorbereiten
     context.enrichedNotes = await TextEditor.enrichHTML(
-      context.system.details.notes,
+      this.actor.system.details?.notes ?? "",
       {
         secrets: this.actor.isOwner,
-        rollData: this.actor.getRollData?.()
+        rollData: this.actor.getRollData()
       }
     );
-    return context;
   }
 
   static async #onEditImage(event, target) {
