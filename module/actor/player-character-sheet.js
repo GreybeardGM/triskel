@@ -11,7 +11,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       },
       actions: {
         editImage: this.#onEditImage,
-        quickTriskelRoll: this.#onQuickTriskelRoll
+        quickTriskelRoll: this.#onQuickTriskelRoll,
+        decrementNumberInput: this.#onDecrementNumberInput,
+        incrementNumberInput: this.#onIncrementNumberInput
       },
       actor: {
         type: 'character'
@@ -71,6 +73,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       }
   
       reserve._segments = segments;
+      reserve._fields = {
+        max: `system.reserves.${key}.max`,
+        value: `system.reserves.${key}.value`
+      };
     }
   
     context.reserves = reserves;
@@ -112,5 +118,44 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       : [];
 
     await this.document?.rollTriskelDice({ modifiers });
+  }
+
+  static #onIncrementNumberInput(event, target) {
+    this.#adjustNumberInput(event, target, 1);
+  }
+
+  static #onDecrementNumberInput(event, target) {
+    this.#adjustNumberInput(event, target, -1);
+  }
+
+  static #adjustNumberInput(event, target, direction) {
+    event.preventDefault();
+
+    const container = target.closest("[data-number-input]");
+    if (!container) return;
+
+    const input = container.querySelector('input[type="number"]');
+    if (!input) return;
+
+    const stepValue = Number(input.step ?? 1);
+    const step = Number.isFinite(stepValue) && stepValue !== 0 ? stepValue : 1;
+    const delta = step * direction;
+
+    const currentValue = Number(input.value);
+    let nextValue = Number.isFinite(currentValue) ? currentValue + delta : direction > 0 ? step : 0;
+
+    if (input.min !== "") {
+      const min = Number(input.min);
+      if (Number.isFinite(min)) nextValue = Math.max(min, nextValue);
+    }
+
+    if (input.max !== "") {
+      const max = Number(input.max);
+      if (Number.isFinite(max)) nextValue = Math.min(max, nextValue);
+    }
+
+    input.value = nextValue;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
   }
 }
