@@ -21,4 +21,102 @@ export class TriskelActor extends Actor {
       reserve.min = minimumFromStrain;
     }
   }
+
+  /**
+   * Roll the standard Triskel 2d10 (tens-as-zero) test with optional modifiers.
+   *
+   * @param {object} [config={}]             - Configuration for the roll.
+   * @param {Array<{label?: string, value?: number}>} [config.modifiers=[]]
+   *   Collection of labeled bonuses or penalties to apply to the roll.
+   * @param {number|null} [config.difficulty=null]
+   *   Optional difficulty value (not yet used mechanically).
+   * @param {object} [config.options={}]     - Placeholder for future options.
+   */
+  async rollTriskelDice({ modifiers = [], difficulty = null, options = {} } = {}) {
+    const baseRoll = await (new Roll("2d10")).evaluate({ async: true });
+    const d10Term = baseRoll.dice.find(die => die.faces === 10);
+    const [firstResult, secondResult] = d10Term?.results ?? [];
+
+    const convertResult = value => (value === 10 ? 0 : value ?? 0);
+    const firstValue = convertResult(firstResult?.result);
+    const secondValue = convertResult(secondResult?.result);
+
+    if (game.dice3d) {
+      const rollMode = game.settings.get("core", "rollMode");
+      const gmRecipients = ChatMessage.getWhisperRecipients("GM").map(user => user.id);
+      let whisper = null;
+      let blind = false;
+      switch (rollMode) {
+        case "selfroll":
+          whisper = [game.user.id];
+          break;
+        case "gmroll":
+          whisper = gmRecipients;
+          break;
+        case "blindroll":
+          whisper = gmRecipients;
+          blind = true;
+          break;
+        default:
+          whisper = null;
+      }
+
+      try {
+        await game.dice3d.showForRoll(baseRoll, game.user, true, whisper ?? [], blind);
+      }
+      catch (error) {
+        console.warn("Triskel | Dice So Nice error:", error);
+      }
+    }
+
+    const normalizedModifiers = modifiers
+      .map(modifier => ({
+        label: modifier?.label ?? "Modifier",
+        value: Number(modifier?.value ?? 0)
+      }))
+      .filter(modifier => !Number.isNaN(modifier.value) && modifier.value !== 0);
+
+    const expressionValues = [firstValue, secondValue, ...normalizedModifiers.map(mod => mod.value)];
+    const expression = expressionValues
+      .map((value, index) => {
+        if (index === 0) return `${value}`;
+        const operator = value >= 0 ? "+" : "-";
+        return `${operator} ${Math.abs(value)}`;
+      })
+      .join(" ");
+
+    const finalRoll = await (new Roll(expression)).evaluate({ async: true });
+
+    const modifierSummary = normalizedModifiers.length
+      ? normalizedModifiers
+        .map(mod => `${mod.label} (${mod.value >= 0 ? "+" : ""}${mod.value})`)
+        .join(", ")
+      : "None";
+
+    const flavorParts = ["2d10 (10→0)"];
+    if (normalizedModifiers.length) {
+      flavorParts.push(`Modifiers: ${modifierSummary}`);
+    }
+    if (Number.isFinite(difficulty)) {
+      flavorParts.push(`Difficulty: ${difficulty}`);
+    }
+
+    const rollMode = game.settings.get("core", "rollMode");
+    await finalRoll.toMessage(
+      {
+        speaker: ChatMessage.getSpeaker({ actor: this }),
+        flavor: flavorParts.join(" | ")
+      },
+      { rollMode }
+    );
+
+    return {
+      baseRoll,
+      finalRoll,
+      diceValues: [firstValue, secondValue],
+      modifiers: normalizedModifiers,
+      difficulty,
+      options
+    };
+  }
 }

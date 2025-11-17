@@ -10,7 +10,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         submitOnChange: true
       },
       actions: {
-        editImage: this.#onEditImage
+        editImage: this.#onEditImage,
+        quickTriskelRoll: this.#onQuickTriskelRoll
       },
       actor: {
         type: 'character'
@@ -22,6 +23,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     info: {
       id: "info",
       template: "systems/triskel/templates/actor/player-character-info.hbs"
+    },
+    roller: {
+      id: "roller",
+      template: "systems/triskel/templates/actor/player-character-roller.hbs"
     },
     reserves: {
       id: "reserves",
@@ -93,5 +98,19 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     });
 
     picker.render(true);
+  }
+
+  static async #onQuickTriskelRoll(event, target) {
+    event.preventDefault();
+
+    const container = target.closest("[data-quick-roll]");
+    const modifierInput = container?.querySelector("[data-quick-roll-modifier]");
+    const modifierValue = Number(modifierInput?.value ?? 0);
+
+    const modifiers = Number.isFinite(modifierValue) && modifierValue !== 0
+      ? [{ label: "Sheet Modifier", value: modifierValue }]
+      : [];
+
+    await this.document?.rollTriskelDice({ modifiers });
   }
 }
