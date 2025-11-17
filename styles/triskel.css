@@ -27,13 +27,73 @@
   gap: 1rem;
 }
 
-.triskel .reserve {
+.triskel .reserve-container {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.triskel .reserve-bar {
+  --color-reserve-box: #444;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 3rem;
+  align-self: stretch;
+}
+
+.triskel .reserve-bar.power {
+  --color-reserve-box: #D9534F;
+}
+
+.triskel .reserve-bar.grace {
+  --color-reserve-box: #5CB85C;
+}
+
+.triskel .reserve-bar.will {
+  --color-reserve-box: #5BC0DE;
+}
+
+.triskel .reserve-box {
+  flex: 1;
+  min-height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.triskel .reserve-box.segment-strain {
+  background: #A00000;
+  border-color: #A00000;
+}
+
+.triskel .reserve-box.segment-empty {
+  background: #4a4a4a;
+  border-color: #4a4a4a;
+}
+
+.triskel .reserve-box.segment-placeholder {
+  background: #000;
+  border-color: #000;
+}
+
+.triskel .reserve-box.segment-filled {
+  background: var(--color-reserve-box);
+  border-color: var(--color-reserve-box);
+}
+
+.triskel .reserve-controls {
   border: 1px solid var(--color-border-light-primary, #999);
   border-radius: 4px;
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .triskel .reserve-fields {

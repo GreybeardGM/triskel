@@ -4,8 +4,8 @@
     {{#each reserves as |reserve key|}}
       <div class="reserve-container">
         <div class="reserve-bar {{key}}">
-          {{#each reserves.segments as |segmentClass segmentNumber|}}
-            <div class="{{segmentClass reserve-box}}">{{segmentNumber}}</div>
+          {{#each reserve._segments as |segment|}}
+            <div class="reserve-box segment-{{segment.state}}">{{segment.index}}</div>
           {{/each}}
         </div>
         <article class="reserve-controls" data-reserve="{{key}}">
