@@ -38,6 +38,38 @@
   gap: 0.25rem;
 }
 
+.triskel .number-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.triskel .number-stepper__button {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border, #333);
+  border-radius: 4px;
+  background: var(--color-bg-alt, #111);
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.triskel .number-stepper__button:focus {
+  outline: 2px solid var(--color-border-highlight, #999);
+  outline-offset: 1px;
+}
+
+.triskel .number-stepper__input {
+  flex: 1;
+  text-align: center;
+  height: 2rem;
+}
+
 .triskel .reserves .reserve-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

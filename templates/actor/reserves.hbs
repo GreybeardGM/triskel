@@ -15,21 +15,17 @@
           <div class="reserve-fields">
             <label class="reserve-max">
               <span>Maximum</span>
-              <input
-                type="number"
-                data-dtype="Number"
-                name="system.reserves.{{key}}.max"
-                value="{{reserve.max}}"
-              />
+              {{numberInput
+                name=reserve._fields.max
+                value=reserve.max
+              }}
             </label>
             <label class="reserve-current">
               <span>Current</span>
-              <input
-                type="number"
-                data-dtype="Number"
-                name="system.reserves.{{key}}.value"
-                value="{{reserve.value}}"
-              />
+              {{numberInput
+                name=reserve._fields.value
+                value=reserve.value
+              }}
             </label>
           </div>
           <footer class="reserve-strain">

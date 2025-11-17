@@ -5,7 +5,10 @@
   <div class="quick-roller-controls">
     <label class="quick-roller-modifier">
       <span>Modifier</span>
-      <input type="number" step="1" value="0" data-quick-roll-modifier />
+      {{numberInput
+        value=0
+        data=(hash quickRollModifier=true)
+      }}
     </label>
     <button type="button" data-action="quickTriskelRoll">Roll Dice</button>
   </div>
