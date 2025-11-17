@@ -57,7 +57,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         if (i <= min)        state = "strain";  // dunkelrot
         else if (i <= value) state = "filled"; // Pool-Farbe
         else if (i <= max)   state = "empty"; // dunkelgrau bis max
-        else                 state = "empty";  // über dem Max
+        else                 state = "placeholder";  // über dem Max
   
         segments.push({ index: i, state });
       }
