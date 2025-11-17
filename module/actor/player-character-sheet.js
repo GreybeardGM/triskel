@@ -35,19 +35,19 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    context.actor ??= this.actor;
-    context.system ??= this.actor.system;
 
-    // Reserves
+    // Standard-Zeug
+    context.actor ??= this.document;
+    context.system ??= this.document.system;
     const reserves = context.system.reserves ?? {};
     context.reserves = reserves;
 
-    // Notizen für Editor vorbereiten
-    context.enrichedNotes = await TextEditor.enrichHTML(
-      this.actor.system.details?.notes ?? "",
+    // Notes für Anzeige aufbereiten (V13-Pattern)
+    context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+      this.document.system.details?.notes ?? "",
       {
-        secrets: this.actor.isOwner,
-        rollData: this.actor.getRollData()
+        secrets: this.document.isOwner,
+        relativeTo: this.document
       }
     );
 
