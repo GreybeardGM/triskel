@@ -41,6 +41,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   
     // Reserves + Balken vorbereiten
     const reserves = context.system.reserves ?? {};
+    const vals = Object.values(reserves)
+      .map(r => r?.max ?? 0);
+    const maxSegments = Math.max(...vals, 5);
   
     for (const [key, reserve] of Object.entries(reserves)) {
       if (!reserve) continue;
@@ -52,7 +55,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       const segments = [];
   
       // 12 Container, unten = 1, oben = 12
-      for (let i = 12; i >= 1; i--) {
+      for (let i = maxSegments; i >= 1; i--) {
         let state;
         if (i <= min)        state = "strain";  // dunkelrot
         else if (i <= value) state = "filled"; // Pool-Farbe
