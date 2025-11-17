@@ -9,13 +9,19 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       form: {
         submitOnChange: true
       },
-        actions: {
-          editImage: this.#onEditImage,
-          quickTriskelRoll: this.#onQuickTriskelRoll,
-          updateReserveValue: this.#onUpdateReserveValue
-        },
+      actions: {
+        editImage: this.#onEditImage,
+        quickTriskelRoll: this.#onQuickTriskelRoll,
+        updateReserveValue: this.#onUpdateReserveValue
+      },
       actor: {
         type: 'character'
+      },
+      window: {
+        resizable: true
+      },
+      position: {
+        height: auto
       }
     }
   );
