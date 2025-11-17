@@ -5,7 +5,16 @@
       <div class="reserve-container">
         <div class="reserve-bar {{key}}">
           {{#each reserve._segments as |segment|}}
-            <div class="reserve-box segment-{{segment.state}}">{{segment.index}}</div>
+            <div
+              class="reserve-box segment-{{segment.state}}"
+              {{#if segment.clickable}}
+                data-action="updateReserveValue"
+                data-reserve="{{key}}"
+                data-reserve-value="{{segment.index}}"
+              {{/if}}
+            >
+              {{segment.index}}
+            </div>
           {{/each}}
         </div>
         <article class="reserve-controls" data-reserve="{{key}}">

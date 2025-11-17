@@ -83,6 +83,11 @@
   color: #fff;
 }
 
+.triskel .reserve-box[data-action="updateReserveValue"] {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
 .triskel .reserve-box.segment-strain {
   background: #A00000;
   border-color: #A00000;
@@ -102,6 +107,14 @@
 .triskel .reserve-box.segment-filled {
   background: var(--color-reserve-box);
   border-color: var(--color-reserve-box);
+}
+
+.triskel .reserve-box.segment-filled[data-action="updateReserveValue"]:hover {
+  box-shadow: 0 0 10px 0 var(--color-reserve-box);
+}
+
+.triskel .reserve-box.segment-empty[data-action="updateReserveValue"]:hover {
+  box-shadow: 0 0 10px 0 #4a4a4a;
 }
 
 .triskel .reserve-controls {

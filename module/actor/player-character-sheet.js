@@ -9,10 +9,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       form: {
         submitOnChange: true
       },
-      actions: {
-        editImage: this.#onEditImage,
-        quickTriskelRoll: this.#onQuickTriskelRoll
-      },
+        actions: {
+          editImage: this.#onEditImage,
+          quickTriskelRoll: this.#onQuickTriskelRoll,
+          updateReserveValue: this.#onUpdateReserveValue
+        },
       actor: {
         type: 'character'
       }
@@ -59,16 +60,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   
       const segments = [];
   
-      // 12 Container, unten = 1, oben = 12
-      for (let i = maxSegments; i >= 1; i--) {
-        let state;
-        if (i <= min)        state = "strain";  // dunkelrot
-        else if (i <= value) state = "filled"; // Pool-Farbe
-        else if (i <= max)   state = "empty"; // dunkelgrau bis max
-        else                 state = "placeholder";  // über dem Max
-  
-        segments.push({ index: i, state });
-      }
+        // 12 Container, unten = 1, oben = 12
+        for (let i = maxSegments; i >= 1; i--) {
+          let state;
+          if (i <= min)        state = "strain";  // dunkelrot
+          else if (i <= value) state = "filled"; // Pool-Farbe
+          else if (i <= max)   state = "empty"; // dunkelgrau bis max
+          else                 state = "placeholder";  // über dem Max
+
+          const clickable = state === "filled" || state === "empty";
+          segments.push({ index: i, state, clickable });
+        }
   
       reserve._segments = segments;
     }
@@ -112,5 +114,21 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       : [];
 
     await this.document?.rollTriskelDice({ modifiers });
+  }
+
+  static async #onUpdateReserveValue(event, target) {
+    event.preventDefault();
+
+    const reserve = target.dataset.reserve;
+    const clickedValue = Number(target.dataset.reserveValue ?? NaN);
+    if (!reserve || !Number.isFinite(clickedValue)) return;
+
+    const property = `system.reserves.${reserve}.value`;
+    const currentValue = Number(foundry.utils.getProperty(this.document, property) ?? 0);
+
+    let newValue = clickedValue;
+    if (currentValue === clickedValue) newValue = clickedValue - 1;
+
+    await this.document.update({ [property]: newValue });
   }
 }
