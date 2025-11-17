@@ -7,25 +7,7 @@
           <h3 class="reserve-name">{{key}}</h3>
         </header>
         <div class="reserve-fields">
-          <label>
-            <span>Minimum</span>
-            <input
-              type="number"
-              data-dtype="Number"
-              value="{{reserve.min}}"
-              readonly
-            />
-          </label>
-          <label>
-            <span>Current</span>
-            <input
-              type="number"
-              data-dtype="Number"
-              name="system.reserves.{{key}}.value"
-              value="{{reserve.value}}"
-            />
-          </label>
-          <label>
+          <label class="reserve-max">
             <span>Maximum</span>
             <input
               type="number"
@@ -34,21 +16,32 @@
               value="{{reserve.max}}"
             />
           </label>
+          <label class="reserve-current">
+            <span>Current</span>
+            <input
+              type="number"
+              data-dtype="Number"
+              name="system.reserves.{{key}}.value"
+              value="{{reserve.value}}"
+            />
+          </label>
         </div>
         <footer class="reserve-strain">
           <span>Strains</span>
-          <div class="strain-track">
+          <ul class="strain-track">
             {{#each reserve.strain as |ischecked strainKey|}}
-              <label class="strain-step">
-                <input
-                  type="checkbox"
-                  name="system.reserves.{{key}}.strain.{{strainKey}}"
-                  {{checked ischecked}}
-                />
-                <span>{{strainKey}}</span>
-              </label>
+              <li>
+                <label class="strain-step">
+                  <input
+                    type="checkbox"
+                    name="system.reserves.{{key}}.strain.{{strainKey}}"
+                    {{checked ischecked}}
+                  />
+                  <span>{{strainKey}}</span>
+                </label>
+              </li>
             {{/each}}
-          </div>
+          </ul>
         </footer>
       </article>
     {{/each}}
