@@ -21,7 +21,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         resizable: true
       },
       position: {
-        height: auto
+        height: "auto"
       }
     }
   );
