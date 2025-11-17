@@ -2,48 +2,55 @@
   <h2>Reserves</h2>
   <div class="reserve-grid">
     {{#each reserves as |reserve key|}}
-      <article class="reserve" data-reserve="{{key}}">
-        <header>
-          <h3 class="reserve-name">{{key}}</h3>
-        </header>
-        <div class="reserve-fields">
-          <label class="reserve-max">
-            <span>Maximum</span>
-            <input
-              type="number"
-              data-dtype="Number"
-              name="system.reserves.{{key}}.max"
-              value="{{reserve.max}}"
-            />
-          </label>
-          <label class="reserve-current">
-            <span>Current</span>
-            <input
-              type="number"
-              data-dtype="Number"
-              name="system.reserves.{{key}}.value"
-              value="{{reserve.value}}"
-            />
-          </label>
+      <div class="reserve-container">
+        <div class="reserve-bar">
+          {{#each reserves.segments as |segmentClass segmentNumber|}}
+            <div class="{{segmentClass reserve-box}}">{{segmentNumber}}</div>
+          {{/each}}
         </div>
-        <footer class="reserve-strain">
-          <span>Strains</span>
-          <ul class="strain-track">
-            {{#each reserve.strain as |ischecked strainKey|}}
-              <li>
-                <label class="strain-step">
-                  <input
-                    type="checkbox"
-                    name="system.reserves.{{key}}.strain.{{strainKey}}"
-                    {{checked ischecked}}
-                  />
-                  <span>{{strainKey}}</span>
-                </label>
-              </li>
-            {{/each}}
-          </ul>
-        </footer>
-      </article>
+        <article class="reserve-controls" data-reserve="{{key}}">
+          <header>
+            <h3 class="reserve-name">{{key}}</h3>
+          </header>
+          <div class="reserve-fields">
+            <label class="reserve-max">
+              <span>Maximum</span>
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.reserves.{{key}}.max"
+                value="{{reserve.max}}"
+              />
+            </label>
+            <label class="reserve-current">
+              <span>Current</span>
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.reserves.{{key}}.value"
+                value="{{reserve.value}}"
+              />
+            </label>
+          </div>
+          <footer class="reserve-strain">
+            <span>Strains</span>
+            <ul class="strain-track">
+              {{#each reserve.strain as |ischecked strainKey|}}
+                <li>
+                  <label class="strain-step">
+                    <input
+                      type="checkbox"
+                      name="system.reserves.{{key}}.strain.{{strainKey}}"
+                      {{checked ischecked}}
+                    />
+                    <span>{{strainKey}}</span>
+                  </label>
+                </li>
+              {{/each}}
+            </ul>
+          </footer>
+        </article>
+      </div>
     {{/each}}
   </div>
 </section>
