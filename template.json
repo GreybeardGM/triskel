@@ -2,17 +2,11 @@
   "Actor": {
     "types": ["character", "npc"],
 
-    "templates": {
-      "triskelBase": {
-        "details": {
-          "biography": "",
-          "notes": ""
-        }
-      }
-    },
-
     "character": {
-      "templates": ["triskelBase"],
+      "details": {
+        "biography": "",
+        "notes": ""
+      },
       "reserves": {
         "power": {
           "value": 0,
@@ -51,7 +45,10 @@
     },
 
     "npc": {
-      "templates": ["triskelBase"],
+      "details": {
+        "biography": "",
+        "notes": ""
+      },
       "reserves": {}
     }
   },

@@ -21,7 +21,7 @@
   ],
   "packs": [],
   "languages": [],
-  "templateVersion": 1,
+  "templateVersion": 2,
   "template": "template.json",
   "url": "https://github.com/GreybeardGM/triskel",
   "manifest": "https://raw.githubusercontent.com/GreybeardGM/triskel/main/system.json",
