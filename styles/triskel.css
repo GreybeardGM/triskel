@@ -16,27 +16,21 @@
 }
 
 .triskel .quick-roller {
-  margin: 1rem 0;
   padding: 0.75rem 0;
   border-top: 1px solid var(--color-border, #333);
   border-bottom: 1px solid var(--color-border, #333);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-tiems: center;
 }
 
 .triskel .quick-roller-controls {
   display: flex;
   gap: 0.5rem;
-  align-items: flex-end;
+  align-items: center;
 }
 
-.triskel .quick-roller-modifier {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
+.triskel .quick-roller-conmtrols
 
 .triskel .reserves .reserve-grid {
   display: grid;
@@ -133,20 +127,19 @@
 
 .triskel .reserve-fields label {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   gap: 0.25rem;
   font-size: 0.9rem;
+  align-items: center;
 }
 
 .triskel .reserve-strain {
   display: flex;
-  gap: 0.25rem;
+  flex-direction: column;
 }
 
 .triskel .strain-track {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  margin: unset;
 }
 
 .triskel .strain-step {
