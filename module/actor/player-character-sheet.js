@@ -89,7 +89,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     };
 
     if (Object.keys(tension).length) {
-      const rawValue = Number(tension.value ?? 0);
+      const value = Number(tension.value ?? 0);
       const segments = [];
 
       for (let i = maxSegments; i >= 1; i--) {
