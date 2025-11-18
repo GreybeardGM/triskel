@@ -10,7 +10,7 @@
       "reserves": {
         "power": {
           "value": 0,
-          "max": 0,
+          "max": 5,
           "strain": {
             "s1": false,
             "s2": false,
@@ -21,7 +21,7 @@
         },
         "grace": {
           "value": 0,
-          "max": 0,
+          "max": 5,
           "strain": {
             "s1": false,
             "s2": false,
@@ -32,7 +32,7 @@
         },
         "will": {
           "value": 0,
-          "max": 0,
+          "max": 5,
           "strain": {
             "s1": false,
             "s2": false,
@@ -53,7 +53,17 @@
         "biography": "",
         "notes": ""
       },
-      "reserves": {}
+      "health": {
+        "hp": {
+          "min": 0,
+          "value": 4,
+          "max": 4
+        },
+        "wounds": {
+          "min": 0,
+          "value": 1,
+          "max": 1
+      }
     }
   },
 
