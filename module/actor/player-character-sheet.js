@@ -90,19 +90,16 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     if (Object.keys(tension).length) {
       const rawValue = Number(tension.value ?? 0);
-      const max = maxSegments;
-      const value = foundry.utils.clamp(rawValue, 0, max);
-
       const segments = [];
 
-      for (let i = max; i >= 1; i--) {
+      for (let i = maxSegments; i >= 1; i--) {
         const state = i <= value ? "filled" : "empty";
         const clickable = true;
         segments.push({ index: i, state, clickable });
       }
 
       tension._segments = segments;
-      tension.max = max;
+      tension.max = maxSegments;
       tension.min = 0;
       tension.value = value;
     }
