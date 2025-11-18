@@ -9,8 +9,8 @@
               class="resource-box segment-{{segment.state}}"
               {{#if segment.clickable}}
                 data-action="updateResourceValue"
-                data-Resource="reserves.{{key}}"
-                data-Rescource-value="{{segment.index}}"
+                data-resource="reserves.{{key}}"
+                data-resource-value="{{segment.index}}"
               {{/if}}
             >
               {{segment.index}}
@@ -52,5 +52,23 @@
         </article>
       </div>
     {{/each}}
+    {{#if tension._segments}}
+      <div class="reserve-container tension">
+        <div class="resource-bar tension">
+          {{#each tension._segments as |segment|}}
+            <div
+              class="resource-box segment-{{segment.state}}"
+              {{#if segment.clickable}}
+                data-action="updateResourceValue"
+                data-resource="tension"
+                data-resource-value="{{segment.index}}"
+              {{/if}}
+            >
+              {{segment.index}}
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
   </div>
 </section>
