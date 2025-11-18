@@ -21,16 +21,14 @@
           <header>
             <h3 class="reserve-name">{{key}}</h3>
           </header>
-          <div class="reserve-fields">
-            <label class="reserve-max">
-              <input
-                type="number"
-                data-dtype="Number"
-                name="system.reserves.{{key}}.max"
-                value="{{reserve.max}}"
-              />
-              <span>Maximum</span>
-            </label>
+          <div class="reserve-max">
+            <span>Maximum</span>
+            <input
+              type="number"
+              data-dtype="Number"
+              name="system.reserves.{{key}}.max"
+              value="{{reserve.max}}"
+            />
           </div>
           <footer class="reserve-strain">
             <span>Strains</span>
