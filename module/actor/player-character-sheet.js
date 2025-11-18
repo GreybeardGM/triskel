@@ -12,7 +12,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       actions: {
         editImage: this.#onEditImage,
         quickTriskelRoll: this.#onQuickTriskelRoll,
-        updateReserveValue: this.#onUpdateReserveValue
+        updateResourceValue: this.#onUpdateResourceValue
       },
       actor: {
         type: 'character'
@@ -122,14 +122,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     await this.document?.rollTriskelDice({ modifiers });
   }
 
-  static async #onUpdateReserveValue(event, target) {
+  static async #onUpdateResourceValue(event, target) {
     event.preventDefault();
 
-    const reserve = target.dataset.reserve;
-    const clickedValue = Number(target.dataset.reserveValue ?? NaN);
-    if (!reserve || !Number.isFinite(clickedValue)) return;
+    const resource = target.dataset.resource;
+    const clickedValue = Number(target.dataset.resourceValue ?? NaN);
+    if (!resource || !Number.isFinite(clickedValue)) return;
 
-    const property = `system.reserves.${reserve}.value`;
+    const property = `system.${resource}.value`;
     const currentValue = Number(foundry.utils.getProperty(this.document, property) ?? 0);
 
     let newValue = clickedValue;
