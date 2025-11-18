@@ -83,7 +83,7 @@
   color: #fff;
 }
 
-.triskel .resource-box[data-action="updateReserveValue"] {
+.triskel .resource-box[data-action="updateResourceValue"] {
   cursor: pointer;
   transition: box-shadow 0.2s ease;
 }
@@ -105,12 +105,12 @@
 }
 
 .triskel .resource-box.segment-filled {
-  background: var(--color-reserve-box);
-  border-color: var(--color-reserve-box);
+  background: var(--color-resource-box);
+  border-color: var(--color-resource-box);
 }
 
 .triskel .resource-box.segment-filled:hover {
-  box-shadow: 0 0 10px 0 var(--color-reserve-box);
+  box-shadow: 0 0 10px 0 var(--color-resource-box);
 }
 
 .triskel .resource-box.segment-empty:hover {
