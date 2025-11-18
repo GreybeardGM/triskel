@@ -3,14 +3,14 @@
   <div class="reserve-grid">
     {{#each reserves as |reserve key|}}
       <div class="reserve-container">
-        <div class="reserve-bar {{key}}">
+        <div class="resource-bar {{key}}">
           {{#each reserve._segments as |segment|}}
             <div
-              class="reserve-box segment-{{segment.state}}"
+              class="resource-box segment-{{segment.state}}"
               {{#if segment.clickable}}
-                data-action="updateReserveValue"
-                data-reserve="{{key}}"
-                data-reserve-value="{{segment.index}}"
+                data-action="updateResourceValue"
+                data-Resource="reserves.{{key}}"
+                data-Rescource-value="{{segment.index}}"
               {{/if}}
             >
               {{segment.index}}
@@ -23,22 +23,13 @@
           </header>
           <div class="reserve-fields">
             <label class="reserve-max">
-              <span>Maximum</span>
               <input
                 type="number"
                 data-dtype="Number"
                 name="system.reserves.{{key}}.max"
                 value="{{reserve.max}}"
               />
-            </label>
-            <label class="reserve-current">
-              <span>Current</span>
-              <input
-                type="number"
-                data-dtype="Number"
-                name="system.reserves.{{key}}.value"
-                value="{{reserve.value}}"
-              />
+              <span>Maximum</span>
             </label>
           </div>
           <footer class="reserve-strain">
