@@ -46,8 +46,8 @@
   align-items: stretch;
 }
 
-.triskel .reserve-bar {
-  --color-reserve-box: #444;
+.triskel .resource-bar {
+  --color-resource-box: #444;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -55,19 +55,19 @@
   align-self: stretch;
 }
 
-.triskel .reserve-bar.power {
-  --color-reserve-box: #D9534F;
+.triskel .resource-bar.power {
+  --color-resource-box: #D9534F;
 }
 
-.triskel .reserve-bar.grace {
-  --color-reserve-box: #5CB85C;
+.triskel .resource-bar.grace {
+  --color-resource-box: #5CB85C;
 }
 
-.triskel .reserve-bar.will {
-  --color-reserve-box: #5BC0DE;
+.triskel .resource-bar.will {
+  --color-resource-box: #5BC0DE;
 }
 
-.triskel .reserve-box {
+.triskel .resource-box {
   flex: 1;
   min-height: 1.5rem;
   display: flex;
@@ -79,37 +79,37 @@
   color: #fff;
 }
 
-.triskel .reserve-box[data-action="updateReserveValue"] {
+.triskel .resource-box[data-action="updateReserveValue"] {
   cursor: pointer;
   transition: box-shadow 0.2s ease;
 }
 
-.triskel .reserve-box.segment-strain {
+.triskel .resource-box.segment-strain {
   background: #A00000;
   border-color: #A00000;
 }
 
-.triskel .reserve-box.segment-empty {
+.triskel .resource-box.segment-empty {
   background: #4a4a4a;
   border-color: #4a4a4a;
 }
 
-.triskel .reserve-box.segment-placeholder {
+.triskel .resource-box.segment-placeholder {
   background: #000;
   border-color: #000;
   opacity: 0.05;
 }
 
-.triskel .reserve-box.segment-filled {
+.triskel .resource-box.segment-filled {
   background: var(--color-reserve-box);
   border-color: var(--color-reserve-box);
 }
 
-.triskel .reserve-box.segment-filled[data-action="updateReserveValue"]:hover {
+.triskel .resource-box.segment-filled:hover {
   box-shadow: 0 0 10px 0 var(--color-reserve-box);
 }
 
-.triskel .reserve-box.segment-empty[data-action="updateReserveValue"]:hover {
+.triskel .resource-box.segment-empty:hover {
   box-shadow: 0 0 10px 0 #4a4a4a;
 }
 
