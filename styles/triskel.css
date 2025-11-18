@@ -36,7 +36,7 @@
 
 .triskel .reserves .reserve-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 0.5fr);
+  grid-template-columns: repeat(3, minmax(0, 2fr)) minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -118,17 +118,11 @@
 }
 
 .triskel .reserve-controls {
-  padding: 0.75rem;
+  padding: 0 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
-}
-
-.triskel .reserve-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
 .triskel .reserve-fields label {
