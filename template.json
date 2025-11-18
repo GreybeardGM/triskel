@@ -41,6 +41,10 @@
             "s5": false
           }
         }
+      },
+      "tension": {
+        "min": 0,
+        "value": 0,
       }
     },
 
