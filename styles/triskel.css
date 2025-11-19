@@ -73,11 +73,11 @@
 }
 
 .triskel .resource-bar.hp {
-  --color-resource-box: #337AB7;
+  --color-resource-box: #FFD15C;
 }
 
 .triskel .resource-bar.wounds {
-  --color-resource-box: #A94442;
+  --color-resource-box: #7A1F1F;
 }
 
 .triskel .resource-bar.tension {
