@@ -16,9 +16,9 @@
           </div>
         {{/each}}
       </div>
-      <article class="resource-input" data-reserve="{{key}}">
+      <div class="resource-input" data-reserve="{{key}}">
         <header>
-          <h3 class="resource-name">{{key}}</h3>
+          <h3 class="resource-name">{{reserve.label}}</h3>
         </header>
         <div class="resource-max">
           <span>Maximum</span>
@@ -46,7 +46,7 @@
             {{/each}}
           </ul>
         </footer>
-      </article>
+      </div>
     {{/each}}
     {{#if tension._segments}}
       <div class="resource-bar tension">

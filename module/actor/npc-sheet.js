@@ -64,8 +64,8 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       resource._segments = segments;
       statResources.push({
         key,
-        label: key.charAt(0).toUpperCase() + key.slice(1),
-        ...resource
+        ...resource,
+        label: resource.label ?? key.charAt(0).toUpperCase() + key.slice(1)
       });
     }
 
