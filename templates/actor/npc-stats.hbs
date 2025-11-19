@@ -1,7 +1,7 @@
 <section class="npc-stats">
   <h2>Stat Grid</h2>
   <div class="stat-grid">
-    {{#each statResources as |resource|}}
+    {{#each health as |resource|}}
       <div class="resource-bar {{resource.key}}">
         {{#each resource._segments as |segment|}}
           <div
@@ -18,7 +18,7 @@
       </div>
       <div class="resource-input">
         <header>
-          <h3 class="resource-name">{{resource.label}}</h3>
+          <h3 class="resource-name">{{health.label}}</h3>
         </header>
         <div class="resource-max">
           <span>Maximum</span>
