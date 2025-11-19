@@ -51,7 +51,6 @@
     minmax(0, 1fr) minmax(0, 4fr)
     minmax(0, 1fr);
   gap: 1rem;
-  align-items: stretch;
 }
 
 .triskel .resource-bar {
@@ -59,7 +58,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  width: 100%;
 }
 
 .triskel .resource-bar.power {
@@ -133,26 +131,11 @@
 }
 
 .triskel .resource-input {
-  padding: 0 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  flex: 1;
-}
-
-.triskel .resource-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.triskel .resource-fields label {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 0.25rem;
-  font-size: 0.9rem;
-  align-items: center;
-  justify-content: space-between;
+  padding-right: 1rem;
+  border-right: 1px dotted;
 }
 
 .triskel .reserve-strain {
