@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareResourceBarSegments } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -54,21 +54,12 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     for (const [key, resource] of Object.entries(health)) {
       if (!resource) continue;
 
-      const min = Number(resource.min ?? 0);
-      const value = Number(resource.value ?? 0);
-      const max = Number(resource.max ?? 0);
-
-      const segments = [];
-      for (let i = maxSegments; i >= 1; i--) {
-        let state;
-        if (i <= min) state = "strain";
-        else if (i <= value) state = "filled";
-        else if (i <= max) state = "empty";
-        else state = "placeholder";
-
-        const clickable = state === "filled" || state === "empty";
-        segments.push({ index: i, state, clickable });
-      }
+      const { segments } = prepareResourceBarSegments({
+        min: resource.min,
+        value: resource.value,
+        max: resource.max,
+        globalMax: maxSegments
+      });
 
       resource._segments = segments;
       statResources.push({

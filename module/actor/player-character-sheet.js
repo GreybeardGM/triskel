@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareResourceBarSegments } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -60,24 +60,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     for (const [key, reserve] of Object.entries(reserves)) {
       if (!reserve) continue;
   
-      const min   = Number(reserve.min  ?? 0);
-      const value = Number(reserve.value ?? 0);
-      const max   = Number(reserve.max  ?? 0);
-  
-      const segments = [];
-  
-        // 12 Container, unten = 1, oben = 12
-        for (let i = maxSegments; i >= 1; i--) {
-          let state;
-          if (i <= min)        state = "strain";  // dunkelrot
-          else if (i <= value) state = "filled"; // Pool-Farbe
-          else if (i <= max)   state = "empty"; // dunkelgrau bis max
-          else                 state = "placeholder";  // über dem Max
+      const { segments } = prepareResourceBarSegments({
+        min: reserve.min,
+        value: reserve.value,
+        max: reserve.max,
+        globalMax: maxSegments
+      });
 
-          const clickable = state === "filled" || state === "empty";
-          segments.push({ index: i, state, clickable });
-        }
-  
       reserve._segments = segments;
     }
   
@@ -89,18 +78,21 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     };
 
     if (Object.keys(tension).length) {
-      const value = Number(tension.value ?? 0);
-      const segments = [];
-
-      for (let i = maxSegments; i >= 1; i--) {
-        const state = i <= value ? "filled" : "empty";
-        const clickable = true;
-        segments.push({ index: i, state, clickable });
-      }
+      const {
+        segments,
+        max,
+        min,
+        value
+      } = prepareResourceBarSegments({
+        min: 0,
+        value: tension.value,
+        max: maxSegments,
+        globalMax: maxSegments
+      });
 
       tension._segments = segments;
-      tension.max = maxSegments;
-      tension.min = 0;
+      tension.max = max;
+      tension.min = min;
       tension.value = value;
     }
 
