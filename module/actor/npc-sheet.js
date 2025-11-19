@@ -49,7 +49,6 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const health = foundry.utils.duplicate(context.system.health ?? {});
     const healthValues = Object.values(health).map(resource => Number(resource?.max ?? 0));
     const maxSegments = Math.max(...healthValues, 5);
-    const statResources = [];
 
     for (const [key, resource] of Object.entries(health)) {
       if (!resource) continue;
@@ -62,11 +61,6 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       });
 
       resource._segments = segments;
-      statResources.push({
-        key,
-        ...resource,
-        label: resource.label ?? key.charAt(0).toUpperCase() + key.slice(1)
-      });
     }
 
     context.health = health;
