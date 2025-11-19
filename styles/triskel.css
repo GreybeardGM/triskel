@@ -1,5 +1,11 @@
 .triskel .window-content {
   overflow: auto;
+  gap: 1em;
+}
+
+.triskel .window-content h2 {
+  border-bottom: 1px dotted;
+  font-family: Modesto Condensed;
 }
 
 .triskel .sheet-header {
@@ -17,6 +23,10 @@
 
 .triskel .header-fields {
   flex: 1;
+}
+
+.triskel .charname input {
+  height: auto;
 }
 
 .triskel .quick-roller {
