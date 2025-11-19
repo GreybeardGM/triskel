@@ -1,0 +1,48 @@
+<section class="npc-stats">
+  <h2>Stat Grid</h2>
+  <div class="stat-grid">
+    {{#each statResources as |resource|}}
+      <div class="resource-control">
+        <div class="resource-bar {{resource.key}}">
+          {{#each resource._segments as |segment|}}
+            <div
+              class="resource-box segment-{{segment.state}}"
+              {{#if segment.clickable}}
+                data-action="updateResourceValue"
+                data-resource="health.{{resource.key}}"
+                data-resource-value="{{segment.index}}"
+              {{/if}}
+            >
+              {{segment.index}}
+            </div>
+          {{/each}}
+        </div>
+        <article class="resource-input">
+          <header>
+            <h3 class="stat-name">{{resource.label}}</h3>
+          </header>
+          <div class="resource-fields">
+            <label>
+              <span>Current</span>
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.health.{{resource.key}}.value"
+                value="{{resource.value}}"
+              />
+            </label>
+            <label>
+              <span>Maximum</span>
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.health.{{resource.key}}.max"
+                value="{{resource.max}}"
+              />
+            </label>
+          </div>
+        </article>
+      </div>
+    {{/each}}
+  </div>
+</section>
