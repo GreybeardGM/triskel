@@ -4,30 +4,27 @@ const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
-  static DEFAULT_OPTIONS = foundry.utils.mergeObject(
-    super.DEFAULT_OPTIONS,
-    {
-      classes: ["triskel", "sheet", "actor", "character"],
-      form: {
-        submitOnChange: true
-      },
-      actions: {
-        editImage: onEditImage,
-        quickTriskelRoll: this.#onQuickTriskelRoll,
-        updateResourceValue: onUpdateResourceValue
-      },
-      actor: {
-        type: 'character'
-      },
-      window: {
-        resizable: true
-      },
-      position: {
-        height: "auto",
-        width: 720
-      }
+  static DEFAULT_OPTIONS = {
+    classes: ["triskel", "sheet", "actor", "character"],
+    form: {
+      submitOnChange: true
+    },
+    actions: {
+      editImage: onEditImage,
+      quickTriskelRoll: this.#onQuickTriskelRoll,
+      updateResourceValue: onUpdateResourceValue
+    },
+    actor: {
+      type: 'character'
+    },
+    window: {
+      resizable: true
+    },
+    position: {
+      height: "auto",
+      width: 720
     }
-  );
+  };
 
   static PARTS = {
     info: {
