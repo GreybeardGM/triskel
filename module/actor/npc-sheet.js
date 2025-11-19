@@ -4,29 +4,26 @@ const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
-  static DEFAULT_OPTIONS = foundry.utils.mergeObject(
-    super.DEFAULT_OPTIONS,
-    {
-      classes: ["triskel", "sheet", "actor", "npc"],
-      form: {
-        submitOnChange: true
-      },
-      actions: {
-        editImage: onEditImage,
-        updateResourceValue: onUpdateResourceValue
-      },
-      actor: {
-        type: "npc"
-      },
-      window: {
-        resizable: true
-      },
-      position: {
-        height: "auto",
-        width: 720
-      }
+  static DEFAULT_OPTIONS = {
+    classes: ["triskel", "sheet", "actor", "npc"],
+    form: {
+      submitOnChange: true
+    },
+    actions: {
+      editImage: onEditImage,
+      updateResourceValue: onUpdateResourceValue
+    },
+    actor: {
+      type: "npc"
+    },
+    window: {
+      resizable: true
+    },
+    position: {
+      height: "auto",
+      width: 720
     }
-  );
+  };
 
   static PARTS = {
     info: {
