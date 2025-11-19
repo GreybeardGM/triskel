@@ -2,7 +2,7 @@ export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
   const current = foundry.utils.getProperty(this.document, field);
 
-  const picker = new foundry.applications.apps.FilePicker({
+  const picker = new FilePicker({
     type: "image",
     current,
     callback: (path) => this.document.update({ [field]: path })
