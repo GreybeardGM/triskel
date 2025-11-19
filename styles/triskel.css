@@ -43,21 +43,14 @@
   align-items: center;
 }
 
-.triskel .reserves .reserve-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 2fr)) minmax(0, 1fr);
-  gap: 1rem;
-}
-
+.triskel .reserves .reserve-grid,
 .triskel .npc-stats .stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 4fr)
+    minmax(0, 1fr) minmax(0, 4fr)
+    minmax(0, 1fr) minmax(0, 4fr)
+    minmax(0, 1fr);
   gap: 1rem;
-}
-
-.triskel .resource-control {
-  display: flex;
-  gap: 0.5rem;
   align-items: stretch;
 }
 
@@ -66,8 +59,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  width: 2rem;
-  align-self: stretch;
+  width: 100%;
 }
 
 .triskel .resource-bar.power {
@@ -170,6 +162,8 @@
 
 .triskel .strain-track {
   margin: unset;
+  padding-left: 0;
+  list-style: none;
 }
 
 .triskel .strain-step {
