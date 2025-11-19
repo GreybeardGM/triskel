@@ -18,18 +18,16 @@
       </div>
       <article class="resource-input">
         <header>
-          <h3 class="stat-name">{{resource.label}}</h3>
+          <h3 class="resource-name">{{resource.label}}</h3>
         </header>
-        <div class="resource-fields">
-          <label>
-            <span>Maximum</span>
-            <input
-              type="number"
-              data-dtype="Number"
-              name="system.health.{{resource.key}}.max"
-              value="{{resource.max}}"
-            />
-          </label>
+        <div class="resource-max">
+          <span>Maximum</span>
+          <input
+            type="number"
+            data-dtype="Number"
+            name="system.health.{{resource.key}}.max"
+            value="{{resource.max}}"
+          />
         </div>
       </article>
     {{/each}}
