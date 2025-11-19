@@ -57,3 +57,36 @@ export function prepareResourceBarSegments({
     segments
   };
 }
+
+export function prepareResourceBars({
+  resources = {},
+  fallbackMax = 5
+} = {}) {
+  const normalizedResources = resources ?? {};
+  const normalizedFallbackMax = Math.max(Math.floor(Number(fallbackMax ?? 0)), 1);
+
+  const segmentBounds = Object.values(normalizedResources)
+    .map(resource => Math.max(Math.floor(Number(resource?.max ?? 0)), 0));
+  const maxSegments = Math.max(normalizedFallbackMax, ...segmentBounds);
+
+  for (const resource of Object.values(normalizedResources)) {
+    if (!resource) continue;
+
+    const { segments, min, value, max } = prepareResourceBarSegments({
+      min: resource.min,
+      value: resource.value,
+      max: resource.max,
+      globalMax: maxSegments
+    });
+
+    resource._segments = segments;
+    resource.min = min;
+    resource.value = value;
+    resource.max = max;
+  }
+
+  return {
+    maxSegments,
+    resources: normalizedResources
+  };
+}

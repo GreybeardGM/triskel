@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareResourceBarSegments } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareResourceBarSegments, prepareResourceBars } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -52,24 +52,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.system ??= this.document.system;
   
     // Reserves + Balken vorbereiten
-    const reserves = context.system.reserves ?? {};
-    const vals = Object.values(reserves)
-      .map(r => r?.max ?? 0);
-    const maxSegments = Math.max(...vals, 5);
-  
-    for (const [key, reserve] of Object.entries(reserves)) {
-      if (!reserve) continue;
-  
-      const { segments } = prepareResourceBarSegments({
-        min: reserve.min,
-        value: reserve.value,
-        max: reserve.max,
-        globalMax: maxSegments
-      });
+    const {
+      resources: reserves,
+      maxSegments
+    } = prepareResourceBars({
+      resources: context.system.reserves ?? {},
+      fallbackMax: 5
+    });
 
-      reserve._segments = segments;
-    }
-  
     context.reserves = reserves;
 
     // Tension-Bar vorbereiten
