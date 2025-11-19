@@ -26,3 +26,34 @@ export async function onUpdateResourceValue(event, target) {
 
   await this.document.update({ [property]: newValue });
 }
+
+export function prepareResourceBarSegments({
+  min = 0,
+  value = 0,
+  max = 0,
+  globalMax = 0
+} = {}) {
+  const normalizedMin = Number(min ?? 0);
+  const normalizedValue = Number(value ?? 0);
+  const normalizedMax = Number(max ?? 0);
+  const normalizedGlobalMax = Math.max(Math.floor(Number(globalMax ?? 0)), 1);
+
+  const segments = [];
+  for (let i = normalizedGlobalMax; i >= 1; i--) {
+    let state;
+    if (i <= normalizedMin) state = "strain";
+    else if (i <= normalizedValue) state = "filled";
+    else if (i <= normalizedMax) state = "empty";
+    else state = "placeholder";
+
+    const clickable = state === "filled" || state === "empty";
+    segments.push({ index: i, state, clickable });
+  }
+
+  return {
+    min: normalizedMin,
+    value: normalizedValue,
+    max: normalizedMax,
+    segments
+  };
+}
