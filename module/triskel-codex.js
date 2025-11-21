@@ -2,98 +2,6 @@
 // Master list of all Triskel Skills + Resistances
 
 export const TRISKEL_SKILLS = {
-  /* ---------------------------------- SOCIAL ---------------------------------- */
-  impress: {
-    id: "impress",
-    label: "Impress",
-    description: "Shape how others perceive you through presence and impact.",
-    category: "Social",
-    phase: "Preparation"
-  },
-  influence: {
-    id: "influence",
-    label: "Influence",
-    description: "Shift another’s intentions through persuasion or pressure.",
-    category: "Social",
-    phase: "Preparation"
-  },
-  insight: {
-    id: "insight",
-    label: "Insight",
-    description: "Read motives, patterns, and emotional cues.",
-    category: "Social",
-    phase: "Preparation"
-  },
-
-  /* ------------------------------- INTELLECTUAL ------------------------------- */
-  lore: {
-    id: "lore",
-    label: "Lore",
-    description: "Recall and apply stored knowledge.",
-    category: "Intellectual",
-    phase: "Preparation"
-  },
-  study: {
-    id: "study",
-    label: "Study",
-    description: "Analyze texts, clues, maps, or structured data.",
-    category: "Intellectual",
-    phase: "Preparation"
-  },
-  navigate: {
-    id: "navigate",
-    label: "Navigate",
-    description: "Chart routes, orient yourself, and read terrain or maps.",
-    category: "Intellectual",
-    phase: "Travel"
-  },
-
-  /* --------------------------------- PHYSICAL --------------------------------- */
-  athletics: {
-    id: "athletics",
-    label: "Athletics",
-    description: "Perform physical feats of strength, speed, or motion.",
-    category: "Physical",
-    phase: "Travel"
-  },
-  notice: {
-    id: "notice",
-    label: "Notice",
-    description: "Spot details, changes, or hidden elements in the environment.",
-    category: "Physical",
-    phase: "Travel"
-  },
-  stealth: {
-    id: "stealth",
-    label: "Stealth",
-    description: "Avoid detection through silence, concealment, or timing.",
-    category: "Physical",
-    phase: "Travel"
-  },
-
-  /* ------------------------------- PROFESSIONAL ------------------------------- */
-  craft: {
-    id: "craft",
-    label: "Craft",
-    description: "Build, repair, or create functional equipment or tools.",
-    category: "Professional",
-    phase: "Preparation"
-  },
-  track: {
-    id: "track",
-    label: "Track",
-    description: "Follow trails, signs, and environmental disturbances.",
-    category: "Professional",
-    phase: "Travel"
-  },
-  handleBeasts: {
-    id: "handleBeasts",
-    label: "Handle Beasts",
-    description: "Manage mounts and animals, calm or direct creatures.",
-    category: "Professional",
-    phase: "Travel"
-  },
-
   /* ---------------------------------- OFFENSE ---------------------------------- */
   strike: {
     id: "strike",
@@ -140,6 +48,121 @@ export const TRISKEL_SKILLS = {
     phase: "Combat"
   },
 
+  /* ------------------------------- RESISTANCES -------------------------------- */
+  snap: {
+    id: "snap",
+    label: "Snap",
+    description: "Instant reflex response to sudden threats.",
+    category: "Resistance",
+    phase: "Any"
+  },
+  grit: {
+    id: "grit",
+    label: "Grit",
+    description: "Bodily toughness against pain, poison, and the elements.",
+    category: "Resistance",
+    phase: "Any"
+  },
+  resolve: {
+    id: "resolve",
+    label: "Resolve",
+    description: "Mental resilience to fear, influence, or despair.",
+    category: "Resistance",
+    phase: "Any"
+  },
+
+  /* --------------------------------- PHYSICAL --------------------------------- */
+  athletics: {
+    id: "athletics",
+    label: "Athletics",
+    description: "Perform physical feats of strength, speed, or motion.",
+    category: "Physical",
+    phase: "Travel"
+  },
+  notice: {
+    id: "notice",
+    label: "Notice",
+    description: "Spot details, changes, or hidden elements in the environment.",
+    category: "Physical",
+    phase: "Travel"
+  },
+  stealth: {
+    id: "stealth",
+    label: "Stealth",
+    description: "Avoid detection through silence, concealment, or timing.",
+    category: "Physical",
+    phase: "Travel"
+  },
+  
+  /* ---------------------------------- SOCIAL ---------------------------------- */
+  impress: {
+    id: "impress",
+    label: "Impress",
+    description: "Shape how others perceive you through presence and impact.",
+    category: "Social",
+    phase: "Preparation"
+  },
+  influence: {
+    id: "influence",
+    label: "Influence",
+    description: "Shift another’s intentions through persuasion or pressure.",
+    category: "Social",
+    phase: "Preparation"
+  },
+  insight: {
+    id: "insight",
+    label: "Insight",
+    description: "Read motives, patterns, and emotional cues.",
+    category: "Social",
+    phase: "Preparation"
+  },
+
+  /* ------------------------------- INTELLECTUAL ------------------------------- */
+  lore: {
+    id: "lore",
+    label: "Lore",
+    description: "Recall and apply stored knowledge.",
+    category: "Intellectual",
+    phase: "Preparation"
+  },
+  study: {
+    id: "study",
+    label: "Study",
+    description: "Analyze texts, clues, maps, or structured data.",
+    category: "Intellectual",
+    phase: "Preparation"
+  },
+  navigate: {
+    id: "navigate",
+    label: "Navigate",
+    description: "Chart routes, orient yourself, and read terrain or maps.",
+    category: "Intellectual",
+    phase: "Travel"
+  },
+
+  /* ------------------------------- PROFESSIONAL ------------------------------- */
+  craft: {
+    id: "craft",
+    label: "Craft",
+    description: "Build, repair, or create functional equipment or tools.",
+    category: "Professional",
+    phase: "Preparation"
+  },
+  track: {
+    id: "track",
+    label: "Track",
+    description: "Follow trails, signs, and environmental disturbances.",
+    category: "Professional",
+    phase: "Travel"
+  },
+  handleBeasts: {
+    id: "handleBeasts",
+    label: "Handle Beasts",
+    description: "Manage mounts and animals, calm or direct creatures.",
+    category: "Professional",
+    phase: "Travel"
+  },
+
   /* ----------------------------------- MAGIC ---------------------------------- */
   manifest: {
     id: "manifest",
@@ -182,28 +205,6 @@ export const TRISKEL_SKILLS = {
     description: "Create barriers, protections, or magical defenses.",
     category: "Magic",
     phase: "Any"
-  },
-
-  /* ------------------------------- RESISTANCES -------------------------------- */
-  snap: {
-    id: "snap",
-    label: "Snap",
-    description: "Instant reflex response to sudden threats.",
-    category: "Resistance",
-    phase: "Any"
-  },
-  grit: {
-    id: "grit",
-    label: "Grit",
-    description: "Bodily toughness against pain, poison, and the elements.",
-    category: "Resistance",
-    phase: "Any"
-  },
-  resolve: {
-    id: "resolve",
-    label: "Resolve",
-    description: "Mental resilience to fear, influence, or despair.",
-    category: "Resistance",
-    phase: "Any"
   }
+
 };
