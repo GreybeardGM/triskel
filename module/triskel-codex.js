@@ -1,5 +1,5 @@
 // triskel-codex.js
-// Master list of all Triskel Skills + Resistances
+// Master list of all Triskel Skills
 
 export const TRISKEL_SKILLS = {
   /* ---------------------------------- OFFENSE ---------------------------------- */
@@ -182,29 +182,28 @@ export const TRISKEL_SKILLS = {
     description: "Create barriers, protections, or magical defenses.",
     category: "Magic",
     phase: "Any"
-  },
-  
-  /* ------------------------------- RESISTANCES -------------------------------- */
+  }
+
+};
+
+// Master list of Triskel Resistances
+export const TRISKEL_RESISTANCES = {
   snap: {
     id: "snap",
     label: "Snap",
     description: "Instant reflex response to sudden threats.",
-    category: "Resistance",
     phase: "Any"
   },
   grit: {
     id: "grit",
     label: "Grit",
     description: "Bodily toughness against pain, poison, and the elements.",
-    category: "Resistance",
     phase: "Any"
   },
   resolve: {
     id: "resolve",
     label: "Resolve",
     description: "Mental resilience to fear, influence, or despair.",
-    category: "Resistance",
     phase: "Any"
   }
-
 };

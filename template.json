@@ -1,11 +1,128 @@
 {
   "Actor": {
     "types": ["character", "npc"],
-    "character": {
-      "details": {
-        "biography": "",
-        "notes": ""
+    "templates": {
+      "base": {
+        "details": {
+          "biography": "",
+          "notes": ""
+        },
+        "skills": {
+          "strike": {
+            "id": "strike",
+            "value": 0
+          },
+          "control": {
+            "id": "control",
+            "value": 0
+          },
+          "aim": {
+            "id": "aim",
+            "value": 0
+          },
+          "guard": {
+            "id": "guard",
+            "value": 0
+          },
+          "brace": {
+            "id": "brace",
+            "value": 0
+          },
+          "evasion": {
+            "id": "evasion",
+            "value": 0
+          },
+          "athletics": {
+            "id": "athletics",
+            "value": 0
+          },
+          "notice": {
+            "id": "notice",
+            "value": 0
+          },
+          "stealth": {
+            "id": "stealth",
+            "value": 0
+          },
+          "craft": {
+            "id": "craft",
+            "value": 0
+          },
+          "track": {
+            "id": "track",
+            "value": 0
+          },
+          "handleBeasts": {
+            "id": "handleBeasts",
+            "value": 0
+          },
+          "impress": {
+            "id": "impress",
+            "value": 0
+          },
+          "influence": {
+            "id": "influence",
+            "value": 0
+          },
+          "insight": {
+            "id": "insight",
+            "value": 0
+          },
+          "lore": {
+            "id": "lore",
+            "value": 0
+          },
+        "study": {
+          "id": "study",
+          "value": 0
+        },
+        "navigate": {
+          "id": "navigate",
+          "value": 0
+        },
+        "manifest": {
+          "id": "manifest",
+          "value": 0
+        },
+        "alter": {
+          "id": "alter",
+          "value": 0
+        },
+        "compel": {
+          "id": "compel",
+          "value": 0
+        },
+        "reveal": {
+          "id": "reveal",
+          "value": 0
+        },
+        "transpose": {
+          "id": "transpose",
+          "value": 0
+        },
+        "ward": {
+          "id": "ward",
+          "value": 0
+        }
       },
+      "resistances": {
+        "snap": {
+          "id": "snap",
+          "value": 0
+        },
+        "grit": {
+          "id": "grit",
+          "value": 0
+        },
+        "resolve": {
+          "id": "resolve",
+          "value": 0
+        }
+      }
+    }
+    },
+    "character": {
+      "templates": ["base"],
       "reserves": {
         "power": {
           "label": "Power",
@@ -50,10 +167,7 @@
       }
     },
     "npc": {
-      "details": {
-        "biography": "",
-        "notes": ""
-      },
+      "templates": ["base"],
       "health": {
         "hp": {
           "label": "Hitpoints",

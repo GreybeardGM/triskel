@@ -1,0 +1,44 @@
+<section class="skills">
+  <h2>Skills</h2>
+
+  {{#if resistances.length}}
+    <div class="resistances-row">
+      {{#each resistances as |resistance|}}
+        <label class="skill-field" title="{{resistance.description}}">
+          <span class="skill-label">{{resistance.label}}</span>
+          <input
+            type="number"
+            data-dtype="Number"
+            name="system.resistances.{{resistance.id}}.value"
+            value="{{resistance.value}}"
+          />
+        </label>
+      {{/each}}
+    </div>
+  {{/if}}
+
+  <div class="skill-grid">
+    {{#each skillColumns as |column|}}
+      <div class="skill-column">
+        {{#each column.categories as |category|}}
+          <div class="skill-category">
+            <h3>{{category.title}}</h3>
+            <ul>
+              {{#each category.skills as |skill|}}
+                <li class="skill-field" title="{{skill.description}}">
+                  <span class="skill-label">{{skill.label}}</span>
+                  <input
+                    type="number"
+                    data-dtype="Number"
+                    name="system.skills.{{skill.id}}.value"
+                    value="{{skill.value}}"
+                  />
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
+</section>

@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareResourceBarSegments, prepareResourceBars } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareResourceBarSegments, prepareResourceBars, prepareSkillsDisplay } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -39,6 +39,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: "reserves",
       template: "systems/triskel/templates/actor/reserves.hbs"
     },
+    skills: {
+      id: "skills",
+      template: "systems/triskel/templates/actor/skills.hbs"
+    },
     notes: {
       id: "notes",
       template: "systems/triskel/templates/actor/player-character-notes.hbs"
@@ -50,7 +54,15 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   
     context.actor ??= this.document;
     context.system ??= this.document.system;
-  
+
+    const { resistances, skillColumns } = prepareSkillsDisplay(
+      context.system.skills,
+      context.system.resistances
+    );
+
+    context.resistances = resistances;
+    context.skillColumns = skillColumns;
+
     // Reserves + Balken vorbereiten
     const {
       resources: reserves,
