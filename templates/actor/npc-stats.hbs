@@ -1,14 +1,14 @@
 <section class="npc-stats">
   <h2>Stat Grid</h2>
   <div class="stat-grid">
-    {{#each health as |resource|}}
-      <div class="resource-bar {{resource.key}}">
+    {{#each health as |resource key|}}
+      <div class="resource-bar {{key}}">
         {{#each resource._segments as |segment|}}
           <div
             class="resource-box segment-{{segment.state}}"
             {{#if segment.clickable}}
               data-action="updateResourceValue"
-              data-resource="health.{{resource.key}}"
+              data-resource="health.{{key}}"
               data-resource-value="{{segment.index}}"
             {{/if}}
           >
@@ -17,15 +17,14 @@
         {{/each}}
       </div>
       <div class="resource-input">
-        <header>
-          <h3 class="resource-name">{{health.label}}</h3>
-        </header>
         <div class="resource-max">
-          <span>Maximum</span>
+          <label class="resource-name" for="health-{{key}}-max">{{resource.label}}</label>
           <input
+            id="health-{{key}}-max"
+            class="resource-max-input"
             type="number"
             data-dtype="Number"
-            name="system.health.{{resource.key}}.max"
+            name="system.health.{{key}}.max"
             value="{{resource.max}}"
           />
         </div>
