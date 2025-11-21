@@ -48,29 +48,6 @@ export const TRISKEL_SKILLS = {
     phase: "Combat"
   },
 
-  /* ------------------------------- RESISTANCES -------------------------------- */
-  snap: {
-    id: "snap",
-    label: "Snap",
-    description: "Instant reflex response to sudden threats.",
-    category: "Resistance",
-    phase: "Any"
-  },
-  grit: {
-    id: "grit",
-    label: "Grit",
-    description: "Bodily toughness against pain, poison, and the elements.",
-    category: "Resistance",
-    phase: "Any"
-  },
-  resolve: {
-    id: "resolve",
-    label: "Resolve",
-    description: "Mental resilience to fear, influence, or despair.",
-    category: "Resistance",
-    phase: "Any"
-  },
-
   /* --------------------------------- PHYSICAL --------------------------------- */
   athletics: {
     id: "athletics",
@@ -91,6 +68,29 @@ export const TRISKEL_SKILLS = {
     label: "Stealth",
     description: "Avoid detection through silence, concealment, or timing.",
     category: "Physical",
+    phase: "Travel"
+  },
+ 
+  /* ------------------------------- PROFESSIONAL ------------------------------- */
+  craft: {
+    id: "craft",
+    label: "Craft",
+    description: "Build, repair, or create functional equipment or tools.",
+    category: "Professional",
+    phase: "Preparation"
+  },
+  track: {
+    id: "track",
+    label: "Track",
+    description: "Follow trails, signs, and environmental disturbances.",
+    category: "Professional",
+    phase: "Travel"
+  },
+  handleBeasts: {
+    id: "handleBeasts",
+    label: "Handle Beasts",
+    description: "Manage mounts and animals, calm or direct creatures.",
+    category: "Professional",
     phase: "Travel"
   },
   
@@ -140,29 +140,6 @@ export const TRISKEL_SKILLS = {
     phase: "Travel"
   },
 
-  /* ------------------------------- PROFESSIONAL ------------------------------- */
-  craft: {
-    id: "craft",
-    label: "Craft",
-    description: "Build, repair, or create functional equipment or tools.",
-    category: "Professional",
-    phase: "Preparation"
-  },
-  track: {
-    id: "track",
-    label: "Track",
-    description: "Follow trails, signs, and environmental disturbances.",
-    category: "Professional",
-    phase: "Travel"
-  },
-  handleBeasts: {
-    id: "handleBeasts",
-    label: "Handle Beasts",
-    description: "Manage mounts and animals, calm or direct creatures.",
-    category: "Professional",
-    phase: "Travel"
-  },
-
   /* ----------------------------------- MAGIC ---------------------------------- */
   manifest: {
     id: "manifest",
@@ -204,6 +181,29 @@ export const TRISKEL_SKILLS = {
     label: "Ward",
     description: "Create barriers, protections, or magical defenses.",
     category: "Magic",
+    phase: "Any"
+  },
+  
+  /* ------------------------------- RESISTANCES -------------------------------- */
+  snap: {
+    id: "snap",
+    label: "Snap",
+    description: "Instant reflex response to sudden threats.",
+    category: "Resistance",
+    phase: "Any"
+  },
+  grit: {
+    id: "grit",
+    label: "Grit",
+    description: "Bodily toughness against pain, poison, and the elements.",
+    category: "Resistance",
+    phase: "Any"
+  },
+  resolve: {
+    id: "resolve",
+    label: "Resolve",
+    description: "Mental resilience to fear, influence, or despair.",
+    category: "Resistance",
     phase: "Any"
   }
 
