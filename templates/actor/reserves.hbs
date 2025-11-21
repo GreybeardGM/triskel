@@ -17,12 +17,11 @@
         {{/each}}
       </div>
       <div class="resource-input" data-reserve="{{key}}">
-        <header>
-          <h3 class="resource-name">{{reserve.label}}</h3>
-        </header>
         <div class="resource-max">
-          <span>Maximum</span>
+          <label class="resource-name" for="reserve-{{key}}-max">{{reserve.label}}</label>
           <input
+            id="reserve-{{key}}-max"
+            class="resource-max-input"
             type="number"
             data-dtype="Number"
             name="system.reserves.{{key}}.max"

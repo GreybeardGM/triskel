@@ -118,6 +118,10 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     return collection;
   }, {});
 
+  Object.values(byCategory).forEach(skillsInCategory =>
+    skillsInCategory.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
+  );
+
   const skillColumns = SKILL_COLUMN_LAYOUT.map(column => ({
     id: column.id,
     categories: column.categories
