@@ -10,6 +10,11 @@
   background-color: rgba(255,255,255,0.1);
 }
 
+.triskel .window-content h3 {
+  font-family: Modesto Condensed;
+  margin: 0.25rem 0;
+}
+
 .triskel .sheet-header {
   display: flex;
   gap: 1rem;
@@ -163,7 +168,6 @@
 .triskel .skills {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
 .triskel .resistances-row {
@@ -176,18 +180,18 @@
 .triskel .skill-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
+  gap: 1.75rem;
 }
 
 .triskel .skill-column {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
-.triskel .skill-category h3 {
-  margin: 0 0 0.25rem;
-  text-align: left;
+.triskel .skill-category {
+  margin-top: 0.25rem;
+  border-top: 1px dotted;
+  padding-top: 0.25rem;
 }
 
 .triskel .skill-category ul {
@@ -206,10 +210,10 @@
 }
 
 .triskel .skill-field input[type="number"] {
-  width: 4rem;
+  width: 3rem;
+  text-align: center;
 }
 
 .triskel .skill-label {
   flex: 1;
-  font-weight: 600;
 }
