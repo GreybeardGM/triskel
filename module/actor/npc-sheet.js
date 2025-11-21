@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareResourceBars } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareResourceBars, prepareSkillsDisplay } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -34,6 +34,10 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       id: "stats",
       template: "systems/triskel/templates/actor/npc-stats.hbs"
     },
+    skills: {
+      id: "skills",
+      template: "systems/triskel/templates/actor/skills.hbs"
+    },
     notes: {
       id: "notes",
       template: "systems/triskel/templates/actor/player-character-notes.hbs"
@@ -45,6 +49,14 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     context.actor ??= this.document;
     context.system ??= this.document.system;
+
+    const { resistances, skillColumns } = prepareSkillsDisplay(
+      context.system.skills,
+      context.system.resistances
+    );
+
+    context.resistances = resistances;
+    context.skillColumns = skillColumns;
 
     // Health + Balken vorbereiten
     const { resources: health } = prepareResourceBars({

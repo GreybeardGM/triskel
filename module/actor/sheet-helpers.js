@@ -27,6 +27,8 @@ export async function onUpdateResourceValue(event, target) {
   await this.document.update({ [property]: newValue });
 }
 
+import { TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../triskel-codex.js";
+
 export function prepareResourceBarSegments({
   min = 0,
   value = 0,
@@ -89,4 +91,51 @@ export function prepareResourceBars({
     maxSegments,
     resources: normalizedResources
   };
+}
+
+const SKILL_COLUMN_LAYOUT = [
+  { id: "combat", categories: ["Offense", "Defense"] },
+  { id: "physical", categories: ["Physical", "Professional"] },
+  { id: "social", categories: ["Social", "Intellectual"] },
+  { id: "magic", categories: ["Magic"] }
+];
+
+export function prepareSkillsDisplay(skills = {}, resistances = {}) {
+  const normalizedSkills = skills ?? {};
+  const normalizedResistances = resistances ?? {};
+
+  const byCategory = Object.values(TRISKEL_SKILLS).reduce((collection, skill) => {
+    const rawValue = normalizedSkills[skill.id]?.value;
+    const parsedValue = Number(rawValue);
+    const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+
+    const entry = { ...skill, value };
+    const category = skill.category ?? "";
+
+    if (!collection[category]) collection[category] = [];
+    collection[category].push(entry);
+
+    return collection;
+  }, {});
+
+  const skillColumns = SKILL_COLUMN_LAYOUT.map(column => ({
+    id: column.id,
+    categories: column.categories
+      .map(category => ({
+        id: category.toLowerCase(),
+        title: category,
+        skills: byCategory[category] ?? []
+      }))
+      .filter(category => category.skills.length)
+  }));
+
+  const resistancesList = Object.values(TRISKEL_RESISTANCES).map(resistance => {
+    const rawValue = normalizedResistances[resistance.id]?.value;
+    const parsedValue = Number(rawValue);
+    const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+
+    return { ...resistance, value };
+  });
+
+  return { resistances: resistancesList, skillColumns };
 }

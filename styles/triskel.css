@@ -159,3 +159,57 @@
 .triskel .editor-content {
   position: unset;
 }
+
+.triskel .skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.triskel .resistances-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem 1rem;
+  align-items: center;
+}
+
+.triskel .skill-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.triskel .skill-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.triskel .skill-category h3 {
+  margin: 0 0 0.25rem;
+  text-align: left;
+}
+
+.triskel .skill-category ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.triskel .skill-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.triskel .skill-field input[type="number"] {
+  width: 4rem;
+}
+
+.triskel .skill-label {
+  flex: 1;
+  font-weight: 600;
+}
