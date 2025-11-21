@@ -189,9 +189,12 @@
 }
 
 .triskel .skill-category {
-  margin-top: 0.25rem;
+  margin-top: 0.75rem;
   border-top: 1px dotted;
   padding-top: 0.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
 }
 
 .triskel .skill-category ul {
