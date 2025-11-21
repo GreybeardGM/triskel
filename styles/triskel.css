@@ -10,11 +10,6 @@
   background-color: rgba(255,255,255,0.1);
 }
 
-.triskel .window-content h3 {
-  font-family: Modesto Condensed;
-  margin: 0.25rem 0;
-}
-
 .triskel .sheet-header {
   display: flex;
   gap: 1rem;
@@ -180,7 +175,7 @@
 .triskel .skill-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.75rem;
+  gap: 1.4rem;
 }
 
 .triskel .skill-column {
@@ -197,6 +192,14 @@
   gap: 0.25rem;
 }
 
+.triskel .skill-category h3 {
+  font-size: 1.2em;
+  opacity: 0.25;
+  rotate: -90deg;
+  width: 1em;
+  direction: rtl;
+}
+
 .triskel .skill-category ul {
   list-style: none;
   margin: 0;
@@ -204,6 +207,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  flex: 1;
 }
 
 .triskel .skill-field {
@@ -213,7 +217,7 @@
 }
 
 .triskel .skill-field input[type="number"] {
-  width: 3rem;
+  width: 2rem;
   text-align: center;
 }
 
