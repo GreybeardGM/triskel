@@ -118,17 +118,17 @@ export const TRISKEL_SKILLS = {
   },
 
   /* ------------------------------- INTELLECTUAL ------------------------------- */
-  lore: {
-    id: "lore",
-    label: "Lore",
-    description: "Recall and apply stored knowledge.",
+  academia: {
+    id: "academia",
+    label: "Academia",
+    description: "Acquire elevated knowledge and analyze complex connections.",
     category: "Intellectual",
     phase: "Preparation"
   },
-  study: {
-    id: "study",
-    label: "Study",
-    description: "Analyze texts, clues, maps, or structured data.",
+  folklore: {
+    id: "folklore",
+    label: "Folklore",
+    description: "Learn and recite everything from local rumors to legendary heroics, grasping traditions and their ties.",
     category: "Intellectual",
     phase: "Preparation"
   },
@@ -205,5 +205,49 @@ export const TRISKEL_RESISTANCES = {
     label: "Resolve",
     description: "Mental resilience to fear, influence, or despair.",
     phase: "Any"
+  }
+};
+
+// Master list of Triskel Paths
+export const TRISKEL_PATHS = {
+  virtue: {
+    id: "virtue",
+    label: "Saint",
+    tags: ["Good", "Moralistic"],
+    steps: [
+      { tier: 1, label: "Discipline" },
+      { tier: 2, label: "Constancy" },
+      { tier: 3, label: "Integrity" }
+    ]
+  },
+  ward: {
+    id: "ward",
+    label: "Guardian",
+    tags: ["Good", "Naturalistic"],
+    steps: [
+      { tier: 1, label: "Presence" },
+      { tier: 2, label: "Stewardship" },
+      { tier: 3, label: "Renewal" }
+    ]
+  },
+  vice: {
+    id: "vice",
+    label: "Sinner",
+    tags: ["Evil", "Moralistic"],
+    steps: [
+      { tier: 1, label: "Indulgence" },
+      { tier: 2, label: "Decay" },
+      { tier: 3, label: "Depravity" }
+    ]
+  },
+  ruin: {
+    id: "ruin",
+    label: "Destroyer",
+    tags: ["Evil", "Naturalistic"],
+    steps: [
+      { tier: 1, label: "Desire" },
+      { tier: 2, label: "Despair" },
+      { tier: 3, label: "Righteousness" }
+    ]
   }
 };
