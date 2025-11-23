@@ -68,14 +68,14 @@
             "id": "insight",
             "value": 0
           },
-          "lore": {
-            "id": "lore",
+          "akademia": {
+            "id": "akademia",
             "value": 0
           },
-        "study": {
-          "id": "study",
-          "value": 0
-        },
+          "folklore": {
+            "id": "folklore",
+            "value": 0
+          },
         "navigate": {
           "id": "navigate",
           "value": 0
@@ -123,6 +123,36 @@
     },
     "character": {
       "templates": ["base"],
+        "paths": {
+          "virtue": {
+            "id": "virtue",
+            "min": 1,
+            "value": 1,
+            "max": 12,
+            "label": "Virtue"
+          },
+          "vice": {
+            "id": "vice",
+            "min": 1,
+            "value": 1,
+            "max": 12,
+            "label": "Vice"
+          },
+          "ward": {
+            "id": "ward",
+            "min": 1,
+            "value": 1,
+            "max": 12,
+            "label": "Ward"
+          },
+          "ruin": {
+            "id": "ruin",
+            "min": 1,
+            "value": 1,
+            "max": 12,
+            "label": "Ruin"
+          }
+        },
       "reserves": {
         "power": {
           "label": "Power",

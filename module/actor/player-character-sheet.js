@@ -39,6 +39,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: "reserves",
       template: "systems/triskel/templates/actor/reserves.hbs"
     },
+    paths: {
+      id: "paths",
+      template: "systems/triskel/templates/actor/paths.hbs"
+    },
     skills: {
       id: "skills",
       template: "systems/triskel/templates/actor/skills.hbs"
@@ -73,6 +77,48 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     });
 
     context.reserves = reserves;
+
+    // Paths vorbereiten
+    const PATH_LAYOUT = [
+      { id: "virtue", label: "Virtue", side: "left" },
+      { id: "vice", label: "Vice", side: "left" },
+      { id: "ward", label: "Ward", side: "right" },
+      { id: "ruin", label: "Ruin", side: "right" }
+    ];
+
+    const preparedPaths = prepareResourceBars({
+      resources: PATH_LAYOUT.reduce((paths, path) => {
+        const systemPath = context.system.paths?.[path.id] ?? {};
+
+        paths[path.id] = {
+          max: systemPath.max ?? 12,
+          ...systemPath,
+          label: systemPath.label ?? path.label
+        };
+
+        return paths;
+      }, {}),
+      fallbackMax: 12
+    }).resources;
+
+    const pathsBySide = PATH_LAYOUT.reduce((columns, { id, side, label }) => {
+      const prepared = preparedPaths[id] ?? {};
+      const segments = prepared._segments ?? [];
+
+      const column = columns[side] ?? { side, paths: [] };
+      column.paths.push({
+        ...prepared,
+        id,
+        label: prepared.label ?? label,
+        side,
+        _displaySegments: side === "right" ? [...segments].reverse() : segments
+      });
+
+      columns[side] = column;
+      return columns;
+    }, {});
+
+    context.paths = [pathsBySide.left, pathsBySide.right].filter(Boolean);
 
     // Tension-Bar vorbereiten
     const tension = {
