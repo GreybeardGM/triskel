@@ -126,6 +126,22 @@
   box-shadow: 0 0 10px 0 var(--color-resource-box);
 }
 
+.triskel .paths .path-bar.virtue {
+  --color-resource-box: #FFD447;
+}
+
+.triskel .paths .path-bar.vice {
+  --color-resource-box: #8E44AD;
+}
+
+.triskel .paths .path-bar.ward {
+  --color-resource-box: #4CAF50;
+}
+
+.triskel .paths .path-bar.ruin {
+  --color-resource-box: #E74C3C;
+}
+
 .triskel .resource-box.segment-empty:hover {
   box-shadow: 0 0 10px 0 #4a4a4a;
 }
@@ -168,6 +184,47 @@
 .triskel .reserve-strain {
   display: flex;
   flex-direction: column;
+}
+
+.triskel .paths {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.triskel .paths-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.triskel .path-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.triskel .path-bar {
+  gap: 0.35rem;
+}
+
+.triskel .path-label {
+  text-align: center;
+  font-family: Modesto Condensed;
+  letter-spacing: 0.5px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.triskel .path-segments {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  justify-content: flex-end;
+}
+
+.triskel .path-column.right .path-segments {
+  justify-content: flex-start;
 }
 
 .triskel .strain-track {

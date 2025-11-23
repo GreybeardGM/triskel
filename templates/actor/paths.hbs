@@ -1,0 +1,28 @@
+<section class="paths">
+  <h2>Paths</h2>
+  <div class="paths-grid">
+    {{#each paths as |column|}}
+      <div class="path-column {{column.side}}">
+        {{#each column.paths as |path|}}
+          <div class="path-bar resource-bar {{path.id}} side-{{column.side}}">
+            <div class="path-label">{{path.label}}</div>
+            <div class="path-segments">
+              {{#each path._displaySegments as |segment|}}
+                <div
+                  class="resource-box segment-{{segment.state}}"
+                  {{#if segment.clickable}}
+                    data-action="updateResourceValue"
+                    data-resource="paths.{{path.id}}"
+                    data-resource-value="{{segment.index}}"
+                  {{/if}}
+                >
+                  {{segment.index}}
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
+</section>
