@@ -60,11 +60,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.actor ??= this.document;
     context.system ??= this.document.system;
 
+    // Prepare Sills
     const { resistances, skillColumns } = prepareSkillsDisplay(
       context.system.skills,
       context.system.resistances
     );
 
+    // Get Max Segments for sheet
     const reserveAndTensionValues = [];
 
     Object.values(context.system.reserves ?? {}).forEach(reserve => {
@@ -85,23 +87,16 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       ? Math.max(...reserveAndTensionValues)
       : 5;
 
+    // Prepare Reserves
     const reserves = prepareBars(context.system.reserves, MaxSegments, TRISKEL_RESERVES);
     const tension = prepareBars({ tension: context.system.tension }, MaxSegments).tension ?? context.system.tension;
 
+    // Prepare Paths
     const preparedPaths = prepareBars(context.system.paths, MaxSegments, TRISKEL_PATHS);
-    const pathColumns = Object.values(TRISKEL_PATHS).reduce((columns, path) => {
-      const side = path.side ?? "left";
-      columns[side] ??= { side, paths: [] };
-
-      const preparedPath = preparedPaths[path.id];
-      if (preparedPath) columns[side].paths.push(preparedPath);
-
-      return columns;
-    }, {});
 
     context.reserves = reserves;
     context.tension = tension;
-    context.paths = Object.values(pathColumns);
+    context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
 
