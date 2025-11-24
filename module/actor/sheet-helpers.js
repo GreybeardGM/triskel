@@ -32,14 +32,28 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
 
   const globalMax = Number.isFinite(Number(MaxSegments)) ? Number(MaxSegments) : 5;
 
-  return Object.entries(bars).reduce((collection, [id, resource]) => {
-    if (!resource) return collection;
+  const barsWithSorting = Object.entries(bars ?? {}).map(([id, resource]) => ({
+    id,
+    resource,
+    codexEntry: codexReference[id] ?? {},
+    sortOrder: codexReference[id]?.sortOrder ?? Number.MAX_SAFE_INTEGER
+  }));
 
-    const codexEntry = codexReference[id] ?? {};
+  barsWithSorting.sort((a, b) => {
+    const orderDifference = a.sortOrder - b.sortOrder;
+    if (orderDifference !== 0) return orderDifference;
 
-    const min = Number(resource.min ?? 0);
-    const value = Number(resource.value ?? 0);
-    const ownMax = Number.isFinite(Number(resource.max)) ? Number(resource.max) : globalMax;
+    const labelA = a.codexEntry.label ?? a.resource?.label ?? "";
+    const labelB = b.codexEntry.label ?? b.resource?.label ?? "";
+    return labelA.localeCompare(labelB, undefined, { sensitivity: "base" });
+  });
+
+  return barsWithSorting.reduce((collection, entry) => {
+    if (!entry.resource) return collection;
+
+    const min = Number(entry.resource.min ?? 0);
+    const value = Number(entry.resource.value ?? 0);
+    const ownMax = Number.isFinite(Number(entry.resource.max)) ? Number(entry.resource.max) : globalMax;
 
     const _segments = [];
     for (let index = 1; index <= globalMax; index += 1) {
@@ -56,11 +70,11 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
       });
     }
 
-    collection[id] = {
-      ...resource,
-      id,
-      label: codexEntry.label ?? resource.label,
-      description: codexEntry.description ?? resource.description,
+    collection[entry.id] = {
+      ...entry.resource,
+      id: entry.id,
+      label: entry.codexEntry.label ?? entry.resource.label,
+      description: entry.codexEntry.description ?? entry.resource.description,
       _segments
     };
 
