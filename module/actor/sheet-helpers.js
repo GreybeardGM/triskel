@@ -27,71 +27,48 @@ export async function onUpdateResourceValue(event, target) {
   await this.document.update({ [property]: newValue });
 }
 
+export function prepareBars(bars, MaxSegments, codexReference = {}) {
+  if (!bars) return {};
+
+  const globalMax = Number.isFinite(Number(MaxSegments)) ? Number(MaxSegments) : 5;
+
+  return Object.entries(bars).reduce((collection, [id, resource]) => {
+    if (!resource) return collection;
+
+    const codexEntry = codexReference[id] ?? {};
+
+    const min = Number(resource.min ?? 0);
+    const value = Number(resource.value ?? 0);
+    const ownMax = Number.isFinite(Number(resource.max)) ? Number(resource.max) : globalMax;
+
+    const _segments = [];
+    for (let index = 1; index <= globalMax; index += 1) {
+      let state = "placeholder";
+      if (index <= min) state = "strain";
+      else if (index <= value) state = "filled";
+      else if (index <= ownMax) state = "empty";
+
+      _segments.push({
+        index,
+        value: index,
+        state,
+        clickable: state !== "placeholder"
+      });
+    }
+
+    collection[id] = {
+      ...resource,
+      id,
+      label: codexEntry.label ?? resource.label,
+      description: codexEntry.description ?? resource.description,
+      _segments
+    };
+
+    return collection;
+  }, {});
+}
+
 import { TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../triskel-codex.js";
-
-export function prepareResourceBarSegments({
-  min = 0,
-  value = 0,
-  max = 0,
-  globalMax = 0
-} = {}) {
-  const normalizedMin = Number(min ?? 0);
-  const normalizedValue = Number(value ?? 0);
-  const normalizedMax = Number(max ?? 0);
-  const normalizedGlobalMax = Math.max(Math.floor(Number(globalMax ?? 0)), 1);
-
-  const segments = [];
-  for (let i = normalizedGlobalMax; i >= 1; i--) {
-    let state;
-    if (i <= normalizedMin) state = "strain";
-    else if (i <= normalizedValue) state = "filled";
-    else if (i <= normalizedMax) state = "empty";
-    else state = "placeholder";
-
-    const clickable = state === "filled" || state === "empty";
-    segments.push({ index: i, state, clickable });
-  }
-
-  return {
-    min: normalizedMin,
-    value: normalizedValue,
-    max: normalizedMax,
-    segments
-  };
-}
-
-export function prepareResourceBars({
-  resources = {},
-  fallbackMax = 5
-} = {}) {
-  const normalizedResources = resources ?? {};
-  const normalizedFallbackMax = Math.max(Math.floor(Number(fallbackMax ?? 0)), 1);
-
-  const segmentBounds = Object.values(normalizedResources)
-    .map(resource => Math.max(Math.floor(Number(resource?.max ?? 0)), 0));
-  const maxSegments = Math.max(normalizedFallbackMax, ...segmentBounds);
-
-  for (const resource of Object.values(normalizedResources)) {
-    if (!resource) continue;
-
-    const { segments, min, value, max } = prepareResourceBarSegments({
-      min: resource.min,
-      value: resource.value,
-      max: resource.max,
-      globalMax: maxSegments
-    });
-
-    resource._segments = segments;
-    resource.min = min;
-    resource.value = value;
-    resource.max = max;
-  }
-
-  return {
-    maxSegments,
-    resources: normalizedResources
-  };
-}
 
 const SKILL_COLUMN_LAYOUT = [
   { id: "combat", categories: ["Offense", "Defense"] },
