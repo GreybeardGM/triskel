@@ -5,9 +5,9 @@
       <div class="path-column {{column.side}}">
         {{#each column.paths as |path|}}
           <div class="path-bar resource-bar {{path.id}} side-{{column.side}}">
-            <div class="path-label">{{path.label}}</div>
+            <div class="path-label" title="{{path.description}}">{{path.label}}</div>
             <div class="path-segments">
-              {{#each path._displaySegments as |segment|}}
+              {{#each path._segments as |segment|}}
                 <div
                   class="resource-box segment-{{segment.state}}"
                   {{#if segment.clickable}}

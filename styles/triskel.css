@@ -205,11 +205,12 @@
 }
 
 .triskel .path-bar {
+  display: flex;
+  align-items: center;
   gap: 0.35rem;
 }
 
 .triskel .path-label {
-  text-align: center;
   font-family: Modesto Condensed;
   letter-spacing: 0.5px;
   font-size: 1.1rem;
@@ -224,7 +225,22 @@
 }
 
 .triskel .path-column.right .path-segments {
+  flex-direction: row-reverse;
   justify-content: flex-start;
+}
+
+.triskel .path-column.left .path-label {
+  order: 0;
+  margin-right: 0.5rem;
+}
+
+.triskel .path-column.left .path-segments {
+  order: 1;
+}
+
+.triskel .path-column.right .path-label {
+  order: 2;
+  margin-left: 0.5rem;
 }
 
 .triskel .strain-track {

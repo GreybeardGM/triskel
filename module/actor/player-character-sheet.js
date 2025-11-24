@@ -1,4 +1,5 @@
-import { onEditImage, onUpdateResourceValue, prepareResourceBarSegments, prepareResourceBars, prepareSkillsDisplay } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
+import { TRISKEL_PATHS, TRISKEL_RESERVES } from "../triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -64,88 +65,46 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       context.system.resistances
     );
 
-    context.resistances = resistances;
-    context.skillColumns = skillColumns;
+    const reserveAndTensionValues = [];
 
-    // Reserves + Balken vorbereiten
-    const {
-      resources: reserves,
-      maxSegments
-    } = prepareResourceBars({
-      resources: context.system.reserves ?? {},
-      fallbackMax: 5
+    Object.values(context.system.reserves ?? {}).forEach(reserve => {
+      const reserveValue = Number(reserve?.value);
+      if (Number.isFinite(reserveValue)) reserveAndTensionValues.push(reserveValue);
+
+      const reserveMax = Number(reserve?.max);
+      if (Number.isFinite(reserveMax)) reserveAndTensionValues.push(reserveMax);
     });
 
-    context.reserves = reserves;
+    const tensionValue = Number(context.system.tension?.value);
+    if (Number.isFinite(tensionValue)) reserveAndTensionValues.push(tensionValue);
 
-    // Paths vorbereiten
-    const PATH_LAYOUT = [
-      { id: "virtue", label: "Virtue", side: "left" },
-      { id: "vice", label: "Vice", side: "left" },
-      { id: "ward", label: "Ward", side: "right" },
-      { id: "ruin", label: "Ruin", side: "right" }
-    ];
+    const tensionMax = Number(context.system.tension?.max);
+    if (Number.isFinite(tensionMax)) reserveAndTensionValues.push(tensionMax);
 
-    const preparedPaths = prepareResourceBars({
-      resources: PATH_LAYOUT.reduce((paths, path) => {
-        const systemPath = context.system.paths?.[path.id] ?? {};
+    const MaxSegments = reserveAndTensionValues.length
+      ? Math.max(...reserveAndTensionValues)
+      : 5;
 
-        paths[path.id] = {
-          max: systemPath.max ?? 12,
-          ...systemPath,
-          label: systemPath.label ?? path.label
-        };
+    const reserves = prepareBars(context.system.reserves, MaxSegments, TRISKEL_RESERVES);
+    const tension = prepareBars({ tension: context.system.tension }, MaxSegments).tension ?? context.system.tension;
 
-        return paths;
-      }, {}),
-      fallbackMax: 12
-    }).resources;
+    const preparedPaths = prepareBars(context.system.paths, MaxSegments, TRISKEL_PATHS);
+    const pathColumns = Object.values(TRISKEL_PATHS).reduce((columns, path) => {
+      const side = path.side ?? "left";
+      columns[side] ??= { side, paths: [] };
 
-    const pathsBySide = PATH_LAYOUT.reduce((columns, { id, side, label }) => {
-      const prepared = preparedPaths[id] ?? {};
-      const segments = prepared._segments ?? [];
+      const preparedPath = preparedPaths[path.id];
+      if (preparedPath) columns[side].paths.push(preparedPath);
 
-      const column = columns[side] ?? { side, paths: [] };
-      column.paths.push({
-        ...prepared,
-        id,
-        label: prepared.label ?? label,
-        side,
-        _displaySegments: side === "right" ? [...segments].reverse() : segments
-      });
-
-      columns[side] = column;
       return columns;
     }, {});
 
-    context.paths = [pathsBySide.left, pathsBySide.right].filter(Boolean);
-
-    // Tension-Bar vorbereiten
-    const tension = {
-      ...(context.system.tension ?? {})
-    };
-
-    if (Object.keys(tension).length) {
-      const {
-        segments,
-        max,
-        min,
-        value
-      } = prepareResourceBarSegments({
-        min: 0,
-        value: tension.value,
-        max: maxSegments,
-        globalMax: maxSegments
-      });
-
-      tension._segments = segments;
-      tension.max = max;
-      tension.min = min;
-      tension.value = value;
-    }
-
+    context.reserves = reserves;
     context.tension = tension;
-  
+    context.paths = Object.values(pathColumns);
+    context.resistances = resistances;
+    context.skillColumns = skillColumns;
+
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
       this.document.system.details?.notes ?? "",
