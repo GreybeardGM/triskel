@@ -56,7 +56,7 @@
 .triskel .resource-bar {
   --color-resource-box: #444;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 0.25rem;
 }
 
@@ -198,16 +198,19 @@
   gap: 1rem;
 }
 
-.triskel .path-column {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .triskel .path-bar {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  justify-content: flex-end;
+}
+
+.triskel .path-bar.side-right {
+  flex-direction: row-reverse;
+}
+
+.triskel .path-bar.side-left {
+  flex-direction: row;
 }
 
 .triskel .path-label {
@@ -219,28 +222,16 @@
 
 .triskel .path-segments {
   display: flex;
+  gap: 0.25em;
+  width: 70%;
+}
+
+.triskel .side-right .path-segments {
   flex-direction: row;
-  gap: 0.25rem;
-  justify-content: flex-end;
 }
 
-.triskel .path-column.right .path-segments {
+.triskel .side-left .path-segments {
   flex-direction: row-reverse;
-  justify-content: flex-start;
-}
-
-.triskel .path-column.left .path-label {
-  order: 0;
-  margin-right: 0.5rem;
-}
-
-.triskel .path-column.left .path-segments {
-  order: 1;
-}
-
-.triskel .path-column.right .path-label {
-  order: 2;
-  margin-left: 0.5rem;
 }
 
 .triskel .strain-track {
