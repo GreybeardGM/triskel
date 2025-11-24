@@ -128,18 +128,22 @@
 
 .triskel .paths .path-bar.virtue {
   --color-resource-box: #FFD447;
+  flex-direction: row;
 }
 
 .triskel .paths .path-bar.vice {
   --color-resource-box: #8E44AD;
+  flex-direction: row;
 }
 
 .triskel .paths .path-bar.ward {
   --color-resource-box: #4CAF50;
+  flex-direction: row-reverse;
 }
 
 .triskel .paths .path-bar.ruin {
   --color-resource-box: #E74C3C;
+  flex-direction: row-reverse;
 }
 
 .triskel .resource-box.segment-empty:hover {
@@ -205,14 +209,6 @@
   justify-content: flex-end;
 }
 
-.triskel .path-bar.side-right {
-  flex-direction: row-reverse;
-}
-
-.triskel .path-bar.side-left {
-  flex-direction: row;
-}
-
 .triskel .path-label {
   font-family: Modesto Condensed;
   letter-spacing: 0.5px;
@@ -226,11 +222,13 @@
   width: 70%;
 }
 
-.triskel .side-right .path-segments {
+.triskel .ward .path-segments, 
+.triskel .ruin .path-segments {
   flex-direction: row;
 }
 
-.triskel .side-left .path-segments {
+.triskel .virtue .path-segments,
+.triskel .vice .path-segments {
   flex-direction: row-reverse;
 }
 
