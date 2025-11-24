@@ -213,17 +213,20 @@ export const TRISKEL_RESERVES = {
   power: {
     id: "power",
     label: "Power",
-    description: "How physically mighty and enduring someone is."
+    description: "How physically mighty and enduring someone is.",
+    sortOrder: 1
   },
   grace: {
     id: "grace",
     label: "Grace",
-    description: "A character's technical skill."
+    description: "A character's technical skill.",
+    sortOrder: 2
   },
   will: {
     id: "will",
     label: "Will",
-    description: "Mental capacity."
+    description: "Mental capacity.",
+    sortOrder: 3
   }
 };
 
@@ -232,12 +235,14 @@ export const TRISKEL_NPC_STATS = {
   hp: {
     id: "hp",
     label: "Hitpoints",
-    description: "How much damage the character can take before it affects their behavior in combat."
+    description: "How much damage the character can take before it affects their behavior in combat.",
+    sortOrder: 1
   },
   wounds: {
     id: "wounds",
     label: "Wounds",
-    description: "How many states the NPC can go through before they are brought down."
+    description: "How many states the NPC can go through before they are brought down.",
+    sortOrder: 2
   }
 };
 
@@ -247,7 +252,7 @@ export const TRISKEL_PATHS = {
     id: "virtue",
     label: "Saint",
     description: "How benevolently the gods of Celestia look upon the character.",
-    side: "left",
+    sortOrder: 1,
     tags: ["Good", "Moralistic"],
     steps: [
       { tier: 1, label: "Discipline" },
@@ -259,7 +264,7 @@ export const TRISKEL_PATHS = {
     id: "ward",
     label: "Guardian",
     description: "How much the spirits of the Underworld aid the character.",
-    side: "right",
+    sortOrder: 2,
     tags: ["Good", "Naturalistic"],
     steps: [
       { tier: 1, label: "Presence" },
@@ -271,7 +276,7 @@ export const TRISKEL_PATHS = {
     id: "vice",
     label: "Sinner",
     description: "How much the powers of Inferna take an interest in the character.",
-    side: "left",
+    sortOrder: 3,
     tags: ["Evil", "Moralistic"],
     steps: [
       { tier: 1, label: "Indulgence" },
@@ -283,7 +288,7 @@ export const TRISKEL_PATHS = {
     id: "ruin",
     label: "Destroyer",
     description: "How strongly the powers of the Abyss reach for the character.",
-    side: "right",
+    sortOrder: 4,
     tags: ["Evil", "Naturalistic"],
     steps: [
       { tier: 1, label: "Desire" },
