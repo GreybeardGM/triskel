@@ -213,19 +213,19 @@ export const TRISKEL_RESERVES = {
   power: {
     id: "power",
     label: "Power",
-    description: "How physically mighty and enduring someone is.",
+    description: "Physical force and exertion.",
     sortOrder: 1
   },
   grace: {
     id: "grace",
     label: "Grace",
-    description: "A character's technical skill.",
+    description: "Precision, movement, coordination.",
     sortOrder: 2
   },
   will: {
     id: "will",
     label: "Will",
-    description: "Mental capacity.",
+    description: "Focus, intent, mental pressure, assertion.",
     sortOrder: 3
   }
 };
@@ -250,8 +250,8 @@ export const TRISKEL_NPC_STATS = {
 export const TRISKEL_PATHS = {
   virtue: {
     id: "virtue",
-    label: "Saint",
-    description: "How benevolently the gods of Celestia look upon the character.",
+    label: "Virtue",
+    description: "Capacity for discipline and moral steadiness.",
     sortOrder: 1,
     tags: ["Good", "Moralistic"],
     steps: [
@@ -262,8 +262,8 @@ export const TRISKEL_PATHS = {
   },
   ward: {
     id: "ward",
-    label: "Guardian",
-    description: "How much the spirits of the Underworld aid the character.",
+    label: "Ward",
+    description: "Inner boundaries, spiritual posture, personal sanctum.",
     sortOrder: 2,
     tags: ["Good", "Naturalistic"],
     steps: [
@@ -275,7 +275,7 @@ export const TRISKEL_PATHS = {
   vice: {
     id: "vice",
     label: "Sinner",
-    description: "How much the powers of Inferna take an interest in the character.",
+    description: "Pull toward impulse, weakness, self-indulgence.",
     sortOrder: 3,
     tags: ["Evil", "Moralistic"],
     steps: [
@@ -287,7 +287,7 @@ export const TRISKEL_PATHS = {
   ruin: {
     id: "ruin",
     label: "Destroyer",
-    description: "How strongly the powers of the Abyss reach for the character.",
+    description: "Fracture, decay, the breaking of the self.",
     sortOrder: 4,
     tags: ["Evil", "Naturalistic"],
     steps: [
