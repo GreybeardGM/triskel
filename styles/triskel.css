@@ -127,22 +127,22 @@
 }
 
 .triskel .paths .path-bar.virtue {
-  --color-resource-box: #FFD447;
+  --color-resource-box: #ffffee;
   flex-direction: row;
 }
 
 .triskel .paths .path-bar.vice {
-  --color-resource-box: #8E44AD;
+  --color-resource-box: #9e9178;
   flex-direction: row;
 }
 
 .triskel .paths .path-bar.ward {
-  --color-resource-box: #4CAF50;
+  --color-resource-box: #90bab9;
   flex-direction: row-reverse;
 }
 
 .triskel .paths .path-bar.ruin {
-  --color-resource-box: #E74C3C;
+  --color-resource-box: #bbb3ce;
   flex-direction: row-reverse;
 }
 
