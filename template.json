@@ -147,7 +147,6 @@
         },
       "reserves": {
         "power": {
-          "label": "Power",
           "value": 0,
           "max": 5,
           "strain": {
@@ -159,7 +158,6 @@
           }
         },
         "grace": {
-          "label": "Grace",
           "value": 0,
           "max": 5,
           "strain": {
@@ -171,7 +169,6 @@
           }
         },
         "will": {
-          "label": "Will",
           "value": 0,
           "max": 5,
           "strain": {
