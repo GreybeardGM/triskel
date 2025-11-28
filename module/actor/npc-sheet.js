@@ -1,5 +1,5 @@
 import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
-import { TRISKEL_NPC_STATS } from "../triskel-codex.js";
+import { TRISKEL_NPC_STATS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;

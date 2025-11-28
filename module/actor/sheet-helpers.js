@@ -82,7 +82,7 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
   }, {});
 }
 
-import { TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../triskel-codex.js";
+import { TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
 const SKILL_COLUMN_LAYOUT = [
   { id: "combat", categories: ["Offense", "Defense"] },
