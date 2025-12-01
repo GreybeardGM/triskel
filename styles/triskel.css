@@ -28,7 +28,7 @@
 }
 
 .triskel .header-fields.tier-info {
-  flex: 0 0 180px;
+  flex: 0 0 130px;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -41,7 +41,15 @@
 }
 
 .triskel .tier-input input[type="number"] {
-  width: 4rem;
+  width: 3rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #111;
+  background: #f3f3f3;
+  border: 1px solid #b5b5b5;
+  border-radius: 999px;
+  height: 3rem;
 }
 
 .triskel .tier-label {
