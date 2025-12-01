@@ -29,7 +29,7 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static PARTS = {
     info: {
       id: "info",
-      template: "systems/triskel/templates/actor/player-character-info.hbs"
+      template: "systems/triskel/templates/actor/npc-info.hbs"
     },
     stats: {
       id: "stats",
