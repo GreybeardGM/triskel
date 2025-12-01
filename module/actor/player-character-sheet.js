@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
 import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -47,6 +47,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     skills: {
       id: "skills",
       template: "systems/triskel/templates/actor/skills.hbs"
+    },
+    actions: {
+      id: "actions",
+      template: "systems/triskel/templates/actor/player-character-actions.hbs"
     },
     notes: {
       id: "notes",
@@ -99,6 +103,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
+    context.standardActions = prepareStandardActions(
+      context.system.actions?.selected,
+      context.system.skills,
+      context.system.reserves
+    );
     const tierValue = Number(context.system.tier?.value);
     context.tierLabel = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label ?? "";
 

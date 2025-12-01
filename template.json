@@ -127,28 +127,31 @@
         "id": "tier",
         "value": 1
       },
-        "paths": {
-          "virtue": {
-            "id": "virtue",
-            "min": 1,
-            "value": 1
-          },
-          "vice": {
-            "id": "vice",
-            "min": 1,
-            "value": 1
-          },
-          "ward": {
-            "id": "ward",
-            "min": 1,
-            "value": 1
-          },
-          "ruin": {
-            "id": "ruin",
-            "min": 1,
-            "value": 1
-          }
+      "actions": {
+        "selected": {}
+      },
+      "paths": {
+        "virtue": {
+          "id": "virtue",
+          "min": 1,
+          "value": 1
         },
+        "vice": {
+          "id": "vice",
+          "min": 1,
+          "value": 1
+        },
+        "ward": {
+          "id": "ward",
+          "min": 1,
+          "value": 1
+        },
+        "ruin": {
+          "id": "ruin",
+          "min": 1,
+          "value": 1
+        }
+      },
       "reserves": {
         "power": {
           "value": 0,
