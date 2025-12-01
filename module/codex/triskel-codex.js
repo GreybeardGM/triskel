@@ -1,6 +1,39 @@
 // triskel-codex.js
-// Master list of all Triskel Skills
+// Triskel Tiers
+export const TRISKEL_TIERS = {
+  novice: {
+    id: "novice",
+    label: "Novice",
+    tier: 1
+  },
+  apprentice: {
+    id: "apprentice",
+    label: "Apprentice",
+    tier: 2
+  },
+  adept: {
+    id: "adept",
+    label: "Adept",
+    tier: 3
+  },
+  veteran: {
+    id: "veteran",
+    label: "Veteran",
+    tier: 4
+  },
+  master: {
+    id: "master",
+    label: "Master",
+    tier: 5
+  },
+  paragon: {
+    id: "paragon",
+    label: "Paragon",
+    tier: 6
+  }
+};
 
+// Master list of all Triskel Skills
 export const TRISKEL_SKILLS = {
   /* ---------------------------------- OFFENSE ---------------------------------- */
   strike: {

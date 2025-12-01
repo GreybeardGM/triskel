@@ -1,5 +1,5 @@
 import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
-import { TRISKEL_PATHS, TRISKEL_RESERVES } from "../codex/triskel-codex.js";
+import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -99,6 +99,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
+    const tierValue = Number(context.system.tier?.value);
+    context.tierLabel = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label ?? "";
 
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(

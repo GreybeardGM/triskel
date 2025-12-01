@@ -27,6 +27,27 @@
   flex: 1;
 }
 
+.triskel .header-fields.tier-info {
+  flex: 0 0 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.triskel .tier-input {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.triskel .tier-input input[type="number"] {
+  width: 4rem;
+}
+
+.triskel .tier-label {
+  font-weight: 700;
+}
+
 .triskel .charname input {
   height: auto;
 }
