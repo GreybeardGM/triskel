@@ -1,3 +1,6 @@
+import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
+import { TRISKEL_RESERVES, TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+
 export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
   const current = foundry.utils.getProperty(this.document, field);
@@ -82,8 +85,6 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
   }, {});
 }
 
-import { TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
-
 const SKILL_COLUMN_LAYOUT = [
   { id: "combat", categories: ["Offense", "Defense"] },
   { id: "physical", categories: ["Physical", "Professional"] },
@@ -133,4 +134,34 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
   });
 
   return { resistances: resistancesList, skillColumns };
+}
+
+export function prepareStandardActions(selectedActions = {}, skills = {}, reserves = {}) {
+  const selected = selectedActions ?? {};
+  const actorSkills = skills ?? {};
+  const actorReserves = reserves ?? {};
+
+  return TRISKEL_ACTIONS.map(action => {
+    const skillInfo = TRISKEL_SKILLS[action.skill] ?? {};
+    const reserveInfo = TRISKEL_RESERVES[action.reserve] ?? {};
+
+    const rawSkillValue = actorSkills[action.skill]?.value;
+    const parsedSkillValue = Number(rawSkillValue);
+    const skillValue = Number.isFinite(parsedSkillValue) ? parsedSkillValue : 0;
+
+    const reserve = actorReserves[action.reserve] ?? {};
+    const reserveValue = Number(reserve.value ?? reserveInfo.value ?? NaN);
+    const reserveMax = Number(reserve.max ?? reserveInfo.max ?? NaN);
+
+    return {
+      ...action,
+      label: action.label ?? skillInfo.label ?? action.key,
+      skillLabel: skillInfo.label ?? action.skill,
+      reserveLabel: reserveInfo.label ?? action.reserve,
+      selected: Boolean(selected[action.key]),
+      skillValue,
+      reserveValue: Number.isFinite(reserveValue) ? reserveValue : null,
+      reserveMax: Number.isFinite(reserveMax) ? reserveMax : null
+    };
+  });
 }

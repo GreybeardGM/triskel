@@ -1,0 +1,45 @@
+<section class="actions">
+  <h2>Actions</h2>
+  <div class="actions-grid">
+    {{#each standardActions as |action|}}
+      <article class="action-card">
+        <header class="action-card__header">
+          <h3 class="action-card__title">{{action.label}}</h3>
+          <label class="action-card__select" title="Diese Aktion auf dem Bogen aktivieren">
+            <input
+              type="checkbox"
+              name="system.actions.selected.{{action.key}}"
+              {{checked action.selected}}
+            />
+            <span>Select</span>
+          </label>
+        </header>
+
+        <dl class="action-card__meta">
+          <div class="action-card__row" title="{{action.description}}">
+            <dt>Skill</dt>
+            <dd>
+              <span class="action-card__skill">{{action.skillLabel}}</span>
+              <span class="action-card__bonus">{{numberFormat action.skillValue decimals=0 sign=true}}</span>
+            </dd>
+          </div>
+          <div class="action-card__row">
+            <dt>Reserve</dt>
+            <dd>
+              <span class="action-card__reserve">{{action.reserveLabel}}</span>
+              {{#if action.reserveValue}}
+                {{#if action.reserveMax}}
+                  <span class="action-card__reserve-values">{{action.reserveValue}} / {{action.reserveMax}}</span>
+                {{/if}}
+              {{/if}}
+            </dd>
+          </div>
+        </dl>
+
+        {{#if action.description}}
+          <p class="action-card__description">{{action.description}}</p>
+        {{/if}}
+      </article>
+    {{/each}}
+  </div>
+</section>
