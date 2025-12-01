@@ -204,7 +204,32 @@
     }
   },
   "Item": {
-    "types": [],
-    "templates": {}
+    "types": ["weapon", "armor", "ability", "spell"],
+    "templates": {
+      "base": {
+        "description": "",
+        "actions": {
+          "add": [],
+          "ref": []
+        },
+        "forms": {
+          "add": [],
+          "ref": []
+        },
+        "modifiers": []
+      },
+      "weapon": {
+        "templates": ["base"]
+      },
+      "armor": {
+        "templates": ["base"]
+      },
+      "ability": {
+        "templates": ["base"]
+      },
+      "spell": {
+        "templates": ["base"]
+      }
+    }
   }
 }
