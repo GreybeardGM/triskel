@@ -1,6 +1,17 @@
 import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
 import { TRISKEL_RESERVES, TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
+const localize = (value) => {
+  if (!value) return "";
+
+  try {
+    return game?.i18n?.localize?.(value) ?? value;
+  } catch (error) {
+    console.warn("[Triskel] Failed to localize value", { value, error });
+    return value;
+  }
+};
+
 export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
   const current = foundry.utils.getProperty(this.document, field);
@@ -48,7 +59,7 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
 
     const labelA = a.codexEntry.label ?? a.resource?.label ?? "";
     const labelB = b.codexEntry.label ?? b.resource?.label ?? "";
-    return labelA.localeCompare(labelB, undefined, { sensitivity: "base" });
+    return localize(labelA).localeCompare(localize(labelB), undefined, { sensitivity: "base" });
   });
 
   return barsWithSorting.reduce((collection, entry) => {
@@ -76,8 +87,8 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
     collection[entry.id] = {
       ...entry.resource,
       id: entry.id,
-      label: entry.codexEntry.label ?? entry.resource.label,
-      description: entry.codexEntry.description ?? entry.resource.description,
+      label: localize(entry.codexEntry.label ?? entry.resource.label),
+      description: localize(entry.codexEntry.description ?? entry.resource.description),
       _segments
     };
 
@@ -85,11 +96,21 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
   }, {});
 }
 
+const SKILL_CATEGORY_LABELS = {
+  offense: "TRISKEL.SkillCategories.Offense",
+  defense: "TRISKEL.SkillCategories.Defense",
+  physical: "TRISKEL.SkillCategories.Physical",
+  professional: "TRISKEL.SkillCategories.Professional",
+  social: "TRISKEL.SkillCategories.Social",
+  intellectual: "TRISKEL.SkillCategories.Intellectual",
+  magic: "TRISKEL.SkillCategories.Magic"
+};
+
 const SKILL_COLUMN_LAYOUT = [
-  { id: "combat", categories: ["Offense", "Defense"] },
-  { id: "physical", categories: ["Physical", "Professional"] },
-  { id: "social", categories: ["Social", "Intellectual"] },
-  { id: "magic", categories: ["Magic"] }
+  { id: "combat", categories: ["offense", "defense"] },
+  { id: "physical", categories: ["physical", "professional"] },
+  { id: "social", categories: ["social", "intellectual"] },
+  { id: "magic", categories: ["magic"] }
 ];
 
 export function prepareSkillsDisplay(skills = {}, resistances = {}) {
@@ -101,7 +122,14 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     const parsedValue = Number(rawValue);
     const value = Number.isFinite(parsedValue) ? parsedValue : 0;
 
-    const entry = { ...skill, value };
+    const entry = {
+      ...skill,
+      value,
+      label: localize(skill.label ?? skill.id),
+      description: localize(skill.description ?? ""),
+      categoryLabel: localize(skill.categoryLabel ?? skill.category ?? ""),
+      phaseLabel: localize(skill.phaseLabel ?? skill.phase ?? "")
+    };
     const category = skill.category ?? "";
 
     if (!collection[category]) collection[category] = [];
@@ -119,7 +147,7 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     categories: column.categories
       .map(category => ({
         id: category.toLowerCase(),
-        title: category,
+        title: localize(SKILL_CATEGORY_LABELS[category] ?? category),
         skills: byCategory[category] ?? []
       }))
       .filter(category => category.skills.length)
@@ -130,7 +158,12 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     const parsedValue = Number(rawValue);
     const value = Number.isFinite(parsedValue) ? parsedValue : 0;
 
-    return { ...resistance, value };
+    return {
+      ...resistance,
+      value,
+      label: localize(resistance.label ?? resistance.id),
+      description: localize(resistance.description ?? "")
+    };
   });
 
   return { resistances: resistancesList, skillColumns };
@@ -155,9 +188,10 @@ export function prepareStandardActions(selectedActions = {}, skills = {}, reserv
 
     return {
       ...action,
-      label: action.label ?? skillInfo.label ?? action.key,
-      skillLabel: skillInfo.label ?? action.skill,
-      reserveLabel: reserveInfo.label ?? action.reserve,
+      label: localize(action.label ?? skillInfo.label ?? action.key),
+      skillLabel: localize(skillInfo.label ?? action.skill),
+      reserveLabel: localize(reserveInfo.label ?? action.reserve),
+      description: localize(action.description ?? ""),
       selected: Boolean(selected[action.key]),
       skillValue,
       reserveValue: Number.isFinite(reserveValue) ? reserveValue : null,

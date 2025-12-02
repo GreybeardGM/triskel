@@ -3,19 +3,30 @@ import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
 import { TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
+const localize = (value) => {
+  if (!value) return "";
+
+  try {
+    return game?.i18n?.localize?.(value) ?? value;
+  } catch (error) {
+    console.warn("[Triskel] Failed to localize value", { value, error });
+    return value;
+  }
+};
+
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-const ACTION_REFERENCE_OPTIONS = TRISKEL_ACTIONS
-  .map(action => ({ value: action.key, label: action.label ?? action.key }))
+const ACTION_REFERENCE_OPTIONS = () => TRISKEL_ACTIONS
+  .map(action => ({ value: action.key, label: localize(action.label ?? action.key) }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
-const FORM_REFERENCE_OPTIONS = TRISKEL_FORMS
-  .map(form => ({ value: form.key, label: form.label ?? form.key }))
+const FORM_REFERENCE_OPTIONS = () => TRISKEL_FORMS
+  .map(form => ({ value: form.key, label: localize(form.label ?? form.key) }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
-const MODIFIER_SKILL_OPTIONS = Object.values(TRISKEL_SKILLS)
-  .map(skill => ({ value: skill.id, label: skill.label ?? skill.id }))
+const MODIFIER_SKILL_OPTIONS = () => Object.values(TRISKEL_SKILLS)
+  .map(skill => ({ value: skill.id, label: localize(skill.label ?? skill.id) }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
@@ -52,15 +63,15 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.system ??= this.document.system ?? {};
 
     context.referenceOptions = {
-      actions: ACTION_REFERENCE_OPTIONS,
-      forms: FORM_REFERENCE_OPTIONS
+      actions: ACTION_REFERENCE_OPTIONS(),
+      forms: FORM_REFERENCE_OPTIONS()
     };
     context.references = {
       actions: this.constructor.prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ACTIONS),
       forms: this.constructor.prepareReferenceEntries(context.system.forms?.ref, TRISKEL_FORMS)
     };
     context.modifiers = this.constructor.prepareModifiers(context.system.modifiers);
-    context.modifierOptions = MODIFIER_SKILL_OPTIONS;
+    context.modifierOptions = MODIFIER_SKILL_OPTIONS();
 
     console.debug("[Triskel] ItemSheet _prepareContext", {
       item: context.item?.name,
@@ -79,7 +90,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       const key = typeof entry === "string" ? entry : entry?.key ?? "";
       const label = collection.find(item => item.key === key)?.label ?? key;
 
-      return { key, label, index };
+      return { key, label: localize(label), index };
     });
   }
 
@@ -91,7 +102,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
       return {
         ...modifier,
-        label: skill.label ?? modifier.skill ?? "",
+        label: localize(skill.label ?? modifier.skill ?? ""),
         index
       };
     });

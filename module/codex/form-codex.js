@@ -5,65 +5,65 @@
 export const TRISKEL_FORMS = [
   {
     key: "power_strike",
-    label: "Power Strike",
+    label: "TRISKEL.Forms.PowerStrike.Label",
     category: "combat",
     skill: "strike",
     reserve: "power",
     actions: ["strike"],
-    description: "Spend power to make a strike hit much harder than usual."
+    description: "TRISKEL.Forms.PowerStrike.Description"
   },
   {
     key: "long_hook",
-    label: "Long Hook",
+    label: "TRISKEL.Forms.LongHook.Label",
     category: "combat",
     skill: "control",
     reserve: "grace",
     actions: ["bind", "expose", "push"],
-    description: "Extend a control action to reach further than normal using a hooked or polearm weapon."
+    description: "TRISKEL.Forms.LongHook.Description"
   },
   {
     key: "locking_bind",
-    label: "Locking Bind",
+    label: "TRISKEL.Forms.LockingBind.Label",
     category: "combat",
     skill: "control",
     reserve: "grace",
     actions: ["bind"],
-    description: "Deepen a bind so that the target’s weapon stays locked more firmly in place."
+    description: "TRISKEL.Forms.LockingBind.Description"
   },
   {
     key: "precision_thrust",
-    label: "Precision Thrust",
+    label: "TRISKEL.Forms.PrecisionThrust.Label",
     category: "combat",
     skill: "strike",
     reserve: "grace",
     actions: ["strike"],
-    description: "Turn a strike into a precise thrust that gains extra accuracy for a brief moment."
+    description: "TRISKEL.Forms.PrecisionThrust.Description"
   },
   {
     key: "push_through",
-    label: "Push Through",
+    label: "TRISKEL.Forms.PushThrough.Label",
     category: "combat",
     skill: "control",
     reserve: "power",
     actions: ["push"],
-    description: "Drive a push harder, forcing the target back farther than a normal control move would."
+    description: "TRISKEL.Forms.PushThrough.Description"
   },
   {
     key: "counterguard",
-    label: "Counterguard",
+    label: "TRISKEL.Forms.Counterguard.Label",
     category: "combat",
     skill: "guard",
     reserve: "grace",
     actions: ["guard"],
-    description: "Sharpen your defensive structure to gain a stronger guard against the next attack."
+    description: "TRISKEL.Forms.Counterguard.Description"
   },
   {
     key: "break_stance",
-    label: "Break Stance",
+    label: "TRISKEL.Forms.BreakStance.Label",
     category: "combat",
     skill: "strike",
     reserve: "power",
     actions: ["strike"],
-    description: "Turn a heavy strike into a stance-breaking blow that leaves the target more exposed."
+    description: "TRISKEL.Forms.BreakStance.Description"
   }
 ];
