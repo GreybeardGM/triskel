@@ -19,7 +19,6 @@ const MODIFIER_SKILL_OPTIONS = Object.values(TRISKEL_SKILLS)
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["triskel", "sheet", "item"],
-    template: "systems/triskel/templates/item/triskel-item-sheet.hbs",
     form: {
       submitOnChange: true
     },
@@ -31,6 +30,13 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     },
     window: {
       resizable: true
+    }
+  };
+
+  static PARTS = {
+    details: {
+      id: "details",
+      template: "systems/triskel/templates/item/triskel-item-sheet.hbs"
     }
   };
 
