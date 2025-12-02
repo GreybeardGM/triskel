@@ -24,12 +24,12 @@
     {
       "lang": "en",
       "name": "English",
-      "path": "systems/triskel/lang/en.json"
+      "path": "lang/en.json"
     },
     {
       "lang": "de",
       "name": "Deutsch",
-      "path": "systems/triskel/lang/de.json"
+      "path": "lang/de.json"
     }
   ],
   "templateVersion": 2,
