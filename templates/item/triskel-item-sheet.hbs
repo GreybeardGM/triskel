@@ -13,7 +13,19 @@
 
   <section class="item-description">
     <h2>Beschreibung</h2>
-    <textarea name="system.description" rows="4">{{system.description}}</textarea>
+    {{#if editable}}
+      <prose-mirror
+        name="system.description"
+        button="true"
+        editable="{{editable}}"
+        toggled="false"
+        value="{{system.description}}"
+      >
+        {{{descriptionHTML}}}
+      </prose-mirror>
+    {{else}}
+      {{{descriptionHTML}}}
+    {{/if}}
   </section>
 
   <section class="item-panels">
@@ -39,11 +51,6 @@
             <option value="">Aus dem Codex wählen</option>
             <optgroup label="Actions">
               {{#each referenceOptions.actions as |option|}}
-                <option value="{{option.value}}">{{option.label}}</option>
-              {{/each}}
-            </optgroup>
-            <optgroup label="Skills">
-              {{#each referenceOptions.skills as |option|}}
                 <option value="{{option.value}}">{{option.label}}</option>
               {{/each}}
             </optgroup>
@@ -73,13 +80,8 @@
         <div class="reference-controls__inputs">
           <select id="forms-reference-select" data-reference-select="forms">
             <option value="">Aus dem Codex wählen</option>
-            <optgroup label="Actions">
-              {{#each referenceOptions.actions as |option|}}
-                <option value="{{option.value}}">{{option.label}}</option>
-              {{/each}}
-            </optgroup>
-            <optgroup label="Skills">
-              {{#each referenceOptions.skills as |option|}}
+            <optgroup label="Forms">
+              {{#each referenceOptions.forms as |option|}}
                 <option value="{{option.value}}">{{option.label}}</option>
               {{/each}}
             </optgroup>
