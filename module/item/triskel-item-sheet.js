@@ -6,11 +6,11 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 const ACTION_REFERENCE_OPTIONS = TRISKEL_ACTIONS
-  .map(action => ({ value: `action:${action.key}`, label: action.label ?? action.key }))
+  .map(action => ({ value: action.key, label: action.label ?? action.key }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
 const FORM_REFERENCE_OPTIONS = TRISKEL_FORMS
-  .map(form => ({ value: `form:${form.key}`, label: form.label ?? form.key }))
+  .map(form => ({ value: form.key, label: form.label ?? form.key }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
 const SKILL_REFERENCE_OPTIONS = Object.values(TRISKEL_SKILLS)
@@ -57,41 +57,23 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       skills: SKILL_REFERENCE_OPTIONS
     };
     context.references = {
-      actions: this.constructor.#prepareReferenceEntries(context.system.actions?.ref, "action"),
-      forms: this.constructor.#prepareReferenceEntries(context.system.forms?.ref, "form")
+      actions: this.constructor.#prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ACTIONS),
+      forms: this.constructor.#prepareReferenceEntries(context.system.forms?.ref, TRISKEL_FORMS)
     };
     context.modifiers = this.constructor.#prepareModifiers(context.system.modifiers);
     context.modifierOptions = MODIFIER_SKILL_OPTIONS;
-    context.descriptionHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-      this.document.system?.description ?? "",
-      {
-        secrets: this.document.isOwner,
-        relativeTo: this.document
-      }
-    );
 
     return context;
   }
 
-  static #prepareReferenceEntries(entries = [], defaultType = "action") {
+  static #prepareReferenceEntries(entries = [], collection = []) {
     if (!Array.isArray(entries)) return [];
 
     return entries.map((entry, index) => {
-      const normalized = typeof entry === "string" ? { type: defaultType, key: entry } : entry ?? {};
-      const type = normalized.type === "skill"
-        ? "skill"
-        : normalized.type === "form"
-          ? "form"
-          : defaultType;
-      const key = normalized.key ?? "";
+      const key = typeof entry === "string" ? entry : entry?.key ?? "";
+      const label = collection.find(item => item.key === key)?.label ?? key;
 
-      const label = type === "action"
-        ? (TRISKEL_ACTIONS.find(action => action.key === key)?.label ?? key)
-        : type === "form"
-          ? (TRISKEL_FORMS.find(form => form.key === key)?.label ?? key)
-          : (TRISKEL_SKILLS[key]?.label ?? key);
-
-      return { ...normalized, type, key, label, index };
+      return { key, label, index };
     });
   }
 
@@ -123,15 +105,15 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (!path) return;
 
     const select = target.closest("form")?.querySelector(`[data-reference-select="${list}"]`);
-    const value = select?.value ?? "";
+    const key = select?.value ?? "";
 
-    if (!value) return;
+    if (!key) return;
 
-    const [type, key] = value.split(":");
-    if (!type || !key) return;
+    const current = Array.isArray(foundry.utils.getProperty(this.document, path))
+      ? foundry.utils.getProperty(this.document, path).map(entry => (typeof entry === "string" ? entry : entry?.key)).filter(Boolean)
+      : [];
 
-    const current = foundry.utils.duplicate(foundry.utils.getProperty(this.document, path) ?? []);
-    current.push({ type, key });
+    current.push(key);
 
     await this.document.update({ [path]: current });
   }
@@ -145,8 +127,11 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     if (!path || index < 0) return;
 
-    const current = foundry.utils.duplicate(foundry.utils.getProperty(this.document, path) ?? []);
-    if (!Array.isArray(current) || !current[index]) return;
+    const current = Array.isArray(foundry.utils.getProperty(this.document, path))
+      ? foundry.utils.getProperty(this.document, path).map(entry => (typeof entry === "string" ? entry : entry?.key)).filter(Boolean)
+      : [];
+
+    if (!current[index]) return;
 
     current.splice(index, 1);
 
