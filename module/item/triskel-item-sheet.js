@@ -1,4 +1,5 @@
 import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
+import { TRISKEL_FORMS } from "../codex/form-codex.js";
 import { TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -6,6 +7,10 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 const ACTION_REFERENCE_OPTIONS = TRISKEL_ACTIONS
   .map(action => ({ value: `action:${action.key}`, label: action.label ?? action.key }))
+  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+const FORM_REFERENCE_OPTIONS = TRISKEL_FORMS
+  .map(form => ({ value: `form:${form.key}`, label: form.label ?? form.key }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
 const SKILL_REFERENCE_OPTIONS = Object.values(TRISKEL_SKILLS)
@@ -48,29 +53,43 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     context.referenceOptions = {
       actions: ACTION_REFERENCE_OPTIONS,
+      forms: FORM_REFERENCE_OPTIONS,
       skills: SKILL_REFERENCE_OPTIONS
     };
     context.references = {
-      actions: this.constructor.#prepareReferenceEntries(context.system.actions?.ref),
-      forms: this.constructor.#prepareReferenceEntries(context.system.forms?.ref)
+      actions: this.constructor.#prepareReferenceEntries(context.system.actions?.ref, "action"),
+      forms: this.constructor.#prepareReferenceEntries(context.system.forms?.ref, "form")
     };
     context.modifiers = this.constructor.#prepareModifiers(context.system.modifiers);
     context.modifierOptions = MODIFIER_SKILL_OPTIONS;
+    context.descriptionHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+      this.document.system?.description ?? "",
+      {
+        secrets: this.document.isOwner,
+        relativeTo: this.document
+      }
+    );
 
     return context;
   }
 
-  static #prepareReferenceEntries(entries = []) {
+  static #prepareReferenceEntries(entries = [], defaultType = "action") {
     if (!Array.isArray(entries)) return [];
 
     return entries.map((entry, index) => {
-      const normalized = typeof entry === "string" ? { type: "action", key: entry } : entry ?? {};
-      const type = normalized.type === "skill" ? "skill" : "action";
+      const normalized = typeof entry === "string" ? { type: defaultType, key: entry } : entry ?? {};
+      const type = normalized.type === "skill"
+        ? "skill"
+        : normalized.type === "form"
+          ? "form"
+          : defaultType;
       const key = normalized.key ?? "";
 
       const label = type === "action"
         ? (TRISKEL_ACTIONS.find(action => action.key === key)?.label ?? key)
-        : (TRISKEL_SKILLS[key]?.label ?? key);
+        : type === "form"
+          ? (TRISKEL_FORMS.find(form => form.key === key)?.label ?? key)
+          : (TRISKEL_SKILLS[key]?.label ?? key);
 
       return { ...normalized, type, key, label, index };
     });
