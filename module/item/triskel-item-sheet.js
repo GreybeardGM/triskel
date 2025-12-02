@@ -13,10 +13,6 @@ const FORM_REFERENCE_OPTIONS = TRISKEL_FORMS
   .map(form => ({ value: form.key, label: form.label ?? form.key }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
-const SKILL_REFERENCE_OPTIONS = Object.values(TRISKEL_SKILLS)
-  .map(skill => ({ value: `skill:${skill.id}`, label: skill.label ?? skill.id }))
-  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
-
 const MODIFIER_SKILL_OPTIONS = Object.values(TRISKEL_SKILLS)
   .map(skill => ({ value: skill.id, label: skill.label ?? skill.id }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
@@ -28,8 +24,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       submitOnChange: true
     },
     actions: {
-      addReference: this.#onAddReference,
-      removeReference: this.#onRemoveReference,
+      addActionReference: this.#onAddActionReference,
+      removeActionReference: this.#onRemoveActionReference,
+      addFormReference: this.#onAddFormReference,
+      removeFormReference: this.#onRemoveFormReference,
       addModifier: this.#onAddModifier,
       removeModifier: this.#onRemoveModifier
     },
@@ -53,8 +51,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     context.referenceOptions = {
       actions: ACTION_REFERENCE_OPTIONS,
-      forms: FORM_REFERENCE_OPTIONS,
-      skills: SKILL_REFERENCE_OPTIONS
+      forms: FORM_REFERENCE_OPTIONS
     };
     context.references = {
       actions: this.constructor.#prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ACTIONS),
@@ -91,51 +88,74 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
   }
 
-  static #pathForList(list) {
-    if (list === "actions") return "system.actions.ref";
-    if (list === "forms") return "system.forms.ref";
-    return null;
+  static #getReferenceList(path) {
+    const current = foundry.utils.getProperty(this.document, path);
+
+    if (!Array.isArray(current)) return [];
+
+    return current
+      .map(entry => (typeof entry === "string" ? entry : entry?.key))
+      .filter(Boolean);
   }
 
-  static async #onAddReference(event, target) {
+  static async #onAddActionReference(event, target) {
     event.preventDefault();
 
-    const list = target.dataset.list;
-    const path = this.#pathForList(list);
-    if (!path) return;
-
-    const select = target.closest("form")?.querySelector(`[data-reference-select="${list}"]`);
+    const select = target.closest("form")?.querySelector('[data-reference-select="actions"]');
     const key = select?.value ?? "";
 
     if (!key) return;
 
-    const current = Array.isArray(foundry.utils.getProperty(this.document, path))
-      ? foundry.utils.getProperty(this.document, path).map(entry => (typeof entry === "string" ? entry : entry?.key)).filter(Boolean)
-      : [];
+    const current = this.#getReferenceList("system.actions.ref");
 
     current.push(key);
 
-    await this.document.update({ [path]: current });
+    await this.document.update({ "system.actions.ref": current });
   }
 
-  static async #onRemoveReference(event, target) {
+  static async #onRemoveActionReference(event, target) {
     event.preventDefault();
 
-    const list = target.dataset.list;
     const index = Number(target.dataset.index ?? -1);
-    const path = this.#pathForList(list);
+    if (index < 0) return;
 
-    if (!path || index < 0) return;
-
-    const current = Array.isArray(foundry.utils.getProperty(this.document, path))
-      ? foundry.utils.getProperty(this.document, path).map(entry => (typeof entry === "string" ? entry : entry?.key)).filter(Boolean)
-      : [];
+    const current = this.#getReferenceList("system.actions.ref");
 
     if (!current[index]) return;
 
     current.splice(index, 1);
 
-    await this.document.update({ [path]: current });
+    await this.document.update({ "system.actions.ref": current });
+  }
+
+  static async #onAddFormReference(event, target) {
+    event.preventDefault();
+
+    const select = target.closest("form")?.querySelector('[data-reference-select="forms"]');
+    const key = select?.value ?? "";
+
+    if (!key) return;
+
+    const current = this.#getReferenceList("system.forms.ref");
+
+    current.push(key);
+
+    await this.document.update({ "system.forms.ref": current });
+  }
+
+  static async #onRemoveFormReference(event, target) {
+    event.preventDefault();
+
+    const index = Number(target.dataset.index ?? -1);
+    if (index < 0) return;
+
+    const current = this.#getReferenceList("system.forms.ref");
+
+    if (!current[index]) return;
+
+    current.splice(index, 1);
+
+    await this.document.update({ "system.forms.ref": current });
   }
 
   static async #onAddModifier(event, target) {
