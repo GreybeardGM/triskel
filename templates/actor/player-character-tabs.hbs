@@ -8,6 +8,9 @@
       data-tab="{{tab.id}}"
       data-tooltip="{{localize tab.tooltip}}"
     >
+      {{#if tab.icon}}
+        <i class="{{tab.icon}}" aria-hidden="true"></i>
+      {{/if}}
       {{localize tab.label}}
     </a>
   {{/each}}

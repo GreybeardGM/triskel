@@ -31,9 +31,27 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static TABS = {
     sheet: {
       tabs: [
-        { id: "actions", group: "sheet", label: "TRISKEL.ActionCards" },
-        { id: "skills", group: "sheet", label: "TRISKEL.Skills" },
-        { id: "notes", group: "sheet", label: "TRISKEL.Notes" }
+        {
+          id: "actions",
+          group: "sheet",
+          icon: "fa-solid fa-bolt",
+          label: "TRISKEL.Tabs.Actions.Label",
+          tooltip: "TRISKEL.Tabs.Actions.Tooltip"
+        },
+        {
+          id: "skills",
+          group: "sheet",
+          icon: "fa-solid fa-shield-halved",
+          label: "TRISKEL.Tabs.Skills.Label",
+          tooltip: "TRISKEL.Tabs.Skills.Tooltip"
+        },
+        {
+          id: "notes",
+          group: "sheet",
+          icon: "fa-solid fa-pen-to-square",
+          label: "TRISKEL.Tabs.Notes.Label",
+          tooltip: "TRISKEL.Tabs.Notes.Tooltip"
+        }
       ],
       initial: "actions"
     }

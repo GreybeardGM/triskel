@@ -1,5 +1,19 @@
 {
   "TRISKEL": {
+    "Tabs": {
+      "Actions": {
+        "Label": "Action Cards",
+        "Tooltip": "Show and select your action cards"
+      },
+      "Skills": {
+        "Label": "Skills",
+        "Tooltip": "Edit skills and resistances"
+      },
+      "Notes": {
+        "Label": "Notes",
+        "Tooltip": "Review character notes"
+      }
+    },
     "Sheets": {
       "PlayerCharacter": "Player Character",
       "NPC": "NPC",
