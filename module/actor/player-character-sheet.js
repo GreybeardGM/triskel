@@ -7,6 +7,7 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["triskel", "sheet", "actor", "character"],
+    template: "systems/triskel/templates/actor/player-character-sheet.hbs",
     form: {
       submitOnChange: true
     },
@@ -27,6 +28,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
   };
 
+  static TABS = {
+    sheet: {
+      tabs: [
+        { id: "actions", group: "sheet", label: "TRISKEL.ActionCards" },
+        { id: "skills", group: "sheet", label: "TRISKEL.Skills" },
+        { id: "notes", group: "sheet", label: "TRISKEL.Notes" }
+      ],
+      initial: "actions"
+    }
+  };
+
   static PARTS = {
     info: {
       id: "info",
@@ -44,6 +56,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: "paths",
       template: "systems/triskel/templates/actor/paths.hbs"
     },
+    tabs: {
+      id: "tabs",
+      template: "systems/triskel/templates/actor/player-character-tabs.hbs"
+    },
     skills: {
       id: "skills",
       template: "systems/triskel/templates/actor/skills.hbs"
@@ -57,6 +73,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       template: "systems/triskel/templates/actor/player-character-notes.hbs"
     }
   };
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+  }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
