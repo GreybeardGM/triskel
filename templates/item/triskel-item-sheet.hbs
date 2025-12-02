@@ -1,5 +1,8 @@
 <form class="triskel" autocomplete="off">
   <header class="sheet-header">
+    <div class="profile-img">
+      <img src="{{item.img}}" data-action="editImage" data-field="img" alt="{{item.name}}" />
+    </div>
     <div class="header-fields">
       <h1 class="charname">
         <input name="name" type="text" value="{{item.name}}" placeholder="Item Name" />
@@ -33,7 +36,7 @@
         <div class="reference-controls__inputs">
           <select
             id="actions-reference-select"
-            name="actionsRef"                          {{!-- NEU --}}
+            name="actionsRef"
             data-reference-select="actions"
           >
             {{#each referenceOptions.actions as |option|}}
@@ -44,13 +47,15 @@
           <button
             type="button"
             data-action="addActionReference"
-            data-select-field="actionsRef"            {{!-- NEU --}}
-            data-ref-path="system.actions.ref"        {{!-- NEU: Ziel-Array --}}
+            data-select-field="actionsRef"
+            data-ref-path="system.actions.ref"
           >
             Hinzufügen
           </button>
         </div>
       </div>
+
+    </div>
 
     <div class="item-panel">
       <h2>Forms</h2>
@@ -73,7 +78,7 @@
         <div class="reference-controls__inputs">
           <select
             id="forms-reference-select"
-            name="formsRef"                            {{!-- NEU --}}
+            name="formsRef"
             data-reference-select="forms"
           >
             {{#each referenceOptions.forms as |option|}}
@@ -84,8 +89,8 @@
           <button
             type="button"
             data-action="addFormReference"
-            data-select-field="formsRef"              {{!-- NEU --}}
-            data-ref-path="system.forms.ref"          {{!-- NEU --}}
+            data-select-field="formsRef"
+            data-ref-path="system.forms.ref"
           >
             Hinzufügen
           </button>
@@ -115,7 +120,7 @@
         <div class="reference-controls__inputs">
           <select
             id="modifier-skill"
-            name="modifierSkill"                       {{!-- NEU --}}
+            name="modifierSkill"
             data-modifier-skill
           >
             {{#each modifierOptions as |option|}}
@@ -128,16 +133,16 @@
             step="1"
             value="0"
             id="modifier-value"
-            name="modifierValue"                       {{!-- NEU --}}
+            name="modifierValue"
             data-modifier-value
           />
-      
+
           <button
             type="button"
             data-action="addModifier"
-            data-skill-field="modifierSkill"          {{!-- NEU --}}
-            data-value-field="modifierValue"          {{!-- NEU --}}
-            data-ref-path="system.modifiers"          {{!-- NEU --}}
+            data-skill-field="modifierSkill"
+            data-value-field="modifierValue"
+            data-ref-path="system.modifiers"
           >
             Hinzufügen
           </button>
