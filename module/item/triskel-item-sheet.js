@@ -1,3 +1,4 @@
+import { onEditImage } from "../actor/sheet-helpers.js";
 import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
 import { TRISKEL_SKILLS } from "../codex/triskel-codex.js";
@@ -24,6 +25,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       submitOnChange: true
     },
     actions: {
+      editImage: onEditImage,
       addActionReference: this.#onAddActionReference,
       removeActionReference: this.#onRemoveActionReference,
       addFormReference: this.#onAddFormReference,
