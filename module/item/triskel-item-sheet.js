@@ -1,3 +1,6 @@
+import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
+import { TRISKEL_FORMS } from "../codex/form-codex.js";
+import { TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
