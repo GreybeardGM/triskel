@@ -36,7 +36,9 @@
             name="actionsRef"                          {{!-- NEU --}}
             data-reference-select="actions"
           >
-            {{!-- Options aus TRISKEL_ACTIONS --}}
+            {{#each referenceOptions.actions as |option|}}
+              <option value="{{option.value}}">{{option.label}}</option>
+            {{/each}}
           </select>
       
           <button
@@ -74,7 +76,9 @@
             name="formsRef"                            {{!-- NEU --}}
             data-reference-select="forms"
           >
-            {{!-- Options aus TRISKEL_FORMS --}}
+            {{#each referenceOptions.forms as |option|}}
+              <option value="{{option.value}}">{{option.label}}</option>
+            {{/each}}
           </select>
       
           <button
@@ -114,7 +118,9 @@
             name="modifierSkill"                       {{!-- NEU --}}
             data-modifier-skill
           >
-            {{!-- Skill-Options --}}
+            {{#each modifierOptions as |option|}}
+              <option value="{{option.value}}">{{option.label}}</option>
+            {{/each}}
           </select>
       
           <input
