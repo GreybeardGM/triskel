@@ -101,52 +101,101 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static async #onAddActionReference(event, target) {
     event.preventDefault();
   
-    const root = this.element?.[0] ?? document;
-    const select = root.querySelector('[data-reference-select="actions"]');
+    const form = target.form;
+    const selectField = target.dataset.selectField ?? "";
+    const refPath = target.dataset.refPath ?? "system.actions.ref";
+  
+    const select = form?.elements[selectField] ?? null;
     const key = select?.value ?? "";
   
-    if (!key) return;
+    console.debug("[Triskel] #onAddActionReference called", {
+      selectField,
+      refPath,
+      key
+    });
   
-    const current = this.#getReferenceList("system.actions.ref");
+    if (!key) {
+      console.debug("[Triskel] #onAddActionReference aborted: empty key");
+      return;
+    }
+  
+    const current = this.#getReferenceList(refPath);
+    console.debug("[Triskel] actions ref list BEFORE", structuredClone(current));
+  
     current.push(key);
   
-    await this.document.update({ "system.actions.ref": current });
+    console.debug("[Triskel] actions ref list AFTER", structuredClone(current));
+    await this.document.update({ [refPath]: current });
   }
-  
+
   static async #onAddFormReference(event, target) {
     event.preventDefault();
   
-    const root = this.element?.[0] ?? document;
-    const select = root.querySelector('[data-reference-select="forms"]');
+    const form = target.form;
+    const selectField = target.dataset.selectField ?? "";
+    const refPath = target.dataset.refPath ?? "system.forms.ref";
+  
+    const select = form?.elements[selectField] ?? null;
     const key = select?.value ?? "";
   
-    if (!key) return;
+    console.debug("[Triskel] #onAddFormReference called", {
+      selectField,
+      refPath,
+      key
+    });
   
-    const current = this.#getReferenceList("system.forms.ref");
+    if (!key) {
+      console.debug("[Triskel] #onAddFormReference aborted: empty key");
+      return;
+    }
+  
+    const current = this.#getReferenceList(refPath);
+    console.debug("[Triskel] forms ref list BEFORE", structuredClone(current));
+  
     current.push(key);
   
-    await this.document.update({ "system.forms.ref": current });
+    console.debug("[Triskel] forms ref list AFTER", structuredClone(current));
+    await this.document.update({ [refPath]: current });
   }
-  
+
   static async #onAddModifier(event, target) {
     event.preventDefault();
   
-    const root = this.element?.[0] ?? document;
-    const form = root; // oder root.querySelector("form"), wenn du willst
+    const form = target.form;
+    const skillField = target.dataset.skillField ?? "";
+    const valueField = target.dataset.valueField ?? "";
+    const refPath = target.dataset.refPath ?? "system.modifiers";
   
-    const skill = form?.querySelector("[data-modifier-skill]")?.value ?? "";
-    const valueInput = form?.querySelector("[data-modifier-value]");
+    const skillInput = form?.elements[skillField] ?? null;
+    const valueInput = form?.elements[valueField] ?? null;
+  
+    const skill = skillInput?.value ?? "";
     const value = Number(valueInput?.value ?? NaN);
   
-    if (!skill || !Number.isFinite(value)) return;
+    console.debug("[Triskel] #onAddModifier called", {
+      skillField,
+      valueField,
+      refPath,
+      skill,
+      rawValue: valueInput?.value
+    });
+  
+    if (!skill || !Number.isFinite(value)) {
+      console.debug("[Triskel] #onAddModifier aborted: invalid skill/value");
+      return;
+    }
   
     const modifiers = foundry.utils.duplicate(this.document.system?.modifiers ?? []);
+    console.debug("[Triskel] modifiers BEFORE", structuredClone(modifiers));
+  
     modifiers.push({ skill, value });
   
-    await this.document.update({ "system.modifiers": modifiers });
+    console.debug("[Triskel] modifiers AFTER", structuredClone(modifiers));
+    await this.document.update({ [refPath]: modifiers });
   
     if (valueInput) valueInput.value = "0";
   }
+
 
   static async #onRemoveActionReference(event, target) {
     event.preventDefault();
