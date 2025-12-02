@@ -1,8 +1,21 @@
 import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
 import { TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
+
+const ACTION_REFERENCE_OPTIONS = TRISKEL_ACTIONS
+  .map(action => ({ value: action.key, label: action.label ?? action.key }))
+  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+const FORM_REFERENCE_OPTIONS = TRISKEL_FORMS
+  .map(form => ({ value: form.key, label: form.label ?? form.key }))
+  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+const MODIFIER_SKILL_OPTIONS = Object.values(TRISKEL_SKILLS)
+  .map(skill => ({ value: skill.id, label: skill.label ?? skill.id }))
+  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static DEFAULT_OPTIONS = {
