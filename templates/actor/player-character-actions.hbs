@@ -16,22 +16,10 @@
         </header>
 
         <dl class="action-card__meta">
-          <div class="action-card__row" title="{{action.description}}">
-            <dt>Skill</dt>
-            <dd>
-              <span class="action-card__skill">{{action.skillLabel}}</span>
-              <span class="action-card__bonus">{{numberFormat action.skillValue decimals=0 sign=true}}</span>
-            </dd>
-          </div>
           <div class="action-card__row">
             <dt>Reserve</dt>
             <dd>
               <span class="action-card__reserve">{{action.reserveLabel}}</span>
-              {{#if action.reserveValue}}
-                {{#if action.reserveMax}}
-                  <span class="action-card__reserve-values">{{action.reserveValue}} / {{action.reserveMax}}</span>
-                {{/if}}
-              {{/if}}
             </dd>
           </div>
         </dl>
