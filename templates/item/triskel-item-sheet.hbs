@@ -11,30 +11,12 @@
     </div>
   </header>
 
-  <section class="item-description">
-    <h2>Beschreibung</h2>
-    {{#if editable}}
-      <prose-mirror
-        name="system.description"
-        button="true"
-        editable="{{editable}}"
-        toggled="false"
-        value="{{system.description}}"
-      >
-        {{{descriptionHTML}}}
-      </prose-mirror>
-    {{else}}
-      {{{descriptionHTML}}}
-    {{/if}}
-  </section>
-
   <section class="item-panels">
     <div class="item-panel">
       <h2>Actions</h2>
       <ol class="reference-entries">
         {{#each references.actions as |reference|}}
           <li class="reference-row">
-            <span class="reference-chip">{{reference.type}}</span>
             <span class="reference-label">{{reference.label}}</span>
             <button type="button" data-action="removeReference" data-list="actions" data-index="{{reference.index}}">Entfernen</button>
           </li>
@@ -65,7 +47,6 @@
       <ol class="reference-entries">
         {{#each references.forms as |reference|}}
           <li class="reference-row">
-            <span class="reference-chip">{{reference.type}}</span>
             <span class="reference-label">{{reference.label}}</span>
             <button type="button" data-action="removeReference" data-list="forms" data-index="{{reference.index}}">Entfernen</button>
           </li>
