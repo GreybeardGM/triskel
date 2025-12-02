@@ -1,1 +1,284 @@
-
+{
+  "TRISKEL": {
+    "Sheets": {
+      "PlayerCharacter": "Player Character",
+      "NPC": "NPC",
+      "Item": "Triskel Item"
+    },
+    "ActorTypes": {
+      "Character": "Player Character",
+      "NPC": "NPC"
+    },
+    "ItemTypes": {
+      "Weapon": "Weapon",
+      "Armor": "Armor",
+      "Ability": "Ability",
+      "Spell": "Spell"
+    },
+    "Tiers": {
+      "Novice": { "Label": "Novice" },
+      "Apprentice": { "Label": "Apprentice" },
+      "Adept": { "Label": "Adept" },
+      "Veteran": { "Label": "Veteran" },
+      "Master": { "Label": "Master" },
+      "Paragon": { "Label": "Paragon" }
+    },
+    "SkillCategories": {
+      "Offense": "Offense",
+      "Defense": "Defense",
+      "Physical": "Physical",
+      "Professional": "Professional",
+      "Social": "Social",
+      "Intellectual": "Intellectual",
+      "Magic": "Magic"
+    },
+    "Phases": {
+      "Combat": "Combat",
+      "Travel": "Travel",
+      "Preparation": "Preparation",
+      "Any": "Any"
+    },
+    "Skills": {
+      "Strike": {
+        "Label": "Strike",
+        "Description": "Deliver direct melee attacks."
+      },
+      "Control": {
+        "Label": "Control",
+        "Description": "Manipulate positioning, balance, or leverage in melee."
+      },
+      "Aim": {
+        "Label": "Aim",
+        "Description": "Execute accurate ranged attacks."
+      },
+      "Guard": {
+        "Label": "Guard",
+        "Description": "Parry or deflect incoming attacks with technique."
+      },
+      "Brace": {
+        "Label": "Brace",
+        "Description": "Absorb force and stand firm against impact."
+      },
+      "Evasion": {
+        "Label": "Evasion",
+        "Description": "Evade attacks through agility and trained movement."
+      },
+      "Athletics": {
+        "Label": "Athletics",
+        "Description": "Perform physical feats of strength, speed, or motion."
+      },
+      "Notice": {
+        "Label": "Notice",
+        "Description": "Spot details, changes, or hidden elements in the environment."
+      },
+      "Stealth": {
+        "Label": "Stealth",
+        "Description": "Avoid detection through silence, concealment, or timing."
+      },
+      "Craft": {
+        "Label": "Craft",
+        "Description": "Build, repair, or create functional equipment or tools."
+      },
+      "Track": {
+        "Label": "Track",
+        "Description": "Follow trails, signs, and environmental disturbances."
+      },
+      "HandleBeasts": {
+        "Label": "Handle Beasts",
+        "Description": "Manage mounts and animals, calm or direct creatures."
+      },
+      "Impress": {
+        "Label": "Impress",
+        "Description": "Shape how others perceive you through presence and impact."
+      },
+      "Influence": {
+        "Label": "Influence",
+        "Description": "Shift another’s intentions through persuasion or pressure."
+      },
+      "Insight": {
+        "Label": "Insight",
+        "Description": "Read motives, patterns, and emotional cues."
+      },
+      "Academia": {
+        "Label": "Academia",
+        "Description": "Acquire elevated knowledge and analyze complex connections."
+      },
+      "Folklore": {
+        "Label": "Folklore",
+        "Description": "Learn and recite everything from local rumors to legendary heroics, grasping traditions and their ties."
+      },
+      "Navigate": {
+        "Label": "Navigate",
+        "Description": "Chart routes, orient yourself, and read terrain or maps."
+      },
+      "Manifest": {
+        "Label": "Manifest",
+        "Description": "Create or project raw magical force."
+      },
+      "Alter": {
+        "Label": "Alter",
+        "Description": "Transform matter, bodies, or physical states."
+      },
+      "Compel": {
+        "Label": "Compel",
+        "Description": "Impose force on minds, spirits, or entities."
+      },
+      "Reveal": {
+        "Label": "Reveal",
+        "Description": "Expose truth, detect hidden things, or gain insight."
+      },
+      "Transpose": {
+        "Label": "Transpose",
+        "Description": "Shift positions, move objects, or bend states and space."
+      },
+      "Ward": {
+        "Label": "Ward",
+        "Description": "Create barriers, protections, or magical defenses."
+      }
+    },
+    "Resistances": {
+      "Snap": {
+        "Label": "Snap",
+        "Description": "Instant reflex response to sudden threats."
+      },
+      "Grit": {
+        "Label": "Grit",
+        "Description": "Bodily toughness against pain, poison, and the elements."
+      },
+      "Resolve": {
+        "Label": "Resolve",
+        "Description": "Mental resilience to fear, influence, or despair."
+      }
+    },
+    "Reserves": {
+      "Power": {
+        "Label": "Power",
+        "Description": "Physical force and exertion."
+      },
+      "Grace": {
+        "Label": "Grace",
+        "Description": "Precision, movement, coordination."
+      },
+      "Will": {
+        "Label": "Will",
+        "Description": "Focus, intent, mental pressure, assertion."
+      }
+    },
+    "NPCStats": {
+      "HP": {
+        "Label": "Hitpoints",
+        "Description": "How much damage the character can take before it affects their behavior in combat."
+      },
+      "Wounds": {
+        "Label": "Wounds",
+        "Description": "How many states the NPC can go through before they are brought down."
+      }
+    },
+    "Paths": {
+      "Virtue": {
+        "Label": "Virtue",
+        "Description": "Capacity for discipline and moral steadiness.",
+        "Steps": {
+          "Discipline": "Discipline",
+          "Constancy": "Constancy",
+          "Integrity": "Integrity"
+        }
+      },
+      "Ward": {
+        "Label": "Ward",
+        "Description": "Inner boundaries, spiritual posture, personal sanctum.",
+        "Steps": {
+          "Presence": "Presence",
+          "Stewardship": "Stewardship",
+          "Renewal": "Renewal"
+        }
+      },
+      "Vice": {
+        "Label": "Sinner",
+        "Description": "Pull toward impulse, weakness, self-indulgence.",
+        "Steps": {
+          "Indulgence": "Indulgence",
+          "Decay": "Decay",
+          "Depravity": "Depravity"
+        }
+      },
+      "Ruin": {
+        "Label": "Destroyer",
+        "Description": "Fracture, decay, the breaking of the self.",
+        "Steps": {
+          "Desire": "Desire",
+          "Despair": "Despair",
+          "Righteousness": "Righteousness"
+        }
+      }
+    },
+    "Actions": {
+      "Strike": {
+        "Label": "Strike",
+        "Description": "A direct attack. Extra power increases its force."
+      },
+      "Bind": {
+        "Label": "Bind",
+        "Description": "Locks the opponent’s weapon line and imposes bound(X)."
+      },
+      "Expose": {
+        "Label": "Expose",
+        "Description": "Forces an opening in the opponent’s defense and applies exposed(X)."
+      },
+      "Push": {
+        "Label": "Push",
+        "Description": "Drives the opponent back and applies pushed(X)."
+      },
+      "Brace": {
+        "Label": "Brace",
+        "Description": "Sets a firm stance; reduces incoming control effects."
+      },
+      "Guard": {
+        "Label": "Guard",
+        "Description": "Adopts a defensive structure; improves the next guard attempt."
+      },
+      "Evade": {
+        "Label": "Evade",
+        "Description": "Moves lightly out of line; improves the next evasion attempt."
+      },
+      "Grapple": {
+        "Label": "Grapple",
+        "Description": "Unarmed restraint that limits the target’s movement."
+      },
+      "Break": {
+        "Label": "Break",
+        "Description": "Shakes off negative states; reduces bound/exposed/pushed."
+      }
+    },
+    "Forms": {
+      "PowerStrike": {
+        "Label": "Power Strike",
+        "Description": "Spend power to make a strike hit much harder than usual."
+      },
+      "LongHook": {
+        "Label": "Long Hook",
+        "Description": "Extend a control action to reach further than normal using a hooked or polearm weapon."
+      },
+      "LockingBind": {
+        "Label": "Locking Bind",
+        "Description": "Deepen a bind so that the target’s weapon stays locked more firmly in place."
+      },
+      "PrecisionThrust": {
+        "Label": "Precision Thrust",
+        "Description": "Turn a strike into a precise thrust that gains extra accuracy for a brief moment."
+      },
+      "PushThrough": {
+        "Label": "Push Through",
+        "Description": "Drive a push harder, forcing the target back farther than a normal control move would."
+      },
+      "Counterguard": {
+        "Label": "Counterguard",
+        "Description": "Sharpen your defensive structure to gain a stronger guard against the next attack."
+      },
+      "BreakStance": {
+        "Label": "Break Stance",
+        "Description": "Turn a heavy strike into a stance-breaking blow that leaves the target more exposed."
+      }
+    }
+  }
+}

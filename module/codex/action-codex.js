@@ -3,74 +3,74 @@
 export const TRISKEL_ACTIONS = [
   {
     key: "strike",
-    label: "Strike",
+    label: "TRISKEL.Actions.Strike.Label",
     category: "combat",
     skill: "strike",
     reserve: "power",
-    description: "A direct attack. Extra power increases its force."
+    description: "TRISKEL.Actions.Strike.Description"
   },
   {
     key: "bind",
-    label: "Bind",
+    label: "TRISKEL.Actions.Bind.Label",
     category: "combat",
     skill: "control",
     reserve: "grace",
-    description: "Locks the opponent’s weapon line and imposes bound(X)."
+    description: "TRISKEL.Actions.Bind.Description"
   },
   {
     key: "expose",
-    label: "Expose",
+    label: "TRISKEL.Actions.Expose.Label",
     category: "combat",
     skill: "control",
     reserve: "grace",
-    description: "Forces an opening in the opponent’s defense and applies exposed(X)."
+    description: "TRISKEL.Actions.Expose.Description"
   },
   {
     key: "push",
-    label: "Push",
+    label: "TRISKEL.Actions.Push.Label",
     category: "combat",
     skill: "control",
     reserve: "grace",
-    description: "Drives the opponent back and applies pushed(X)."
+    description: "TRISKEL.Actions.Push.Description"
   },
   {
     key: "brace",
-    label: "Brace",
+    label: "TRISKEL.Actions.Brace.Label",
     category: "combat",
     skill: "brace",
     reserve: "power",
-    description: "Sets a firm stance; reduces incoming control effects."
+    description: "TRISKEL.Actions.Brace.Description"
   },
   {
     key: "guard",
-    label: "Guard",
+    label: "TRISKEL.Actions.Guard.Label",
     category: "combat",
     skill: "guard",
     reserve: "grace",
-    description: "Adopts a defensive structure; improves the next guard attempt."
+    description: "TRISKEL.Actions.Guard.Description"
   },
   {
     key: "evade",
-    label: "Evade",
+    label: "TRISKEL.Actions.Evade.Label",
     category: "combat",
     skill: "evasion",
     reserve: "grace",
-    description: "Moves lightly out of line; improves the next evasion attempt."
+    description: "TRISKEL.Actions.Evade.Description"
   },
   {
     key: "grapple",
-    label: "Grapple",
+    label: "TRISKEL.Actions.Grapple.Label",
     category: "combat",
     skill: "control",
     reserve: "power",
-    description: "Unarmed restraint that limits the target’s movement."
+    description: "TRISKEL.Actions.Grapple.Description"
   },
   {
     key: "break",
-    label: "Break",
+    label: "TRISKEL.Actions.Break.Label",
     category: "combat",
     skill: "brace",
     reserve: "power",
-    description: "Shakes off negative states; reduces bound/exposed/pushed."
+    description: "TRISKEL.Actions.Break.Description"
   }
 ];
