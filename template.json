@@ -7,6 +7,9 @@
           "biography": "",
           "notes": ""
         },
+        "class": {
+          "label": ""
+        },
         "skills": {
           "strike": {
             "id": "strike",

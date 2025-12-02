@@ -1,0 +1,122 @@
+<form class="triskel" autocomplete="off">
+  <header class="sheet-header">
+    <div class="header-fields">
+      <h1 class="charname">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Item Name" />
+      </h1>
+      <div class="item-type-label">
+        <span class="item-type-label__title">Typ</span>
+        <span class="item-type-label__value">{{item.type}}</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="item-description">
+    <h2>Beschreibung</h2>
+    <textarea name="system.description" rows="4">{{system.description}}</textarea>
+  </section>
+
+  <section class="item-panels">
+    <div class="item-panel">
+      <h2>Actions</h2>
+      <ol class="reference-entries">
+        {{#each references.actions as |reference|}}
+          <li class="reference-row">
+            <span class="reference-chip">{{reference.type}}</span>
+            <span class="reference-label">{{reference.label}}</span>
+            <button type="button" data-action="removeReference" data-list="actions" data-index="{{reference.index}}">Entfernen</button>
+          </li>
+        {{/each}}
+        {{#unless references.actions.length}}
+          <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+        {{/unless}}
+      </ol>
+
+      <div class="reference-controls">
+        <label class="reference-controls__label" for="actions-reference-select">Ref hinzufügen</label>
+        <div class="reference-controls__inputs">
+          <select id="actions-reference-select" data-reference-select="actions">
+            <option value="">Aus dem Codex wählen</option>
+            <optgroup label="Actions">
+              {{#each referenceOptions.actions as |option|}}
+                <option value="{{option.value}}">{{option.label}}</option>
+              {{/each}}
+            </optgroup>
+            <optgroup label="Skills">
+              {{#each referenceOptions.skills as |option|}}
+                <option value="{{option.value}}">{{option.label}}</option>
+              {{/each}}
+            </optgroup>
+          </select>
+          <button type="button" data-action="addReference" data-list="actions">Hinzufügen</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="item-panel">
+      <h2>Forms</h2>
+      <ol class="reference-entries">
+        {{#each references.forms as |reference|}}
+          <li class="reference-row">
+            <span class="reference-chip">{{reference.type}}</span>
+            <span class="reference-label">{{reference.label}}</span>
+            <button type="button" data-action="removeReference" data-list="forms" data-index="{{reference.index}}">Entfernen</button>
+          </li>
+        {{/each}}
+        {{#unless references.forms.length}}
+          <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+        {{/unless}}
+      </ol>
+
+      <div class="reference-controls">
+        <label class="reference-controls__label" for="forms-reference-select">Ref hinzufügen</label>
+        <div class="reference-controls__inputs">
+          <select id="forms-reference-select" data-reference-select="forms">
+            <option value="">Aus dem Codex wählen</option>
+            <optgroup label="Actions">
+              {{#each referenceOptions.actions as |option|}}
+                <option value="{{option.value}}">{{option.label}}</option>
+              {{/each}}
+            </optgroup>
+            <optgroup label="Skills">
+              {{#each referenceOptions.skills as |option|}}
+                <option value="{{option.value}}">{{option.label}}</option>
+              {{/each}}
+            </optgroup>
+          </select>
+          <button type="button" data-action="addReference" data-list="forms">Hinzufügen</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="item-panel item-panel--full">
+      <h2>Modifiers</h2>
+      <ol class="reference-entries">
+        {{#each modifiers as |modifier|}}
+          <li class="reference-row">
+            <span class="reference-label">{{modifier.label}}</span>
+            <span class="modifier-value">{{modifier.value}}</span>
+            <button type="button" data-action="removeModifier" data-index="{{modifier.index}}">Entfernen</button>
+          </li>
+        {{/each}}
+        {{#unless modifiers.length}}
+          <li class="reference-row reference-row--empty">Keine Modifiers hinterlegt</li>
+        {{/unless}}
+      </ol>
+
+      <div class="reference-controls">
+        <label class="reference-controls__label" for="modifier-skill">Skill-Mod hinzufügen</label>
+        <div class="reference-controls__inputs">
+          <select id="modifier-skill" data-modifier-skill>
+            <option value="">Skill auswählen</option>
+            {{#each modifierOptions as |option|}}
+              <option value="{{option.value}}">{{option.label}}</option>
+            {{/each}}
+          </select>
+          <input type="number" step="1" value="0" data-modifier-value />
+          <button type="button" data-action="addModifier">Hinzufügen</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
