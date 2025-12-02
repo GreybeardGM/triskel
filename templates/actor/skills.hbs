@@ -1,6 +1,8 @@
-<section class="skills">
-  <h2>Skills</h2>
-
+<section
+  class="tab {{tabs.skills.id}} {{tabs.skills.cssClass}}"
+  data-tab="{{tabs.skills.id}}"
+  data-group="{{tabs.skills.group}}"
+>
   {{#if resistances.length}}
     <div class="resistances-row">
       {{#each resistances as |resistance|}}

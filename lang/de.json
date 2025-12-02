@@ -1,5 +1,19 @@
 {
   "TRISKEL": {
+    "Tabs": {
+      "Actions": {
+        "Label": "Aktionskarten",
+        "Tooltip": "Aktionskarten anzeigen und auswählen"
+      },
+      "Skills": {
+        "Label": "Fertigkeiten",
+        "Tooltip": "Fertigkeiten und Resistenzen bearbeiten"
+      },
+      "Notes": {
+        "Label": "Notizen",
+        "Tooltip": "Charakternotizen ansehen"
+      }
+    },
     "Sheets": {
       "PlayerCharacter": "Spielercharakter",
       "NPC": "NSC",
