@@ -120,6 +120,32 @@
   align-items: center;
 }
 
+.triskel .sheet-tabs-nav {
+  display: inline-flex;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--triskel-color-border-muted);
+  margin-bottom: 0.35rem;
+}
+
+.triskel .sheet-tabs-nav .item {
+  border: 1px solid var(--triskel-color-border-muted);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: var(--triskel-color-surface-muted);
+  color: var(--triskel-color-text-strong);
+  padding: 0.35rem 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.triskel .sheet-tabs-nav .item.active,
+.triskel .sheet-tabs-nav .item[aria-selected="true"] {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border-color: var(--color-border-light-tertiary);
+}
+
 .triskel .reserves .reserve-grid,
 .triskel .npc-stats .stat-grid {
   display: grid;
