@@ -97,7 +97,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
   }
 
-  static getReferenceList(path) {
+  getReferenceList(path) {
     const current = foundry.utils.getProperty(this.document, path);
 
     if (!Array.isArray(current)) return [];
