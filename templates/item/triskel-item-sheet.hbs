@@ -29,30 +29,25 @@
         {{/unless}}
       </ol>
 
-      <div class="reference-controls">
-        <label class="reference-controls__label" for="actions-reference-select">
-          Ref hinzufügen
-        </label>
-        <div class="reference-controls__inputs">
-          <select
-            id="actions-reference-select"
-            name="actionsRef"
-            data-reference-select="actions"
-          >
-            {{#each referenceOptions.actions as |option|}}
-              <option value="{{option.value}}">{{option.label}}</option>
-            {{/each}}
-          </select>
-      
-          <button
-            type="button"
-            data-action="addActionReference"
-            data-select-field="actionsRef"
-            data-ref-path="system.actions.ref"
-          >
-            Hinzufügen
-          </button>
-        </div>
+      <div class="reference-controls__inputs">
+        <select
+          id="actions-reference-select"
+          name="actionsRef"
+          data-reference-select="actions"
+        >
+          {{#each referenceOptions.actions as |option|}}
+            <option value="{{option.value}}">{{option.label}}</option>
+          {{/each}}
+        </select>
+    
+        <button
+          type="button"
+          data-action="addActionReference"
+          data-select-field="actionsRef"
+          data-ref-path="system.actions.ref"
+        >
+          Hinzufügen
+        </button>
       </div>
 
     </div>
@@ -71,34 +66,29 @@
         {{/unless}}
       </ol>
 
-      <div class="reference-controls">
-        <label class="reference-controls__label" for="forms-reference-select">
-          Ref hinzufügen
-        </label>
-        <div class="reference-controls__inputs">
-          <select
-            id="forms-reference-select"
-            name="formsRef"
-            data-reference-select="forms"
-          >
-            {{#each referenceOptions.forms as |option|}}
-              <option value="{{option.value}}">{{option.label}}</option>
-            {{/each}}
-          </select>
-      
-          <button
-            type="button"
-            data-action="addFormReference"
-            data-select-field="formsRef"
-            data-ref-path="system.forms.ref"
-          >
-            Hinzufügen
-          </button>
-        </div>
+      <div class="reference-controls__inputs">
+        <select
+          id="forms-reference-select"
+          name="formsRef"
+          data-reference-select="forms"
+        >
+          {{#each referenceOptions.forms as |option|}}
+            <option value="{{option.value}}">{{option.label}}</option>
+          {{/each}}
+        </select>
+    
+        <button
+          type="button"
+          data-action="addFormReference"
+          data-select-field="formsRef"
+          data-ref-path="system.forms.ref"
+        >
+          Hinzufügen
+        </button>
       </div>
     </div>
 
-    <div class="item-panel item-panel--full">
+    <div class="item-panel">
       <h2>Modifiers</h2>
       <ol class="reference-entries">
         {{#each modifiers as |modifier|}}
@@ -113,40 +103,35 @@
         {{/unless}}
       </ol>
       
-      <div class="reference-controls">
-        <label class="reference-controls__label" for="modifier-skill">
-          Skill-Mod hinzufügen
-        </label>
-        <div class="reference-controls__inputs">
-          <select
-            id="modifier-skill"
-            name="modifierSkill"
-            data-modifier-skill
-          >
-            {{#each modifierOptions as |option|}}
-              <option value="{{option.value}}">{{option.label}}</option>
-            {{/each}}
-          </select>
-      
-          <input
-            type="number"
-            step="1"
-            value="0"
-            id="modifier-value"
-            name="modifierValue"
-            data-modifier-value
-          />
+      <div class="reference-controls__inputs">
+        <select
+          id="modifier-skill"
+          name="modifierSkill"
+          data-modifier-skill
+        >
+          {{#each modifierOptions as |option|}}
+            <option value="{{option.value}}">{{option.label}}</option>
+          {{/each}}
+        </select>
+    
+        <input
+          type="number"
+          step="1"
+          value="0"
+          id="modifier-value"
+          name="modifierValue"
+          data-modifier-value
+        />
 
-          <button
-            type="button"
-            data-action="addModifier"
-            data-skill-field="modifierSkill"
-            data-value-field="modifierValue"
-            data-ref-path="system.modifiers"
-          >
-            Hinzufügen
-          </button>
-        </div>
+        <button
+          type="button"
+          data-action="addModifier"
+          data-skill-field="modifierSkill"
+          data-value-field="modifierValue"
+          data-ref-path="system.modifiers"
+        >
+          Hinzufügen
+        </button>
       </div>
 
     </div>
