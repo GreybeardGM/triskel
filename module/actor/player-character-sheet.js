@@ -58,19 +58,23 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     },
     tabs: {
       id: "tabs",
-      template: "systems/triskel/templates/actor/player-character-tabs.hbs"
-    },
-    skills: {
-      id: "skills",
-      template: "systems/triskel/templates/actor/skills.hbs"
+      template: "systems/triskel/templates/actor/player-character-tabs.hbs",
+      sort: 50
     },
     actions: {
       id: "actions",
-      template: "systems/triskel/templates/actor/player-character-actions.hbs"
+      template: "systems/triskel/templates/actor/player-character-actions.hbs",
+      sort: 100
+    },
+    skills: {
+      id: "skills",
+      template: "systems/triskel/templates/actor/skills.hbs",
+      sort: 200
     },
     notes: {
       id: "notes",
-      template: "systems/triskel/templates/actor/player-character-notes.hbs"
+      template: "systems/triskel/templates/actor/player-character-notes.hbs",
+      sort: 300
     }
   };
 
