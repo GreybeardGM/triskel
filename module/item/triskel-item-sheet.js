@@ -100,17 +100,52 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   static async #onAddActionReference(event, target) {
     event.preventDefault();
-
-    const select = target.closest("form")?.querySelector('[data-reference-select="actions"]');
+  
+    const root = this.element?.[0] ?? document;
+    const select = root.querySelector('[data-reference-select="actions"]');
     const key = select?.value ?? "";
-
+  
     if (!key) return;
-
+  
     const current = this.#getReferenceList("system.actions.ref");
-
     current.push(key);
-
+  
     await this.document.update({ "system.actions.ref": current });
+  }
+  
+  static async #onAddFormReference(event, target) {
+    event.preventDefault();
+  
+    const root = this.element?.[0] ?? document;
+    const select = root.querySelector('[data-reference-select="forms"]');
+    const key = select?.value ?? "";
+  
+    if (!key) return;
+  
+    const current = this.#getReferenceList("system.forms.ref");
+    current.push(key);
+  
+    await this.document.update({ "system.forms.ref": current });
+  }
+  
+  static async #onAddModifier(event, target) {
+    event.preventDefault();
+  
+    const root = this.element?.[0] ?? document;
+    const form = root; // oder root.querySelector("form"), wenn du willst
+  
+    const skill = form?.querySelector("[data-modifier-skill]")?.value ?? "";
+    const valueInput = form?.querySelector("[data-modifier-value]");
+    const value = Number(valueInput?.value ?? NaN);
+  
+    if (!skill || !Number.isFinite(value)) return;
+  
+    const modifiers = foundry.utils.duplicate(this.document.system?.modifiers ?? []);
+    modifiers.push({ skill, value });
+  
+    await this.document.update({ "system.modifiers": modifiers });
+  
+    if (valueInput) valueInput.value = "0";
   }
 
   static async #onRemoveActionReference(event, target) {
@@ -128,21 +163,6 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.document.update({ "system.actions.ref": current });
   }
 
-  static async #onAddFormReference(event, target) {
-    event.preventDefault();
-
-    const select = target.closest("form")?.querySelector('[data-reference-select="forms"]');
-    const key = select?.value ?? "";
-
-    if (!key) return;
-
-    const current = this.#getReferenceList("system.forms.ref");
-
-    current.push(key);
-
-    await this.document.update({ "system.forms.ref": current });
-  }
-
   static async #onRemoveFormReference(event, target) {
     event.preventDefault();
 
@@ -156,22 +176,6 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     current.splice(index, 1);
 
     await this.document.update({ "system.forms.ref": current });
-  }
-
-  static async #onAddModifier(event, target) {
-    event.preventDefault();
-
-    const form = target.closest("form");
-    const skill = form?.querySelector("[data-modifier-skill]")?.value ?? "";
-    const valueInput = form?.querySelector("[data-modifier-value]");
-    const value = Number(valueInput?.value ?? NaN);
-
-    if (!skill || !Number.isFinite(value)) return;
-
-    const modifiers = foundry.utils.duplicate(this.document.system?.modifiers ?? []);
-    modifiers.push({ skill, value });
-
-    await this.document.update({ "system.modifiers": modifiers });
   }
 
   static async #onRemoveModifier(event, target) {
