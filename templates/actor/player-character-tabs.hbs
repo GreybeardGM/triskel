@@ -1,6 +1,13 @@
-<nav class="tabs sheet-tabs-nav" data-group="sheet" aria-label="Character Sheet Tabs">
-  {{#each tabs.sheet.tabs as |tab|}}
-    <a class="item {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}" role="tab">
+{{!-- Sheet Tab Navigation --}}
+<nav class="sheet-tabs tabs">
+  {{#each tabs as |tab|}}
+    <a
+      class="{{tab.cssClass}}"
+      data-action="tab"
+      data-group="{{tab.group}}"
+      data-tab="{{tab.id}}"
+      data-tooltip="{{localize tab.tooltip}}"
+    >
       {{localize tab.label}}
     </a>
   {{/each}}
