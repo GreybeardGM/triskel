@@ -26,12 +26,12 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     },
     actions: {
       editImage: onEditImage,
-      addActionReference: this.#onAddActionReference,
-      removeActionReference: this.#onRemoveActionReference,
-      addFormReference: this.#onAddFormReference,
-      removeFormReference: this.#onRemoveFormReference,
-      addModifier: this.#onAddModifier,
-      removeModifier: this.#onRemoveModifier
+      addActionReference: this.onAddActionReference,
+      removeActionReference: this.onRemoveActionReference,
+      addFormReference: this.onAddFormReference,
+      removeFormReference: this.onRemoveFormReference,
+      addModifier: this.onAddModifier,
+      removeModifier: this.onRemoveModifier
     },
     window: {
       resizable: true
@@ -56,10 +56,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       forms: FORM_REFERENCE_OPTIONS
     };
     context.references = {
-      actions: this.constructor.#prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ACTIONS),
-      forms: this.constructor.#prepareReferenceEntries(context.system.forms?.ref, TRISKEL_FORMS)
+      actions: this.constructor.prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ACTIONS),
+      forms: this.constructor.prepareReferenceEntries(context.system.forms?.ref, TRISKEL_FORMS)
     };
-    context.modifiers = this.constructor.#prepareModifiers(context.system.modifiers);
+    context.modifiers = this.constructor.prepareModifiers(context.system.modifiers);
     context.modifierOptions = MODIFIER_SKILL_OPTIONS;
 
     console.debug("[Triskel] ItemSheet _prepareContext", {
@@ -72,7 +72,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     return context;
   }
 
-  static #prepareReferenceEntries(entries = [], collection = []) {
+  static prepareReferenceEntries(entries = [], collection = []) {
     if (!Array.isArray(entries)) return [];
 
     return entries.map((entry, index) => {
@@ -83,7 +83,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
   }
 
-  static #prepareModifiers(modifiers = []) {
+  static prepareModifiers(modifiers = []) {
     if (!Array.isArray(modifiers)) return [];
 
     return modifiers.map((modifier, index) => {
@@ -97,7 +97,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
   }
 
-  static #getReferenceList(path) {
+  static getReferenceList(path) {
     const current = foundry.utils.getProperty(this.document, path);
 
     if (!Array.isArray(current)) return [];
@@ -109,7 +109,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   // ---------- Add / Remove Actions ----------
 
-  static async #onAddActionReference(event, target) {
+  static async onAddActionReference(event, target) {
     event.preventDefault();
 
     const form = target.form;
@@ -130,7 +130,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       return;
     }
 
-    const current = this.#getReferenceList(refPath);
+    const current = this.getReferenceList(refPath);
     console.debug("[Triskel] actions ref list BEFORE", current.slice());
 
     current.push(key);
@@ -139,13 +139,13 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.document.update({ [refPath]: current });
   }
 
-  static async #onRemoveActionReference(event, target) {
+  static async onRemoveActionReference(event, target) {
     event.preventDefault();
 
     const index = Number(target.dataset.index ?? -1);
     if (index < 0) return;
 
-    const current = this.#getReferenceList("system.actions.ref");
+    const current = this.getReferenceList("system.actions.ref");
     if (!current[index]) return;
 
     console.debug("[Triskel] #onRemoveActionReference", { index, before: current.slice() });
@@ -158,7 +158,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   // ---------- Add / Remove Forms ----------
 
-  static async #onAddFormReference(event, target) {
+  static async onAddFormReference(event, target) {
     event.preventDefault();
 
     const form = target.form;
@@ -179,7 +179,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       return;
     }
 
-    const current = this.#getReferenceList(refPath);
+    const current = this.getReferenceList(refPath);
     console.debug("[Triskel] forms ref list BEFORE", current.slice());
 
     current.push(key);
@@ -188,13 +188,13 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.document.update({ [refPath]: current });
   }
 
-  static async #onRemoveFormReference(event, target) {
+  static async onRemoveFormReference(event, target) {
     event.preventDefault();
 
     const index = Number(target.dataset.index ?? -1);
     if (index < 0) return;
 
-    const current = this.#getReferenceList("system.forms.ref");
+    const current = this.getReferenceList("system.forms.ref");
     if (!current[index]) return;
 
     console.debug("[Triskel] #onRemoveFormReference", { index, before: current.slice() });
@@ -207,7 +207,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   // ---------- Add / Remove Modifiers ----------
 
-  static async #onAddModifier(event, target) {
+  static async onAddModifier(event, target) {
     event.preventDefault();
 
     const form = target.form;
@@ -245,7 +245,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (valueInput) valueInput.value = "0";
   }
 
-  static async #onRemoveModifier(event, target) {
+  static async onRemoveModifier(event, target) {
     event.preventDefault();
 
     const index = Number(target.dataset.index ?? -1);
