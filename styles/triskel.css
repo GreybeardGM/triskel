@@ -88,15 +88,12 @@
   font-weight: 700;
 }
 
-.triskel .charname input {
-  height: auto;
+.triskel .charname {
+  margin-bottom: 0.25rem;
 }
 
-.triskel .character-class {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  margin-top: 0.25rem;
+.triskel .charname input {
+  height: auto;
 }
 
 .triskel .character-class label {
@@ -104,8 +101,10 @@
   color: var(--color-text-secondary);
 }
 
-.triskel .character-class input {
-  height: auto;
+.triskel .character-class {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .triskel .quick-roller {
