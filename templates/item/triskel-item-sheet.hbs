@@ -18,7 +18,7 @@
         {{#each references.actions as |reference|}}
           <li class="reference-row">
             <span class="reference-label">{{reference.label}}</span>
-            <button type="button" data-action="removeReference" data-list="actions" data-index="{{reference.index}}">Entfernen</button>
+            <button type="button" data-action="removeActionReference" data-index="{{reference.index}}">Entfernen</button>
           </li>
         {{/each}}
         {{#unless references.actions.length}}
@@ -37,7 +37,7 @@
               {{/each}}
             </optgroup>
           </select>
-          <button type="button" data-action="addReference" data-list="actions">Hinzufügen</button>
+          <button type="button" data-action="addActionReference">Hinzufügen</button>
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
         {{#each references.forms as |reference|}}
           <li class="reference-row">
             <span class="reference-label">{{reference.label}}</span>
-            <button type="button" data-action="removeReference" data-list="forms" data-index="{{reference.index}}">Entfernen</button>
+            <button type="button" data-action="removeFormReference" data-index="{{reference.index}}">Entfernen</button>
           </li>
         {{/each}}
         {{#unless references.forms.length}}
@@ -67,7 +67,7 @@
               {{/each}}
             </optgroup>
           </select>
-          <button type="button" data-action="addReference" data-list="forms">Hinzufügen</button>
+          <button type="button" data-action="addFormReference">Hinzufügen</button>
         </div>
       </div>
     </div>
