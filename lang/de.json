@@ -40,40 +40,40 @@
     },
     "Skills": {
       "Strike": {
-        "Label": "Hieb",
+        "Label": "Schlag",
         "Description": "Führt direkte Nahkampfangriffe aus."
       },
       "Control": {
         "Label": "Kontrolle",
-        "Description": "Beeinflusst Position, Gleichgewicht oder Hebelwirkung im Nahkampf."
+        "Description": "Beeinflusst Position, Gleichgewicht oder Hebel im Nahkampf."
       },
       "Aim": {
         "Label": "Zielen",
         "Description": "Setzt präzise Fernkampfangriffe um."
       },
       "Guard": {
-        "Label": "Wache",
-        "Description": "Pariert oder lenkt eingehende Angriffe mit Technik ab."
+        "Label": "Parade",
+        "Description": "Lenkt Angriffe mit Technik ab oder fängt sie ab."
       },
       "Brace": {
-        "Label": "Stemmen",
-        "Description": "Fängt Wucht ab und bleibt standhaft gegen Aufprall."
+        "Label": "Standhalten",
+        "Description": "Fängt Wucht ab und bleibt gegen Aufprall standfest."
       },
       "Evasion": {
         "Label": "Ausweichen",
-        "Description": "Entgeht Angriffen durch Beweglichkeit und geübte Schritte."
+        "Description": "Entgeht Angriffen durch Beweglichkeit und trainierte Abläufe."
       },
       "Athletics": {
         "Label": "Athletik",
-        "Description": "Vollbringt körperliche Kraft-, Geschwindigkeits- oder Bewegungsleistungen."
+        "Description": "Meistert körperliche Leistungen in Kraft, Geschwindigkeit oder Bewegung."
       },
       "Notice": {
         "Label": "Wahrnehmung",
-        "Description": "Entdeckt Details, Veränderungen oder verborgene Elemente in der Umgebung."
+        "Description": "Erkennt Details, Veränderungen oder Verborgenes in der Umgebung."
       },
       "Stealth": {
         "Label": "Heimlichkeit",
-        "Description": "Entzieht sich Entdeckung durch Stille, Verbergen oder gutes Timing."
+        "Description": "Vermeidet Entdeckung durch Lautlosigkeit, Deckung oder Timing."
       },
       "Craft": {
         "Label": "Handwerk",
@@ -84,100 +84,100 @@
         "Description": "Folgt Fährten, Zeichen und Störungen in der Umgebung."
       },
       "HandleBeasts": {
-        "Label": "Tierführung",
-        "Description": "Bändigt Reittiere und Tiere, beruhigt oder lenkt Kreaturen."
+        "Label": "Tiere führen",
+        "Description": "Führt Reittiere und Tiere, beruhigt oder lenkt Kreaturen."
       },
       "Impress": {
-        "Label": "Beeinflussen",
-        "Description": "Prägt, wie andere dich durch Präsenz und Auftreten wahrnehmen."
+        "Label": "Beeindrucken",
+        "Description": "Formt den Eindruck, den andere von dir haben, durch Auftreten und Wirkung."
       },
       "Influence": {
-        "Label": "Überzeugen",
-        "Description": "Lenkt Absichten anderer durch Überredung oder Druck."
+        "Label": "Beeinflussen",
+        "Description": "Lenkt die Absichten anderer durch Überzeugung oder Druck."
       },
       "Insight": {
         "Label": "Einsicht",
         "Description": "Liest Motive, Muster und emotionale Signale."
       },
       "Academia": {
-        "Label": "Wissenschaft",
-        "Description": "Eignet sich vertieftes Wissen an und analysiert komplexe Zusammenhänge."
+        "Label": "Gelehrsamkeit",
+        "Description": "Erwirbt höheres Wissen und analysiert komplexe Zusammenhänge."
       },
       "Folklore": {
-        "Label": "Volkskunde",
-        "Description": "Kennt und erzählt alles von lokalen Gerüchten bis zu heroischen Legenden und ihren Traditionen."
+        "Label": "Sagenkunde",
+        "Description": "Kennt alles von lokalen Gerüchten bis zu Heldensagen und begreift Traditionen und ihre Bezüge."
       },
       "Navigate": {
         "Label": "Navigation",
-        "Description": "Plant Routen, orientiert sich und liest Gelände oder Karten."
+        "Description": "Legt Routen fest, orientiert sich und liest Gelände oder Karten."
       },
       "Manifest": {
         "Label": "Manifestieren",
-        "Description": "Erschafft oder projiziert rohe magische Kraft."
+        "Description": "Erzeugt oder projiziert rohe magische Kraft."
       },
       "Alter": {
-        "Label": "Verwandeln",
-        "Description": "Verändert Materie, Körper oder physische Zustände."
+        "Label": "Verändern",
+        "Description": "Verwandelt Materie, Körper oder physische Zustände."
       },
       "Compel": {
         "Label": "Zwingen",
-        "Description": "Übt Macht auf Geist, Seele oder Wesen aus."
+        "Description": "Übt Zwang auf Geist, Seele oder Wesen aus."
       },
       "Reveal": {
         "Label": "Enthüllen",
-        "Description": "Deckt Wahrheit auf, spürt Verborgenes auf oder gewinnt Einsicht."
+        "Description": "Legt Wahrheit offen, entdeckt Verborgenes oder gewinnt Einsicht."
       },
       "Transpose": {
         "Label": "Versetzen",
-        "Description": "Verschiebt Positionen, bewegt Objekte oder beugt Raum und Zustand."
+        "Description": "Verschiebt Positionen, bewegt Objekte oder beugt Zustände und Raum."
       },
       "Ward": {
         "Label": "Schirmen",
-        "Description": "Errichtet Barrieren, Schutz oder magische Abwehr."
+        "Description": "Errichtet Barrieren, Schutz oder magische Verteidigung."
       }
     },
     "Resistances": {
       "Snap": {
         "Label": "Reflex",
-        "Description": "Unmittelbare Reaktion auf plötzliche Bedrohungen."
+        "Description": "Unmittelbare Reflexreaktion auf plötzliche Bedrohungen."
       },
       "Grit": {
         "Label": "Zähigkeit",
-        "Description": "Körperliche Robustheit gegen Schmerz, Gift und Umwelteinflüsse."
+        "Description": "Körperliche Widerstandskraft gegen Schmerz, Gifte und Witterung."
       },
       "Resolve": {
         "Label": "Entschlossenheit",
-        "Description": "Mentale Widerstandskraft gegen Furcht, Beeinflussung oder Verzweiflung."
+        "Description": "Mentale Widerstandskraft gegen Furcht, Einfluss oder Verzweiflung."
       }
     },
     "Reserves": {
       "Power": {
         "Label": "Kraft",
-        "Description": "Physische Stärke und Anstrengung."
+        "Description": "Körperliche Stärke und Anstrengung."
       },
       "Grace": {
         "Label": "Anmut",
-        "Description": "Präzision, Bewegung und Koordination."
+        "Description": "Präzision, Bewegung, Koordination."
       },
       "Will": {
         "Label": "Wille",
-        "Description": "Fokus, Absicht, mentaler Druck und Durchsetzung."
+        "Description": "Fokus, Absicht, mentaler Druck, Durchsetzung."
       }
     },
     "NPCStats": {
       "HP": {
-        "Label": "Lebenspunkte",
-        "Description": "Wie viel Schaden die Figur ertragen kann, bevor es ihr Verhalten im Kampf beeinflusst."
+        "Label": "Trefferpunkte",
+        "Description": "Wie viel Schaden die Figur einstecken kann, bevor sich ihr Verhalten im Kampf ändert."
       },
       "Wounds": {
         "Label": "Wunden",
-        "Description": "Wie viele Zustände der NSC durchlaufen kann, bevor er zu Boden geht."
+        "Description": "Wie viele Zustände der NSC durchläuft, bevor er zu Boden geht."
       }
     },
     "Paths": {
       "Virtue": {
         "Label": "Tugend",
-        "Description": "Fähigkeit zu Disziplin und moralischer Standhaftigkeit.",
+        "Description": "Fähigkeit zu Disziplin und moralischer Beständigkeit.",
         "Steps": {
           "Discipline": "Disziplin",
           "Constancy": "Beständigkeit",
@@ -186,60 +186,60 @@
       },
       "Ward": {
         "Label": "Schutz",
-        "Description": "Innere Grenzen, geistige Haltung, persönlicher Zufluchtsort.",
+        "Description": "Innere Grenzen, geistige Haltung, persönliches Heiligtum.",
         "Steps": {
           "Presence": "Präsenz",
-          "Stewardship": "Fürsorge",
+          "Stewardship": "Verantwortung",
           "Renewal": "Erneuerung"
         }
       },
       "Vice": {
         "Label": "Sünder",
-        "Description": "Hang zu Impuls, Schwäche und Selbstverfehlung.",
+        "Description": "Zug zu Impuls, Schwäche und Selbstvergnügen.",
         "Steps": {
-          "Indulgence": "Hingabe",
+          "Indulgence": "Genuss",
           "Decay": "Verfall",
-          "Depravity": "Verderbnis"
+          "Depravity": "Verderbtheit"
         }
       },
       "Ruin": {
         "Label": "Zerstörer",
-        "Description": "Bruch, Verfall, das Auseinanderfallen des Selbst.",
+        "Description": "Bruch, Verfall, das Zerbrechen des Selbst.",
         "Steps": {
-          "Desire": "Begehren",
+          "Desire": "Begierde",
           "Despair": "Verzweiflung",
-          "Righteousness": "Gerechtigkeit"
+          "Righteousness": "Selbstgerechtigkeit"
         }
       }
     },
     "Actions": {
       "Strike": {
-        "Label": "Hieb",
-        "Description": "Ein direkter Angriff. Zusätzliche Kraft erhöht die Wucht."
+        "Label": "Schlag",
+        "Description": "Direkter Angriff. Zusätzliche Kraft erhöht die Wucht."
       },
       "Bind": {
         "Label": "Binden",
-        "Description": "Blockiert die Waffenlinie des Gegners und verhängt Gebunden(X)."
+        "Description": "Blockiert die Waffenlinie des Gegners und verhängt gebunden(X)."
       },
       "Expose": {
-        "Label": "Entblößen",
-        "Description": "Erzwingt eine Lücke in der Verteidigung des Gegners und verleiht Entblößt(X)."
+        "Label": "Öffnen",
+        "Description": "Erzwingt eine Lücke in der Verteidigung des Gegners und verhängt offengelegt(X)."
       },
       "Push": {
         "Label": "Stoßen",
-        "Description": "Drängt den Gegner zurück und verleiht Zurückgedrängt(X)."
+        "Description": "Drängt den Gegner zurück und verhängt gestoßen(X)."
       },
       "Brace": {
-        "Label": "Abstützen",
-        "Description": "Nimmt eine feste Haltung ein; mindert eingehende Kontrolleffekte."
+        "Label": "Standhalten",
+        "Description": "Nimmt eine feste Haltung ein; verringert eingehende Kontrolleffekte."
       },
       "Guard": {
-        "Label": "Parade",
-        "Description": "Nimmt eine defensive Struktur ein; verbessert die nächste Wache."
+        "Label": "Wache",
+        "Description": "Nimmt eine defensive Struktur ein; verbessert den nächsten Paradeversuch."
       },
       "Evade": {
-        "Label": "Entziehen",
-        "Description": "Tritt leicht aus der Linie; verbessert das nächste Ausweichen."
+        "Label": "Ausweichen",
+        "Description": "Tritt leicht aus der Linie; verbessert den nächsten Ausweichversuch."
       },
       "Grapple": {
         "Label": "Ringen",
@@ -247,37 +247,37 @@
       },
       "Break": {
         "Label": "Lösen",
-        "Description": "Schüttelt negative Zustände ab; reduziert Gebunden/Entblößt/Zurückgedrängt."
+        "Description": "Schüttelt negative Zustände ab; reduziert gebunden/offengelegt/gestoßen."
       }
     },
     "Forms": {
       "PowerStrike": {
-        "Label": "Mächtiger Schlag",
-        "Description": "Gibt Kraft aus, damit ein Hieb deutlich härter trifft als üblich."
+        "Label": "Kraftschlag",
+        "Description": "Gibt Kraft aus, um einen Schlag wesentlich härter treffen zu lassen als gewöhnlich."
       },
       "LongHook": {
         "Label": "Langer Haken",
-        "Description": "Erweitert eine Kontrollaktion, um mit Haken- oder Stangenwaffen weiter zu reichen."
+        "Description": "Erweitert eine Kontrollaktion mit Haken- oder Stangenwaffe auf größere Reichweite als üblich."
       },
       "LockingBind": {
         "Label": "Fesselnder Block",
-        "Description": "Vertieft ein Binden, damit die Waffe des Ziels fester fixiert bleibt."
+        "Description": "Vertieft ein Binden, sodass die Waffe des Ziels fester blockiert bleibt."
       },
       "PrecisionThrust": {
-        "Label": "Präziser Stich",
-        "Description": "Verwandelt einen Hieb in einen präzisen Stich mit kurzzeitiger Zusatzgenauigkeit."
+        "Label": "Präzisionsstoß",
+        "Description": "Wandelt einen Schlag in einen genauen Stoß, der kurzzeitig zusätzliche Treffgenauigkeit gewinnt."
       },
       "PushThrough": {
         "Label": "Durchdrücken",
-        "Description": "Drückt einen Stoß stärker durch und zwingt das Ziel weiter zurück als üblich."
+        "Description": "Treibt ein Stoßen stärker voran und zwingt das Ziel weiter zurück als eine normale Kontrollaktion."
       },
       "Counterguard": {
-        "Label": "Gegenparade",
-        "Description": "Schärft die defensive Struktur, um beim nächsten Angriff besser zu parieren."
+        "Label": "Gegenwache",
+        "Description": "Schärft deine defensive Struktur, um beim nächsten Angriff eine stärkere Parade zu erhalten."
       },
       "BreakStance": {
-        "Label": "Haltung brechen",
-        "Description": "Macht aus einem wuchtigen Hieb einen standbrechenden Schlag, der das Ziel offener zurücklässt."
+        "Label": "Standbruch",
+        "Description": "Verwandelt einen schweren Schlag in einen stellungsbrechenden Hieb, der das Ziel offener zurücklässt."
       }
     }
   }
