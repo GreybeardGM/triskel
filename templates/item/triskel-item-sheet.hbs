@@ -27,20 +27,28 @@
       </ol>
 
       <div class="reference-controls">
-        <label class="reference-controls__label" for="actions-reference-select">Ref hinzufügen</label>
+        <label class="reference-controls__label" for="actions-reference-select">
+          Ref hinzufügen
+        </label>
         <div class="reference-controls__inputs">
-          <select id="actions-reference-select" data-reference-select="actions">
-            <option value="">Aus dem Codex wählen</option>
-            <optgroup label="Actions">
-              {{#each referenceOptions.actions as |option|}}
-                <option value="{{option.value}}">{{option.label}}</option>
-              {{/each}}
-            </optgroup>
+          <select
+            id="actions-reference-select"
+            name="actionsRef"                          {{!-- NEU --}}
+            data-reference-select="actions"
+          >
+            {{!-- Options aus TRISKEL_ACTIONS --}}
           </select>
-          <button type="button" data-action="addActionReference">Hinzufügen</button>
+      
+          <button
+            type="button"
+            data-action="addActionReference"
+            data-select-field="actionsRef"            {{!-- NEU --}}
+            data-ref-path="system.actions.ref"        {{!-- NEU: Ziel-Array --}}
+          >
+            Hinzufügen
+          </button>
         </div>
       </div>
-    </div>
 
     <div class="item-panel">
       <h2>Forms</h2>
@@ -57,17 +65,26 @@
       </ol>
 
       <div class="reference-controls">
-        <label class="reference-controls__label" for="forms-reference-select">Ref hinzufügen</label>
+        <label class="reference-controls__label" for="forms-reference-select">
+          Ref hinzufügen
+        </label>
         <div class="reference-controls__inputs">
-          <select id="forms-reference-select" data-reference-select="forms">
-            <option value="">Aus dem Codex wählen</option>
-            <optgroup label="Forms">
-              {{#each referenceOptions.forms as |option|}}
-                <option value="{{option.value}}">{{option.label}}</option>
-              {{/each}}
-            </optgroup>
+          <select
+            id="forms-reference-select"
+            name="formsRef"                            {{!-- NEU --}}
+            data-reference-select="forms"
+          >
+            {{!-- Options aus TRISKEL_FORMS --}}
           </select>
-          <button type="button" data-action="addFormReference">Hinzufügen</button>
+      
+          <button
+            type="button"
+            data-action="addFormReference"
+            data-select-field="formsRef"              {{!-- NEU --}}
+            data-ref-path="system.forms.ref"          {{!-- NEU --}}
+          >
+            Hinzufügen
+          </button>
         </div>
       </div>
     </div>
@@ -86,20 +103,41 @@
           <li class="reference-row reference-row--empty">Keine Modifiers hinterlegt</li>
         {{/unless}}
       </ol>
-
+      
       <div class="reference-controls">
-        <label class="reference-controls__label" for="modifier-skill">Skill-Mod hinzufügen</label>
+        <label class="reference-controls__label" for="modifier-skill">
+          Skill-Mod hinzufügen
+        </label>
         <div class="reference-controls__inputs">
-          <select id="modifier-skill" data-modifier-skill>
-            <option value="">Skill auswählen</option>
-            {{#each modifierOptions as |option|}}
-              <option value="{{option.value}}">{{option.label}}</option>
-            {{/each}}
+          <select
+            id="modifier-skill"
+            name="modifierSkill"                       {{!-- NEU --}}
+            data-modifier-skill
+          >
+            {{!-- Skill-Options --}}
           </select>
-          <input type="number" step="1" value="0" data-modifier-value />
-          <button type="button" data-action="addModifier">Hinzufügen</button>
+      
+          <input
+            type="number"
+            step="1"
+            value="0"
+            id="modifier-value"
+            name="modifierValue"                       {{!-- NEU --}}
+            data-modifier-value
+          />
+      
+          <button
+            type="button"
+            data-action="addModifier"
+            data-skill-field="modifierSkill"          {{!-- NEU --}}
+            data-value-field="modifierValue"          {{!-- NEU --}}
+            data-ref-path="system.modifiers"          {{!-- NEU --}}
+          >
+            Hinzufügen
+          </button>
         </div>
       </div>
+
     </div>
   </section>
 </form>
