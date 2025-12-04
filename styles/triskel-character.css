@@ -115,35 +115,40 @@
   gap: 1rem;
 }
 
+.triskel .reserve-power,
+.triskel .resource-bar.power {
+  --triskel-interactive-highlight: var(--triskel-color-resource-power);
+}
+
+.triskel .reserve-grace,
+.triskel .resource-bar.grace {
+  --triskel-interactive-highlight: var(--triskel-color-resource-grace);
+}
+
+.triskel .reserve-will,
+.triskel .resource-bar.will {
+  --triskel-interactive-highlight: var(--triskel-color-resource-will);
+}
+
+.triskel .reserve-hp,
+.triskel .resource-bar.hp {
+  --triskel-interactive-highlight: var(--triskel-color-resource-hp);
+}
+
+.triskel .reserve-wounds,
+.triskel .resource-bar.wounds {
+  --triskel-interactive-highlight: var(--triskel-color-resource-wounds);
+}
+
+.triskel .reserve-tension,
+.triskel .resource-bar.tension {
+  --triskel-interactive-highlight: var(--triskel-color-resource-tension);
+}
+
 .triskel .resource-bar {
-  --color-resource-box: var(--triskel-color-resource-default);
   display: flex;
   flex-direction: column-reverse;
   gap: 0.25rem;
-}
-
-.triskel .resource-bar.power {
-  --color-resource-box: var(--triskel-color-resource-power);
-}
-
-.triskel .resource-bar.grace {
-  --color-resource-box: var(--triskel-color-resource-grace);
-}
-
-.triskel .resource-bar.will {
-  --color-resource-box: var(--triskel-color-resource-will);
-}
-
-.triskel .resource-bar.hp {
-  --color-resource-box: var(--triskel-color-resource-hp);
-}
-
-.triskel .resource-bar.wounds {
-  --color-resource-box: var(--triskel-color-resource-wounds);
-}
-
-.triskel .resource-bar.tension {
-  --color-resource-box: var(--triskel-color-resource-tension);
 }
 
 .triskel .resource-box {
@@ -154,6 +159,12 @@
   border-radius: 4px;
   font-weight: 600;
   color: var(--triskel-color-text-inverse);
+  border: 1px solid var(--triskel-color-border-muted);
+  background: color-mix(
+    in srgb,
+    var(--triskel-interactive-highlight) 70%,
+    var(--color-bg) 30%
+  );
 }
 
 .triskel .resource-box[data-action="updateResourceValue"] {
@@ -175,35 +186,35 @@
 }
 
 .triskel .resource-box.segment-filled {
-  background: var(--color-resource-box);
+  background: color-mix(
+    in srgb,
+    var(--triskel-interactive-highlight) 70%,
+    var(--color-bg) 30%
+  );
 }
 
-.triskel .resource-box.segment-filled:hover {
-  box-shadow: 0 0 10px 0 var(--color-resource-box);
-}
-
+.triskel .path-virtue,
 .triskel .paths .path-bar.virtue {
-  --color-resource-box: var(--triskel-color-path-virtue);
+  --triskel-interactive-highlight: var(--triskel-color-path-virtue);
   flex-direction: row;
 }
 
+.triskel .path-vice,
 .triskel .paths .path-bar.vice {
-  --color-resource-box: var(--triskel-color-path-vice);
+  --triskel-interactive-highlight: var(--triskel-color-path-vice);
   flex-direction: row;
 }
 
+.triskel .path-ward,
 .triskel .paths .path-bar.ward {
-  --color-resource-box: var(--triskel-color-path-ward);
+  --triskel-interactive-highlight: var(--triskel-color-path-ward);
   flex-direction: row-reverse;
 }
 
+.triskel .path-ruin,
 .triskel .paths .path-bar.ruin {
-  --color-resource-box: var(--triskel-color-path-ruin);
+  --triskel-interactive-highlight: var(--triskel-color-path-ruin);
   flex-direction: row-reverse;
-}
-
-.triskel .resource-box.segment-empty:hover {
-  box-shadow: 0 0 10px 0 var(--triskel-color-segment-empty);
 }
 
 .triskel .resource-input {
@@ -368,6 +379,20 @@
 }
 
 .triskel .action-card {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.triskel .action-card__radio {
+  position: absolute;
+  inset-inline-start: -9999px;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+}
+
+.triskel .action-card__content {
   border-radius: 8px;
   padding: 0.75rem;
   display: flex;
@@ -375,31 +400,20 @@
   gap: 0.5rem;
 }
 
+.triskel .action-card:focus-within .action-card__content {
+  outline: 2px solid var(--triskel-interactive-highlight);
+  outline-offset: 2px;
+}
+
 .triskel .action-card__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .triskel .action-card__title {
   margin: 0;
   font-size: 1.1rem;
-}
-
-.triskel .action-card__select {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-  border-radius: 999px;
-  padding: 0.3rem 0.75rem;
-  color: inherit;
-}
-
-.triskel .action-card__select:focus-visible {
-  outline: 2px solid var(--color-primary-3);
-  outline-offset: 2px;
 }
 
 .triskel .action-card__meta {

@@ -7,7 +7,7 @@
         <div class="path-segments">
           {{#each path._segments as |segment|}}
             <div
-              class="resource-box segment-{{segment.state}}"
+              class="resource-box is-interactive segment-{{segment.state}}"
               {{#if segment.clickable}}
                 data-action="updateResourceValue"
                 data-resource="paths.{{path.id}}"
