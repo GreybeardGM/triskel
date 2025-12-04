@@ -14,6 +14,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     actions: {
       editImage: onEditImage,
       quickTriskelRoll: this.#onQuickTriskelRoll,
+      selectAction: this.#onSelectAction,
+      toggleFormSelection: this.#onToggleFormSelection,
       updateResourceValue: onUpdateResourceValue,
       editItem: this.#onEditItem,
       deleteItem: this.#onDeleteItem
@@ -165,7 +167,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       context.system.actions?.selected,
       context.system.skills,
       context.system.reserves,
-      availableForms
+      availableForms,
+      context.system.actions?.forms
     );
     context.items = Array.from(this.document.items ?? []).map(item => ({
       id: item.id,
@@ -205,6 +208,43 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       : [];
 
     await this.document?.rollTriskelDice({ modifiers });
+  }
+
+  static async #onSelectAction(event, target) {
+    event.preventDefault();
+
+    const actionKey = target.dataset.actionKey;
+    if (!actionKey) return;
+
+    const currentSelections = foundry.utils.duplicate(this.document.system?.actions?.selected ?? {});
+    const isSelected = Boolean(currentSelections[actionKey]);
+
+    const nextSelection = {};
+    if (!isSelected) nextSelection[actionKey] = true;
+
+    await this.document.update({ "system.actions.selected": nextSelection });
+  }
+
+  static async #onToggleFormSelection(event, target) {
+    event.preventDefault();
+
+    const actionKey = target.dataset.actionKey;
+    const formKey = target.dataset.formKey;
+    if (!actionKey || !formKey) return;
+
+    const currentForms = foundry.utils.duplicate(this.document.system?.actions?.forms ?? {});
+    const selectedForAction = Array.isArray(currentForms[actionKey])
+      ? currentForms[actionKey].slice()
+      : [];
+
+    const existingIndex = selectedForAction.indexOf(formKey);
+    if (existingIndex >= 0) selectedForAction.splice(existingIndex, 1);
+    else selectedForAction.push(formKey);
+
+    if (selectedForAction.length) currentForms[actionKey] = selectedForAction;
+    else delete currentForms[actionKey];
+
+    await this.document.update({ "system.actions.forms": currentForms });
   }
 
   static #getItemFromTarget(target) {
