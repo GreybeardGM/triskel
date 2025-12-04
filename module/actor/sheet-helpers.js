@@ -209,13 +209,12 @@ export function gatherFormsFromItems(items = []) {
   });
 }
 
-export function prepareStandardActions(selectedActions = {}, skills = {}, reserves = {}, availableForms = [], selectedForms = {}) {
-  const selected = selectedActions ?? {};
+export function prepareStandardActions(selectedAction = null, skills = {}, reserves = {}, availableForms = [], selectedForms = {}) {
+  const selected = typeof selectedAction === "string" ? selectedAction : null;
   const actorSkills = skills ?? {};
   const actorReserves = reserves ?? {};
   const forms = Array.isArray(availableForms) ? availableForms : [];
   const selectedFormsByAction = selectedForms ?? {};
-  const selectedActionKey = Object.entries(selected).find(([, value]) => Boolean(value))?.[0] ?? null;
 
   return TRISKEL_ACTIONS.map(action => {
     const skillInfo = TRISKEL_SKILLS[action.skill] ?? {};
@@ -244,7 +243,7 @@ export function prepareStandardActions(selectedActions = {}, skills = {}, reserv
       skillLabel: localize(skillInfo.label ?? action.skill),
       reserveLabel: localize(reserveInfo.label ?? action.reserve),
       description: localize(action.description ?? ""),
-      selected: selectedActionKey === action.key,
+      selected: selected === action.key,
       skillValue,
       reserveValue: Number.isFinite(reserveValue) ? reserveValue : null,
       reserveMax: Number.isFinite(reserveMax) ? reserveMax : null,
