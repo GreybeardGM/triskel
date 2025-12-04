@@ -230,6 +230,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   static async #onToggleFormSelection(event, target) {
     event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 
     const actionKey = target.dataset.actionKey;
     const formKey = target.dataset.formKey;
