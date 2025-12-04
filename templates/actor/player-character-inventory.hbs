@@ -3,7 +3,7 @@
   data-tab="{{tabs.inventory.id}}"
   data-group="{{tabs.inventory.group}}"
 >
-  <ol class="inventory-list">
+  <ul class="inventory-list">
     {{#if items.length}}
       {{#each items as |item|}}
         <li class="inventory-list__item" data-item-id="{{item.id}}">
@@ -11,10 +11,30 @@
           {{#if item.typeLabel}}
             <span class="inventory-list__item-type">{{item.typeLabel}}</span>
           {{/if}}
+          <div class="inventory-list__item-actions">
+            <button
+              type="button"
+              class="inventory-list__item-action"
+              data-action="editItem"
+              title="{{localize 'TRISKEL.Items.Edit'}}"
+              aria-label="{{localize 'TRISKEL.Items.Edit'}}"
+            >
+              <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            </button>
+            <button
+              type="button"
+              class="inventory-list__item-action"
+              data-action="deleteItem"
+              title="{{localize 'TRISKEL.Items.Delete'}}"
+              aria-label="{{localize 'TRISKEL.Items.Delete'}}"
+            >
+              <i class="fa-solid fa-trash" aria-hidden="true"></i>
+            </button>
+          </div>
         </li>
       {{/each}}
     {{else}}
       <li class="inventory-list__empty">{{localize "TRISKEL.Items.Empty"}}</li>
     {{/if}}
-  </ol>
+  </ul>
 </section>

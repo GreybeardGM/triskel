@@ -1,4 +1,5 @@
 import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
+import { TRISKEL_FORMS } from "../codex/form-codex.js";
 import { TRISKEL_RESERVES, TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
 const localize = (value) => {
@@ -169,10 +170,50 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
   return { resistances: resistancesList, skillColumns };
 }
 
-export function prepareStandardActions(selectedActions = {}, skills = {}, reserves = {}) {
+export function gatherFormsFromItems(items = []) {
+  const codexByKey = TRISKEL_FORMS.reduce((collection, form) => {
+    collection[form.key] = form;
+    return collection;
+  }, {});
+
+  const collected = new Map();
+
+  const addForm = (formData = {}) => {
+    const key = typeof formData === "string" ? formData : formData.key;
+    if (!key || collected.has(key)) return;
+
+    const codexForm = codexByKey[key] ?? {};
+    const merged = { ...codexForm, ...(typeof formData === "object" ? formData : {}) };
+
+    collected.set(key, merged);
+  };
+
+  items.forEach(item => {
+    const system = item?.system ?? {};
+
+    (system.forms?.ref ?? []).forEach(addForm);
+    (system.forms?.add ?? []).forEach(addForm);
+  });
+
+  return Array.from(collected.values()).map(form => {
+    const actions = Array.isArray(form.actions) ? form.actions : [];
+    const cost = Number.isFinite(Number(form.cost)) ? Number(form.cost) : null;
+
+    return {
+      ...form,
+      label: localize(form.label ?? form.key),
+      description: localize(form.description ?? ""),
+      actions,
+      cost
+    };
+  });
+}
+
+export function prepareStandardActions(selectedActions = {}, skills = {}, reserves = {}, availableForms = []) {
   const selected = selectedActions ?? {};
   const actorSkills = skills ?? {};
   const actorReserves = reserves ?? {};
+  const forms = Array.isArray(availableForms) ? availableForms : [];
 
   return TRISKEL_ACTIONS.map(action => {
     const skillInfo = TRISKEL_SKILLS[action.skill] ?? {};
@@ -186,6 +227,10 @@ export function prepareStandardActions(selectedActions = {}, skills = {}, reserv
     const reserveValue = Number(reserve.value ?? reserveInfo.value ?? NaN);
     const reserveMax = Number(reserve.max ?? reserveInfo.max ?? NaN);
 
+    const formsForAction = forms
+      .filter(form => form.actions.includes(action.key))
+      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
     return {
       ...action,
       label: localize(action.label ?? skillInfo.label ?? action.key),
@@ -195,7 +240,8 @@ export function prepareStandardActions(selectedActions = {}, skills = {}, reserv
       selected: Boolean(selected[action.key]),
       skillValue,
       reserveValue: Number.isFinite(reserveValue) ? reserveValue : null,
-      reserveMax: Number.isFinite(reserveMax) ? reserveMax : null
+      reserveMax: Number.isFinite(reserveMax) ? reserveMax : null,
+      forms: formsForAction
     };
   });
 }

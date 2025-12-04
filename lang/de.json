@@ -34,7 +34,9 @@
       "Spell": "Zauber"
     },
     "Items": {
-      "Empty": "Du trägst momentan keine Gegenstände."
+      "Empty": "Du trägst momentan keine Gegenstände.",
+      "Edit": "Gegenstand bearbeiten",
+      "Delete": "Gegenstand löschen"
     },
     "Tiers": {
       "Novice": { "Label": "Novize" },

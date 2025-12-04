@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
+import { gatherFormsFromItems, onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
 import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -14,7 +14,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     actions: {
       editImage: onEditImage,
       quickTriskelRoll: this.#onQuickTriskelRoll,
-      updateResourceValue: onUpdateResourceValue
+      updateResourceValue: onUpdateResourceValue,
+      editItem: this.#onEditItem,
+      deleteItem: this.#onDeleteItem
     },
     actor: {
       type: 'character'
@@ -158,10 +160,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
+    const availableForms = gatherFormsFromItems(Array.from(this.document.items ?? []));
     context.standardActions = prepareStandardActions(
       context.system.actions?.selected,
       context.system.skills,
-      context.system.reserves
+      context.system.reserves,
+      availableForms
     );
     context.items = Array.from(this.document.items ?? []).map(item => ({
       id: item.id,
@@ -201,6 +205,29 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       : [];
 
     await this.document?.rollTriskelDice({ modifiers });
+  }
+
+  static #getItemFromTarget(target) {
+    const itemId = target.closest("[data-item-id]")?.dataset.itemId ?? target.dataset.itemId;
+    if (!itemId) return null;
+
+    return this.document?.items?.get(itemId) ?? null;
+  }
+
+  static async #onEditItem(event, target) {
+    event.preventDefault();
+
+    const item = this.#getItemFromTarget(target);
+    await item?.sheet?.render(true);
+  }
+
+  static async #onDeleteItem(event, target) {
+    event.preventDefault();
+
+    const item = this.#getItemFromTarget(target);
+    if (!item) return;
+
+    await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
   }
 
 }

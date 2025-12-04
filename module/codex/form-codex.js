@@ -8,6 +8,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.PowerStrike.Label",
     category: "combat",
     skill: "strike",
+    cost: 1,
     reserve: "power",
     actions: ["strike"],
     description: "TRISKEL.Forms.PowerStrike.Description"
@@ -17,6 +18,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.LongHook.Label",
     category: "combat",
     skill: "control",
+    cost: 1,
     reserve: "grace",
     actions: ["bind", "expose", "push"],
     description: "TRISKEL.Forms.LongHook.Description"
@@ -26,6 +28,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.LockingBind.Label",
     category: "combat",
     skill: "control",
+    cost: 1,
     reserve: "grace",
     actions: ["bind"],
     description: "TRISKEL.Forms.LockingBind.Description"
@@ -35,6 +38,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.PrecisionThrust.Label",
     category: "combat",
     skill: "strike",
+    cost: 1,
     reserve: "grace",
     actions: ["strike"],
     description: "TRISKEL.Forms.PrecisionThrust.Description"
@@ -44,6 +48,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.PushThrough.Label",
     category: "combat",
     skill: "control",
+    cost: 1,
     reserve: "power",
     actions: ["push"],
     description: "TRISKEL.Forms.PushThrough.Description"
@@ -53,6 +58,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.Counterguard.Label",
     category: "combat",
     skill: "guard",
+    cost: 1,
     reserve: "grace",
     actions: ["guard"],
     description: "TRISKEL.Forms.Counterguard.Description"
@@ -62,6 +68,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.BreakStance.Label",
     category: "combat",
     skill: "strike",
+    cost: 1,
     reserve: "power",
     actions: ["strike"],
     description: "TRISKEL.Forms.BreakStance.Description"

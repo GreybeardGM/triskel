@@ -34,7 +34,9 @@
       "Spell": "Spell"
     },
     "Items": {
-      "Empty": "You are not carrying any items."
+      "Empty": "You are not carrying any items.",
+      "Edit": "Edit item",
+      "Delete": "Delete item"
     },
     "Tiers": {
       "Novice": { "Label": "Novice" },
