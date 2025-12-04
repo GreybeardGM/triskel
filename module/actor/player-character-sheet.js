@@ -1,4 +1,4 @@
-import { gatherFormsFromItems, onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
+import { gatherFormsFromItems, onEditImage, onUpdateResourceValue, prepareActionFormsState, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
 import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -163,12 +163,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.resistances = resistances;
     context.skillColumns = skillColumns;
     const availableForms = gatherFormsFromItems(Array.from(this.document.items ?? []));
+    const actionFormsState = prepareActionFormsState(availableForms, context.system.actions?.forms);
+    context.actionForms = actionFormsState;
     context.standardActions = prepareStandardActions(
       context.system.actions?.selected,
       context.system.skills,
       context.system.reserves,
       availableForms,
-      context.system.actions?.forms
+      actionFormsState
     );
     context.items = Array.from(this.document.items ?? []).map(item => ({
       id: item.id,
@@ -238,13 +240,16 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (!actionKey || !formKey) return;
 
     const currentForms = foundry.utils.duplicate(this.document.system?.actions?.forms ?? {});
-    const selectedForAction = foundry.utils.deepClone(currentForms[actionKey] ?? {});
+    const normalizedForAction = Object.entries(currentForms[actionKey] ?? {}).reduce((collection, [key, formState]) => {
+      const activeState = typeof formState === "boolean" ? formState : formState?.active;
+      collection[key] = { active: Boolean(activeState) };
+      return collection;
+    }, {});
 
-    if (selectedForAction[formKey]) delete selectedForAction[formKey];
-    else selectedForAction[formKey] = true;
+    const currentState = normalizedForAction[formKey]?.active ?? false;
+    normalizedForAction[formKey] = { active: !currentState };
 
-    if (Object.keys(selectedForAction).length) currentForms[actionKey] = selectedForAction;
-    else delete currentForms[actionKey];
+    currentForms[actionKey] = normalizedForAction;
 
     await this.document.update({ "system.actions.forms": currentForms });
   }
