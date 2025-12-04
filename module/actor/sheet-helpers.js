@@ -228,8 +228,13 @@ export function prepareStandardActions(selectedAction = null, skills = {}, reser
     const reserveValue = Number(reserve.value ?? reserveInfo.value ?? NaN);
     const reserveMax = Number(reserve.max ?? reserveInfo.max ?? NaN);
 
+    const formsForSelection = selectedFormsByAction[action.key];
     const selectedFormKeys = new Set(
-      Array.isArray(selectedFormsByAction[action.key]) ? selectedFormsByAction[action.key] : []
+      Array.isArray(formsForSelection)
+        ? formsForSelection
+        : Object.entries(formsForSelection ?? {})
+            .filter(([, isSelected]) => Boolean(isSelected))
+            .map(([formKey]) => formKey)
     );
 
     const formsForAction = forms

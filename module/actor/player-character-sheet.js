@@ -238,15 +238,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (!actionKey || !formKey) return;
 
     const currentForms = foundry.utils.duplicate(this.document.system?.actions?.forms ?? {});
-    const selectedForAction = Array.isArray(currentForms[actionKey])
-      ? currentForms[actionKey].slice()
-      : [];
+    const selectedForAction = foundry.utils.deepClone(currentForms[actionKey] ?? {});
 
-    const existingIndex = selectedForAction.indexOf(formKey);
-    if (existingIndex >= 0) selectedForAction.splice(existingIndex, 1);
-    else selectedForAction.push(formKey);
+    if (selectedForAction[formKey]) delete selectedForAction[formKey];
+    else selectedForAction[formKey] = true;
 
-    if (selectedForAction.length) currentForms[actionKey] = selectedForAction;
+    if (Object.keys(selectedForAction).length) currentForms[actionKey] = selectedForAction;
     else delete currentForms[actionKey];
 
     await this.document.update({ "system.actions.forms": currentForms });
