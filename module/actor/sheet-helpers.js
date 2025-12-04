@@ -209,11 +209,13 @@ export function gatherFormsFromItems(items = []) {
   });
 }
 
-export function prepareStandardActions(selectedActions = {}, skills = {}, reserves = {}, availableForms = []) {
+export function prepareStandardActions(selectedActions = {}, skills = {}, reserves = {}, availableForms = [], selectedForms = {}) {
   const selected = selectedActions ?? {};
   const actorSkills = skills ?? {};
   const actorReserves = reserves ?? {};
   const forms = Array.isArray(availableForms) ? availableForms : [];
+  const selectedFormsByAction = selectedForms ?? {};
+  const selectedActionKey = Object.entries(selected).find(([, value]) => Boolean(value))?.[0] ?? null;
 
   return TRISKEL_ACTIONS.map(action => {
     const skillInfo = TRISKEL_SKILLS[action.skill] ?? {};
@@ -227,9 +229,14 @@ export function prepareStandardActions(selectedActions = {}, skills = {}, reserv
     const reserveValue = Number(reserve.value ?? reserveInfo.value ?? NaN);
     const reserveMax = Number(reserve.max ?? reserveInfo.max ?? NaN);
 
+    const selectedFormKeys = new Set(
+      Array.isArray(selectedFormsByAction[action.key]) ? selectedFormsByAction[action.key] : []
+    );
+
     const formsForAction = forms
       .filter(form => form.actions.includes(action.key))
-      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
+      .map(form => ({ ...form, selected: selectedFormKeys.has(form.key) }));
 
     return {
       ...action,
@@ -237,7 +244,7 @@ export function prepareStandardActions(selectedActions = {}, skills = {}, reserv
       skillLabel: localize(skillInfo.label ?? action.skill),
       reserveLabel: localize(reserveInfo.label ?? action.reserve),
       description: localize(action.description ?? ""),
-      selected: Boolean(selected[action.key]),
+      selected: selectedActionKey === action.key,
       skillValue,
       reserveValue: Number.isFinite(reserveValue) ? reserveValue : null,
       reserveMax: Number.isFinite(reserveMax) ? reserveMax : null,

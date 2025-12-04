@@ -23,6 +23,10 @@
       "NPC": "NPC",
       "Item": "Triskel Item"
     },
+    "ActionControls": {
+      "SelectAction": "Select action",
+      "Active": "Active"
+    },
     "ActorTypes": {
       "Character": "Player Character",
       "NPC": "NPC"

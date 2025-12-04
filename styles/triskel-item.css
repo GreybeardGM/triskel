@@ -1,0 +1,68 @@
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| -- ITEM SHEET -- |
+\*________________*/
+
+.triskel .item-type-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: 0.25rem;
+}
+
+.triskel .item-type-label__title {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.triskel .item-type-label__value {
+  font-weight: 700;
+}
+
+.triskel .item-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.triskel .item-panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.triskel .reference-entries {
+  list-style: none;
+  padding-left: 8px;
+  margin: 0;
+}
+
+.triskel .reference-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.triskel .reference-row--empty {
+  color: var(--color-text-secondary);
+  hieght: 28px;
+}
+
+.triskel .reference-label {
+  flex: 1;
+}
+
+.triskel .reference-controls__inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1em;
+}
+
+.triskel .reference-controls select,
+.triskel .reference-controls input[type="number"] {
+  flex: 1;
+}
+
+.triskel .modifier-value {
+  font-weight: 700;
+  flex: 1;
+  text-align: center;
+}

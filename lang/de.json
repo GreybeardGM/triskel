@@ -23,6 +23,10 @@
       "NPC": "NSC",
       "Item": "Triskel-Gegenstand"
     },
+    "ActionControls": {
+      "SelectAction": "Aktion wählen",
+      "Active": "Aktiv"
+    },
     "ActorTypes": {
       "Character": "Spielercharakter",
       "NPC": "NSC"

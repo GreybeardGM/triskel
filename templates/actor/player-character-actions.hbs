@@ -5,17 +5,18 @@
 >
   <div class="actions-grid">
     {{#each standardActions as |action|}}
-      <article class="action-card">
+      <article
+        class="action-card is-interactive {{#if action.selected}}is-selected{{/if}}"
+      >
         <header class="action-card__header">
           <h3 class="action-card__title">{{action.label}}</h3>
-          <label class="action-card__select" title="Diese Aktion auf dem Bogen aktivieren">
-            <input
-              type="checkbox"
-              name="system.actions.selected.{{action.key}}"
-              {{checked action.selected}}
-            />
-            <span>Select</span>
-          </label>
+          <button
+            type="button"
+            class="action-card__select is-interactive"
+            data-action="selectAction"
+            data-action-key="{{action.key}}"
+            title="{{localize "TRISKEL.ActionControls.SelectAction"}}"
+          ></button>
         </header>
 
         <dl class="action-card__meta">
@@ -31,7 +32,18 @@
         {{#if action.forms.length}}
           <ul class="action-card__forms">
             {{#each action.forms as |form|}}
-              <li class="action-card__form" title="{{form.description}}">{{form.label}}</li>
+              <li>
+                <button
+                  type="button"
+                  class="action-card__form is-interactive {{#if form.selected}}is-selected{{/if}}"
+                  data-action="toggleFormSelection"
+                  data-action-key="{{action.key}}"
+                  data-form-key="{{form.key}}"
+                  title="{{form.description}}"
+                >
+                  {{form.label}}
+                </button>
+              </li>
             {{/each}}
           </ul>
         {{/if}}
