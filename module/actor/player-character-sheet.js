@@ -211,16 +211,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   static async #onSelectAction(event, target) {
-    event.preventDefault();
-
-    const actionKey = target.dataset.actionKey;
+    const actionKey = target.dataset.actionKey ?? target.closest("[data-action-key]")?.dataset.actionKey;
     if (!actionKey) return;
 
     const currentSelections = foundry.utils.duplicate(this.document.system?.actions?.selected ?? {});
-    const isSelected = Boolean(currentSelections[actionKey]);
+    const isAlreadySelected = Boolean(currentSelections[actionKey]);
+    if (isAlreadySelected) return;
 
-    const nextSelection = {};
-    if (!isSelected) nextSelection[actionKey] = true;
+    const nextSelection = { [actionKey]: true };
 
     await this.document.update({ "system.actions.selected": nextSelection });
   }

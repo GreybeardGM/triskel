@@ -5,7 +5,7 @@
       <div class="resource-bar {{key}}">
         {{#each resource._segments as |segment|}}
           <div
-            class="resource-box segment-{{segment.state}}"
+            class="resource-box is-interactive segment-{{segment.state}}"
             {{#if segment.clickable}}
               data-action="updateResourceValue"
               data-resource="health.{{key}}"

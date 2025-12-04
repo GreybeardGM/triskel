@@ -5,7 +5,7 @@
       <div class="resource-bar {{key}}">
         {{#each reserve._segments as |segment|}}
           <div
-            class="resource-box segment-{{segment.state}}"
+            class="resource-box is-interactive segment-{{segment.state}}"
             {{#if segment.clickable}}
               data-action="updateResourceValue"
               data-resource="reserves.{{key}}"
@@ -51,7 +51,7 @@
       <div class="resource-bar tension">
         {{#each tension._segments as |segment|}}
           <div
-            class="resource-box segment-{{segment.state}}"
+            class="resource-box is-interactive segment-{{segment.state}}"
             {{#if segment.clickable}}
               data-action="updateResourceValue"
               data-resource="tension"
