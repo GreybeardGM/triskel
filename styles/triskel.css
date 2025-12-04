@@ -60,12 +60,3 @@
   border-color: var(--triskel-interactive-highlight);
   background: color-mix(in srgb, var(--triskel-interactive-highlight) 10%, var(--triskel-interactive-background));
 }
-
-.triskel .is-selected::after {
-  content: "✓";
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  color: var(--triskel-interactive-highlight);
-  font-weight: 700;
-}
