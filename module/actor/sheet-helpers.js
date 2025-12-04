@@ -209,12 +209,39 @@ export function gatherFormsFromItems(items = []) {
   });
 }
 
-export function prepareStandardActions(selectedAction = null, skills = {}, reserves = {}, availableForms = [], selectedForms = {}) {
+export function prepareActionFormsState(availableForms = [], actionForms = {}) {
+  const normalizedFormsByAction = Object.entries(actionForms ?? {}).reduce((collection, [actionKey, forms]) => {
+    if (!forms) return collection;
+
+    const normalizedForms = Object.entries(forms).reduce((normalized, [formKey, formState]) => {
+      const activeState = typeof formState === "boolean" ? formState : formState?.active;
+      normalized[formKey] = { active: Boolean(activeState) };
+      return normalized;
+    }, {});
+
+    if (Object.keys(normalizedForms).length) collection[actionKey] = normalizedForms;
+    return collection;
+  }, {});
+
+  (Array.isArray(availableForms) ? availableForms : []).forEach(form => {
+    const actions = Array.isArray(form.actions) ? form.actions : [];
+
+    actions.forEach(actionKey => {
+      const formsForAction = normalizedFormsByAction[actionKey] ?? {};
+      if (!formsForAction[form.key]) formsForAction[form.key] = { active: false };
+      normalizedFormsByAction[actionKey] = formsForAction;
+    });
+  });
+
+  return normalizedFormsByAction;
+}
+
+export function prepareStandardActions(selectedAction = null, skills = {}, reserves = {}, availableForms = [], actionForms = {}) {
   const selected = typeof selectedAction === "string" ? selectedAction : null;
   const actorSkills = skills ?? {};
   const actorReserves = reserves ?? {};
   const forms = Array.isArray(availableForms) ? availableForms : [];
-  const selectedFormsByAction = selectedForms ?? {};
+  const normalizedFormsByAction = prepareActionFormsState(forms, actionForms);
 
   return TRISKEL_ACTIONS.map(action => {
     const skillInfo = TRISKEL_SKILLS[action.skill] ?? {};
@@ -228,19 +255,13 @@ export function prepareStandardActions(selectedAction = null, skills = {}, reser
     const reserveValue = Number(reserve.value ?? reserveInfo.value ?? NaN);
     const reserveMax = Number(reserve.max ?? reserveInfo.max ?? NaN);
 
-    const formsForSelection = selectedFormsByAction[action.key];
-    const selectedFormKeys = new Set(
-      Array.isArray(formsForSelection)
-        ? formsForSelection
-        : Object.entries(formsForSelection ?? {})
-            .filter(([, isSelected]) => Boolean(isSelected))
-            .map(([formKey]) => formKey)
-    );
-
     const formsForAction = forms
       .filter(form => form.actions.includes(action.key))
       .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
-      .map(form => ({ ...form, selected: selectedFormKeys.has(form.key) }));
+      .map(form => ({
+        ...form,
+        active: Boolean(normalizedFormsByAction[action.key]?.[form.key]?.active)
+      }));
 
     return {
       ...action,
