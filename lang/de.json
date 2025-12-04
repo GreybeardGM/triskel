@@ -9,6 +9,10 @@
         "Label": "Fertigkeiten",
         "Tooltip": "Fertigkeiten und Resistenzen bearbeiten"
       },
+      "Inventory": {
+        "Label": "Ausrüstung",
+        "Tooltip": "Alle getragenen Gegenstände ansehen"
+      },
       "Notes": {
         "Label": "Notizen",
         "Tooltip": "Charakternotizen ansehen"
@@ -28,6 +32,9 @@
       "Armor": "Rüstung",
       "Ability": "Fähigkeit",
       "Spell": "Zauber"
+    },
+    "Items": {
+      "Empty": "Du trägst momentan keine Gegenstände."
     },
     "Tiers": {
       "Novice": { "Label": "Novize" },

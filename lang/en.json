@@ -9,6 +9,10 @@
         "Label": "Skills",
         "Tooltip": "Edit skills and resistances"
       },
+      "Inventory": {
+        "Label": "Equipment",
+        "Tooltip": "Review your carried items"
+      },
       "Notes": {
         "Label": "Notes",
         "Tooltip": "Review character notes"
@@ -28,6 +32,9 @@
       "Armor": "Armor",
       "Ability": "Ability",
       "Spell": "Spell"
+    },
+    "Items": {
+      "Empty": "You are not carrying any items."
     },
     "Tiers": {
       "Novice": { "Label": "Novice" },
