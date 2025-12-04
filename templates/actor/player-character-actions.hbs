@@ -28,6 +28,14 @@
           </div>
         </dl>
 
+        {{#if action.forms.length}}
+          <ul class="action-card__forms">
+            {{#each action.forms as |form|}}
+              <li class="action-card__form" title="{{form.description}}">{{form.label}}</li>
+            {{/each}}
+          </ul>
+        {{/if}}
+
         {{#if action.description}}
           <p class="action-card__description">{{action.description}}</p>
         {{/if}}

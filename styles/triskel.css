@@ -491,6 +491,24 @@
   color: var(--color-form-hint, var(--triskel-color-form-hint));
 }
 
+.triskel .action-card__forms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.triskel .action-card__form {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
 .triskel .item-type-label {
   display: flex;
   flex-direction: column;

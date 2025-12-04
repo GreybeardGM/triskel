@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
+import { gatherFormsFromItems, onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
 import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -14,7 +14,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     actions: {
       editImage: onEditImage,
       quickTriskelRoll: this.#onQuickTriskelRoll,
-      updateResourceValue: onUpdateResourceValue
+      updateResourceValue: onUpdateResourceValue,
+      editItem: this.#onEditItem,
+      deleteItem: this.#onDeleteItem
     },
     actor: {
       type: 'character'
@@ -44,6 +46,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           icon: "fa-solid fa-shield-halved",
           label: "TRISKEL.Tabs.Skills.Label",
           tooltip: "TRISKEL.Tabs.Skills.Tooltip"
+        },
+        {
+          id: "inventory",
+          group: "sheet",
+          icon: "fa-solid fa-suitcase",
+          label: "TRISKEL.Tabs.Inventory.Label",
+          tooltip: "TRISKEL.Tabs.Inventory.Tooltip"
         },
         {
           id: "notes",
@@ -93,6 +102,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: "notes",
       template: "systems/triskel/templates/actor/player-character-notes.hbs",
       sort: 300
+    },
+    inventory: {
+      id: "inventory",
+      template: "systems/triskel/templates/actor/player-character-inventory.hbs",
+      sort: 250
     }
   };
 
@@ -146,13 +160,26 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
+    const availableForms = gatherFormsFromItems(Array.from(this.document.items ?? []));
     context.standardActions = prepareStandardActions(
       context.system.actions?.selected,
       context.system.skills,
-      context.system.reserves
+      context.system.reserves,
+      availableForms
     );
+    context.items = Array.from(this.document.items ?? []).map(item => ({
+      id: item.id,
+      name: item.name,
+      type: item.type,
+      typeLabel: (() => {
+        const typeLabelKey = `TRISKEL.ItemTypes.${item.type}`;
+        const localizedType = game.i18n.localize(typeLabelKey);
+        return localizedType === typeLabelKey ? item.type : localizedType;
+      })()
+    }));
     const tierValue = Number(context.system.tier?.value);
-    context.tierLabel = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label ?? "";
+    const tierLabelKey = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label;
+    context.tierLabel = tierLabelKey ? game.i18n.localize(tierLabelKey) : "";
 
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -178,6 +205,29 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       : [];
 
     await this.document?.rollTriskelDice({ modifiers });
+  }
+
+  static #getItemFromTarget(target) {
+    const itemId = target.closest("[data-item-id]")?.dataset.itemId ?? target.dataset.itemId;
+    if (!itemId) return null;
+
+    return this.document?.items?.get(itemId) ?? null;
+  }
+
+  static async #onEditItem(event, target) {
+    event.preventDefault();
+
+    const item = this.#getItemFromTarget(target);
+    await item?.sheet?.render(true);
+  }
+
+  static async #onDeleteItem(event, target) {
+    event.preventDefault();
+
+    const item = this.#getItemFromTarget(target);
+    if (!item) return;
+
+    await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
   }
 
 }
