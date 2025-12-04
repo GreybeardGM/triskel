@@ -6,7 +6,7 @@
   <div class="actions-grid">
     {{#each standardActions as |action|}}
       <label
-        class="action-card is-interactive reserve-{{action.reserve}} {{#if action.selected}}is-selected{{/if}}"
+        class="action-card is-interactive {{action.reserve}} {{#if action.selected}}is-selected{{/if}}"
         data-action-key="{{action.key}}"
       >
         <input
