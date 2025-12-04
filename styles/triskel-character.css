@@ -115,34 +115,44 @@
   gap: 1rem;
 }
 
-.triskel .reserve-power,
-.triskel .resource-bar.power {
+.triskel .power {
   --triskel-interactive-highlight: var(--triskel-color-resource-power);
 }
 
-.triskel .reserve-grace,
-.triskel .resource-bar.grace {
+.triskel .grace {
   --triskel-interactive-highlight: var(--triskel-color-resource-grace);
 }
 
-.triskel .reserve-will,
-.triskel .resource-bar.will {
+.triskel .will {
   --triskel-interactive-highlight: var(--triskel-color-resource-will);
 }
 
-.triskel .reserve-hp,
-.triskel .resource-bar.hp {
+.triskel .hp {
   --triskel-interactive-highlight: var(--triskel-color-resource-hp);
 }
 
-.triskel .reserve-wounds,
-.triskel .resource-bar.wounds {
+.triskel .wounds {
   --triskel-interactive-highlight: var(--triskel-color-resource-wounds);
 }
 
-.triskel .reserve-tension,
-.triskel .resource-bar.tension {
+.triskel .tension {
   --triskel-interactive-highlight: var(--triskel-color-resource-tension);
+}
+
+.triskel .virtue {
+  --triskel-interactive-highlight: var(--triskel-color-path-virtue);
+}
+
+.triskel .vice {
+  --triskel-interactive-highlight: var(--triskel-color-path-vice);
+}
+
+.triskel .ward {
+  --triskel-interactive-highlight: var(--triskel-color-path-ward);
+}
+
+.triskel .ruin {
+  --triskel-interactive-highlight: var(--triskel-color-path-ruin);
 }
 
 .triskel .resource-bar {
@@ -159,12 +169,7 @@
   border-radius: 4px;
   font-weight: 600;
   color: var(--triskel-color-text-inverse);
-  border: 1px solid var(--triskel-color-border-muted);
-  background: color-mix(
-    in srgb,
-    var(--triskel-interactive-highlight) 70%,
-    var(--color-bg) 30%
-  );
+  /*! border: 1px solid var(--triskel-color-border-muted); */
 }
 
 .triskel .resource-box[data-action="updateResourceValue"] {
@@ -186,34 +191,17 @@
 }
 
 .triskel .resource-box.segment-filled {
-  background: color-mix(
-    in srgb,
-    var(--triskel-interactive-highlight) 70%,
-    var(--color-bg) 30%
-  );
+  border-color: color-mix( in srgb, var(--triskel-interactive-highlight) 50%, var(--triskel-interactive-background) 50% );
+  background: var(--triskel-interactive-highlight);
 }
 
-.triskel .path-virtue,
-.triskel .paths .path-bar.virtue {
-  --triskel-interactive-highlight: var(--triskel-color-path-virtue);
-  flex-direction: row;
-}
-
-.triskel .path-vice,
+.triskel .paths .path-bar.virtue,
 .triskel .paths .path-bar.vice {
-  --triskel-interactive-highlight: var(--triskel-color-path-vice);
   flex-direction: row;
 }
 
-.triskel .path-ward,
-.triskel .paths .path-bar.ward {
-  --triskel-interactive-highlight: var(--triskel-color-path-ward);
-  flex-direction: row-reverse;
-}
-
-.triskel .path-ruin,
+.triskel .paths .path-bar.ward,
 .triskel .paths .path-bar.ruin {
-  --triskel-interactive-highlight: var(--triskel-color-path-ruin);
   flex-direction: row-reverse;
 }
 
@@ -386,10 +374,17 @@
 
 .triskel .action-card__radio {
   position: absolute;
-  inset-inline-start: -9999px;
-  inline-size: 1px;
-  block-size: 1px;
-  opacity: 0;
+  top: 4px;
+  right: 6px;
+  &:before,
+  &:after {
+    content: "";
+  }
+  &:checked::after {
+    content: "✓";
+    color: var(--triskel-interactive-highlight);
+    font-weight: 700;
+  }
 }
 
 .triskel .action-card__content {
@@ -398,11 +393,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.triskel .action-card:focus-within .action-card__content {
-  outline: 2px solid var(--triskel-interactive-highlight);
-  outline-offset: 2px;
 }
 
 .triskel .action-card__header {
@@ -436,7 +426,7 @@
 
 .triskel .action-card__row dt {
   font-weight: 700;
-  color: var(--color-text-secondary);
+  color: var(--triskel-interactive-highlight);
 }
 
 .triskel .action-card__row dd {
@@ -458,11 +448,6 @@
   border-radius: 999px;
   padding: 0.1rem 0.6rem;
   font-weight: 700;
-}
-
-.triskel .action-card__reserve-values {
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
 }
 
 .triskel .action-card__description {
