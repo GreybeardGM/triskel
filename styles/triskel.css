@@ -42,6 +42,10 @@
   &:after  { background: linear-gradient(to left , var(--triskel-color-segment-placeholder), var(--color-form-label)); }
 }
 
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| -- CHARACTER SHEET -- |
+\*_____________________*/
+
 .triskel .sheet-header {
   display: flex;
   gap: 1rem;
@@ -508,6 +512,20 @@
   font-size: 0.85rem;
   line-height: 1.2;
 }
+
+.triskel .inventory-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.triskel .inventory-list__item-actions {
+  display: flex;
+}
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| -- ITEM SHEET -- |
+\*________________*/
 
 .triskel .item-type-label {
   display: flex;
