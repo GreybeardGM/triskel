@@ -1,6 +1,6 @@
-/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
-| -- CHARACTER SHEET -- |
-\*_____________________*/
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --     HEADER     -- |
+\*____________________*/
 
 .triskel .sheet-header {
   display: flex;
@@ -79,6 +79,10 @@
   align-items: center;
 }
 
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --      TABS      -- |
+\*____________________*/
+
 .triskel .sheet-tabs-nav {
   display: inline-flex;
   gap: 0.35rem;
@@ -105,6 +109,10 @@
   border-color: var(--color-border-light-tertiary);
 }
 
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --    RESERVES    -- |
+\*____________________*/
+
 .triskel .reserves .reserve-grid,
 .triskel .npc-stats .stat-grid {
   display: grid;
@@ -113,96 +121,6 @@
     minmax(0, 1fr) minmax(0, 4fr)
     minmax(0, 1fr);
   gap: 1rem;
-}
-
-.triskel .power {
-  --triskel-interactive-highlight: var(--triskel-color-resource-power);
-}
-
-.triskel .grace {
-  --triskel-interactive-highlight: var(--triskel-color-resource-grace);
-}
-
-.triskel .will {
-  --triskel-interactive-highlight: var(--triskel-color-resource-will);
-}
-
-.triskel .hp {
-  --triskel-interactive-highlight: var(--triskel-color-resource-hp);
-}
-
-.triskel .wounds {
-  --triskel-interactive-highlight: var(--triskel-color-resource-wounds);
-}
-
-.triskel .tension {
-  --triskel-interactive-highlight: var(--triskel-color-resource-tension);
-}
-
-.triskel .virtue {
-  --triskel-interactive-highlight: var(--triskel-color-path-virtue);
-}
-
-.triskel .vice {
-  --triskel-interactive-highlight: var(--triskel-color-path-vice);
-}
-
-.triskel .ward {
-  --triskel-interactive-highlight: var(--triskel-color-path-ward);
-}
-
-.triskel .ruin {
-  --triskel-interactive-highlight: var(--triskel-color-path-ruin);
-}
-
-.triskel .resource-bar {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 0.25rem;
-}
-
-.triskel .resource-box {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-weight: 600;
-  color: var(--triskel-color-text-inverse);
-  /*! border: 1px solid var(--triskel-color-border-muted); */
-}
-
-.triskel .resource-box[data-action="updateResourceValue"] {
-  cursor: pointer;
-  transition: box-shadow 0.2s ease;
-}
-
-.triskel .resource-box.segment-strain {
-  background: var(--triskel-color-strain);
-}
-
-.triskel .resource-box.segment-empty {
-  background: var(--triskel-color-segment-empty);
-}
-
-.triskel .resource-box.segment-placeholder {
-  background: var(--triskel-color-segment-placeholder);
-  opacity: 0.05;
-}
-
-.triskel .resource-box.segment-filled {
-  border-color: color-mix( in srgb, var(--triskel-interactive-highlight) 50%, var(--triskel-interactive-background) 50% );
-  background: var(--triskel-interactive-highlight);
-}
-
-.triskel .paths .path-bar.virtue,
-.triskel .paths .path-bar.vice {
-  flex-direction: row;
-}
-
-.triskel .paths .path-bar.ward,
-.triskel .paths .path-bar.ruin {
-  flex-direction: row-reverse;
 }
 
 .triskel .resource-input {
@@ -243,6 +161,109 @@
 .triskel .reserve-strain {
   display: flex;
   flex-direction: column;
+}
+
+.triskel .strain-track {
+  margin: unset;
+  padding-left: 0;
+  list-style: none;
+}
+
+.triskel .strain-step {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --  RESOURCE BARS -- |
+\*____________________*/
+
+.triskel .power {
+  --triskel-interactive-highlight: var(--triskel-color-resource-power);
+}
+
+.triskel .grace {
+  --triskel-interactive-highlight: var(--triskel-color-resource-grace);
+}
+
+.triskel .will {
+  --triskel-interactive-highlight: var(--triskel-color-resource-will);
+}
+
+.triskel .tension {
+  --triskel-interactive-highlight: var(--triskel-color-resource-tension);
+}
+
+.triskel .virtue {
+  --triskel-interactive-highlight: var(--triskel-color-path-virtue);
+}
+
+.triskel .vice {
+  --triskel-interactive-highlight: var(--triskel-color-path-vice);
+}
+
+.triskel .ward {
+  --triskel-interactive-highlight: var(--triskel-color-path-ward);
+}
+
+.triskel .ruin {
+  --triskel-interactive-highlight: var(--triskel-color-path-ruin);
+}
+
+.triskel .resource-bar {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+}
+
+.triskel .resource-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--triskel-color-text-inverse);
+}
+
+.triskel .resource-box[data-action="updateResourceValue"] {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.triskel .resource-box.segment-strain {
+  background: var(--triskel-color-strain);
+}
+
+.triskel .resource-box.segment-empty {
+  background: var(--triskel-color-segment-empty);
+}
+
+.triskel .resource-box.segment-placeholder {
+  background: var(--triskel-color-segment-placeholder);
+  opacity: 0.05;
+}
+
+.triskel .resource-box.segment-filled {
+  border-color: color-mix( in srgb, var(--triskel-interactive-highlight) 50%, var(--triskel-interactive-background) 50% );
+  background: var(--triskel-interactive-highlight);
+}
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --     PATHS      -- |
+\*____________________*/
+
+.triskel .paths .path-bar.virtue,
+.triskel .paths .path-bar.vice {
+  flex-direction: row;
+}
+
+.triskel .paths .path-bar.ward,
+.triskel .paths .path-bar.ruin {
+  flex-direction: row-reverse;
 }
 
 .triskel .paths {
@@ -286,22 +307,18 @@
   flex-direction: row-reverse;
 }
 
-.triskel .strain-track {
-  margin: unset;
-  padding-left: 0;
-  list-style: none;
-}
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --     NOTES      -- |
+\*____________________*/
 
-.triskel .strain-step {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-}
 
 .triskel .editor-content {
   position: unset;
 }
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --  RESISTANCES   -- |
+\*____________________*/
 
 .triskel .resistances-row {
   display: grid;
@@ -309,6 +326,10 @@
   gap: 0.5rem 1rem;
   align-items: center;
 }
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --     SKILLS      -- |
+\*____________________*/
 
 .triskel .skill-grid {
   display: grid;
@@ -360,6 +381,10 @@
   flex: 1;
 }
 
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --    ACTIONS     -- |
+\*____________________*/
+
 .triskel .actions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -367,9 +392,8 @@
 }
 
 .triskel .action-card {
-  position: relative;
-  display: block;
   cursor: pointer;
+  border-radius: 8px;
 }
 
 .triskel .action-card__radio {
@@ -388,17 +412,10 @@
 }
 
 .triskel .action-card__content {
-  border-radius: 8px;
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.triskel .action-card__header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
 }
 
 .triskel .action-card__title {
@@ -406,16 +423,9 @@
   font-size: 1.1rem;
 }
 
-.triskel .action-card__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
 .triskel .action-card__row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 0.5rem;
 }
 
@@ -431,16 +441,10 @@
 
 .triskel .action-card__row dd {
   flex: 1;
-  text-align: right;
   display: flex;
   gap: 0.25rem;
   align-items: center;
   justify-content: flex-end;
-}
-
-.triskel .action-card__skill,
-.triskel .action-card__reserve {
-  font-weight: 700;
 }
 
 .triskel .action-card__bonus {
@@ -474,12 +478,17 @@
   align-items: center;
   cursor: pointer;
   color: inherit;
+  outline: unset;
 }
 
 .triskel .action-card__form:focus-visible {
   outline: 2px solid var(--color-primary-3);
   outline-offset: 1px;
 }
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --     ITEMS      -- |
+\*____________________*/
 
 .triskel .inventory-list__item {
   display: flex;
