@@ -46,6 +46,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           tooltip: "TRISKEL.Tabs.Skills.Tooltip"
         },
         {
+          id: "inventory",
+          group: "sheet",
+          icon: "fa-solid fa-suitcase",
+          label: "TRISKEL.Tabs.Inventory.Label",
+          tooltip: "TRISKEL.Tabs.Inventory.Tooltip"
+        },
+        {
           id: "notes",
           group: "sheet",
           icon: "fa-solid fa-pen-to-square",
@@ -93,6 +100,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: "notes",
       template: "systems/triskel/templates/actor/player-character-notes.hbs",
       sort: 300
+    },
+    inventory: {
+      id: "inventory",
+      template: "systems/triskel/templates/actor/player-character-inventory.hbs",
+      sort: 250
     }
   };
 
@@ -151,8 +163,19 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       context.system.skills,
       context.system.reserves
     );
+    context.items = Array.from(this.document.items ?? []).map(item => ({
+      id: item.id,
+      name: item.name,
+      type: item.type,
+      typeLabel: (() => {
+        const typeLabelKey = `TRISKEL.ItemTypes.${item.type}`;
+        const localizedType = game.i18n.localize(typeLabelKey);
+        return localizedType === typeLabelKey ? item.type : localizedType;
+      })()
+    }));
     const tierValue = Number(context.system.tier?.value);
-    context.tierLabel = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label ?? "";
+    const tierLabelKey = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label;
+    context.tierLabel = tierLabelKey ? game.i18n.localize(tierLabelKey) : "";
 
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(

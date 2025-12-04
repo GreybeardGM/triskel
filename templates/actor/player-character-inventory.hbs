@@ -1,0 +1,20 @@
+<section
+  class="tab {{tabs.inventory.id}} {{tabs.inventory.cssClass}}"
+  data-tab="{{tabs.inventory.id}}"
+  data-group="{{tabs.inventory.group}}"
+>
+  <ol class="inventory-list">
+    {{#if items.length}}
+      {{#each items as |item|}}
+        <li class="inventory-list__item" data-item-id="{{item.id}}">
+          <span class="inventory-list__item-name">{{item.name}}</span>
+          {{#if item.typeLabel}}
+            <span class="inventory-list__item-type">{{item.typeLabel}}</span>
+          {{/if}}
+        </li>
+      {{/each}}
+    {{else}}
+      <li class="inventory-list__empty">{{localize "TRISKEL.Items.Empty"}}</li>
+    {{/if}}
+  </ol>
+</section>
