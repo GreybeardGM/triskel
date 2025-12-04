@@ -213,6 +213,15 @@
   --triskel-interactive-highlight: var(--triskel-color-path-ruin);
 }
 
+/* -- NPCs -- */
+.triskel .hp {
+  --triskel-interactive-highlight: var(--triskel-color-resource-hp);
+}
+
+.triskel .wounds {
+  --triskel-interactive-highlight: var(--triskel-color-resource-wounds);
+}
+
 .triskel .resource-bar {
   display: flex;
   flex-direction: column-reverse;
