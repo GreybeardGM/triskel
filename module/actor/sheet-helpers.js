@@ -250,9 +250,15 @@ export function prepareStandardActions(selectedAction = null, skills = {}, reser
     const skillInfo = TRISKEL_SKILLS[action.skill] ?? {};
     const reserveInfo = TRISKEL_RESERVES[action.reserve] ?? {};
 
-    const rawSkillValue = actorSkills[action.skill]?.value;
-    const parsedSkillValue = Number(rawSkillValue);
-    const skillValue = Number.isFinite(parsedSkillValue) ? parsedSkillValue : 0;
+    const rawSkillTotal = actorSkills[action.skill]?.total;
+    const parsedSkillTotal = Number(rawSkillTotal);
+    const fallbackSkillValue = Number(actorSkills[action.skill]?.value);
+    const skillTotal =
+      Number.isFinite(parsedSkillTotal)
+        ? parsedSkillTotal
+        : Number.isFinite(fallbackSkillValue)
+          ? fallbackSkillValue
+          : 0;
 
     const reserve = actorReserves[action.reserve] ?? {};
     const reserveValue = Number(reserve.value ?? reserveInfo.value ?? NaN);
@@ -273,7 +279,7 @@ export function prepareStandardActions(selectedAction = null, skills = {}, reser
       reserveLabel: localize(reserveInfo.label ?? action.reserve),
       description: localize(action.description ?? ""),
       selected: selected === action.key,
-      skillValue,
+      skillTotal,
       reserveValue: Number.isFinite(reserveValue) ? reserveValue : null,
       reserveMax: Number.isFinite(reserveMax) ? reserveMax : null,
       forms: formsForAction

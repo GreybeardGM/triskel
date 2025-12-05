@@ -67,18 +67,6 @@
   align-items: center;
 }
 
-.triskel .quick-roller {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.triskel .quick-roller-controls {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --      TABS      -- |
 \*____________________*/
@@ -378,6 +366,14 @@
   display: flex;
   align-items: center;
   margin: 0.15rem 0;
+}
+
+.triskel .skill-mod {
+  min-width: 3.75rem;
+  text-align: right;
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-right: 0.25rem;
 }
 
 .triskel .skill-field input[type="number"] {

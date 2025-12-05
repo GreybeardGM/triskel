@@ -1,4 +1,4 @@
-import { gatherFormsFromItems, onEditImage, onUpdateResourceValue, prepareActionFormsState, prepareBars, prepareSkillsDisplay, prepareStandardActions } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
 import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -13,7 +13,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     },
     actions: {
       editImage: onEditImage,
-      quickTriskelRoll: this.#onQuickTriskelRoll,
       selectAction: this.#onSelectAction,
       toggleFormSelection: this.#onToggleFormSelection,
       updateResourceValue: onUpdateResourceValue,
@@ -72,10 +71,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     info: {
       id: "info",
       template: "systems/triskel/templates/actor/player-character-info.hbs"
-    },
-    roller: {
-      id: "roller",
-      template: "systems/triskel/templates/actor/player-character-roller.hbs"
     },
     reserves: {
       id: "reserves",
@@ -162,16 +157,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
-    const availableForms = gatherFormsFromItems(Array.from(this.document.items ?? []));
-    const actionFormsState = prepareActionFormsState(availableForms, context.system.actions?.forms);
+    const actionFormsState = context.system.actions?.formsState ?? context.system.actions?.forms ?? {};
     context.actionForms = actionFormsState;
-    context.standardActions = prepareStandardActions(
-      context.system.actions?.selected,
-      context.system.skills,
-      context.system.reserves,
-      availableForms,
-      actionFormsState
-    );
+    context.standardActions = context.system.actions?.standard ?? [];
     context.items = Array.from(this.document.items ?? []).map(item => ({
       id: item.id,
       name: item.name,
@@ -196,20 +184,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     );
   
     return context;
-  }
-
-  static async #onQuickTriskelRoll(event, target) {
-    event.preventDefault();
-
-    const container = target.closest("[data-quick-roll]");
-    const modifierInput = container?.querySelector("[data-quick-roll-modifier]");
-    const modifierValue = Number(modifierInput?.value ?? 0);
-
-    const modifiers = Number.isFinite(modifierValue) && modifierValue !== 0
-      ? [{ label: "Sheet Modifier", value: modifierValue }]
-      : [];
-
-    await this.document?.rollTriskelDice({ modifiers });
   }
 
   static async #onSelectAction(event, target) {
