@@ -14,10 +14,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     actions: {
       editImage: onEditImage,
       updateResourceValue: onUpdateResourceValue,
-      editItem: this.#onEditItem,
-      deleteItem: this.#onDeleteItem,
-      selectAction: this.#onSelectAction,
-      toggleForm: this.#onToggleForm
+      editItem: onEditItem,
+      deleteItem: onDeleteItem,
+      selectAction: onSelectAction,
+      toggleForm: onToggleForm
     },
     actor: {
       type: 'character'
@@ -183,62 +183,56 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     return context;
   }
 
-  static #getItemFromTarget(target) {
-    const itemId = target.closest("[data-item-id]")?.dataset.itemId ?? target.dataset.itemId;
-    if (!itemId) return null;
-
-    return this.document?.items?.get(itemId) ?? null;
-  }
-
-  static async #onEditItem(event, target) {
-    event.preventDefault();
-
-    const item = this.#getItemFromTarget(target);
-    await item?.sheet?.render(true);
-  }
-
-  static async #onDeleteItem(event, target) {
-    event.preventDefault();
-
-    const item = this.#getItemFromTarget(target);
-    if (!item) return;
-
-    await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
-  }
-
-  static async #onSelectAction(event, target) {
-    event.preventDefault();
-
-    const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
-    if (!actionKey) return;
-
-    await this.document?.update({ "system.actions.selected": actionKey });
-  }
-
-  static async #onToggleForm(event, target) {
-    event.preventDefault();
-
-    const formKey = target.closest("[data-form-key]")?.dataset.formKey;
-    if (!formKey) return;
-
-    const currentSelection = (() => {
-      if (Array.isArray(this.document?.system?.actions?.selectedForms)) {
-        return [...this.document.system.actions.selectedForms];
-      }
-
-      const legacyForms = this.document?.system?.actions?.forms ?? {};
-      return Object.entries(legacyForms)
-        .filter(([, value]) => Boolean(value?.active ?? value))
-        .map(([key]) => key);
-    })();
-
-    const normalizedSelection = Array.from(new Set(currentSelection));
-    const selectedIndex = normalizedSelection.indexOf(formKey);
-
-    if (selectedIndex >= 0) normalizedSelection.splice(selectedIndex, 1);
-    else normalizedSelection.push(formKey);
-
-    await this.document?.update({ "system.actions.selectedForms": normalizedSelection });
-  }
-
 }
+
+function getItemFromTarget(sheet, target) {
+  const itemId = target.closest("[data-item-id]")?.dataset.itemId ?? target.dataset.itemId;
+  if (!itemId) return null;
+
+  return sheet.document?.items?.get(itemId) ?? null;
+}
+
+async function onEditItem(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  await item?.sheet?.render(true);
+}
+
+async function onDeleteItem(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item) return;
+
+  await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
+}
+
+async function onSelectAction(event, target) {
+  event.preventDefault();
+
+  const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
+  if (!actionKey) return;
+
+  await this.document?.update({ "system.actions.selected": actionKey });
+}
+
+async function onToggleForm(event, target) {
+  event.preventDefault();
+
+  const formKey = target.closest("[data-form-key]")?.dataset.formKey;
+  if (!formKey) return;
+
+  const currentSelection = Array.isArray(this.document?.system?.actions?.selectedForms)
+    ? [...this.document.system.actions.selectedForms]
+    : [];
+
+  const normalizedSelection = Array.from(new Set(currentSelection));
+  const selectedIndex = normalizedSelection.indexOf(formKey);
+
+  if (selectedIndex >= 0) normalizedSelection.splice(selectedIndex, 1);
+  else normalizedSelection.push(formKey);
+
+  await this.document?.update({ "system.actions.selectedForms": normalizedSelection });
+}
+

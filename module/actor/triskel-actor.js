@@ -41,9 +41,7 @@ export class TriskelActor extends Actor {
     this._applySkillModifiers(modifiers);
 
     const selectedAction = this.system?.actions?.selected ?? null;
-    const selectedForms = this._normalizeSelectedForms(
-      this.system?.actions?.selectedForms ?? this.system?.actions?.forms ?? []
-    );
+    const selectedForms = this._normalizeSelectedForms(this.system?.actions?.selectedForms ?? []);
     const { actions, spells } = this._prepareActionCollections({ selectedAction, selectedForms });
     this.system.actions = { actions, spells, selected: selectedAction, selectedForms };
 
@@ -123,19 +121,9 @@ export class TriskelActor extends Actor {
   }
 
   _normalizeSelectedForms(selectedForms = []) {
-    if (Array.isArray(selectedForms)) {
-      return Array.from(new Set(this._normalizeReferenceList(selectedForms)));
-    }
+    if (!Array.isArray(selectedForms)) return [];
 
-    if (selectedForms && typeof selectedForms === "object") {
-      const activeKeys = Object.entries(selectedForms)
-        .filter(([, value]) => Boolean(value?.active ?? value))
-        .map(([key]) => key);
-
-      return Array.from(new Set(activeKeys));
-    }
-
-    return [];
+    return Array.from(new Set(this._normalizeReferenceList(selectedForms)));
   }
 
   _formatAction(action, { source, image }) {
