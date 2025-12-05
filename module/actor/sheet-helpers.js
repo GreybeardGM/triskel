@@ -178,12 +178,15 @@ export function gatherFormsFromItems(items = []) {
 
   const collected = new Map();
 
-  const addForm = (formData = {}) => {
+  const addForm = (formData = {}, sourceItem = null) => {
     const key = typeof formData === "string" ? formData : formData.key;
     if (!key || collected.has(key)) return;
 
     const codexForm = codexByKey[key] ?? {};
     const merged = { ...codexForm, ...(typeof formData === "object" ? formData : {}) };
+
+    const formImage = merged.image ?? merged.img ?? sourceItem?.img;
+    if (formImage) merged.image = formImage;
 
     collected.set(key, merged);
   };
@@ -191,8 +194,8 @@ export function gatherFormsFromItems(items = []) {
   items.forEach(item => {
     const system = item?.system ?? {};
 
-    (system.forms?.ref ?? []).forEach(addForm);
-    (system.forms?.add ?? []).forEach(addForm);
+    (system.forms?.ref ?? []).forEach(form => addForm(form, item));
+    (system.forms?.add ?? []).forEach(form => addForm(form, item));
   });
 
   return Array.from(collected.values()).map(form => {
