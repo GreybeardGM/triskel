@@ -242,7 +242,7 @@
         }
       }
     },
-    "Actions": {
+    "BaseActions": {
       "Strike": {
         "Label": "Strike",
         "Description": "A direct attack. Extra power increases its force."
@@ -278,6 +278,22 @@
       "Break": {
         "Label": "Break",
         "Description": "Shakes off negative states; reduces bound/exposed/pushed."
+      }
+    },
+    "AdvancedActions": {
+      "QuickShot": {
+        "Label": "Quick Shot",
+        "Description": "Loose a fast ranged attack with minimal setup."
+      },
+      "CrossBowShot": {
+        "Label": "Crossbow Shot",
+        "Description": "Fire a heavy bolt with solid power behind it."
+      }
+    },
+    "Spells": {
+      "Arc": {
+        "Label": "Arc",
+        "Description": "Channel a short arcing spell of energy."
       }
     },
     "Forms": {

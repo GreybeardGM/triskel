@@ -131,7 +131,8 @@
         "value": 1
       },
       "actions": {
-        "forms": {}
+        "actions": [],
+        "spells": []
       },
       "paths": {
         "virtue": {
