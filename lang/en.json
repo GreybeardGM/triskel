@@ -66,6 +66,8 @@
       "Any": "Any"
     },
     "Skills": {
+      "Label": "Skills",
+      "ModLabel": "Mod",
       "Strike": {
         "Label": "Strike",
         "Description": "Deliver direct melee attacks."
@@ -164,6 +166,7 @@
       }
     },
     "Resistances": {
+      "Label": "Resistances",
       "Snap": {
         "Label": "Snap",
         "Description": "Instant reflex response to sudden threats."

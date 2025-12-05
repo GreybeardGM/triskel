@@ -66,6 +66,8 @@
       "Any": "Beliebig"
     },
     "Skills": {
+      "Label": "Fertigkeiten",
+      "ModLabel": "Mod",
       "Strike": {
         "Label": "Schlag",
         "Description": "Führt direkte Nahkampfangriffe aus."
@@ -164,6 +166,7 @@
       }
     },
     "Resistances": {
+      "Label": "Resistenzen",
       "Snap": {
         "Label": "Reflex",
         "Description": "Unmittelbare Reflexreaktion auf plötzliche Bedrohungen."
