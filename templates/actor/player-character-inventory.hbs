@@ -7,6 +7,9 @@
     {{#if items.length}}
       {{#each items as |item|}}
         <li class="inventory-list__item" data-item-id="{{item.id}}">
+          {{#if item.img}}
+            <img class="inventory-list__item-image" src="{{item.img}}" alt="" aria-hidden="true" />
+          {{/if}}
           <span class="inventory-list__item-name">{{item.name}}</span>
           {{#if item.typeLabel}}
             <span class="inventory-list__item-type">{{item.typeLabel}}</span>

@@ -31,9 +31,11 @@
               {{#each category.skills as |skill|}}
                 <li class="skill-field" title="{{skill.description}}">
                   <span class="skill-label">{{skill.label}}</span>
-                  <span class="skill-mod" title="{{localize "TRISKEL.Skills.ModLabel"}}">
-                    {{numberFormat skill.mod decimals=0 sign=true}}
-                  </span>
+                  {{#if skill.mod}}
+                    <span class="skill-mod" title="{{localize "TRISKEL.Skills.ModLabel"}}">
+                      {{numberFormat skill.mod decimals=0 sign=true}}
+                    </span>
+                  {{/if}}
                   <input
                     type="number"
                     data-dtype="Number"
