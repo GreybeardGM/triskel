@@ -32,7 +32,7 @@
                 <li class="skill-field" title="{{skill.description}}">
                   <span class="skill-label">{{skill.label}}</span>
                   <span class="skill-mod" title="{{localize "TRISKEL.Skills.ModLabel"}}">
-                    {{localize "TRISKEL.Skills.ModLabel"}}: {{skill.mod}}
+                    {{numberFormat skill.mod decimals=0 sign=true}}
                   </span>
                   <input
                     type="number"

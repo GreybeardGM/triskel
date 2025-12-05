@@ -157,8 +157,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
-    const actionFormsState = context.system.actions?.formsState ?? context.system.actions?.forms ?? {};
-    context.actionForms = actionFormsState;
+    const actionForms = context.system.actions?.forms ?? {};
+    context.actionForms = actionForms;
     context.standardActions = context.system.actions?.standard ?? [];
     context.items = Array.from(this.document.items ?? []).map(item => ({
       id: item.id,

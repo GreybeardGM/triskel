@@ -34,17 +34,17 @@ export class TriskelActor extends Actor {
     if (!actionsData) return;
 
     const availableForms = gatherFormsFromItems(ownedItems);
-    const actionFormsState = prepareActionFormsState(availableForms, actionsData.forms);
+    const normalizedActionForms = prepareActionFormsState(availableForms, actionsData.forms);
     const standardActions = prepareStandardActions(
       actionsData.selected,
       this.system?.skills,
       this.system?.reserves,
       availableForms,
-      actionFormsState
+      normalizedActionForms
     );
 
     actionsData.availableForms = availableForms;
-    actionsData.formsState = actionFormsState;
+    actionsData.forms = normalizedActionForms;
     actionsData.standard = standardActions;
   }
 

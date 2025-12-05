@@ -119,9 +119,17 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
   const normalizedResistances = resistances ?? {};
 
   const byCategory = Object.values(TRISKEL_SKILLS).reduce((collection, skill) => {
-    const rawValue = normalizedSkills[skill.id]?.value;
+    const rawSkill = normalizedSkills[skill.id] ?? {};
+
+    const rawValue = rawSkill.value;
     const parsedValue = Number(rawValue);
     const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+
+    const parsedMod = Number(rawSkill.mod);
+    const mod = Number.isFinite(parsedMod) ? parsedMod : 0;
+
+    const parsedTotal = Number(rawSkill.total);
+    const total = Number.isFinite(parsedTotal) ? parsedTotal : value + mod;
 
     const entry = {
       ...skill,
@@ -129,7 +137,9 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
       label: localize(skill.label ?? skill.id),
       description: localize(skill.description ?? ""),
       categoryLabel: localize(skill.categoryLabel ?? skill.category ?? ""),
-      phaseLabel: localize(skill.phaseLabel ?? skill.phase ?? "")
+      phaseLabel: localize(skill.phaseLabel ?? skill.phase ?? ""),
+      mod,
+      total
     };
     const category = skill.category ?? "";
 
