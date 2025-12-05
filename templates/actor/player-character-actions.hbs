@@ -6,7 +6,7 @@
   {{#*inline "actionCards"}}
     <div class="actions-grid">
       {{#each this as |action|}}
-        <div class="action-card {{action.reserve}}" data-action-key="{{action.key}}">
+        <div class="action-card {{action.reserve}} is-interactive" data-action-key="{{action.key}}">
           <div class="action-card__content">
             <header class="action-card__header">
               <h3 class="action-card__title">{{action.label}}</h3>
