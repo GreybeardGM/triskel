@@ -36,20 +36,20 @@ export class TriskelActor extends Actor {
       reserve.min = minimumFromStrain;
     }
 
-    const modifiers = this.#prepareSkillModifiers();
+    const modifiers = this._prepareSkillModifiers();
     this.system.modifiers = modifiers;
-    this.#applySkillModifiers(modifiers);
+    this._applySkillModifiers(modifiers);
 
     const selectedAction = this.system?.actions?.selected ?? null;
-    const selectedForms = this.#normalizeSelectedForms(
+    const selectedForms = this._normalizeSelectedForms(
       this.system?.actions?.selectedForms ?? this.system?.actions?.forms ?? []
     );
-    const { actions, spells } = this.#prepareActionCollections({ selectedAction, selectedForms });
+    const { actions, spells } = this._prepareActionCollections({ selectedAction, selectedForms });
     this.system.actions = { actions, spells, selected: selectedAction, selectedForms };
 
   }
 
-  #prepareSkillModifiers() {
+  _prepareSkillModifiers() {
     const modifiersBySkill = {};
 
     for (const item of Array.from(this.items ?? [])) {
@@ -89,7 +89,7 @@ export class TriskelActor extends Actor {
     });
   }
 
-  #applySkillModifiers(modifiers = []) {
+  _applySkillModifiers(modifiers = []) {
     const skills = this.system?.skills ?? {};
 
     const modifiersBySkill = modifiers.reduce((collection, modifier) => {
@@ -114,7 +114,7 @@ export class TriskelActor extends Actor {
     });
   }
 
-  #normalizeReferenceList(entries = []) {
+  _normalizeReferenceList(entries = []) {
     if (!Array.isArray(entries)) return [];
 
     return entries
@@ -122,9 +122,9 @@ export class TriskelActor extends Actor {
       .filter(Boolean);
   }
 
-  #normalizeSelectedForms(selectedForms = []) {
+  _normalizeSelectedForms(selectedForms = []) {
     if (Array.isArray(selectedForms)) {
-      return Array.from(new Set(this.#normalizeReferenceList(selectedForms)));
+      return Array.from(new Set(this._normalizeReferenceList(selectedForms)));
     }
 
     if (selectedForms && typeof selectedForms === "object") {
@@ -138,7 +138,7 @@ export class TriskelActor extends Actor {
     return [];
   }
 
-  #formatAction(action, { source, image }) {
+  _formatAction(action, { source, image }) {
     const skill = TRISKEL_SKILLS[action.skill] ?? {};
     const reserve = TRISKEL_RESERVES[action.reserve] ?? {};
     const actorSkill = this.system?.skills?.[action.skill] ?? {};
@@ -158,7 +158,7 @@ export class TriskelActor extends Actor {
     };
   }
 
-  #formatForm(form, { source, image }) {
+  _formatForm(form, { source, image }) {
     const reserve = TRISKEL_RESERVES[form.reserve] ?? {};
     const skill = TRISKEL_SKILLS[form.skill] ?? {};
 
@@ -173,7 +173,7 @@ export class TriskelActor extends Actor {
     };
   }
 
-  #prepareActionCollections({ selectedAction = null, selectedForms = [] } = {}) {
+  _prepareActionCollections({ selectedAction = null, selectedForms = [] } = {}) {
     const actions = [];
     const spells = [];
     const forms = [];
@@ -185,26 +185,26 @@ export class TriskelActor extends Actor {
     const addAction = (action, { source = null, image } = {}) => {
       if (!action?.key || actionKeys.has(action.key)) return;
       actionKeys.add(action.key);
-      actions.push(this.#formatAction(action, { source, image }));
+      actions.push(this._formatAction(action, { source, image }));
     };
 
     const addSpell = (spell, { source = null, image } = {}) => {
       if (!spell?.key || spellKeys.has(spell.key)) return;
       spellKeys.add(spell.key);
-      spells.push(this.#formatAction(spell, { source, image }));
+      spells.push(this._formatAction(spell, { source, image }));
     };
 
     const addForm = (form, { source = null, image } = {}) => {
       if (!form?.key || formKeys.has(form.key)) return;
       formKeys.add(form.key);
-      forms.push(this.#formatForm(form, { source, image }));
+      forms.push(this._formatForm(form, { source, image }));
     };
 
     TRISKEL_BASE_ACTIONS.forEach(action => addAction(action, { image: action.image ?? action.img }));
 
     for (const item of Array.from(this.items ?? [])) {
-      const actionRefs = this.#normalizeReferenceList(item.system?.actions?.ref);
-      const formRefs = this.#normalizeReferenceList(item.system?.forms?.ref);
+      const actionRefs = this._normalizeReferenceList(item.system?.actions?.ref);
+      const formRefs = this._normalizeReferenceList(item.system?.forms?.ref);
 
       actionRefs.forEach(actionKey => {
         const advancedAction = TRISKEL_ADVANCED_ACTIONS.find(entry => entry.key === actionKey);
