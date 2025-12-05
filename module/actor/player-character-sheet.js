@@ -13,8 +13,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     },
     actions: {
       editImage: onEditImage,
-      selectAction: this.#onSelectAction,
-      toggleFormSelection: this.#onToggleFormSelection,
       updateResourceValue: onUpdateResourceValue,
       editItem: this.#onEditItem,
       deleteItem: this.#onDeleteItem
@@ -157,9 +155,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
-    const actionForms = context.system.actions?.forms ?? {};
-    context.actionForms = actionForms;
-    context.standardActions = context.system.actions?.standard ?? [];
     context.items = Array.from(this.document.items ?? []).map(item => ({
       id: item.id,
       name: item.name,
@@ -184,48 +179,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     );
   
     return context;
-  }
-
-  static async #onSelectAction(event, target) {
-    event.preventDefault();
-
-    const actionKey = target.dataset.actionKey ?? target.closest("[data-action-key]")?.dataset.actionKey;
-    if (!actionKey) return;
-
-    const currentSelection = this.document.system?.actions?.selected ?? null;
-    const isAlreadySelected = currentSelection === actionKey;
-
-    if (isAlreadySelected) {
-      target.checked = false;
-      await this.document.update({ "system.actions.selected": null });
-      return;
-    }
-
-    await this.document.update({ "system.actions.selected": actionKey });
-  }
-
-  static async #onToggleFormSelection(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-
-    const actionKey = target.dataset.actionKey;
-    const formKey = target.dataset.formKey;
-    if (!actionKey || !formKey) return;
-
-    const currentForms = foundry.utils.duplicate(this.document.system?.actions?.forms ?? {});
-    const normalizedForAction = Object.entries(currentForms[actionKey] ?? {}).reduce((collection, [key, formState]) => {
-      const activeState = typeof formState === "boolean" ? formState : formState?.active;
-      collection[key] = { active: Boolean(activeState) };
-      return collection;
-    }, {});
-
-    const currentState = normalizedForAction[formKey]?.active ?? false;
-    normalizedForAction[formKey] = { active: !currentState };
-
-    currentForms[actionKey] = normalizedForAction;
-
-    await this.document.update({ "system.actions.forms": currentForms });
   }
 
   static #getItemFromTarget(target) {

@@ -1,5 +1,5 @@
 import { onEditImage } from "../actor/sheet-helpers.js";
-import { TRISKEL_ACTIONS } from "../codex/action-codex.js";
+import { TRISKEL_ALL_ACTIONS } from "../codex/action-codex.js";
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
 import { TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
@@ -17,7 +17,7 @@ const localize = (value) => {
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-const ACTION_REFERENCE_OPTIONS = () => TRISKEL_ACTIONS
+const ACTION_REFERENCE_OPTIONS = () => TRISKEL_ALL_ACTIONS
   .map(action => ({ value: action.key, label: localize(action.label ?? action.key) }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
@@ -67,7 +67,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       forms: FORM_REFERENCE_OPTIONS()
     };
     context.references = {
-      actions: this.constructor.prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ACTIONS),
+      actions: this.constructor.prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ALL_ACTIONS),
       forms: this.constructor.prepareReferenceEntries(context.system.forms?.ref, TRISKEL_FORMS)
     };
     context.modifiers = this.constructor.prepareModifiers(context.system.modifiers);

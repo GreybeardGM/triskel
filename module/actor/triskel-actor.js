@@ -1,4 +1,17 @@
-import { gatherFormsFromItems, prepareActionFormsState, prepareStandardActions } from "./sheet-helpers.js";
+import { TRISKEL_BASE_ACTIONS, TRISKEL_ADVANCED_ACTIONS, TRISKEL_SPELLS } from "../codex/action-codex.js";
+import { TRISKEL_FORMS } from "../codex/form-codex.js";
+import { TRISKEL_RESERVES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+
+const localize = (value) => {
+  if (!value) return "";
+
+  try {
+    return game?.i18n?.localize?.(value) ?? value;
+  } catch (error) {
+    console.warn("[Triskel] Failed to localize value", { value, error });
+    return value;
+  }
+};
 
 export class TriskelActor extends Actor {
   /** @override */
@@ -23,69 +36,122 @@ export class TriskelActor extends Actor {
       reserve.min = minimumFromStrain;
     }
 
-    const ownedItems = Array.from(this.items ?? []);
+    const { actions, spells } = this.#prepareActionCollections();
+    this.system.actions = { actions, spells };
 
-    this.#prepareActionsAndForms(ownedItems);
-    this.#prepareSkillsWithModifiers(ownedItems);
   }
 
-  #prepareActionsAndForms(ownedItems = []) {
-    const actionsData = this.system?.actions;
-    if (!actionsData) return;
+  #normalizeReferenceList(entries = []) {
+    if (!Array.isArray(entries)) return [];
 
-    const availableForms = gatherFormsFromItems(ownedItems);
-    const normalizedActionForms = prepareActionFormsState(availableForms, actionsData.forms);
-    const standardActions = prepareStandardActions(
-      actionsData.selected,
-      this.system?.skills,
-      this.system?.reserves,
-      availableForms,
-      normalizedActionForms
-    );
-
-    actionsData.availableForms = availableForms;
-    actionsData.forms = normalizedActionForms;
-    actionsData.standard = standardActions;
+    return entries
+      .map(entry => (typeof entry === "string" ? entry : entry?.key ?? ""))
+      .filter(Boolean);
   }
 
-  #prepareSkillsWithModifiers(ownedItems = []) {
-    // TODO: Ergänzungen für zukünftige Skill-Modifier-Logik einfügen.
-    const skills = this.system?.skills ?? {};
-    const highestSkillModifiers = this.#collectHighestSkillModifiers(ownedItems);
+  #formatAction(action, { source, image }) {
+    const skill = TRISKEL_SKILLS[action.skill] ?? {};
+    const reserve = TRISKEL_RESERVES[action.reserve] ?? {};
+    const actorSkill = this.system?.skills?.[action.skill] ?? {};
 
-    Object.entries(skills).forEach(([skillKey, skill]) => {
-      const value = Number(skill?.value ?? 0);
-      const baseMod = Number.isFinite(Number(skill?.mod)) ? Number(skill.mod) : 0;
-      const itemMod = highestSkillModifiers[skillKey];
-      const mod = Number.isFinite(itemMod)
-        ? itemMod
-        : baseMod;
+    const parsedSkillTotal = Number(actorSkill.total ?? actorSkill.value ?? 0);
+    const skillTotal = Number.isFinite(parsedSkillTotal) ? parsedSkillTotal : 0;
 
-      skill.mod = mod;
-      skill.total = value + mod;
-    });
+    return {
+      ...action,
+      label: localize(action.label ?? action.key),
+      description: localize(action.description ?? ""),
+      skillLabel: localize(skill.label ?? action.skill ?? ""),
+      reserveLabel: localize(reserve.label ?? action.reserve ?? ""),
+      skillTotal,
+      source,
+      image: image ?? action.image ?? action.img ?? null
+    };
   }
 
-  #collectHighestSkillModifiers(ownedItems = []) {
-    return ownedItems.reduce((modifiersBySkill, item) => {
-      const itemModifiers = item?.system?.modifiers;
-      if (!Array.isArray(itemModifiers)) return modifiersBySkill;
+  #formatForm(form, { source, image }) {
+    const reserve = TRISKEL_RESERVES[form.reserve] ?? {};
+    const skill = TRISKEL_SKILLS[form.skill] ?? {};
 
-      itemModifiers.forEach(modifier => {
-        const skillKey = typeof modifier?.skill === "string" ? modifier.skill : null;
-        if (!skillKey) return;
+    return {
+      ...form,
+      label: localize(form.label ?? form.key),
+      description: localize(form.description ?? ""),
+      reserveLabel: localize(reserve.label ?? form.reserve ?? ""),
+      skillLabel: localize(skill.label ?? form.skill ?? ""),
+      source,
+      image: image ?? form.image ?? form.img ?? null
+    };
+  }
 
-        const value = Number(modifier?.value);
-        if (!Number.isFinite(value)) return;
+  #prepareActionCollections() {
+    const actions = [];
+    const spells = [];
+    const forms = [];
 
-        const current = modifiersBySkill[skillKey];
-        modifiersBySkill[skillKey] = Number.isFinite(current)
-          ? Math.max(current, value)
-          : value;
+    const actionKeys = new Set();
+    const spellKeys = new Set();
+    const formKeys = new Set();
+
+    const addAction = (action, { source = null, image } = {}) => {
+      if (!action?.key || actionKeys.has(action.key)) return;
+      actionKeys.add(action.key);
+      actions.push(this.#formatAction(action, { source, image }));
+    };
+
+    const addSpell = (spell, { source = null, image } = {}) => {
+      if (!spell?.key || spellKeys.has(spell.key)) return;
+      spellKeys.add(spell.key);
+      spells.push(this.#formatAction(spell, { source, image }));
+    };
+
+    const addForm = (form, { source = null, image } = {}) => {
+      if (!form?.key || formKeys.has(form.key)) return;
+      formKeys.add(form.key);
+      forms.push(this.#formatForm(form, { source, image }));
+    };
+
+    TRISKEL_BASE_ACTIONS.forEach(action => addAction(action, { image: action.image ?? action.img }));
+
+    for (const item of Array.from(this.items ?? [])) {
+      const actionRefs = this.#normalizeReferenceList(item.system?.actions?.ref);
+      const formRefs = this.#normalizeReferenceList(item.system?.forms?.ref);
+
+      actionRefs.forEach(actionKey => {
+        const advancedAction = TRISKEL_ADVANCED_ACTIONS.find(entry => entry.key === actionKey);
+        if (advancedAction) addAction(advancedAction, { source: item.id, image: item.img });
+
+        const spell = TRISKEL_SPELLS.find(entry => entry.key === actionKey);
+        if (spell) addSpell(spell, { source: item.id, image: item.img });
       });
 
-      return modifiersBySkill;
+      formRefs.forEach(formKey => {
+        const form = TRISKEL_FORMS.find(entry => entry.key === formKey);
+        if (form) addForm(form, { source: item.id, image: item.img });
+      });
+    }
+
+    const formsByAction = forms.reduce((collection, form) => {
+      for (const actionKey of form.actions ?? []) {
+        if (!collection[actionKey]) collection[actionKey] = [];
+        collection[actionKey].push({ ...form });
+      }
+      return collection;
     }, {});
+
+    actions.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+    spells.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+    forms.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+    actions.forEach(action => {
+      action.forms = formsByAction[action.key] ?? [];
+    });
+
+    spells.forEach(spell => {
+      spell.forms = formsByAction[spell.key] ?? [];
+    });
+
+    return { actions, spells };
   }
 
   /**

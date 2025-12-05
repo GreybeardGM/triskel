@@ -242,7 +242,7 @@
         }
       }
     },
-    "Actions": {
+    "BaseActions": {
       "Strike": {
         "Label": "Schlag",
         "Description": "Direkter Angriff. Zusätzliche Kraft erhöht die Wucht."
@@ -278,6 +278,22 @@
       "Break": {
         "Label": "Lösen",
         "Description": "Schüttelt negative Zustände ab; reduziert gebunden/offengelegt/gestoßen."
+      }
+    },
+    "AdvancedActions": {
+      "QuickShot": {
+        "Label": "Schneller Schuss",
+        "Description": "Löst einen schnellen Fernangriff mit minimaler Vorbereitung aus."
+      },
+      "CrossBowShot": {
+        "Label": "Armbrustschuss",
+        "Description": "Feuert einen schweren Bolzen mit kräftigem Einschlag."
+      }
+    },
+    "Spells": {
+      "Arc": {
+        "Label": "Lichtbogen",
+        "Description": "Entlädt einen kurzen arkanen Bogen aus Energie."
       }
     },
     "Forms": {
