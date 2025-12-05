@@ -16,18 +16,15 @@
               {{#if action.image}}
                 <img class="action-card__icon" src="{{action.image}}" alt="" />
               {{/if}}
-              <h3 class="action-card__title">{{action.label}}</h3>
-            </header>
-
-            <dl class="action-card__meta">
-              <div class="action-card__row" title="{{action.description}}">
-                <dt>{{action.reserveLabel}}</dt>
-                <dd>
-                  <span class="action-card__skill">{{action.skillLabel}}</span>
+              <div class="action-card__summary">
+                <h3 class="action-card__title">{{action.label}}</h3>
+                <p class="action-card__reserve">{{action.reserveLabel}}</p>
+                <p class="action-card__skill">
+                  <span class="action-card__skill-label">{{action.skillLabel}}</span>
                   <span class="action-card__bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</span>
-                </dd>
+                </p>
               </div>
-            </dl>
+            </header>
 
             {{#if action.forms.length}}
               <ul class="action-card__forms">

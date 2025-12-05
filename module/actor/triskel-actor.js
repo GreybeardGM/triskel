@@ -220,14 +220,6 @@ export class TriskelActor extends Actor {
       });
     }
 
-    const formsByAction = forms.reduce((collection, form) => {
-      for (const actionKey of form.actions ?? []) {
-        if (!collection[actionKey]) collection[actionKey] = [];
-        collection[actionKey].push({ ...form });
-      }
-      return collection;
-    }, {});
-
     actions.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
     spells.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
     forms.forEach(form => {
@@ -235,6 +227,16 @@ export class TriskelActor extends Actor {
     });
 
     forms.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+    const formsByAction = forms.reduce((collection, form) => {
+      const activeForm = { ...form, active: form.active ?? selectedForms.includes(form.key) };
+
+      for (const actionKey of activeForm.actions ?? []) {
+        if (!collection[actionKey]) collection[actionKey] = [];
+        collection[actionKey].push(activeForm);
+      }
+      return collection;
+    }, {});
 
     actions.forEach(action => {
       action.forms = formsByAction[action.key] ?? [];
