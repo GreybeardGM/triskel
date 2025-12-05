@@ -1,0 +1,27 @@
+<section class="triskel-chat-output">
+  {{#if hasHeader}}
+    <header class="triskel-chat-output__header">
+      {{#if image}}
+        <div class="triskel-chat-output__image">
+          <img src="{{image}}" alt="{{title}}">
+        </div>
+      {{/if}}
+      <div class="triskel-chat-output__titles">
+        {{#if title}}
+          <h2 class="triskel-chat-output__title">{{title}}</h2>
+        {{/if}}
+        {{#if subtitle}}
+          <p class="triskel-chat-output__subtitle">{{subtitle}}</p>
+        {{/if}}
+      </div>
+    </header>
+  {{/if}}
+
+  {{#if hasRoll}}
+    <div class="triskel-chat-output__roll">{{{roll}}}</div>
+  {{/if}}
+
+  {{#if content}}
+    <div class="triskel-chat-output__content">{{{content}}}</div>
+  {{/if}}
+</section>
