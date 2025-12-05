@@ -512,9 +512,18 @@
 .triskel .inventory-list__item {
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: auto 1fr 1fr auto;
+  gap: 0.5rem;
 }
 
 .triskel .inventory-list__item-actions {
   display: flex;
 }
+
+.triskel .inventory-list__item-image {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+

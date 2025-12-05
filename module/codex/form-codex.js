@@ -11,6 +11,7 @@ export const TRISKEL_FORMS = [
     cost: 1,
     reserve: "power",
     actions: ["strike"],
+    modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.PowerStrike.Description"
   },
   {
@@ -21,6 +22,10 @@ export const TRISKEL_FORMS = [
     cost: 1,
     reserve: "grace",
     actions: ["bind", "expose", "push"],
+    modifiers: [
+      { skill: 1 },
+      { reach: 5 }
+    ],
     description: "TRISKEL.Forms.LongHook.Description"
   },
   {
@@ -41,6 +46,7 @@ export const TRISKEL_FORMS = [
     cost: 1,
     reserve: "grace",
     actions: ["strike"],
+    modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.PrecisionThrust.Description"
   },
   {
@@ -61,6 +67,7 @@ export const TRISKEL_FORMS = [
     cost: 1,
     reserve: "grace",
     actions: ["guard"],
+    modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.Counterguard.Description"
   },
   {

@@ -7,6 +7,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "strike",
     reserve: "power",
+    cost: 0,
     description: "TRISKEL.BaseActions.Strike.Description",
     image: "icons/skills/melee/strike-sword-steel-yellow.webp"
   },
@@ -16,6 +17,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "control",
     reserve: "grace",
+    cost: 0,
     description: "TRISKEL.BaseActions.Bind.Description",
     image: "icons/skills/melee/weapons-crossed-swords-black-gray.webp"
   },
@@ -25,6 +27,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "control",
     reserve: "grace",
+    cost: 0,
     description: "TRISKEL.BaseActions.Expose.Description",
     image: "icons/skills/melee/shield-damaged-broken-blue.webp"
   },
@@ -34,6 +37,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "control",
     reserve: "grace",
+    cost: 0,
     description: "TRISKEL.BaseActions.Push.Description",
     image: "icons/skills/melee/shield-block-bash-blue.webp"
   },
@@ -43,6 +47,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "brace",
     reserve: "power",
+    cost: 0,
     description: "TRISKEL.BaseActions.Brace.Description",
     image: "icons/skills/melee/hand-grip-sword-white-brown.webp"
   },
@@ -52,6 +57,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "guard",
     reserve: "grace",
+    cost: 0,
     description: "TRISKEL.BaseActions.Guard.Description",
     image: "icons/skills/melee/swords-parry-block-blue.webp"
   },
@@ -61,6 +67,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "evasion",
     reserve: "grace",
+    cost: 0,
     description: "TRISKEL.BaseActions.Evade.Description",
     image: "icons/skills/movement/figure-running-gray.webp"
   },
@@ -70,6 +77,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "control",
     reserve: "power",
+    cost: 0,
     description: "TRISKEL.BaseActions.Grapple.Description",
     image: "icons/skills/melee/unarmed-punch-fist.webp"
   },
@@ -79,6 +87,7 @@ export const TRISKEL_BASE_ACTIONS = [
     category: "combat",
     skill: "brace",
     reserve: "power",
+    cost: 0,
     description: "TRISKEL.BaseActions.Break.Description",
     image: "icons/skills/movement/arrow-upward-yellow.webp"
   }
@@ -91,6 +100,7 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     category: "advanced",
     skill: "aim",
     reserve: "grace",
+    cost: 0,
     description: "TRISKEL.AdvancedActions.QuickShot.Description"
   },
   {
@@ -99,6 +109,7 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     category: "advanced",
     skill: "aim",
     reserve: "power",
+    cost: 0,
     description: "TRISKEL.AdvancedActions.CrossBowShot.Description"
   }
 ];
@@ -110,6 +121,7 @@ export const TRISKEL_SPELLS = [
     category: "spell",
     skill: "manifest",
     reserve: "will",
+    cost: 1,
     description: "TRISKEL.Spells.Arc.Description"
   }
 ];
