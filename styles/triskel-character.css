@@ -481,6 +481,7 @@
   line-height: 1.2;
   display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
   cursor: pointer;
   color: inherit;
   outline: unset;
@@ -491,7 +492,14 @@
   height: 1.1rem;
   object-fit: cover;
   border-radius: 50%;
-  margin-right: 0.35rem;
+}
+
+.triskel .action-card__form-label {
+  flex: 1 1 auto;
+}
+
+.triskel .action-card__form-cost {
+  font-weight: 700;
 }
 
 .triskel .action-card__form:focus-visible {

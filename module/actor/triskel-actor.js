@@ -36,9 +36,80 @@ export class TriskelActor extends Actor {
       reserve.min = minimumFromStrain;
     }
 
-    const { actions, spells } = this.#prepareActionCollections();
-    this.system.actions = { actions, spells };
+    const modifiers = this.#prepareSkillModifiers();
+    this.system.modifiers = modifiers;
+    this.#applySkillModifiers(modifiers);
 
+    const selectedAction = this.system?.actions?.selected ?? null;
+    const activeForms = this.system?.actions?.forms ?? {};
+    const { actions, spells } = this.#prepareActionCollections({ selectedAction, activeForms });
+    this.system.actions = { actions, spells, selected: selectedAction, forms: activeForms };
+
+  }
+
+  #prepareSkillModifiers() {
+    const modifiersBySkill = {};
+
+    for (const item of Array.from(this.items ?? [])) {
+      const itemModifiers = Array.isArray(item?.system?.modifiers)
+        ? item.system.modifiers
+        : [];
+
+      const image = item.img ?? item.image ?? null;
+
+      for (const modifier of itemModifiers) {
+        const skill = modifier?.skill ?? modifier?.key ?? modifier?.id ?? "";
+        if (!skill) continue;
+
+        const parsedValue = Number(modifier.value);
+        const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+        const existing = modifiersBySkill[skill];
+
+        if (!existing || value > (existing.value ?? 0)) {
+          modifiersBySkill[skill] = {
+            ...modifier,
+            skill,
+            value,
+            source: item.id ?? null,
+            image
+          };
+        }
+      }
+    }
+
+    return Object.values(modifiersBySkill).map(modifier => {
+      const skill = TRISKEL_SKILLS[modifier.skill] ?? {};
+
+      return {
+        ...modifier,
+        label: localize(skill.label ?? modifier.skill ?? "")
+      };
+    });
+  }
+
+  #applySkillModifiers(modifiers = []) {
+    const skills = this.system?.skills ?? {};
+
+    const modifiersBySkill = modifiers.reduce((collection, modifier) => {
+      const skill = modifier?.skill ?? "";
+      if (!skill) return collection;
+
+      collection[skill] = modifier;
+      return collection;
+    }, {});
+
+    Object.entries(skills).forEach(([skillId, skillData]) => {
+      if (!skillData) return;
+
+      const parsedValue = Number(skillData.value);
+      const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+
+      const parsedMod = Number(modifiersBySkill[skillId]?.value ?? 0);
+      const mod = Number.isFinite(parsedMod) ? parsedMod : 0;
+
+      skillData.mod = mod;
+      skillData.total = value + mod;
+    });
   }
 
   #normalizeReferenceList(entries = []) {
@@ -84,7 +155,7 @@ export class TriskelActor extends Actor {
     };
   }
 
-  #prepareActionCollections() {
+  #prepareActionCollections({ selectedAction = null, activeForms = {} } = {}) {
     const actions = [];
     const spells = [];
     const forms = [];
@@ -141,14 +212,21 @@ export class TriskelActor extends Actor {
 
     actions.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
     spells.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+    forms.forEach(form => {
+      const activeState = activeForms?.[form.key];
+      form.active = Boolean(activeState?.active ?? activeState);
+    });
+
     forms.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
     actions.forEach(action => {
       action.forms = formsByAction[action.key] ?? [];
+      action.isSelected = action.key === selectedAction;
     });
 
     spells.forEach(spell => {
       spell.forms = formsByAction[spell.key] ?? [];
+      spell.isSelected = spell.key === selectedAction;
     });
 
     return { actions, spells };
