@@ -108,8 +108,8 @@ export const TRISKEL_SPELLS = [
     key: "arc",
     label: "TRISKEL.Spells.Arc.Label",
     category: "spell",
-    skill: "control",
-    reserve: "grace",
+    skill: "manifest",
+    reserve: "will",
     description: "TRISKEL.Spells.Arc.Description"
   }
 ];
