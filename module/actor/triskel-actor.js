@@ -1,3 +1,5 @@
+import { gatherFormsFromItems, prepareActionFormsState, prepareStandardActions } from "./sheet-helpers.js";
+
 export class TriskelActor extends Actor {
   /** @override */
   prepareBaseData() {
@@ -20,6 +22,70 @@ export class TriskelActor extends Actor {
       );
       reserve.min = minimumFromStrain;
     }
+
+    const ownedItems = Array.from(this.items ?? []);
+
+    this.#prepareActionsAndForms(ownedItems);
+    this.#prepareSkillsWithModifiers(ownedItems);
+  }
+
+  #prepareActionsAndForms(ownedItems = []) {
+    const actionsData = this.system?.actions;
+    if (!actionsData) return;
+
+    const availableForms = gatherFormsFromItems(ownedItems);
+    const normalizedActionForms = prepareActionFormsState(availableForms, actionsData.forms);
+    const standardActions = prepareStandardActions(
+      actionsData.selected,
+      this.system?.skills,
+      this.system?.reserves,
+      availableForms,
+      normalizedActionForms
+    );
+
+    actionsData.availableForms = availableForms;
+    actionsData.forms = normalizedActionForms;
+    actionsData.standard = standardActions;
+  }
+
+  #prepareSkillsWithModifiers(ownedItems = []) {
+    // TODO: Ergänzungen für zukünftige Skill-Modifier-Logik einfügen.
+    const skills = this.system?.skills ?? {};
+    const highestSkillModifiers = this.#collectHighestSkillModifiers(ownedItems);
+
+    Object.entries(skills).forEach(([skillKey, skill]) => {
+      const value = Number(skill?.value ?? 0);
+      const baseMod = Number.isFinite(Number(skill?.mod)) ? Number(skill.mod) : 0;
+      const itemMod = highestSkillModifiers[skillKey];
+      const mod = Number.isFinite(itemMod)
+        ? itemMod
+        : baseMod;
+
+      skill.mod = mod;
+      skill.total = value + mod;
+    });
+  }
+
+  #collectHighestSkillModifiers(ownedItems = []) {
+    return ownedItems.reduce((modifiersBySkill, item) => {
+      const itemModifiers = item?.system?.modifiers;
+      if (!Array.isArray(itemModifiers)) return modifiersBySkill;
+
+      itemModifiers.forEach(modifier => {
+        const skillKey = typeof modifier?.skill === "string" ? modifier.skill : null;
+        if (!skillKey) return;
+
+        const value = Number(modifier?.value);
+        if (!Number.isFinite(value)) return;
+
+        const current = modifiersBySkill[skillKey];
+        modifiersBySkill[skillKey] = Number.isFinite(current)
+          ? Math.max(current, value)
+          : value;
+      });
+
+      return modifiersBySkill;
+    }, {});
   }
 
   /**
