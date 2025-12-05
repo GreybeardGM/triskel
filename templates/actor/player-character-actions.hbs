@@ -13,6 +13,9 @@
         >
           <div class="action-card__content">
             <header class="action-card__header">
+              {{#if action.image}}
+                <img class="action-card__icon" src="{{action.image}}" alt="" />
+              {{/if}}
               <h3 class="action-card__title">{{action.label}}</h3>
             </header>
 

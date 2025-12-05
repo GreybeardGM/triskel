@@ -132,7 +132,9 @@
       },
       "actions": {
         "actions": [],
-        "spells": []
+        "spells": [],
+        "selected": null,
+        "selectedForms": []
       },
       "paths": {
         "virtue": {

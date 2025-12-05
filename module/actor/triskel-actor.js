@@ -41,9 +41,11 @@ export class TriskelActor extends Actor {
     this.#applySkillModifiers(modifiers);
 
     const selectedAction = this.system?.actions?.selected ?? null;
-    const activeForms = this.system?.actions?.forms ?? {};
-    const { actions, spells } = this.#prepareActionCollections({ selectedAction, activeForms });
-    this.system.actions = { actions, spells, selected: selectedAction, forms: activeForms };
+    const selectedForms = this.#normalizeSelectedForms(
+      this.system?.actions?.selectedForms ?? this.system?.actions?.forms ?? []
+    );
+    const { actions, spells } = this.#prepareActionCollections({ selectedAction, selectedForms });
+    this.system.actions = { actions, spells, selected: selectedAction, selectedForms };
 
   }
 
@@ -120,6 +122,22 @@ export class TriskelActor extends Actor {
       .filter(Boolean);
   }
 
+  #normalizeSelectedForms(selectedForms = []) {
+    if (Array.isArray(selectedForms)) {
+      return Array.from(new Set(this.#normalizeReferenceList(selectedForms)));
+    }
+
+    if (selectedForms && typeof selectedForms === "object") {
+      const activeKeys = Object.entries(selectedForms)
+        .filter(([, value]) => Boolean(value?.active ?? value))
+        .map(([key]) => key);
+
+      return Array.from(new Set(activeKeys));
+    }
+
+    return [];
+  }
+
   #formatAction(action, { source, image }) {
     const skill = TRISKEL_SKILLS[action.skill] ?? {};
     const reserve = TRISKEL_RESERVES[action.reserve] ?? {};
@@ -155,7 +173,7 @@ export class TriskelActor extends Actor {
     };
   }
 
-  #prepareActionCollections({ selectedAction = null, activeForms = {} } = {}) {
+  #prepareActionCollections({ selectedAction = null, selectedForms = [] } = {}) {
     const actions = [];
     const spells = [];
     const forms = [];
@@ -213,8 +231,7 @@ export class TriskelActor extends Actor {
     actions.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
     spells.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
     forms.forEach(form => {
-      const activeState = activeForms?.[form.key];
-      form.active = Boolean(activeState?.active ?? activeState);
+      form.active = selectedForms.includes(form.key);
     });
 
     forms.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));

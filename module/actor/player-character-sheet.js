@@ -221,8 +221,24 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const formKey = target.closest("[data-form-key]")?.dataset.formKey;
     if (!formKey) return;
 
-    const isActive = Boolean(this.document?.system?.actions?.forms?.[formKey]?.active);
-    await this.document?.update({ [`system.actions.forms.${formKey}.active`]: !isActive });
+    const currentSelection = (() => {
+      if (Array.isArray(this.document?.system?.actions?.selectedForms)) {
+        return [...this.document.system.actions.selectedForms];
+      }
+
+      const legacyForms = this.document?.system?.actions?.forms ?? {};
+      return Object.entries(legacyForms)
+        .filter(([, value]) => Boolean(value?.active ?? value))
+        .map(([key]) => key);
+    })();
+
+    const normalizedSelection = Array.from(new Set(currentSelection));
+    const selectedIndex = normalizedSelection.indexOf(formKey);
+
+    if (selectedIndex >= 0) normalizedSelection.splice(selectedIndex, 1);
+    else normalizedSelection.push(formKey);
+
+    await this.document?.update({ "system.actions.selectedForms": normalizedSelection });
   }
 
 }
