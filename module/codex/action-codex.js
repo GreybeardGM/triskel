@@ -8,7 +8,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "strike",
     reserve: "power",
     description: "TRISKEL.BaseActions.Strike.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/melee/strike-sword-steel-yellow.webp"
   },
   {
     key: "bind",
@@ -17,7 +17,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "control",
     reserve: "grace",
     description: "TRISKEL.BaseActions.Bind.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/melee/weapons-crossed-swords-black-gray.webp"
   },
   {
     key: "expose",
@@ -26,7 +26,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "control",
     reserve: "grace",
     description: "TRISKEL.BaseActions.Expose.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/melee/shield-damaged-broken-blue.webp"
   },
   {
     key: "push",
@@ -35,7 +35,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "control",
     reserve: "grace",
     description: "TRISKEL.BaseActions.Push.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/melee/shield-block-bash-blue.webp"
   },
   {
     key: "brace",
@@ -44,7 +44,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "brace",
     reserve: "power",
     description: "TRISKEL.BaseActions.Brace.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/melee/hand-grip-sword-white-brown.webp"
   },
   {
     key: "guard",
@@ -53,7 +53,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "guard",
     reserve: "grace",
     description: "TRISKEL.BaseActions.Guard.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/melee/swords-parry-block-blue.webp"
   },
   {
     key: "evade",
@@ -62,7 +62,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "evasion",
     reserve: "grace",
     description: "TRISKEL.BaseActions.Evade.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/movement/figure-running-gray.webp"
   },
   {
     key: "grapple",
@@ -71,7 +71,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "control",
     reserve: "power",
     description: "TRISKEL.BaseActions.Grapple.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/melee/unarmed-punch-fist.webp"
   },
   {
     key: "break",
@@ -80,7 +80,7 @@ export const TRISKEL_BASE_ACTIONS = [
     skill: "brace",
     reserve: "power",
     description: "TRISKEL.BaseActions.Break.Description",
-    image: "systems/triskel/assets/placeholders/base-action.svg"
+    image: "icons/skills/movement/arrow-upward-yellow.webp"
   }
 ];
 
