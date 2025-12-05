@@ -14,19 +14,19 @@ Hooks.once("init", function() {
   CONFIG.Actor.sheetClasses.npc = NpcSheet;
 
   // Sheets registrieren
-  Actors.registerSheet("triskel", PlayerCharacterSheet, {
+  foundry.documents.collections.Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
     types: ["character"],
     label: localize("TRISKEL.Sheets.PlayerCharacter")
   });
 
-  Actors.registerSheet("triskel", NpcSheet, {
+  foundry.documents.collections.Actors.registerSheet("triskel", NpcSheet, {
     makeDefault: true,
     types: ["npc"],
     label: localize("TRISKEL.Sheets.NPC")
   });
 
-  Items.registerSheet("triskel", TriskelItemSheet, {
+  foundry.documents.collections.Items.registerSheet("triskel", TriskelItemSheet, {
     makeDefault: true,
     types: ["weapon", "armor", "ability", "spell"],
     label: localize("TRISKEL.Sheets.Item")
