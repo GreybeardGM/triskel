@@ -15,7 +15,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       editImage: onEditImage,
       updateResourceValue: onUpdateResourceValue,
       editItem: this.#onEditItem,
-      deleteItem: this.#onDeleteItem
+      deleteItem: this.#onDeleteItem,
+      selectAction: this.#onSelectAction,
+      toggleForm: this.#onToggleForm
     },
     actor: {
       type: 'character'
@@ -202,6 +204,25 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (!item) return;
 
     await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
+  }
+
+  static async #onSelectAction(event, target) {
+    event.preventDefault();
+
+    const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
+    if (!actionKey) return;
+
+    await this.document?.update({ "system.actions.selected": actionKey });
+  }
+
+  static async #onToggleForm(event, target) {
+    event.preventDefault();
+
+    const formKey = target.closest("[data-form-key]")?.dataset.formKey;
+    if (!formKey) return;
+
+    const isActive = Boolean(this.document?.system?.actions?.forms?.[formKey]?.active);
+    await this.document?.update({ [`system.actions.forms.${formKey}.active`]: !isActive });
   }
 
 }

@@ -6,7 +6,11 @@
   {{#*inline "actionCards"}}
     <div class="actions-grid">
       {{#each this as |action|}}
-        <div class="action-card {{action.reserve}} is-interactive" data-action-key="{{action.key}}">
+        <div
+          class="action-card {{action.reserve}} is-interactive {{#if action.isSelected}}is-selected{{/if}}"
+          data-action="selectAction"
+          data-action-key="{{action.key}}"
+        >
           <div class="action-card__content">
             <header class="action-card__header">
               <h3 class="action-card__title">{{action.label}}</h3>
@@ -27,13 +31,18 @@
                 {{#each action.forms as |form|}}
                   <li>
                     <div
-                      class="action-card__form {{form.reserve}} is-interactive"
+                      class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
                       title="{{form.description}}"
+                      data-action="toggleForm"
+                      data-form-key="{{form.key}}"
                     >
                       {{#if form.image}}
                         <img class="action-card__form-icon" src="{{form.image}}" alt="" />
                       {{/if}}
-                      {{form.label}}
+                      <span class="action-card__form-label">{{form.label}}</span>
+                      {{#if form.cost}}
+                        <span class="action-card__form-cost">{{numberFormat form.cost decimals=0}}</span>
+                      {{/if}}
                     </div>
                   </li>
                 {{/each}}
