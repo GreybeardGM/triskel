@@ -400,21 +400,6 @@
   border-radius: 8px;
 }
 
-.triskel .action-card__radio {
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  &:before,
-  &:after {
-    content: "";
-  }
-  &:checked::after {
-    content: "✓";
-    color: var(--triskel-interactive-highlight);
-    font-weight: 700;
-  }
-}
-
 .triskel .action-card__content {
   padding: 0.75rem;
   display: flex;
