@@ -1,27 +1,23 @@
 // form-codex.js
 // Core combat forms for Triskel.
-// Keys, skills, reserves, and action references are lowercase for direct ID usage.
+// Keys, reserves, and keyword references are lowercase for direct ID usage.
 
 export const TRISKEL_FORMS = [
   {
     key: "power_strike",
     label: "TRISKEL.Forms.PowerStrike.Label",
-    category: "combat",
-    skill: "strike",
     cost: 1,
     reserve: "power",
-    actions: ["strike"],
+    keywords: ["strike"],
     modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.PowerStrike.Description"
   },
   {
     key: "long_hook",
     label: "TRISKEL.Forms.LongHook.Label",
-    category: "combat",
-    skill: "control",
     cost: 1,
     reserve: "grace",
-    actions: ["bind", "expose", "push"],
+    keywords: ["control"],
     modifiers: [
       { skill: 1 },
       { reach: 5 }
@@ -31,53 +27,51 @@ export const TRISKEL_FORMS = [
   {
     key: "locking_bind",
     label: "TRISKEL.Forms.LockingBind.Label",
-    category: "combat",
-    skill: "control",
     cost: 1,
     reserve: "grace",
-    actions: ["bind"],
+    keywords: ["bind"],
     description: "TRISKEL.Forms.LockingBind.Description"
   },
   {
     key: "precision_thrust",
     label: "TRISKEL.Forms.PrecisionThrust.Label",
-    category: "combat",
-    skill: "strike",
     cost: 1,
     reserve: "grace",
-    actions: ["strike"],
+    keywords: ["strike"],
     modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.PrecisionThrust.Description"
   },
   {
     key: "push_through",
     label: "TRISKEL.Forms.PushThrough.Label",
-    category: "combat",
-    skill: "control",
     cost: 1,
     reserve: "power",
-    actions: ["push"],
+    keywords: ["push"],
     description: "TRISKEL.Forms.PushThrough.Description"
   },
   {
     key: "counterguard",
     label: "TRISKEL.Forms.Counterguard.Label",
-    category: "combat",
-    skill: "guard",
     cost: 1,
     reserve: "grace",
-    actions: ["guard"],
+    keywords: ["guard"],
     modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.Counterguard.Description"
   },
   {
     key: "break_stance",
     label: "TRISKEL.Forms.BreakStance.Label",
-    category: "combat",
-    skill: "strike",
     cost: 1,
     reserve: "power",
-    actions: ["strike"],
+    keywords: ["strike"],
     description: "TRISKEL.Forms.BreakStance.Description"
+  },
+  {
+    key: "blackmagic",
+    label: "TRISKEL.Forms.Blackmagic.Label",
+    cost: 1,
+    reserve: "power",
+    keywords: ["manifestation"],
+    description: "TRISKEL.Forms.Blackmagic.Description"
   }
 ];

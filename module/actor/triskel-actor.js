@@ -216,23 +216,31 @@ export class TriskelActor extends Actor {
 
     forms.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
-    const formsByAction = forms.reduce((collection, form) => {
-      const activeForm = { ...form, active: form.active ?? selectedForms.includes(form.key) };
+    const hasAllKeywords = (formKeywords = [], entryKeywords = []) => {
+      const normalizedFormKeywords = (Array.isArray(formKeywords) ? formKeywords : [])
+        .map(keyword => `${keyword}`.trim().toLowerCase())
+        .filter(Boolean);
+      const normalizedEntryKeywords = new Set(
+        (Array.isArray(entryKeywords) ? entryKeywords : [])
+          .map(keyword => `${keyword}`.trim().toLowerCase())
+          .filter(Boolean)
+      );
 
-      for (const actionKey of activeForm.actions ?? []) {
-        if (!collection[actionKey]) collection[actionKey] = [];
-        collection[actionKey].push(activeForm);
-      }
-      return collection;
-    }, {});
+      return normalizedFormKeywords.length > 0
+        ? normalizedFormKeywords.every(keyword => normalizedEntryKeywords.has(keyword))
+        : false;
+    };
+
+    const findMatchingForms = entry =>
+      forms.filter(form => hasAllKeywords(form.keywords ?? [], entry?.keywords ?? []));
 
     actions.forEach(action => {
-      action.forms = formsByAction[action.key] ?? [];
+      action.forms = findMatchingForms(action);
       action.isSelected = action.key === selectedAction;
     });
 
     spells.forEach(spell => {
-      spell.forms = formsByAction[spell.key] ?? [];
+      spell.forms = findMatchingForms(spell);
       spell.isSelected = spell.key === selectedAction;
     });
 
