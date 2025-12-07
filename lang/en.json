@@ -324,6 +324,10 @@
       "BreakStance": {
         "Label": "Break Stance",
         "Description": "Turn a heavy strike into a stance-breaking blow that leaves the target more exposed."
+      },
+      "Blackmagic": {
+        "Label": "Blackmagic",
+        "Description": "The caster folds a sliver of their life force into the spell."
       }
     }
   }

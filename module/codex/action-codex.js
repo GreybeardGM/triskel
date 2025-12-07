@@ -9,7 +9,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "power",
     cost: 0,
     description: "TRISKEL.BaseActions.Strike.Description",
-    image: "icons/skills/melee/strike-sword-steel-yellow.webp"
+    image: "icons/skills/melee/strike-sword-steel-yellow.webp",
+    keywords: ["action", "melee", "offense", "strike"]
   },
   {
     key: "bind",
@@ -19,7 +20,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "grace",
     cost: 0,
     description: "TRISKEL.BaseActions.Bind.Description",
-    image: "icons/skills/melee/weapons-crossed-swords-black-gray.webp"
+    image: "icons/skills/melee/weapons-crossed-swords-black-gray.webp",
+    keywords: ["action", "melee", "offense", "control", "bind"]
   },
   {
     key: "expose",
@@ -29,7 +31,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "grace",
     cost: 0,
     description: "TRISKEL.BaseActions.Expose.Description",
-    image: "icons/skills/melee/shield-damaged-broken-blue.webp"
+    image: "icons/skills/melee/shield-damaged-broken-blue.webp",
+    keywords: ["action", "melee", "offense", "control", "expose"]
   },
   {
     key: "push",
@@ -39,7 +42,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "grace",
     cost: 0,
     description: "TRISKEL.BaseActions.Push.Description",
-    image: "icons/skills/melee/shield-block-bash-blue.webp"
+    image: "icons/skills/melee/shield-block-bash-blue.webp",
+    keywords: ["action", "melee", "offense", "control", "push"]
   },
   {
     key: "brace",
@@ -49,7 +53,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "power",
     cost: 0,
     description: "TRISKEL.BaseActions.Brace.Description",
-    image: "icons/skills/melee/hand-grip-sword-white-brown.webp"
+    image: "icons/skills/melee/hand-grip-sword-white-brown.webp",
+    keywords: ["action", "melee", "defense", "brace", "resilience"]
   },
   {
     key: "guard",
@@ -59,7 +64,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "grace",
     cost: 0,
     description: "TRISKEL.BaseActions.Guard.Description",
-    image: "icons/skills/melee/swords-parry-block-blue.webp"
+    image: "icons/skills/melee/swords-parry-block-blue.webp",
+    keywords: ["action", "melee", "defense", "guard", "protection"]
   },
   {
     key: "evade",
@@ -69,7 +75,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "grace",
     cost: 0,
     description: "TRISKEL.BaseActions.Evade.Description",
-    image: "icons/skills/movement/figure-running-gray.webp"
+    image: "icons/skills/movement/figure-running-gray.webp",
+    keywords: ["reaction", "defense", "evasion"]
   },
   {
     key: "grapple",
@@ -79,7 +86,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "power",
     cost: 0,
     description: "TRISKEL.BaseActions.Grapple.Description",
-    image: "icons/skills/melee/unarmed-punch-fist.webp"
+    image: "icons/skills/melee/unarmed-punch-fist.webp",
+    keywords: ["action", "melee", "offense", "control", "grapple"]
   },
   {
     key: "break",
@@ -89,7 +97,8 @@ export const TRISKEL_BASE_ACTIONS = [
     reserve: "power",
     cost: 0,
     description: "TRISKEL.BaseActions.Break.Description",
-    image: "icons/skills/movement/arrow-upward-yellow.webp"
+    image: "icons/skills/movement/arrow-upward-yellow.webp",
+    keywords: ["action", "melee", "offense", "brace", "break"]
   }
 ];
 
@@ -101,7 +110,8 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     skill: "aim",
     reserve: "grace",
     cost: 0,
-    description: "TRISKEL.AdvancedActions.QuickShot.Description"
+    description: "TRISKEL.AdvancedActions.QuickShot.Description",
+    keywords: ["action", "ranged", "offense", "aim", "quick shot"]
   },
   {
     key: "crossBowShot",
@@ -110,7 +120,8 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     skill: "aim",
     reserve: "power",
     cost: 0,
-    description: "TRISKEL.AdvancedActions.CrossBowShot.Description"
+    description: "TRISKEL.AdvancedActions.CrossBowShot.Description",
+    keywords: ["action", "ranged", "offense", "aim", "crossbow"]
   }
 ];
 
@@ -122,7 +133,8 @@ export const TRISKEL_SPELLS = [
     skill: "manifest",
     reserve: "will",
     cost: 1,
-    description: "TRISKEL.Spells.Arc.Description"
+    description: "TRISKEL.Spells.Arc.Description",
+    keywords: ["spell", "arcane", "action", "manifestation", "lightning"]
   }
 ];
 
