@@ -13,16 +13,13 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Forms.PowerStrike.Description"
   },
   {
-    key: "long_hook",
-    label: "TRISKEL.Forms.LongHook.Label",
+    key: "tripping_hook",
+    label: "TRISKEL.Forms.TrippingHook.Label",
     cost: 1,
     reserve: "grace",
-    keywords: ["control"],
-    modifiers: [
-      { skill: 1 },
-      { reach: 5 }
-    ],
-    description: "TRISKEL.Forms.LongHook.Description"
+    keywords: ["expose"],
+    modifiers: [{ skill: 2 }],
+    description: "TRISKEL.Forms.TrippingHook.Description"
   },
   {
     key: "locking_bind",
@@ -30,6 +27,7 @@ export const TRISKEL_FORMS = [
     cost: 1,
     reserve: "grace",
     keywords: ["bind"],
+    modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.LockingBind.Description"
   },
   {
@@ -47,6 +45,7 @@ export const TRISKEL_FORMS = [
     cost: 1,
     reserve: "power",
     keywords: ["push"],
+    modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.PushThrough.Description"
   },
   {
@@ -67,11 +66,30 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Forms.BreakStance.Description"
   },
   {
+    key: "drag",
+    label: "TRISKEL.Forms.Drag.Label",
+    cost: 1,
+    reserve: "grace",
+    keywords: ["push"],
+    modifiers: [{ skill: 1 }],
+    description: "TRISKEL.Forms.Drag.Description"
+  },
+  {
+    key: "shield_pull",
+    label: "TRISKEL.Forms.ShieldPull.Label",
+    cost: 1,
+    reserve: "grace",
+    keywords: ["bind"],
+    modifiers: [{ skill: 2 }],
+    description: "TRISKEL.Forms.ShieldPull.Description"
+  },
+  {
     key: "blackmagic",
     label: "TRISKEL.Forms.Blackmagic.Label",
     cost: 1,
     reserve: "power",
     keywords: ["manifestation"],
+    modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.Blackmagic.Description"
   }
 ];

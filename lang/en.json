@@ -281,19 +281,31 @@
       }
     },
     "AdvancedActions": {
-      "QuickShot": {
-        "Label": "Quick Shot",
-        "Description": "Loose a fast ranged attack with minimal setup."
+      "Shoot": {
+        "Label": "Shoot",
+        "Description": "Loose a precise ranged attack with aim and timing."
       },
-      "CrossBowShot": {
-        "Label": "Crossbow Shot",
-        "Description": "Fire a heavy bolt with solid power behind it."
+      "Throw": {
+        "Label": "Throw",
+        "Description": "Hurl a weapon or object to strike at distance."
       }
     },
     "Spells": {
       "Arc": {
         "Label": "Arc",
         "Description": "Channel a short arcing spell of energy."
+      },
+      "Glue": {
+        "Label": "Glue",
+        "Description": "Creates a small area of sticky fluid.\n1-2 -> Exposed\n3-4 -> Slowed\n5+ -> Grabbed"
+      },
+      "RebukeEvil": {
+        "Label": "Rebuke Evil",
+        "Description": "Drives back all nearby beings with evil intent.\n0-1 -> Pushed 1\n2-3 -> Pushed 2\n4-5 -> Pushed 3\n6+ -> Pushed 4"
+      },
+      "ProtectivePrayer": {
+        "Label": "Protective Prayer",
+        "Description": "Offers an ally Fortified 1+ against the next incoming attack."
       }
     },
     "Forms": {
@@ -301,9 +313,9 @@
         "Label": "Power Strike",
         "Description": "Spend power to make a strike hit much harder than usual."
       },
-      "LongHook": {
-        "Label": "Long Hook",
-        "Description": "Extend a control action to reach further than normal using a hooked or polearm weapon."
+      "TrippingHook": {
+        "Label": "Tripping Hook",
+        "Description": "Catch the extremities of a foe with a long hook to wrench them off balance or send them sprawling."
       },
       "LockingBind": {
         "Label": "Locking Bind",
@@ -320,6 +332,14 @@
       "Counterguard": {
         "Label": "Counterguard",
         "Description": "Sharpen your defensive structure to gain a stronger guard against the next attack."
+      },
+      "Drag": {
+        "Label": "Drag",
+        "Description": "Use the weapon’s hook to yank a target toward you instead of shoving them away."
+      },
+      "ShieldPull": {
+        "Label": "Shield Pull",
+        "Description": "Rip open and bind an opponent’s shield with the weapon’s leverage."
       },
       "BreakStance": {
         "Label": "Break Stance",
