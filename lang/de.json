@@ -281,19 +281,31 @@
       }
     },
     "AdvancedActions": {
-      "QuickShot": {
-        "Label": "Schneller Schuss",
-        "Description": "Löst einen schnellen Fernangriff mit minimaler Vorbereitung aus."
+      "Shoot": {
+        "Label": "Schießen",
+        "Description": "Löst einen gezielten Fernangriff mit Ziel und Timing aus."
       },
-      "CrossBowShot": {
-        "Label": "Armbrustschuss",
-        "Description": "Feuert einen schweren Bolzen mit kräftigem Einschlag."
+      "Throw": {
+        "Label": "Werfen",
+        "Description": "Schleudert eine Waffe oder ein Objekt, um aus der Distanz zu treffen."
       }
     },
     "Spells": {
       "Arc": {
         "Label": "Lichtbogen",
         "Description": "Entlädt einen kurzen arkanen Bogen aus Energie."
+      },
+      "Glue": {
+        "Label": "Leim",
+        "Description": "Erzeugt ein kleines Areal aus klebriger Flüssigkeit.\n1-2 -> Entblößt\n3-4 -> Verlangsamt\n5+ -> Gepackt"
+      },
+      "RebukeEvil": {
+        "Label": "Böses Zurückweisen",
+        "Description": "Drängt alle Wesen mit bösen Absichten in der Nähe zurück.\n0-1 -> Gestoßen 1\n2-3 -> Gestoßen 2\n4-5 -> Gestoßen 3\n6+ -> Gestoßen 4"
+      },
+      "ProtectivePrayer": {
+        "Label": "Schutzgebet",
+        "Description": "Verleiht einem Verbündeten gegen den nächsten Angriff den Zustand Gefestigt 1+."
       }
     },
     "Forms": {
@@ -301,9 +313,9 @@
         "Label": "Kraftschlag",
         "Description": "Gibt Kraft aus, um einen Schlag wesentlich härter treffen zu lassen als gewöhnlich."
       },
-      "LongHook": {
-        "Label": "Langer Haken",
-        "Description": "Erweitert eine Kontrollaktion mit Haken- oder Stangenwaffe auf größere Reichweite als üblich."
+      "TrippingHook": {
+        "Label": "Stolperhaken",
+        "Description": "Hakt mit einem langen Haken in die Extremitäten eines Gegners ein, um ihn aus dem Gleichgewicht zu bringen oder zu Fall zu reißen."
       },
       "LockingBind": {
         "Label": "Fesselnder Block",
@@ -320,6 +332,14 @@
       "Counterguard": {
         "Label": "Gegenwache",
         "Description": "Schärft deine defensive Struktur, um beim nächsten Angriff eine stärkere Parade zu erhalten."
+      },
+      "Drag": {
+        "Label": "Heranziehen",
+        "Description": "Die Waffe verfügt über einen Haken, mit dem du einen Gegner heranziehen kannst, anstatt ihn wegzudrücken."
+      },
+      "ShieldPull": {
+        "Label": "Schildreißer",
+        "Description": "Mit der Waffe lässt sich ein Schild aufreißen und sogleich binden."
       },
       "BreakStance": {
         "Label": "Standbruch",
