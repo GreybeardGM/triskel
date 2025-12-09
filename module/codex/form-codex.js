@@ -88,7 +88,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Forms.ShieldCover.Label",
     cost: 1,
     reserve: "grace",
-    keywords: ["evadsion"],
+    keywords: ["evasion"],
     modifiers: [{ skill: 2 }],
     description: "TRISKEL.Forms.ShieldCover.Description"
   },
