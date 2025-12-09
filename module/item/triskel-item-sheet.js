@@ -31,6 +31,7 @@ const MODIFIER_SKILL_OPTIONS = () => Object.values(TRISKEL_SKILLS)
 
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static DEFAULT_OPTIONS = {
+    tag: "form",
     classes: ["triskel", "sheet", "item"],
     form: {
       submitOnChange: true
@@ -50,9 +51,21 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   };
 
   static PARTS = {
-    details: {
-      id: "details",
-      template: "systems/triskel/templates/item/triskel-item-sheet.hbs"
+    header: {
+      id: "header",
+      template: "systems/triskel/templates/item/parts/triskel-item-header.hbs"
+    },
+    actions: {
+      id: "actions",
+      template: "systems/triskel/templates/item/parts/triskel-item-actions.hbs"
+    },
+    forms: {
+      id: "forms",
+      template: "systems/triskel/templates/item/parts/triskel-item-forms.hbs"
+    },
+    modifiers: {
+      id: "modifiers",
+      template: "systems/triskel/templates/item/parts/triskel-item-modifiers.hbs"
     }
   };
 
@@ -61,6 +74,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     context.item ??= this.document;
     context.system ??= this.document.system ?? {};
+
+    const itemTypeKey = context.item?.type ?? "";
+
+    context.itemTypeLabel = localize(`TRISKEL.ItemTypes.${itemTypeKey}`) || itemTypeKey;
 
     context.referenceOptions = {
       actions: ACTION_REFERENCE_OPTIONS(),

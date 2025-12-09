@@ -46,7 +46,8 @@
     "Items": {
       "Empty": "You are not carrying any items.",
       "Edit": "Edit item",
-      "Delete": "Delete item"
+      "Delete": "Delete item",
+      "TypeLabel": "Type"
     },
     "Tiers": {
       "Novice": { "Label": "Novice" },
