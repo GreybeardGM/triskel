@@ -46,7 +46,8 @@
     "Items": {
       "Empty": "Du trägst momentan keine Gegenstände.",
       "Edit": "Gegenstand bearbeiten",
-      "Delete": "Gegenstand löschen"
+      "Delete": "Gegenstand löschen",
+      "TypeLabel": "Typ"
     },
     "Tiers": {
       "Novice": { "Label": "Novize" },
