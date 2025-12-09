@@ -75,17 +75,17 @@ export class TriskelActor extends Actor {
       .filter(itemId => itemsById.has(itemId));
 
     const sanitizedEquippedGear = {
-      Worn: sanitizeEquippedList(equippedGear?.Worn ?? []),
-      Held: sanitizeEquippedList(equippedGear?.Held ?? []),
-      Spells: sanitizeEquippedList(equippedGear?.Spells ?? []),
-      Abilities: sanitizeEquippedList(equippedGear?.Abilities ?? [])
+      worn: sanitizeEquippedList(equippedGear?.worn ?? []),
+      held: sanitizeEquippedList(equippedGear?.held ?? []),
+      spell: sanitizeEquippedList(equippedGear?.spell ?? []),
+      ability: sanitizeEquippedList(equippedGear?.ability ?? [])
     };
 
     const equippedIds = [
-      ...sanitizedEquippedGear.Worn,
-      ...sanitizedEquippedGear.Held,
-      ...sanitizedEquippedGear.Spells,
-      ...sanitizedEquippedGear.Abilities
+      ...sanitizedEquippedGear.worn,
+      ...sanitizedEquippedGear.held,
+      ...sanitizedEquippedGear.spell,
+      ...sanitizedEquippedGear.ability
     ];
 
     const equippedItems = [];

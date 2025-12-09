@@ -512,13 +512,8 @@
 .triskel .inventory-list__item {
   display: grid;
   align-items: center;
-  grid-template-columns: auto auto 1fr 1fr auto;
+  grid-template-columns: auto auto 1fr auto;
   gap: 0.5rem;
-}
-
-.triskel .inventory-list__item--slot {
-  grid-template-columns: 1fr 2fr;
-  font-weight: 600;
 }
 
 .triskel .inventory-category {

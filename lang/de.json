@@ -1,321 +1,336 @@
 {
   "TRISKEL": {
-    "Tabs": {
-      "Actions": {
-        "Label": "Aktionskarten",
-        "Tooltip": "Aktionskarten anzeigen und auswählen"
+    "Actor": {
+      "Tab": {
+        "Actions": {
+          "Label": "Aktionskarten",
+          "Tooltip": "Aktionskarten anzeigen und auswählen"
+        },
+        "Skills": {
+          "Label": "Fertigkeiten",
+          "Tooltip": "Fertigkeiten und Resistenzen bearbeiten"
+        },
+        "Inventory": {
+          "Label": "Ausrüstung",
+          "Tooltip": "Alle getragenen Gegenstände ansehen"
+        },
+        "Notes": {
+          "Label": "Notizen",
+          "Tooltip": "Charakternotizen ansehen"
+        }
       },
-      "Skills": {
+      "Type": {
+        "Character": "Spielercharakter",
+        "NPC": "NSC"
+      },
+      "Tier": {
+        "Novice": {
+          "Label": "Novize"
+        },
+        "Apprentice": {
+          "Label": "Lehrling"
+        },
+        "Adept": {
+          "Label": "Adept"
+        },
+        "Veteran": {
+          "Label": "Veteran"
+        },
+        "Master": {
+          "Label": "Meister"
+        },
+        "Paragon": {
+          "Label": "Paragon"
+        }
+      },
+      "Skill": {
         "Label": "Fertigkeiten",
-        "Tooltip": "Fertigkeiten und Resistenzen bearbeiten"
+        "ModLabel": "Mod",
+        "Strike": {
+          "Label": "Schlag",
+          "Description": "Führt direkte Nahkampfangriffe aus."
+        },
+        "Control": {
+          "Label": "Kontrolle",
+          "Description": "Beeinflusst Position, Gleichgewicht oder Hebel im Nahkampf."
+        },
+        "Aim": {
+          "Label": "Zielen",
+          "Description": "Setzt präzise Fernkampfangriffe um."
+        },
+        "Guard": {
+          "Label": "Parade",
+          "Description": "Lenkt Angriffe mit Technik ab oder fängt sie ab."
+        },
+        "Brace": {
+          "Label": "Standhalten",
+          "Description": "Fängt Wucht ab und bleibt gegen Aufprall standfest."
+        },
+        "Evasion": {
+          "Label": "Ausweichen",
+          "Description": "Entgeht Angriffen durch Beweglichkeit und trainierte Abläufe."
+        },
+        "Athletics": {
+          "Label": "Athletik",
+          "Description": "Meistert körperliche Leistungen in Kraft, Geschwindigkeit oder Bewegung."
+        },
+        "Notice": {
+          "Label": "Wahrnehmung",
+          "Description": "Erkennt Details, Veränderungen oder Verborgenes in der Umgebung."
+        },
+        "Stealth": {
+          "Label": "Heimlichkeit",
+          "Description": "Vermeidet Entdeckung durch Lautlosigkeit, Deckung oder Timing."
+        },
+        "Craft": {
+          "Label": "Handwerk",
+          "Description": "Baut, repariert oder erschafft funktionale Ausrüstung und Werkzeuge."
+        },
+        "Track": {
+          "Label": "Spurenlesen",
+          "Description": "Folgt Fährten, Zeichen und Störungen in der Umgebung."
+        },
+        "HandleBeasts": {
+          "Label": "Tiere führen",
+          "Description": "Führt Reittiere und Tiere, beruhigt oder lenkt Kreaturen."
+        },
+        "Impress": {
+          "Label": "Beeindrucken",
+          "Description": "Formt den Eindruck, den andere von dir haben, durch Auftreten und Wirkung."
+        },
+        "Influence": {
+          "Label": "Beeinflussen",
+          "Description": "Lenkt die Absichten anderer durch Überzeugung oder Druck."
+        },
+        "Insight": {
+          "Label": "Einsicht",
+          "Description": "Liest Motive, Muster und emotionale Signale."
+        },
+        "Academia": {
+          "Label": "Gelehrsamkeit",
+          "Description": "Erwirbt höheres Wissen und analysiert komplexe Zusammenhänge."
+        },
+        "Folklore": {
+          "Label": "Sagenkunde",
+          "Description": "Kennt alles von lokalen Gerüchten bis zu Heldensagen und begreift Traditionen und ihre Bezüge."
+        },
+        "Navigate": {
+          "Label": "Navigation",
+          "Description": "Legt Routen fest, orientiert sich und liest Gelände oder Karten."
+        },
+        "Manifest": {
+          "Label": "Manifestieren",
+          "Description": "Erzeugt oder projiziert rohe magische Kraft."
+        },
+        "Alter": {
+          "Label": "Verändern",
+          "Description": "Verwandelt Materie, Körper oder physische Zustände."
+        },
+        "Compel": {
+          "Label": "Zwingen",
+          "Description": "Übt Zwang auf Geist, Seele oder Wesen aus."
+        },
+        "Reveal": {
+          "Label": "Enthüllen",
+          "Description": "Legt Wahrheit offen, entdeckt Verborgenes oder gewinnt Einsicht."
+        },
+        "Transpose": {
+          "Label": "Versetzen",
+          "Description": "Verschiebt Positionen, bewegt Objekte oder beugt Zustände und Raum."
+        },
+        "Ward": {
+          "Label": "Schirmen",
+          "Description": "Errichtet Barrieren, Schutz oder magische Verteidigung."
+        },
+        "Category": {
+          "Offense": "Angriff",
+          "Defense": "Verteidigung",
+          "Physical": "Körperlich",
+          "Professional": "Handwerklich",
+          "Social": "Sozial",
+          "Intellectual": "Intellektuell",
+          "Magic": "Magie"
+        }
+      },
+      "Resistance": {
+        "Label": "Resistenzen",
+        "Snap": {
+          "Label": "Reflex",
+          "Description": "Unmittelbare Reflexreaktion auf plötzliche Bedrohungen."
+        },
+        "Grit": {
+          "Label": "Zähigkeit",
+          "Description": "Körperliche Widerstandskraft gegen Schmerz, Gifte und Witterung."
+        },
+        "Resolve": {
+          "Label": "Entschlossenheit",
+          "Description": "Mentale Widerstandskraft gegen Furcht, Einfluss oder Verzweiflung."
+        }
+      },
+      "Reserve": {
+        "Power": {
+          "Label": "Kraft",
+          "Description": "Körperliche Stärke und Anstrengung."
+        },
+        "Grace": {
+          "Label": "Anmut",
+          "Description": "Präzision, Bewegung, Koordination."
+        },
+        "Will": {
+          "Label": "Wille",
+          "Description": "Fokus, Absicht, mentaler Druck, Durchsetzung."
+        }
+      },
+      "NPC": {
+        "Stat": {
+          "HP": {
+            "Label": "Trefferpunkte",
+            "Description": "Wie viel Schaden die Figur einstecken kann, bevor sich ihr Verhalten im Kampf ändert."
+          },
+          "Wounds": {
+            "Label": "Wunden",
+            "Description": "Wie viele Zustände der NSC durchläuft, bevor er zu Boden geht."
+          }
+        }
+      },
+      "Path": {
+        "Virtue": {
+          "Label": "Tugend",
+          "Description": "Fähigkeit zu Disziplin und moralischer Beständigkeit.",
+          "Steps": {
+            "Discipline": "Disziplin",
+            "Constancy": "Beständigkeit",
+            "Integrity": "Integrität"
+          }
+        },
+        "Ward": {
+          "Label": "Schutz",
+          "Description": "Innere Grenzen, geistige Haltung, persönliches Heiligtum.",
+          "Steps": {
+            "Presence": "Präsenz",
+            "Stewardship": "Verantwortung",
+            "Renewal": "Erneuerung"
+          }
+        },
+        "Vice": {
+          "Label": "Sünder",
+          "Description": "Zug zu Impuls, Schwäche und Selbstvergnügen.",
+          "Steps": {
+            "Indulgence": "Genuss",
+            "Decay": "Verfall",
+            "Depravity": "Verderbtheit"
+          }
+        },
+        "Ruin": {
+          "Label": "Zerstörer",
+          "Description": "Bruch, Verfall, das Zerbrechen des Selbst.",
+          "Steps": {
+            "Desire": "Begierde",
+            "Despair": "Verzweiflung",
+            "Righteousness": "Selbstgerechtigkeit"
+          }
+        }
+      }
+    },
+    "Item": {
+      "Type": {
+        "Held": "Geführt",
+        "Worn": "Getragen",
+        "Ability": "Fähigkeit",
+        "Spell": "Zauber"
+      },
+      "Category": {
+        "Held": "Geführte Gegenstände",
+        "Worn": "Getragene Ausrüstung",
+        "Ability": "Fähigkeiten",
+        "Spell": "Zauber"
       },
       "Inventory": {
-        "Label": "Ausrüstung",
-        "Tooltip": "Alle getragenen Gegenstände ansehen"
-      },
-      "Notes": {
-        "Label": "Notizen",
-        "Tooltip": "Charakternotizen ansehen"
+        "Empty": "Du trägst momentan keine Gegenstände.",
+        "Edit": "Gegenstand bearbeiten",
+        "Delete": "Gegenstand löschen",
+        "TypeLabel": "Typ"
       }
     },
-    "Sheets": {
-      "PlayerCharacter": "Spielercharakter",
-      "NPC": "NSC",
-      "Item": "Triskel-Gegenstand"
-    },
-    "ActionControls": {
-      "SelectAction": "Aktion wählen",
-      "Active": "Aktiv"
-    },
-    "ActorTypes": {
-      "Character": "Spielercharakter",
-      "NPC": "NSC"
-    },
-    "ItemTypes": {
-      "Held": "Geführt",
-      "Worn": "Getragen",
-      "Ability": "Fähigkeit",
-      "Spell": "Zauber"
-    },
-    "ItemToggles": {
-      "Held": "Gehaltenen Gegenstand umschalten",
-      "Worn": "Getragene Ausrüstung umschalten",
-      "Ability": "Fähigkeit umschalten",
-      "Spell": "Zauber umschalten"
-    },
-    "Items": {
-      "Empty": "Du trägst momentan keine Gegenstände.",
-      "Edit": "Gegenstand bearbeiten",
-      "Delete": "Gegenstand löschen",
-      "TypeLabel": "Typ"
-    },
-    "Tiers": {
-      "Novice": { "Label": "Novize" },
-      "Apprentice": { "Label": "Lehrling" },
-      "Adept": { "Label": "Adept" },
-      "Veteran": { "Label": "Veteran" },
-      "Master": { "Label": "Meister" },
-      "Paragon": { "Label": "Paragon" }
-    },
-    "SkillCategories": {
-      "Offense": "Angriff",
-      "Defense": "Verteidigung",
-      "Physical": "Körperlich",
-      "Professional": "Handwerklich",
-      "Social": "Sozial",
-      "Intellectual": "Intellektuell",
-      "Magic": "Magie"
-    },
-    "Phases": {
-      "Combat": "Kampf",
-      "Travel": "Reise",
-      "Preparation": "Vorbereitung",
-      "Any": "Beliebig"
-    },
-    "Skills": {
-      "Label": "Fertigkeiten",
-      "ModLabel": "Mod",
-      "Strike": {
-        "Label": "Schlag",
-        "Description": "Führt direkte Nahkampfangriffe aus."
-      },
+    "Action": {
       "Control": {
-        "Label": "Kontrolle",
-        "Description": "Beeinflusst Position, Gleichgewicht oder Hebel im Nahkampf."
+        "SelectAction": "Aktion wählen",
+        "Active": "Aktiv"
       },
-      "Aim": {
-        "Label": "Zielen",
-        "Description": "Setzt präzise Fernkampfangriffe um."
+      "Phase": {
+        "Combat": "Kampf",
+        "Travel": "Reise",
+        "Preparation": "Vorbereitung",
+        "Any": "Beliebig"
       },
-      "Guard": {
-        "Label": "Parade",
-        "Description": "Lenkt Angriffe mit Technik ab oder fängt sie ab."
-      },
-      "Brace": {
-        "Label": "Standhalten",
-        "Description": "Fängt Wucht ab und bleibt gegen Aufprall standfest."
-      },
-      "Evasion": {
-        "Label": "Ausweichen",
-        "Description": "Entgeht Angriffen durch Beweglichkeit und trainierte Abläufe."
-      },
-      "Athletics": {
-        "Label": "Athletik",
-        "Description": "Meistert körperliche Leistungen in Kraft, Geschwindigkeit oder Bewegung."
-      },
-      "Notice": {
-        "Label": "Wahrnehmung",
-        "Description": "Erkennt Details, Veränderungen oder Verborgenes in der Umgebung."
-      },
-      "Stealth": {
-        "Label": "Heimlichkeit",
-        "Description": "Vermeidet Entdeckung durch Lautlosigkeit, Deckung oder Timing."
-      },
-      "Craft": {
-        "Label": "Handwerk",
-        "Description": "Baut, repariert oder erschafft funktionale Ausrüstung und Werkzeuge."
-      },
-      "Track": {
-        "Label": "Spurenlesen",
-        "Description": "Folgt Fährten, Zeichen und Störungen in der Umgebung."
-      },
-      "HandleBeasts": {
-        "Label": "Tiere führen",
-        "Description": "Führt Reittiere und Tiere, beruhigt oder lenkt Kreaturen."
-      },
-      "Impress": {
-        "Label": "Beeindrucken",
-        "Description": "Formt den Eindruck, den andere von dir haben, durch Auftreten und Wirkung."
-      },
-      "Influence": {
-        "Label": "Beeinflussen",
-        "Description": "Lenkt die Absichten anderer durch Überzeugung oder Druck."
-      },
-      "Insight": {
-        "Label": "Einsicht",
-        "Description": "Liest Motive, Muster und emotionale Signale."
-      },
-      "Academia": {
-        "Label": "Gelehrsamkeit",
-        "Description": "Erwirbt höheres Wissen und analysiert komplexe Zusammenhänge."
-      },
-      "Folklore": {
-        "Label": "Sagenkunde",
-        "Description": "Kennt alles von lokalen Gerüchten bis zu Heldensagen und begreift Traditionen und ihre Bezüge."
-      },
-      "Navigate": {
-        "Label": "Navigation",
-        "Description": "Legt Routen fest, orientiert sich und liest Gelände oder Karten."
-      },
-      "Manifest": {
-        "Label": "Manifestieren",
-        "Description": "Erzeugt oder projiziert rohe magische Kraft."
-      },
-      "Alter": {
-        "Label": "Verändern",
-        "Description": "Verwandelt Materie, Körper oder physische Zustände."
-      },
-      "Compel": {
-        "Label": "Zwingen",
-        "Description": "Übt Zwang auf Geist, Seele oder Wesen aus."
-      },
-      "Reveal": {
-        "Label": "Enthüllen",
-        "Description": "Legt Wahrheit offen, entdeckt Verborgenes oder gewinnt Einsicht."
-      },
-      "Transpose": {
-        "Label": "Versetzen",
-        "Description": "Verschiebt Positionen, bewegt Objekte oder beugt Zustände und Raum."
-      },
-      "Ward": {
-        "Label": "Schirmen",
-        "Description": "Errichtet Barrieren, Schutz oder magische Verteidigung."
-      }
-    },
-    "Resistances": {
-      "Label": "Resistenzen",
-      "Snap": {
-        "Label": "Reflex",
-        "Description": "Unmittelbare Reflexreaktion auf plötzliche Bedrohungen."
-      },
-      "Grit": {
-        "Label": "Zähigkeit",
-        "Description": "Körperliche Widerstandskraft gegen Schmerz, Gifte und Witterung."
-      },
-      "Resolve": {
-        "Label": "Entschlossenheit",
-        "Description": "Mentale Widerstandskraft gegen Furcht, Einfluss oder Verzweiflung."
-      }
-    },
-    "Reserves": {
-      "Power": {
-        "Label": "Kraft",
-        "Description": "Körperliche Stärke und Anstrengung."
-      },
-      "Grace": {
-        "Label": "Anmut",
-        "Description": "Präzision, Bewegung, Koordination."
-      },
-      "Will": {
-        "Label": "Wille",
-        "Description": "Fokus, Absicht, mentaler Druck, Durchsetzung."
-      }
-    },
-    "NPCStats": {
-      "HP": {
-        "Label": "Trefferpunkte",
-        "Description": "Wie viel Schaden die Figur einstecken kann, bevor sich ihr Verhalten im Kampf ändert."
-      },
-      "Wounds": {
-        "Label": "Wunden",
-        "Description": "Wie viele Zustände der NSC durchläuft, bevor er zu Boden geht."
-      }
-    },
-    "Paths": {
-      "Virtue": {
-        "Label": "Tugend",
-        "Description": "Fähigkeit zu Disziplin und moralischer Beständigkeit.",
-        "Steps": {
-          "Discipline": "Disziplin",
-          "Constancy": "Beständigkeit",
-          "Integrity": "Integrität"
+      "Base": {
+        "Strike": {
+          "Label": "Schlag",
+          "Description": "Direkter Angriff. Zusätzliche Kraft erhöht die Wucht."
+        },
+        "Bind": {
+          "Label": "Binden",
+          "Description": "Blockiert die Waffenlinie des Gegners und verhängt gebunden(X)."
+        },
+        "Expose": {
+          "Label": "Öffnen",
+          "Description": "Erzwingt eine Lücke in der Verteidigung des Gegners und verhängt offengelegt(X)."
+        },
+        "Push": {
+          "Label": "Stoßen",
+          "Description": "Drängt den Gegner zurück und verhängt gestoßen(X)."
+        },
+        "Brace": {
+          "Label": "Standhalten",
+          "Description": "Nimmt eine feste Haltung ein; verringert eingehende Kontrolleffekte."
+        },
+        "Guard": {
+          "Label": "Wache",
+          "Description": "Nimmt eine defensive Struktur ein; verbessert den nächsten Paradeversuch."
+        },
+        "Evade": {
+          "Label": "Ausweichen",
+          "Description": "Tritt leicht aus der Linie; verbessert den nächsten Ausweichversuch."
+        },
+        "Grapple": {
+          "Label": "Ringen",
+          "Description": "Unbewaffnete Fesselung, die die Bewegung des Ziels einschränkt."
+        },
+        "Break": {
+          "Label": "Lösen",
+          "Description": "Schüttelt negative Zustände ab; reduziert gebunden/offengelegt/gestoßen."
         }
       },
-      "Ward": {
-        "Label": "Schutz",
-        "Description": "Innere Grenzen, geistige Haltung, persönliches Heiligtum.",
-        "Steps": {
-          "Presence": "Präsenz",
-          "Stewardship": "Verantwortung",
-          "Renewal": "Erneuerung"
+      "Advanced": {
+        "Shoot": {
+          "Label": "Schießen",
+          "Description": "Löst einen gezielten Fernangriff mit Ziel und Timing aus."
+        },
+        "Throw": {
+          "Label": "Werfen",
+          "Description": "Schleudert eine Waffe oder ein Objekt, um aus der Distanz zu treffen."
         }
       },
-      "Vice": {
-        "Label": "Sünder",
-        "Description": "Zug zu Impuls, Schwäche und Selbstvergnügen.",
-        "Steps": {
-          "Indulgence": "Genuss",
-          "Decay": "Verfall",
-          "Depravity": "Verderbtheit"
-        }
-      },
-      "Ruin": {
-        "Label": "Zerstörer",
-        "Description": "Bruch, Verfall, das Zerbrechen des Selbst.",
-        "Steps": {
-          "Desire": "Begierde",
-          "Despair": "Verzweiflung",
-          "Righteousness": "Selbstgerechtigkeit"
+      "Spell": {
+        "Arc": {
+          "Label": "Lichtbogen",
+          "Description": "Entlädt einen kurzen arkanen Bogen aus Energie."
+        },
+        "Glue": {
+          "Label": "Leim",
+          "Description": "Erzeugt ein kleines Areal aus klebriger Flüssigkeit.\n1-2 -> Entblößt\n3-4 -> Verlangsamt\n5+ -> Gepackt"
+        },
+        "RebukeEvil": {
+          "Label": "Böses Zurückweisen",
+          "Description": "Drängt alle Wesen mit bösen Absichten in der Nähe zurück.\n0-1 -> Gestoßen 1\n2-3 -> Gestoßen 2\n4-5 -> Gestoßen 3\n6+ -> Gestoßen 4"
+        },
+        "ProtectivePrayer": {
+          "Label": "Schutzgebet",
+          "Description": "Verleiht einem Verbündeten gegen den nächsten Angriff den Zustand Gefestigt 1+."
         }
       }
     },
-    "BaseActions": {
-      "Strike": {
-        "Label": "Schlag",
-        "Description": "Direkter Angriff. Zusätzliche Kraft erhöht die Wucht."
-      },
-      "Bind": {
-        "Label": "Binden",
-        "Description": "Blockiert die Waffenlinie des Gegners und verhängt gebunden(X)."
-      },
-      "Expose": {
-        "Label": "Öffnen",
-        "Description": "Erzwingt eine Lücke in der Verteidigung des Gegners und verhängt offengelegt(X)."
-      },
-      "Push": {
-        "Label": "Stoßen",
-        "Description": "Drängt den Gegner zurück und verhängt gestoßen(X)."
-      },
-      "Brace": {
-        "Label": "Standhalten",
-        "Description": "Nimmt eine feste Haltung ein; verringert eingehende Kontrolleffekte."
-      },
-      "Guard": {
-        "Label": "Wache",
-        "Description": "Nimmt eine defensive Struktur ein; verbessert den nächsten Paradeversuch."
-      },
-      "Evade": {
-        "Label": "Ausweichen",
-        "Description": "Tritt leicht aus der Linie; verbessert den nächsten Ausweichversuch."
-      },
-      "Grapple": {
-        "Label": "Ringen",
-        "Description": "Unbewaffnete Fesselung, die die Bewegung des Ziels einschränkt."
-      },
-      "Break": {
-        "Label": "Lösen",
-        "Description": "Schüttelt negative Zustände ab; reduziert gebunden/offengelegt/gestoßen."
-      }
-    },
-    "AdvancedActions": {
-      "Shoot": {
-        "Label": "Schießen",
-        "Description": "Löst einen gezielten Fernangriff mit Ziel und Timing aus."
-      },
-      "Throw": {
-        "Label": "Werfen",
-        "Description": "Schleudert eine Waffe oder ein Objekt, um aus der Distanz zu treffen."
-      }
-    },
-    "Spells": {
-      "Arc": {
-        "Label": "Lichtbogen",
-        "Description": "Entlädt einen kurzen arkanen Bogen aus Energie."
-      },
-      "Glue": {
-        "Label": "Leim",
-        "Description": "Erzeugt ein kleines Areal aus klebriger Flüssigkeit.\n1-2 -> Entblößt\n3-4 -> Verlangsamt\n5+ -> Gepackt"
-      },
-      "RebukeEvil": {
-        "Label": "Böses Zurückweisen",
-        "Description": "Drängt alle Wesen mit bösen Absichten in der Nähe zurück.\n0-1 -> Gestoßen 1\n2-3 -> Gestoßen 2\n4-5 -> Gestoßen 3\n6+ -> Gestoßen 4"
-      },
-      "ProtectivePrayer": {
-        "Label": "Schutzgebet",
-        "Description": "Verleiht einem Verbündeten gegen den nächsten Angriff den Zustand Gefestigt 1+."
-      }
-    },
-    "Forms": {
+    "Form": {
       "PowerStrike": {
         "Label": "Kraftschlag",
         "Description": "Gibt Kraft aus, um einen Schlag wesentlich härter treffen zu lassen als gewöhnlich."
@@ -359,6 +374,13 @@
       "Blackmagic": {
         "Label": "Schwarze Magie",
         "Description": "Der Zauberer legt ein Stück seiner Lebenskraft in den Zauber."
+      }
+    },
+    "Misc": {
+      "Sheet": {
+        "PlayerCharacter": "Spielercharakter",
+        "NPC": "NSC",
+        "Item": "Triskel-Gegenstand"
       }
     }
   }

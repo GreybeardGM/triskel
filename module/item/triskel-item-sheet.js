@@ -1,7 +1,7 @@
 import { onEditImage } from "../actor/sheet-helpers.js";
 import { TRISKEL_ALL_ACTIONS } from "../codex/action-codex.js";
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
-import { TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+import { ITEM_CATEGORY_CONFIG, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
 const localize = (value) => {
   if (!value) return "";
@@ -53,19 +53,19 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static PARTS = {
     header: {
       id: "header",
-      template: "systems/triskel/templates/item/parts/triskel-item-header.hbs"
+      template: "systems/triskel/templates/item/triskel-item-header.hbs"
     },
     actions: {
       id: "actions",
-      template: "systems/triskel/templates/item/parts/triskel-item-actions.hbs"
+      template: "systems/triskel/templates/item/triskel-item-actions.hbs"
     },
     forms: {
       id: "forms",
-      template: "systems/triskel/templates/item/parts/triskel-item-forms.hbs"
+      template: "systems/triskel/templates/item/triskel-item-forms.hbs"
     },
     modifiers: {
       id: "modifiers",
-      template: "systems/triskel/templates/item/parts/triskel-item-modifiers.hbs"
+      template: "systems/triskel/templates/item/triskel-item-modifiers.hbs"
     }
   };
 
@@ -76,8 +76,9 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.system ??= this.document.system ?? {};
 
     const itemTypeKey = context.item?.type ?? "";
+    const labelKey = ITEM_CATEGORY_CONFIG[itemTypeKey]?.itemLabelKey ?? `TRISKEL.Item.Type.${itemTypeKey}`;
 
-    context.itemTypeLabel = localize(`TRISKEL.ItemTypes.${itemTypeKey}`) || itemTypeKey;
+    context.itemTypeLabel = localize(labelKey) || itemTypeKey;
 
     context.referenceOptions = {
       actions: ACTION_REFERENCE_OPTIONS(),

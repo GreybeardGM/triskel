@@ -5,100 +5,100 @@
 export const TRISKEL_FORMS = [
   {
     key: "power_strike",
-    label: "TRISKEL.Forms.PowerStrike.Label",
+    label: "TRISKEL.Form.PowerStrike.Label",
     cost: 1,
     reserve: "power",
     keywords: ["strike"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.PowerStrike.Description"
+    description: "TRISKEL.Form.PowerStrike.Description"
   },
   {
     key: "tripping_hook",
-    label: "TRISKEL.Forms.TrippingHook.Label",
+    label: "TRISKEL.Form.TrippingHook.Label",
     cost: 1,
     reserve: "grace",
     keywords: ["expose"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.TrippingHook.Description"
+    description: "TRISKEL.Form.TrippingHook.Description"
   },
   {
     key: "locking_bind",
-    label: "TRISKEL.Forms.LockingBind.Label",
+    label: "TRISKEL.Form.LockingBind.Label",
     cost: 1,
     reserve: "grace",
     keywords: ["bind"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.LockingBind.Description"
+    description: "TRISKEL.Form.LockingBind.Description"
   },
   {
     key: "precision_thrust",
-    label: "TRISKEL.Forms.PrecisionThrust.Label",
+    label: "TRISKEL.Form.PrecisionThrust.Label",
     cost: 1,
     reserve: "grace",
     keywords: ["strike"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.PrecisionThrust.Description"
+    description: "TRISKEL.Form.PrecisionThrust.Description"
   },
   {
     key: "push_through",
-    label: "TRISKEL.Forms.PushThrough.Label",
+    label: "TRISKEL.Form.PushThrough.Label",
     cost: 1,
     reserve: "power",
     keywords: ["push"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.PushThrough.Description"
+    description: "TRISKEL.Form.PushThrough.Description"
   },
   {
     key: "counterguard",
-    label: "TRISKEL.Forms.Counterguard.Label",
+    label: "TRISKEL.Form.Counterguard.Label",
     cost: 1,
     reserve: "grace",
     keywords: ["guard"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.Counterguard.Description"
+    description: "TRISKEL.Form.Counterguard.Description"
   },
   {
     key: "break_stance",
-    label: "TRISKEL.Forms.BreakStance.Label",
+    label: "TRISKEL.Form.BreakStance.Label",
     cost: 1,
     reserve: "power",
     keywords: ["strike"],
-    description: "TRISKEL.Forms.BreakStance.Description"
+    description: "TRISKEL.Form.BreakStance.Description"
   },
   {
     key: "drag",
-    label: "TRISKEL.Forms.Drag.Label",
+    label: "TRISKEL.Form.Drag.Label",
     cost: 1,
     reserve: "grace",
     keywords: ["push"],
     modifiers: [{ skill: 1 }],
-    description: "TRISKEL.Forms.Drag.Description"
+    description: "TRISKEL.Form.Drag.Description"
   },
   {
     key: "shield_pull",
-    label: "TRISKEL.Forms.ShieldPull.Label",
+    label: "TRISKEL.Form.ShieldPull.Label",
     cost: 1,
     reserve: "grace",
     keywords: ["bind"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.ShieldPull.Description"
+    description: "TRISKEL.Form.ShieldPull.Description"
   },
   {
     key: "shield_cover",
-    label: "TRISKEL.Forms.ShieldCover.Label",
+    label: "TRISKEL.Form.ShieldCover.Label",
     cost: 1,
     reserve: "grace",
     keywords: ["evasion"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.ShieldCover.Description"
+    description: "TRISKEL.Form.ShieldCover.Description"
   },
   {
     key: "blackmagic",
-    label: "TRISKEL.Forms.Blackmagic.Label",
+    label: "TRISKEL.Form.Blackmagic.Label",
     cost: 1,
     reserve: "power",
     keywords: ["manifestation"],
     modifiers: [{ skill: 2 }],
-    description: "TRISKEL.Forms.Blackmagic.Description"
+    description: "TRISKEL.Form.Blackmagic.Description"
   }
 ];
