@@ -108,19 +108,25 @@
           "value": 0
         }
       },
-      "resistances": {
-        "snap": {
-          "id": "snap",
-          "value": 0
-        },
-        "grit": {
-          "id": "grit",
-          "value": 0
-        },
-        "resolve": {
-          "id": "resolve",
-          "value": 0
+        "resistances": {
+          "snap": {
+            "id": "snap",
+            "value": 0
+          },
+          "grit": {
+            "id": "grit",
+            "value": 0
+          },
+          "resolve": {
+            "id": "resolve",
+            "value": 0
         }
+      },
+      "equippedGear": {
+        "mainHand": "",
+        "offHand": "",
+        "armor": [],
+        "preparedSpells": []
       }
     }
     },
