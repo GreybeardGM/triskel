@@ -123,10 +123,10 @@
         }
       },
       "equippedGear": {
-        "Held": [],
-        "Worn": [],
-        "Spells": [],
-        "Abilities": []
+        "held": [],
+        "worn": [],
+        "spell": [],
+        "ability": []
       }
     }
     },

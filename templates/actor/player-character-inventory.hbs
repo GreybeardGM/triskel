@@ -19,7 +19,6 @@
                     type="button"
                     class="inventory-list__toggle is-interactive {{#if item.isEquipToggleActive}}is-selected{{/if}}"
                     data-action="{{category.toggleAction}}"
-                    title="{{category.toggleTitle}}"
                   >
                     {{#if item.isEquipToggleActive}}
                       <i class="fa-solid fa-check"></i>
@@ -32,15 +31,12 @@
                   <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
                 {{/if}}
                 <span class="inventory-list__item-name">{{item.name}}</span>
-                {{#if item.typeLabel}}
-                  <span class="inventory-list__item-type">{{item.typeLabel}}</span>
-                {{/if}}
                 <div class="inventory-list__item-actions">
                   <button
                     type="button"
                     class="inventory-list__item-action"
                     data-action="editItem"
-                    title="{{localize 'TRISKEL.Items.Edit'}}"
+                    title="{{localize 'TRISKEL.Item.Inventory.Edit'}}"
                   >
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
@@ -48,7 +44,7 @@
                     type="button"
                     class="inventory-list__item-action"
                     data-action="deleteItem"
-                    title="{{localize 'TRISKEL.Items.Delete'}}"
+                    title="{{localize 'TRISKEL.Item.Inventory.Delete'}}"
                   >
                     <i class="fa-solid fa-trash"></i>
                   </button>
@@ -56,14 +52,14 @@
               </li>
             {{/each}}
           {{else}}
-            <li class="inventory-list__empty">{{localize "TRISKEL.Items.Empty"}}</li>
+            <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
           {{/if}}
         </ul>
       </div>
     {{/each}}
   {{else}}
     <ul class="inventory-list">
-      <li class="inventory-list__empty">{{localize "TRISKEL.Items.Empty"}}</li>
+      <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
     </ul>
   {{/if}}
 </section>

@@ -3,33 +3,56 @@
 export const TRISKEL_TIERS = {
   novice: {
     id: "novice",
-    label: "TRISKEL.Tiers.Novice.Label",
+    label: "TRISKEL.Actor.Tier.Novice.Label",
     tier: 1
   },
   apprentice: {
     id: "apprentice",
-    label: "TRISKEL.Tiers.Apprentice.Label",
+    label: "TRISKEL.Actor.Tier.Apprentice.Label",
     tier: 2
   },
   adept: {
     id: "adept",
-    label: "TRISKEL.Tiers.Adept.Label",
+    label: "TRISKEL.Actor.Tier.Adept.Label",
     tier: 3
   },
   veteran: {
     id: "veteran",
-    label: "TRISKEL.Tiers.Veteran.Label",
+    label: "TRISKEL.Actor.Tier.Veteran.Label",
     tier: 4
   },
   master: {
     id: "master",
-    label: "TRISKEL.Tiers.Master.Label",
+    label: "TRISKEL.Actor.Tier.Master.Label",
     tier: 5
   },
   paragon: {
     id: "paragon",
-    label: "TRISKEL.Tiers.Paragon.Label",
+    label: "TRISKEL.Actor.Tier.Paragon.Label",
     tier: 6
+  }
+};
+
+export const ITEM_CATEGORY_CONFIG = {
+  held: {
+    itemLabelKey: "TRISKEL.Item.Type.Held",
+    categoryLabelKey: "TRISKEL.Item.Category.Held",
+    toggleAction: "toggleHeldItem"
+  },
+  worn: {
+    itemLabelKey: "TRISKEL.Item.Type.Worn",
+    categoryLabelKey: "TRISKEL.Item.Category.Worn",
+    toggleAction: "toggleWornEquip"
+  },
+  ability: {
+    itemLabelKey: "TRISKEL.Item.Type.Ability",
+    categoryLabelKey: "TRISKEL.Item.Category.Ability",
+    toggleAction: "toggleAbility"
+  },
+  spell: {
+    itemLabelKey: "TRISKEL.Item.Type.Spell",
+    categoryLabelKey: "TRISKEL.Item.Category.Spell",
+    toggleAction: "toggleSpell"
   }
 };
 
@@ -38,231 +61,231 @@ export const TRISKEL_SKILLS = {
   /* ---------------------------------- OFFENSE ---------------------------------- */
   strike: {
     id: "strike",
-    label: "TRISKEL.Skills.Strike.Label",
-    description: "TRISKEL.Skills.Strike.Description",
+    label: "TRISKEL.Actor.Skill.Strike.Label",
+    description: "TRISKEL.Actor.Skill.Strike.Description",
     category: "offense",
-    categoryLabel: "TRISKEL.SkillCategories.Offense",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Offense",
     phase: "combat",
-    phaseLabel: "TRISKEL.Phases.Combat"
+    phaseLabel: "TRISKEL.Action.Phase.Combat"
   },
   control: {
     id: "control",
-    label: "TRISKEL.Skills.Control.Label",
-    description: "TRISKEL.Skills.Control.Description",
+    label: "TRISKEL.Actor.Skill.Control.Label",
+    description: "TRISKEL.Actor.Skill.Control.Description",
     category: "offense",
-    categoryLabel: "TRISKEL.SkillCategories.Offense",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Offense",
     phase: "combat",
-    phaseLabel: "TRISKEL.Phases.Combat"
+    phaseLabel: "TRISKEL.Action.Phase.Combat"
   },
   aim: {
     id: "aim",
-    label: "TRISKEL.Skills.Aim.Label",
-    description: "TRISKEL.Skills.Aim.Description",
+    label: "TRISKEL.Actor.Skill.Aim.Label",
+    description: "TRISKEL.Actor.Skill.Aim.Description",
     category: "offense",
-    categoryLabel: "TRISKEL.SkillCategories.Offense",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Offense",
     phase: "combat",
-    phaseLabel: "TRISKEL.Phases.Combat"
+    phaseLabel: "TRISKEL.Action.Phase.Combat"
   },
 
   /* ---------------------------------- DEFENSE ---------------------------------- */
   guard: {
     id: "guard",
-    label: "TRISKEL.Skills.Guard.Label",
-    description: "TRISKEL.Skills.Guard.Description",
+    label: "TRISKEL.Actor.Skill.Guard.Label",
+    description: "TRISKEL.Actor.Skill.Guard.Description",
     category: "defense",
-    categoryLabel: "TRISKEL.SkillCategories.Defense",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Defense",
     phase: "combat",
-    phaseLabel: "TRISKEL.Phases.Combat"
+    phaseLabel: "TRISKEL.Action.Phase.Combat"
   },
   brace: {
     id: "brace",
-    label: "TRISKEL.Skills.Brace.Label",
-    description: "TRISKEL.Skills.Brace.Description",
+    label: "TRISKEL.Actor.Skill.Brace.Label",
+    description: "TRISKEL.Actor.Skill.Brace.Description",
     category: "defense",
-    categoryLabel: "TRISKEL.SkillCategories.Defense",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Defense",
     phase: "combat",
-    phaseLabel: "TRISKEL.Phases.Combat"
+    phaseLabel: "TRISKEL.Action.Phase.Combat"
   },
   evasion: {
     id: "evasion",
-    label: "TRISKEL.Skills.Evasion.Label",
-    description: "TRISKEL.Skills.Evasion.Description",
+    label: "TRISKEL.Actor.Skill.Evasion.Label",
+    description: "TRISKEL.Actor.Skill.Evasion.Description",
     category: "defense",
-    categoryLabel: "TRISKEL.SkillCategories.Defense",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Defense",
     phase: "combat",
-    phaseLabel: "TRISKEL.Phases.Combat"
+    phaseLabel: "TRISKEL.Action.Phase.Combat"
   },
 
   /* --------------------------------- PHYSICAL --------------------------------- */
   athletics: {
     id: "athletics",
-    label: "TRISKEL.Skills.Athletics.Label",
-    description: "TRISKEL.Skills.Athletics.Description",
+    label: "TRISKEL.Actor.Skill.Athletics.Label",
+    description: "TRISKEL.Actor.Skill.Athletics.Description",
     category: "physical",
-    categoryLabel: "TRISKEL.SkillCategories.Physical",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Physical",
     phase: "travel",
-    phaseLabel: "TRISKEL.Phases.Travel"
+    phaseLabel: "TRISKEL.Action.Phase.Travel"
   },
   notice: {
     id: "notice",
-    label: "TRISKEL.Skills.Notice.Label",
-    description: "TRISKEL.Skills.Notice.Description",
+    label: "TRISKEL.Actor.Skill.Notice.Label",
+    description: "TRISKEL.Actor.Skill.Notice.Description",
     category: "physical",
-    categoryLabel: "TRISKEL.SkillCategories.Physical",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Physical",
     phase: "travel",
-    phaseLabel: "TRISKEL.Phases.Travel"
+    phaseLabel: "TRISKEL.Action.Phase.Travel"
   },
   stealth: {
     id: "stealth",
-    label: "TRISKEL.Skills.Stealth.Label",
-    description: "TRISKEL.Skills.Stealth.Description",
+    label: "TRISKEL.Actor.Skill.Stealth.Label",
+    description: "TRISKEL.Actor.Skill.Stealth.Description",
     category: "physical",
-    categoryLabel: "TRISKEL.SkillCategories.Physical",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Physical",
     phase: "travel",
-    phaseLabel: "TRISKEL.Phases.Travel"
+    phaseLabel: "TRISKEL.Action.Phase.Travel"
   },
  
   /* ------------------------------- PROFESSIONAL ------------------------------- */
   craft: {
     id: "craft",
-    label: "TRISKEL.Skills.Craft.Label",
-    description: "TRISKEL.Skills.Craft.Description",
+    label: "TRISKEL.Actor.Skill.Craft.Label",
+    description: "TRISKEL.Actor.Skill.Craft.Description",
     category: "professional",
-    categoryLabel: "TRISKEL.SkillCategories.Professional",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Professional",
     phase: "preparation",
-    phaseLabel: "TRISKEL.Phases.Preparation"
+    phaseLabel: "TRISKEL.Action.Phase.Preparation"
   },
   track: {
     id: "track",
-    label: "TRISKEL.Skills.Track.Label",
-    description: "TRISKEL.Skills.Track.Description",
+    label: "TRISKEL.Actor.Skill.Track.Label",
+    description: "TRISKEL.Actor.Skill.Track.Description",
     category: "professional",
-    categoryLabel: "TRISKEL.SkillCategories.Professional",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Professional",
     phase: "travel",
-    phaseLabel: "TRISKEL.Phases.Travel"
+    phaseLabel: "TRISKEL.Action.Phase.Travel"
   },
   handleBeasts: {
     id: "handleBeasts",
-    label: "TRISKEL.Skills.HandleBeasts.Label",
-    description: "TRISKEL.Skills.HandleBeasts.Description",
+    label: "TRISKEL.Actor.Skill.HandleBeasts.Label",
+    description: "TRISKEL.Actor.Skill.HandleBeasts.Description",
     category: "professional",
-    categoryLabel: "TRISKEL.SkillCategories.Professional",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Professional",
     phase: "travel",
-    phaseLabel: "TRISKEL.Phases.Travel"
+    phaseLabel: "TRISKEL.Action.Phase.Travel"
   },
   
   /* ---------------------------------- SOCIAL ---------------------------------- */
   impress: {
     id: "impress",
-    label: "TRISKEL.Skills.Impress.Label",
-    description: "TRISKEL.Skills.Impress.Description",
+    label: "TRISKEL.Actor.Skill.Impress.Label",
+    description: "TRISKEL.Actor.Skill.Impress.Description",
     category: "social",
-    categoryLabel: "TRISKEL.SkillCategories.Social",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Social",
     phase: "preparation",
-    phaseLabel: "TRISKEL.Phases.Preparation"
+    phaseLabel: "TRISKEL.Action.Phase.Preparation"
   },
   influence: {
     id: "influence",
-    label: "TRISKEL.Skills.Influence.Label",
-    description: "TRISKEL.Skills.Influence.Description",
+    label: "TRISKEL.Actor.Skill.Influence.Label",
+    description: "TRISKEL.Actor.Skill.Influence.Description",
     category: "social",
-    categoryLabel: "TRISKEL.SkillCategories.Social",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Social",
     phase: "preparation",
-    phaseLabel: "TRISKEL.Phases.Preparation"
+    phaseLabel: "TRISKEL.Action.Phase.Preparation"
   },
   insight: {
     id: "insight",
-    label: "TRISKEL.Skills.Insight.Label",
-    description: "TRISKEL.Skills.Insight.Description",
+    label: "TRISKEL.Actor.Skill.Insight.Label",
+    description: "TRISKEL.Actor.Skill.Insight.Description",
     category: "social",
-    categoryLabel: "TRISKEL.SkillCategories.Social",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Social",
     phase: "preparation",
-    phaseLabel: "TRISKEL.Phases.Preparation"
+    phaseLabel: "TRISKEL.Action.Phase.Preparation"
   },
 
   /* ------------------------------- INTELLECTUAL ------------------------------- */
   academia: {
     id: "academia",
-    label: "TRISKEL.Skills.Academia.Label",
-    description: "TRISKEL.Skills.Academia.Description",
+    label: "TRISKEL.Actor.Skill.Academia.Label",
+    description: "TRISKEL.Actor.Skill.Academia.Description",
     category: "intellectual",
-    categoryLabel: "TRISKEL.SkillCategories.Intellectual",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Intellectual",
     phase: "preparation",
-    phaseLabel: "TRISKEL.Phases.Preparation"
+    phaseLabel: "TRISKEL.Action.Phase.Preparation"
   },
   folklore: {
     id: "folklore",
-    label: "TRISKEL.Skills.Folklore.Label",
-    description: "TRISKEL.Skills.Folklore.Description",
+    label: "TRISKEL.Actor.Skill.Folklore.Label",
+    description: "TRISKEL.Actor.Skill.Folklore.Description",
     category: "intellectual",
-    categoryLabel: "TRISKEL.SkillCategories.Intellectual",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Intellectual",
     phase: "preparation",
-    phaseLabel: "TRISKEL.Phases.Preparation"
+    phaseLabel: "TRISKEL.Action.Phase.Preparation"
   },
   navigate: {
     id: "navigate",
-    label: "TRISKEL.Skills.Navigate.Label",
-    description: "TRISKEL.Skills.Navigate.Description",
+    label: "TRISKEL.Actor.Skill.Navigate.Label",
+    description: "TRISKEL.Actor.Skill.Navigate.Description",
     category: "intellectual",
-    categoryLabel: "TRISKEL.SkillCategories.Intellectual",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Intellectual",
     phase: "travel",
-    phaseLabel: "TRISKEL.Phases.Travel"
+    phaseLabel: "TRISKEL.Action.Phase.Travel"
   },
 
   /* ----------------------------------- MAGIC ---------------------------------- */
   manifest: {
     id: "manifest",
-    label: "TRISKEL.Skills.Manifest.Label",
-    description: "TRISKEL.Skills.Manifest.Description",
+    label: "TRISKEL.Actor.Skill.Manifest.Label",
+    description: "TRISKEL.Actor.Skill.Manifest.Description",
     category: "magic",
-    categoryLabel: "TRISKEL.SkillCategories.Magic",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Magic",
     phase: "any",
-    phaseLabel: "TRISKEL.Phases.Any"
+    phaseLabel: "TRISKEL.Action.Phase.Any"
   },
   alter: {
     id: "alter",
-    label: "TRISKEL.Skills.Alter.Label",
-    description: "TRISKEL.Skills.Alter.Description",
+    label: "TRISKEL.Actor.Skill.Alter.Label",
+    description: "TRISKEL.Actor.Skill.Alter.Description",
     category: "magic",
-    categoryLabel: "TRISKEL.SkillCategories.Magic",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Magic",
     phase: "any",
-    phaseLabel: "TRISKEL.Phases.Any"
+    phaseLabel: "TRISKEL.Action.Phase.Any"
   },
   compel: {
     id: "compel",
-    label: "TRISKEL.Skills.Compel.Label",
-    description: "TRISKEL.Skills.Compel.Description",
+    label: "TRISKEL.Actor.Skill.Compel.Label",
+    description: "TRISKEL.Actor.Skill.Compel.Description",
     category: "magic",
-    categoryLabel: "TRISKEL.SkillCategories.Magic",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Magic",
     phase: "any",
-    phaseLabel: "TRISKEL.Phases.Any"
+    phaseLabel: "TRISKEL.Action.Phase.Any"
   },
   reveal: {
     id: "reveal",
-    label: "TRISKEL.Skills.Reveal.Label",
-    description: "TRISKEL.Skills.Reveal.Description",
+    label: "TRISKEL.Actor.Skill.Reveal.Label",
+    description: "TRISKEL.Actor.Skill.Reveal.Description",
     category: "magic",
-    categoryLabel: "TRISKEL.SkillCategories.Magic",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Magic",
     phase: "any",
-    phaseLabel: "TRISKEL.Phases.Any"
+    phaseLabel: "TRISKEL.Action.Phase.Any"
   },
   transpose: {
     id: "transpose",
-    label: "TRISKEL.Skills.Transpose.Label",
-    description: "TRISKEL.Skills.Transpose.Description",
+    label: "TRISKEL.Actor.Skill.Transpose.Label",
+    description: "TRISKEL.Actor.Skill.Transpose.Description",
     category: "magic",
-    categoryLabel: "TRISKEL.SkillCategories.Magic",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Magic",
     phase: "any",
-    phaseLabel: "TRISKEL.Phases.Any"
+    phaseLabel: "TRISKEL.Action.Phase.Any"
   },
   ward: {
     id: "ward",
-    label: "TRISKEL.Skills.Ward.Label",
-    description: "TRISKEL.Skills.Ward.Description",
+    label: "TRISKEL.Actor.Skill.Ward.Label",
+    description: "TRISKEL.Actor.Skill.Ward.Description",
     category: "magic",
-    categoryLabel: "TRISKEL.SkillCategories.Magic",
+    categoryLabel: "TRISKEL.Actor.Skill.Category.Magic",
     phase: "any",
-    phaseLabel: "TRISKEL.Phases.Any"
+    phaseLabel: "TRISKEL.Action.Phase.Any"
   }
 
 };
@@ -271,20 +294,20 @@ export const TRISKEL_SKILLS = {
 export const TRISKEL_RESISTANCES = {
   snap: {
     id: "snap",
-    label: "TRISKEL.Resistances.Snap.Label",
-    description: "TRISKEL.Resistances.Snap.Description",
+    label: "TRISKEL.Actor.Resistance.Snap.Label",
+    description: "TRISKEL.Actor.Resistance.Snap.Description",
     phase: "Any"
   },
   grit: {
     id: "grit",
-    label: "TRISKEL.Resistances.Grit.Label",
-    description: "TRISKEL.Resistances.Grit.Description",
+    label: "TRISKEL.Actor.Resistance.Grit.Label",
+    description: "TRISKEL.Actor.Resistance.Grit.Description",
     phase: "Any"
   },
   resolve: {
     id: "resolve",
-    label: "TRISKEL.Resistances.Resolve.Label",
-    description: "TRISKEL.Resistances.Resolve.Description",
+    label: "TRISKEL.Actor.Resistance.Resolve.Label",
+    description: "TRISKEL.Actor.Resistance.Resolve.Description",
     phase: "Any"
   }
 };
@@ -293,20 +316,20 @@ export const TRISKEL_RESISTANCES = {
 export const TRISKEL_RESERVES = {
   power: {
     id: "power",
-    label: "TRISKEL.Reserves.Power.Label",
-    description: "TRISKEL.Reserves.Power.Description",
+    label: "TRISKEL.Actor.Reserve.Power.Label",
+    description: "TRISKEL.Actor.Reserve.Power.Description",
     sortOrder: 1
   },
   grace: {
     id: "grace",
-    label: "TRISKEL.Reserves.Grace.Label",
-    description: "TRISKEL.Reserves.Grace.Description",
+    label: "TRISKEL.Actor.Reserve.Grace.Label",
+    description: "TRISKEL.Actor.Reserve.Grace.Description",
     sortOrder: 2
   },
   will: {
     id: "will",
-    label: "TRISKEL.Reserves.Will.Label",
-    description: "TRISKEL.Reserves.Will.Description",
+    label: "TRISKEL.Actor.Reserve.Will.Label",
+    description: "TRISKEL.Actor.Reserve.Will.Description",
     sortOrder: 3
   }
 };
@@ -331,50 +354,50 @@ export const TRISKEL_NPC_STATS = {
 export const TRISKEL_PATHS = {
   virtue: {
     id: "virtue",
-    label: "TRISKEL.Paths.Virtue.Label",
-    description: "TRISKEL.Paths.Virtue.Description",
+    label: "TRISKEL.Actor.Path.Virtue.Label",
+    description: "TRISKEL.Actor.Path.Virtue.Description",
     sortOrder: 1,
     tags: ["Good", "Moralistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Paths.Virtue.Steps.Discipline" },
-      { tier: 2, label: "TRISKEL.Paths.Virtue.Steps.Constancy" },
-      { tier: 3, label: "TRISKEL.Paths.Virtue.Steps.Integrity" }
+      { tier: 1, label: "TRISKEL.Actor.Path.Virtue.Steps.Discipline" },
+      { tier: 2, label: "TRISKEL.Actor.Path.Virtue.Steps.Constancy" },
+      { tier: 3, label: "TRISKEL.Actor.Path.Virtue.Steps.Integrity" }
     ]
   },
   ward: {
     id: "ward",
-    label: "TRISKEL.Paths.Ward.Label",
-    description: "TRISKEL.Paths.Ward.Description",
+    label: "TRISKEL.Actor.Path.Ward.Label",
+    description: "TRISKEL.Actor.Path.Ward.Description",
     sortOrder: 2,
     tags: ["Good", "Naturalistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Paths.Ward.Steps.Presence" },
-      { tier: 2, label: "TRISKEL.Paths.Ward.Steps.Stewardship" },
-      { tier: 3, label: "TRISKEL.Paths.Ward.Steps.Renewal" }
+      { tier: 1, label: "TRISKEL.Actor.Path.Ward.Steps.Presence" },
+      { tier: 2, label: "TRISKEL.Actor.Path.Ward.Steps.Stewardship" },
+      { tier: 3, label: "TRISKEL.Actor.Path.Ward.Steps.Renewal" }
     ]
   },
   vice: {
     id: "vice",
-    label: "TRISKEL.Paths.Vice.Label",
-    description: "TRISKEL.Paths.Vice.Description",
+    label: "TRISKEL.Actor.Path.Vice.Label",
+    description: "TRISKEL.Actor.Path.Vice.Description",
     sortOrder: 3,
     tags: ["Evil", "Moralistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Paths.Vice.Steps.Indulgence" },
-      { tier: 2, label: "TRISKEL.Paths.Vice.Steps.Decay" },
-      { tier: 3, label: "TRISKEL.Paths.Vice.Steps.Depravity" }
+      { tier: 1, label: "TRISKEL.Actor.Path.Vice.Steps.Indulgence" },
+      { tier: 2, label: "TRISKEL.Actor.Path.Vice.Steps.Decay" },
+      { tier: 3, label: "TRISKEL.Actor.Path.Vice.Steps.Depravity" }
     ]
   },
   ruin: {
     id: "ruin",
-    label: "TRISKEL.Paths.Ruin.Label",
-    description: "TRISKEL.Paths.Ruin.Description",
+    label: "TRISKEL.Actor.Path.Ruin.Label",
+    description: "TRISKEL.Actor.Path.Ruin.Description",
     sortOrder: 4,
     tags: ["Evil", "Naturalistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Paths.Ruin.Steps.Desire" },
-      { tier: 2, label: "TRISKEL.Paths.Ruin.Steps.Despair" },
-      { tier: 3, label: "TRISKEL.Paths.Ruin.Steps.Righteousness" }
+      { tier: 1, label: "TRISKEL.Actor.Path.Ruin.Steps.Desire" },
+      { tier: 2, label: "TRISKEL.Actor.Path.Ruin.Steps.Despair" },
+      { tier: 3, label: "TRISKEL.Actor.Path.Ruin.Steps.Righteousness" }
     ]
   }
 };

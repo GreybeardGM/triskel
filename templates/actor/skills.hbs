@@ -4,7 +4,7 @@
   data-group="{{tabs.skills.group}}"
 >
   {{#if resistances.length}}
-    <h2>{{localize "TRISKEL.Resistances.Label"}}</h2>
+    <h2>{{localize "TRISKEL.Actor.Resistance.Label"}}</h2>
     <div class="resistances-row">
       {{#each resistances as |resistance|}}
         <label class="skill-field" title="{{resistance.description}}">
@@ -20,7 +20,7 @@
     </div>
   {{/if}}
 
-  <h2>{{localize "TRISKEL.Skills.Label"}}</h2>
+  <h2>{{localize "TRISKEL.Actor.Skill.Label"}}</h2>
   <div class="skill-grid">
     {{#each skillColumns as |column|}}
       <div class="skill-column">
@@ -32,7 +32,7 @@
                 <li class="skill-field" title="{{skill.description}}">
                   <span class="skill-label">{{skill.label}}</span>
                   {{#if skill.mod}}
-                    <span class="skill-mod" title="{{localize "TRISKEL.Skills.ModLabel"}}">
+                    <span class="skill-mod" title="{{localize "TRISKEL.Actor.Skill.ModLabel"}}">
                       {{numberFormat skill.mod decimals=0 sign=true}}
                     </span>
                   {{/if}}

@@ -96,13 +96,13 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
 }
 
 const SKILL_CATEGORY_LABELS = {
-  offense: "TRISKEL.SkillCategories.Offense",
-  defense: "TRISKEL.SkillCategories.Defense",
-  physical: "TRISKEL.SkillCategories.Physical",
-  professional: "TRISKEL.SkillCategories.Professional",
-  social: "TRISKEL.SkillCategories.Social",
-  intellectual: "TRISKEL.SkillCategories.Intellectual",
-  magic: "TRISKEL.SkillCategories.Magic"
+  offense: "TRISKEL.Actor.Skill.Category.Offense",
+  defense: "TRISKEL.Actor.Skill.Category.Defense",
+  physical: "TRISKEL.Actor.Skill.Category.Physical",
+  professional: "TRISKEL.Actor.Skill.Category.Professional",
+  social: "TRISKEL.Actor.Skill.Category.Social",
+  intellectual: "TRISKEL.Actor.Skill.Category.Intellectual",
+  magic: "TRISKEL.Actor.Skill.Category.Magic"
 };
 
 const SKILL_COLUMN_LAYOUT = [

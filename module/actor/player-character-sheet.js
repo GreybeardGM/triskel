@@ -1,42 +1,5 @@
 import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
-import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
-
-const ITEM_TYPE_ALIASES = {
-  held: ["held"],
-  worn: ["worn"],
-  ability: ["ability"],
-  spell: ["spell"]
-};
-
-const canonicalItemType = (type) => Object.entries(ITEM_TYPE_ALIASES)
-  .find(([, aliases]) => aliases.includes(type))?.[0] ?? type;
-
-const ITEM_CATEGORY_CONFIG = {
-  held: {
-    labelKey: "TRISKEL.ItemTypes.Held",
-    gearKey: "Held",
-    toggleAction: "toggleHeldItem",
-    toggleTitleKey: "TRISKEL.ItemToggles.Held"
-  },
-  worn: {
-    labelKey: "TRISKEL.ItemTypes.Worn",
-    gearKey: "Worn",
-    toggleAction: "toggleWornEquip",
-    toggleTitleKey: "TRISKEL.ItemToggles.Worn"
-  },
-  ability: {
-    labelKey: "TRISKEL.ItemTypes.Ability",
-    gearKey: "Abilities",
-    toggleAction: "toggleAbility",
-    toggleTitleKey: "TRISKEL.ItemToggles.Ability"
-  },
-  spell: {
-    labelKey: "TRISKEL.ItemTypes.Spell",
-    gearKey: "Spells",
-    toggleAction: "toggleSpell",
-    toggleTitleKey: "TRISKEL.ItemToggles.Spell"
-  }
-};
+import { ITEM_CATEGORY_CONFIG, TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -79,29 +42,29 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           id: "actions",
           group: "sheet",
           icon: "fa-solid fa-bolt",
-          label: "TRISKEL.Tabs.Actions.Label",
-          tooltip: "TRISKEL.Tabs.Actions.Tooltip"
+          label: "TRISKEL.Actor.Tab.Actions.Label",
+          tooltip: "TRISKEL.Actor.Tab.Actions.Tooltip"
         },
         {
           id: "skills",
           group: "sheet",
           icon: "fa-solid fa-shield-halved",
-          label: "TRISKEL.Tabs.Skills.Label",
-          tooltip: "TRISKEL.Tabs.Skills.Tooltip"
+          label: "TRISKEL.Actor.Tab.Skills.Label",
+          tooltip: "TRISKEL.Actor.Tab.Skills.Tooltip"
         },
         {
           id: "inventory",
           group: "sheet",
           icon: "fa-solid fa-suitcase",
-          label: "TRISKEL.Tabs.Inventory.Label",
-          tooltip: "TRISKEL.Tabs.Inventory.Tooltip"
+          label: "TRISKEL.Actor.Tab.Inventory.Label",
+          tooltip: "TRISKEL.Actor.Tab.Inventory.Tooltip"
         },
         {
           id: "notes",
           group: "sheet",
           icon: "fa-solid fa-pen-to-square",
-          label: "TRISKEL.Tabs.Notes.Label",
-          tooltip: "TRISKEL.Tabs.Notes.Tooltip"
+          label: "TRISKEL.Actor.Tab.Notes.Label",
+          tooltip: "TRISKEL.Actor.Tab.Notes.Tooltip"
         }
       ],
       initial: "actions"
@@ -147,11 +110,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       sort: 250
     }
   };
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-  }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
@@ -200,31 +158,34 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.skillColumns = skillColumns;
     const equippedGear = this.document.system?.equippedGear ?? {};
     const equippedLists = Object.fromEntries(
+      Object.entries(ITEM_CATEGORY_CONFIG).map(([type]) => [
+        type,
+        getEquippedList(type, equippedGear)
+      ])
+    );
+
+    const localizedCategoryLabels = Object.fromEntries(
       Object.entries(ITEM_CATEGORY_CONFIG).map(([type, config]) => [
         type,
-        getEquippedList(config.gearKey, equippedGear)
+        {
+          itemLabel: game.i18n.localize(config.itemLabelKey),
+          categoryLabel: game.i18n.localize(config.categoryLabelKey)
+        }
       ])
     );
 
     const items = Array.from(this.document.items ?? []).map(item => {
-      const categoryType = canonicalItemType(item.type);
-      const categoryConfig = ITEM_CATEGORY_CONFIG[categoryType];
-      const typeLabelKey = categoryConfig?.labelKey ?? `TRISKEL.ItemTypes.${categoryType}`;
-      const localizedType = game.i18n.localize(typeLabelKey);
-      const equippedList = categoryConfig ? equippedLists[categoryType] ?? [] : [];
+      const categoryConfig = ITEM_CATEGORY_CONFIG[item.type];
+      const equippedList = categoryConfig ? equippedLists[item.type] ?? [] : [];
       const isEquipToggleActive = categoryConfig ? equippedList.includes(item.id) : false;
-      const toggleTitle = categoryConfig?.toggleTitleKey ? game.i18n.localize(categoryConfig.toggleTitleKey) : "";
-
       return {
         id: item.id,
         name: item.name,
         img: item.img,
         type: item.type,
-        categoryType,
-        typeLabel: localizedType === typeLabelKey ? categoryType : localizedType,
+        categoryType: categoryConfig ? item.type : undefined,
         isEquipToggleActive,
-        toggleAction: categoryConfig?.toggleAction,
-        toggleTitle
+        toggleAction: categoryConfig?.toggleAction
       };
     });
 
@@ -234,9 +195,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.itemsByType = Object.entries(ITEM_CATEGORY_CONFIG).map(([type, config]) => ({
       type,
-      label: game.i18n.localize(config.labelKey),
+      itemLabel: localizedCategoryLabels[type]?.itemLabel ?? game.i18n.localize(config.itemLabelKey),
+      label: localizedCategoryLabels[type]?.categoryLabel ?? game.i18n.localize(config.categoryLabelKey),
       toggleAction: config.toggleAction,
-      toggleTitle: config.toggleTitleKey ? game.i18n.localize(config.toggleTitleKey) : "",
       items: items.filter(item => item.categoryType === type)
     }));
     const tierValue = Number(context.system.tier?.value);
@@ -329,55 +290,55 @@ async function onToggleWornEquip(event, target) {
   event.preventDefault();
 
   const item = getItemFromTarget(this, target);
-  if (!item || canonicalItemType(item.type) !== "worn") return;
+  if (!item || item.type !== "worn") return;
 
   const updatedWorn = toggleIdInList(
-    getEquippedList("Worn", this.document?.system?.equippedGear),
+    getEquippedList("worn", this.document?.system?.equippedGear),
     item.id
   );
 
-  await this.document?.update({ "system.equippedGear.Worn": updatedWorn });
+  await this.document?.update({ "system.equippedGear.worn": updatedWorn });
 }
 
 async function onToggleSpell(event, target) {
   event.preventDefault();
 
   const item = getItemFromTarget(this, target);
-  if (!item || canonicalItemType(item.type) !== "spell") return;
+  if (!item || item.type !== "spell") return;
 
   const updatedSpells = toggleIdInList(
-    getEquippedList("Spells", this.document?.system?.equippedGear),
+    getEquippedList("spell", this.document?.system?.equippedGear),
     item.id
   );
 
-  await this.document?.update({ "system.equippedGear.Spells": updatedSpells });
+  await this.document?.update({ "system.equippedGear.spell": updatedSpells });
 }
 
 async function onToggleHeldItem(event, target) {
   event.preventDefault();
 
   const item = getItemFromTarget(this, target);
-  if (!item || canonicalItemType(item.type) !== "held") return;
+  if (!item || item.type !== "held") return;
 
   const updatedHeldItems = toggleIdInList(
-    getEquippedList("Held", this.document?.system?.equippedGear),
+    getEquippedList("held", this.document?.system?.equippedGear),
     item.id
   );
 
-  await this.document?.update({ "system.equippedGear.Held": updatedHeldItems });
+  await this.document?.update({ "system.equippedGear.held": updatedHeldItems });
 }
 
 async function onToggleAbility(event, target) {
   event.preventDefault();
 
   const item = getItemFromTarget(this, target);
-  if (!item || canonicalItemType(item.type) !== "ability") return;
+  if (!item || item.type !== "ability") return;
 
   const updatedAbilities = toggleIdInList(
-    getEquippedList("Abilities", this.document?.system?.equippedGear),
+    getEquippedList("ability", this.document?.system?.equippedGear),
     item.id
   );
 
-  await this.document?.update({ "system.equippedGear.Abilities": updatedAbilities });
+  await this.document?.update({ "system.equippedGear.ability": updatedAbilities });
 }
 
