@@ -144,6 +144,11 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const current = this.getReferenceList(refPath);
     console.debug("[Triskel] actions ref list BEFORE", current.slice());
 
+    if (current.includes(key)) {
+      console.debug("[Triskel] #onAddActionReference aborted: duplicate key", { key });
+      return;
+    }
+
     current.push(key);
 
     console.debug("[Triskel] actions ref list AFTER", current.slice());
@@ -192,6 +197,11 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     const current = this.getReferenceList(refPath);
     console.debug("[Triskel] forms ref list BEFORE", current.slice());
+
+    if (current.includes(key)) {
+      console.debug("[Triskel] #onAddFormReference aborted: duplicate key", { key });
+      return;
+    }
 
     current.push(key);
 

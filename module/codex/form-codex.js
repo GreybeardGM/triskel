@@ -84,6 +84,15 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Forms.ShieldPull.Description"
   },
   {
+    key: "shield_cover",
+    label: "TRISKEL.Forms.ShieldCover.Label",
+    cost: 1,
+    reserve: "grace",
+    keywords: ["evade"],
+    modifiers: [{ skill: 2 }],
+    description: "TRISKEL.Forms.ShieldCover.Description"
+  },
+  {
     key: "blackmagic",
     label: "TRISKEL.Forms.Blackmagic.Label",
     cost: 1,

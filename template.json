@@ -123,10 +123,10 @@
         }
       },
       "equippedGear": {
-        "heldItems": [],
-        "armor": [],
-        "preparedSpells": [],
-        "activatedAbilities": []
+        "Held": [],
+        "Worn": [],
+        "Spells": [],
+        "Abilities": []
       }
     }
     },
@@ -223,7 +223,7 @@
     }
   },
   "Item": {
-    "types": ["weapon", "armor", "ability", "spell"],
+    "types": ["held", "worn", "ability", "spell"],
     "templates": {
       "base": {
         "description": "",
@@ -237,10 +237,10 @@
         },
         "modifiers": []
       },
-      "weapon": {
+      "held": {
         "templates": ["base"]
       },
-      "armor": {
+      "worn": {
         "templates": ["base"]
       },
       "ability": {
