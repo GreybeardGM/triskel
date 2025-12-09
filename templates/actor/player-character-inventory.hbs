@@ -11,7 +11,7 @@
           {{#if category.items.length}}
             {{#each category.items as |item|}}
               <li
-                class="inventory-list__item {{#if category.toggleAction}}inventory-list__item--has-toggle{{/if}}"
+                class="inventory-list__item"
                 data-item-id="{{item.id}}"
               >
                 {{#if category.toggleAction}}
