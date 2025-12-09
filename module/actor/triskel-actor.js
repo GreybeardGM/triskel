@@ -46,27 +46,77 @@ export class TriskelActor extends Actor {
       reserve.min = minimumFromStrain;
     }
 
-    const modifiers = this._prepareSkillModifiers();
+    const { equippedItems, sanitizedEquippedGear } = this._collectEquippedItems();
+    this.system.equippedGear = sanitizedEquippedGear;
+
+    const equippedContext = this._buildEquippedContext(equippedItems);
+
+    const modifiers = this._prepareSkillModifiers(equippedContext);
     this.system.modifiers = modifiers;
     this._applySkillModifiers(modifiers);
 
     const selectedAction = this.system?.actions?.selected ?? null;
     const selectedForms = this._normalizeSelectedForms(this.system?.actions?.selectedForms ?? []);
-    const { actions, spells } = this._prepareActionCollections({ selectedAction, selectedForms });
+    const { actions, spells } = this._prepareActionCollections({
+      selectedAction,
+      selectedForms,
+      equippedContext
+    });
     this.system.actions = { actions, spells, selected: selectedAction, selectedForms };
 
   }
 
-  _prepareSkillModifiers() {
+  _collectEquippedItems() {
+    const itemsById = new Map(Array.from(this.items ?? []).map(item => [item.id, item]));
+
+    const equippedGear = this.system?.equippedGear ?? {};
+    const sanitizeEquippedList = (entries = []) => this
+      ._normalizeReferenceList(entries)
+      .filter(itemId => itemsById.has(itemId));
+
+    const sanitizedEquippedGear = {
+      Worn: sanitizeEquippedList(equippedGear?.Worn ?? []),
+      Held: sanitizeEquippedList(equippedGear?.Held ?? []),
+      Spells: sanitizeEquippedList(equippedGear?.Spells ?? []),
+      Abilities: sanitizeEquippedList(equippedGear?.Abilities ?? [])
+    };
+
+    const equippedIds = [
+      ...sanitizedEquippedGear.Worn,
+      ...sanitizedEquippedGear.Held,
+      ...sanitizedEquippedGear.Spells,
+      ...sanitizedEquippedGear.Abilities
+    ];
+
+    const equippedItems = [];
+    const seenItemIds = new Set();
+    for (const itemId of this._normalizeReferenceList(equippedIds)) {
+      if (seenItemIds.has(itemId)) continue;
+
+      const item = itemsById.get(itemId);
+      if (!item) continue;
+
+      equippedItems.push(item);
+      seenItemIds.add(itemId);
+    }
+
+    return { equippedItems, sanitizedEquippedGear };
+  }
+
+  _buildEquippedContext(equippedItems = []) {
+    return Array.from(equippedItems).map(item => ({
+      id: item.id,
+      image: item.img ?? item.image ?? null,
+      modifiers: Array.isArray(item?.system?.modifiers) ? item.system.modifiers : [],
+      actionRefs: this._normalizeReferenceList(item.system?.actions?.ref),
+      formRefs: this._normalizeReferenceList(item.system?.forms?.ref)
+    }));
+  }
+
+  _prepareSkillModifiers(equippedContext = []) {
     const modifiersBySkill = {};
 
-    for (const item of Array.from(this.items ?? [])) {
-      const itemModifiers = Array.isArray(item?.system?.modifiers)
-        ? item.system.modifiers
-        : [];
-
-      const image = item.img ?? item.image ?? null;
-
+    for (const { modifiers: itemModifiers, id, image } of Array.from(equippedContext)) {
       for (const modifier of itemModifiers) {
         const skill = modifier?.skill ?? modifier?.key ?? modifier?.id ?? "";
         if (!skill) continue;
@@ -80,7 +130,7 @@ export class TriskelActor extends Actor {
             ...modifier,
             skill,
             value,
-            source: item.id ?? null,
+            source: id ?? null,
             image
           };
         }
@@ -171,7 +221,7 @@ export class TriskelActor extends Actor {
     };
   }
 
-  _prepareActionCollections({ selectedAction = null, selectedForms = [] } = {}) {
+  _prepareActionCollections({ selectedAction = null, selectedForms = [], equippedContext = [] } = {}) {
     const actions = [];
     const spells = [];
     const forms = [];
@@ -200,75 +250,46 @@ export class TriskelActor extends Actor {
 
     TRISKEL_BASE_ACTIONS.forEach(action => addAction(action, { image: action.image ?? action.img }));
 
-    const itemsById = new Map(Array.from(this.items ?? []).map(item => [item.id, item]));
-
-    const equippedGear = this.system?.equippedGear ?? {};
-    const sanitizeEquippedList = (entries = []) => this
-      ._normalizeReferenceList(entries)
-      .filter(itemId => itemsById.has(itemId));
-
-    const sanitizedEquippedGear = {
-      Worn: sanitizeEquippedList(equippedGear?.Worn ?? []),
-      Held: sanitizeEquippedList(equippedGear?.Held ?? []),
-      Spells: sanitizeEquippedList(equippedGear?.Spells ?? []),
-      Abilities: sanitizeEquippedList(equippedGear?.Abilities ?? [])
-    };
-
-    this.system.equippedGear = sanitizedEquippedGear;
-
-    const equippedIds = [
-      ...sanitizedEquippedGear.Worn,
-      ...sanitizedEquippedGear.Held,
-      ...sanitizedEquippedGear.Spells,
-      ...sanitizedEquippedGear.Abilities
-    ];
-
-    for (const itemId of this._normalizeReferenceList(equippedIds)) {
-      const item = itemsById.get(itemId);
-      if (!item) continue;
-
-      const actionRefs = this._normalizeReferenceList(item.system?.actions?.ref);
-      const formRefs = this._normalizeReferenceList(item.system?.forms?.ref);
-
+    for (const { actionRefs, formRefs, id, image } of Array.from(equippedContext)) {
       actionRefs.forEach(actionKey => {
         const advancedAction = ADVANCED_ACTIONS_BY_KEY.get(actionKey);
-        if (advancedAction) addAction(advancedAction, { source: item.id, image: item.img });
+        if (advancedAction) addAction(advancedAction, { source: id, image });
 
         const spell = SPELLS_BY_KEY.get(actionKey);
-        if (spell) addSpell(spell, { source: item.id, image: item.img });
+        if (spell) addSpell(spell, { source: id, image });
       });
 
       formRefs.forEach(formKey => {
         const form = FORMS_BY_KEY.get(formKey);
-        if (form) addForm(form, { source: item.id, image: item.img });
+        if (form) addForm(form, { source: id, image });
       });
     }
 
     actions.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
     spells.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+    const normalizeKeywords = (keywords = []) => (Array.isArray(keywords) ? keywords : [])
+      .map(keyword => `${keyword}`.trim().toLowerCase())
+      .filter(Boolean);
+
     forms.forEach(form => {
       form.active = selectedForms.includes(form.key);
+      form.normalizedKeywords = normalizeKeywords(form.keywords);
     });
 
     forms.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
-    const hasAllKeywords = (formKeywords = [], entryKeywords = []) => {
-      const normalizedFormKeywords = (Array.isArray(formKeywords) ? formKeywords : [])
-        .map(keyword => `${keyword}`.trim().toLowerCase())
-        .filter(Boolean);
-      const normalizedEntryKeywords = new Set(
-        (Array.isArray(entryKeywords) ? entryKeywords : [])
-          .map(keyword => `${keyword}`.trim().toLowerCase())
-          .filter(Boolean)
+    const findMatchingForms = entry => {
+      const entryKeywords = normalizeKeywords(entry?.keywords);
+      if (!entryKeywords.length) return [];
+
+      const entryKeywordSet = new Set(entryKeywords);
+
+      return forms.filter(form =>
+        form.normalizedKeywords.length > 0
+        && form.normalizedKeywords.every(keyword => entryKeywordSet.has(keyword))
       );
-
-      return normalizedFormKeywords.length > 0
-        ? normalizedFormKeywords.every(keyword => normalizedEntryKeywords.has(keyword))
-        : false;
     };
-
-    const findMatchingForms = entry =>
-      forms.filter(form => hasAllKeywords(form.keywords ?? [], entry?.keywords ?? []));
 
     actions.forEach(action => {
       action.forms = findMatchingForms(action);

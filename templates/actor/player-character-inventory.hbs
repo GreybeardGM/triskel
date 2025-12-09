@@ -21,7 +21,9 @@
                     data-action="{{category.toggleAction}}"
                     title="{{category.toggleTitle}}"
                   >
-                    <i class="fa-solid fa-check"></i>
+                    {{#if item.isEquipToggleActive}}
+                      <i class="fa-solid fa-check"></i>
+                    {{/if}}
                   </button>
                 {{/if}}
                 {{#if item.img}}
