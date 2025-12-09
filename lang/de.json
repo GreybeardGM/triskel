@@ -32,10 +32,16 @@
       "NPC": "NSC"
     },
     "ItemTypes": {
-      "Weapon": "Waffe",
-      "Armor": "Rüstung",
+      "Held": "Geführt",
+      "Worn": "Getragen",
       "Ability": "Fähigkeit",
       "Spell": "Zauber"
+    },
+    "ItemToggles": {
+      "Held": "Gehaltenen Gegenstand umschalten",
+      "Worn": "Getragene Ausrüstung umschalten",
+      "Ability": "Fähigkeit umschalten",
+      "Spell": "Zauber umschalten"
     },
     "Items": {
       "Empty": "Du trägst momentan keine Gegenstände.",
@@ -340,6 +346,10 @@
       "ShieldPull": {
         "Label": "Schildreißer",
         "Description": "Mit der Waffe lässt sich ein Schild aufreißen und sogleich binden."
+      },
+      "ShieldCover": {
+        "Label": "Schilddeckung",
+        "Description": "Du duckst dich hinter das Schild weg, um dich zu schützen."
       },
       "BreakStance": {
         "Label": "Standbruch",

@@ -2,6 +2,16 @@ import { TRISKEL_BASE_ACTIONS, TRISKEL_ADVANCED_ACTIONS, TRISKEL_SPELLS } from "
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
 import { TRISKEL_RESERVES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
+const createLookupByKey = (collection = []) => new Map(
+  (Array.isArray(collection) ? collection : [])
+    .filter(entry => entry?.key)
+    .map(entry => [entry.key, entry])
+);
+
+const ADVANCED_ACTIONS_BY_KEY = createLookupByKey(TRISKEL_ADVANCED_ACTIONS);
+const SPELLS_BY_KEY = createLookupByKey(TRISKEL_SPELLS);
+const FORMS_BY_KEY = createLookupByKey(TRISKEL_FORMS);
+
 const localize = (value) => {
   if (!value) return "";
 
@@ -190,15 +200,28 @@ export class TriskelActor extends Actor {
 
     TRISKEL_BASE_ACTIONS.forEach(action => addAction(action, { image: action.image ?? action.img }));
 
-    const equippedGear = this.system?.equippedGear ?? {};
-    const equippedIds = [
-      ...(Array.isArray(equippedGear?.armor) ? equippedGear.armor : []),
-      ...(Array.isArray(equippedGear?.heldItems) ? equippedGear.heldItems : []),
-      ...(Array.isArray(equippedGear?.preparedSpells) ? equippedGear.preparedSpells : []),
-      ...(Array.isArray(equippedGear?.activatedAbilities) ? equippedGear.activatedAbilities : [])
-    ];
-
     const itemsById = new Map(Array.from(this.items ?? []).map(item => [item.id, item]));
+
+    const equippedGear = this.system?.equippedGear ?? {};
+    const sanitizeEquippedList = (entries = []) => this
+      ._normalizeReferenceList(entries)
+      .filter(itemId => itemsById.has(itemId));
+
+    const sanitizedEquippedGear = {
+      Worn: sanitizeEquippedList(equippedGear?.Worn ?? []),
+      Held: sanitizeEquippedList(equippedGear?.Held ?? []),
+      Spells: sanitizeEquippedList(equippedGear?.Spells ?? []),
+      Abilities: sanitizeEquippedList(equippedGear?.Abilities ?? [])
+    };
+
+    this.system.equippedGear = sanitizedEquippedGear;
+
+    const equippedIds = [
+      ...sanitizedEquippedGear.Worn,
+      ...sanitizedEquippedGear.Held,
+      ...sanitizedEquippedGear.Spells,
+      ...sanitizedEquippedGear.Abilities
+    ];
 
     for (const itemId of this._normalizeReferenceList(equippedIds)) {
       const item = itemsById.get(itemId);
@@ -208,15 +231,15 @@ export class TriskelActor extends Actor {
       const formRefs = this._normalizeReferenceList(item.system?.forms?.ref);
 
       actionRefs.forEach(actionKey => {
-        const advancedAction = TRISKEL_ADVANCED_ACTIONS.find(entry => entry.key === actionKey);
+        const advancedAction = ADVANCED_ACTIONS_BY_KEY.get(actionKey);
         if (advancedAction) addAction(advancedAction, { source: item.id, image: item.img });
 
-        const spell = TRISKEL_SPELLS.find(entry => entry.key === actionKey);
+        const spell = SPELLS_BY_KEY.get(actionKey);
         if (spell) addSpell(spell, { source: item.id, image: item.img });
       });
 
       formRefs.forEach(formKey => {
-        const form = TRISKEL_FORMS.find(entry => entry.key === formKey);
+        const form = FORMS_BY_KEY.get(formKey);
         if (form) addForm(form, { source: item.id, image: item.img });
       });
     }

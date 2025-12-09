@@ -32,10 +32,16 @@
       "NPC": "NPC"
     },
     "ItemTypes": {
-      "Weapon": "Weapon",
-      "Armor": "Armor",
+      "Held": "Held",
+      "Worn": "Worn",
       "Ability": "Ability",
       "Spell": "Spell"
+    },
+    "ItemToggles": {
+      "Held": "Toggle held item",
+      "Worn": "Toggle worn item",
+      "Ability": "Toggle ability",
+      "Spell": "Toggle spell"
     },
     "Items": {
       "Empty": "You are not carrying any items.",
@@ -340,6 +346,10 @@
       "ShieldPull": {
         "Label": "Shield Pull",
         "Description": "Rip open and bind an opponent’s shield with the weapon’s leverage."
+      },
+      "ShieldCover": {
+        "Label": "Shield Cover",
+        "Description": "Duck behind the shield to cover yourself from harm."
       },
       "BreakStance": {
         "Label": "Break Stance",

@@ -28,7 +28,7 @@ Hooks.once("init", function() {
 
   foundry.documents.collections.Items.registerSheet("triskel", TriskelItemSheet, {
     makeDefault: true,
-    types: ["weapon", "armor", "ability", "spell"],
+    types: ["held", "worn", "ability", "spell"],
     label: localize("TRISKEL.Sheets.Item")
   });
 
@@ -41,8 +41,8 @@ Hooks.once("init", function() {
 
   CONFIG.Item.typeLabels = {
     ...CONFIG.Item.typeLabels,
-    weapon: localize("TRISKEL.ItemTypes.Weapon"),
-    armor: localize("TRISKEL.ItemTypes.Armor"),
+    held: localize("TRISKEL.ItemTypes.Held"),
+    worn: localize("TRISKEL.ItemTypes.Worn"),
     ability: localize("TRISKEL.ItemTypes.Ability"),
     spell: localize("TRISKEL.ItemTypes.Spell")
   };
