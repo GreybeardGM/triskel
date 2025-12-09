@@ -17,7 +17,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       editItem: onEditItem,
       deleteItem: onDeleteItem,
       selectAction: onSelectAction,
-      toggleForm: onToggleForm
+      toggleForm: onToggleForm,
+      toggleArmorEquip: onToggleArmorEquip,
+      togglePreparedSpell: onTogglePreparedSpell,
+      toggleMainHand: onToggleMainHand,
+      toggleOffHand: onToggleOffHand
     },
     actor: {
       type: 'character'
@@ -157,15 +161,56 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = preparedPaths;
     context.resistances = resistances;
     context.skillColumns = skillColumns;
-    context.items = Array.from(this.document.items ?? []).map(item => ({
+    const equippedGear = this.document.system?.equippedGear ?? {};
+    const equippedArmor = Array.isArray(equippedGear.armor) ? equippedGear.armor : [];
+    const preparedSpells = Array.isArray(equippedGear.preparedSpells) ? equippedGear.preparedSpells : [];
+    const mainHandId = typeof equippedGear.mainHand === "string" ? equippedGear.mainHand : "";
+    const offHandId = typeof equippedGear.offHand === "string" ? equippedGear.offHand : "";
+
+    const items = Array.from(this.document.items ?? []).map(item => ({
       id: item.id,
       name: item.name,
+      img: item.img,
       type: item.type,
       typeLabel: (() => {
         const typeLabelKey = `TRISKEL.ItemTypes.${item.type}`;
         const localizedType = game.i18n.localize(typeLabelKey);
         return localizedType === typeLabelKey ? item.type : localizedType;
-      })()
+      })(),
+      isEquippedArmor: item.type === "armor" && equippedArmor.includes(item.id),
+      isPreparedSpell: item.type === "spell" && preparedSpells.includes(item.id),
+      isMainHand: item.type === "weapon" && item.id === mainHandId,
+      isOffHand: item.type === "weapon" && item.id === offHandId,
+      isEquipToggleActive:
+        (item.type === "armor" && equippedArmor.includes(item.id)) ||
+        (item.type === "spell" && preparedSpells.includes(item.id)) ||
+        (item.type === "weapon" && (item.id === mainHandId || item.id === offHandId))
+    }));
+
+    items.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
+
+    context.items = items;
+    context.equippedWeapons = {
+      mainHand: items.find(item => item.type === "weapon" && item.id === mainHandId) ?? null,
+      offHand: items.find(item => item.type === "weapon" && item.id === offHandId) ?? null
+    };
+
+    const itemTypeLabels = {
+      weapon: game.i18n.localize("TRISKEL.ItemTypes.Weapon"),
+      armor: game.i18n.localize("TRISKEL.ItemTypes.Armor"),
+      ability: game.i18n.localize("TRISKEL.ItemTypes.Ability"),
+      spell: game.i18n.localize("TRISKEL.ItemTypes.Spell")
+    };
+
+    context.itemsByType = Object.entries(itemTypeLabels).map(([type, label]) => ({
+      type,
+      label,
+      items: items.filter(item => item.type === type),
+      hasEquipToggle: type === "armor" || type === "spell",
+      hasWeaponToggle: type === "weapon",
+      isArmorCategory: type === "armor",
+      isSpellCategory: type === "spell",
+      isWeaponCategory: type === "weapon"
     }));
     const tierValue = Number(context.system.tier?.value);
     const tierLabelKey = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label;
@@ -234,5 +279,67 @@ async function onToggleForm(event, target) {
   else normalizedSelection.push(formKey);
 
   await this.document?.update({ "system.actions.selectedForms": normalizedSelection });
+}
+
+function toggleIdInList(list, id) {
+  const normalized = Array.isArray(list) ? [...list] : [];
+  const existingIndex = normalized.indexOf(id);
+
+  if (existingIndex >= 0) normalized.splice(existingIndex, 1);
+  else normalized.push(id);
+
+  return normalized;
+}
+
+async function onToggleArmorEquip(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item || item.type !== "armor") return;
+
+  const updatedArmor = toggleIdInList(this.document?.system?.equippedGear?.armor, item.id);
+
+  await this.document?.update({ "system.equippedGear.armor": updatedArmor });
+}
+
+async function onTogglePreparedSpell(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item || item.type !== "spell") return;
+
+  const updatedSpells = toggleIdInList(this.document?.system?.equippedGear?.preparedSpells, item.id);
+
+  await this.document?.update({ "system.equippedGear.preparedSpells": updatedSpells });
+}
+
+async function onToggleMainHand(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item || item.type !== "weapon") return;
+
+  const currentMainHand = typeof this.document?.system?.equippedGear?.mainHand === "string"
+    ? this.document.system.equippedGear.mainHand
+    : "";
+
+  const newMainHand = currentMainHand === item.id ? "" : item.id;
+
+  await this.document?.update({ "system.equippedGear.mainHand": newMainHand });
+}
+
+async function onToggleOffHand(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item || item.type !== "weapon") return;
+
+  const currentOffHand = typeof this.document?.system?.equippedGear?.offHand === "string"
+    ? this.document.system.equippedGear.offHand
+    : "";
+
+  const newOffHand = currentOffHand === item.id ? "" : item.id;
+
+  await this.document?.update({ "system.equippedGear.offHand": newOffHand });
 }
 
