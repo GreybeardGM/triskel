@@ -190,7 +190,20 @@ export class TriskelActor extends Actor {
 
     TRISKEL_BASE_ACTIONS.forEach(action => addAction(action, { image: action.image ?? action.img }));
 
-    for (const item of Array.from(this.items ?? [])) {
+    const equippedGear = this.system?.equippedGear ?? {};
+    const equippedIds = [
+      ...(Array.isArray(equippedGear?.armor) ? equippedGear.armor : []),
+      ...(Array.isArray(equippedGear?.heldItems) ? equippedGear.heldItems : []),
+      ...(Array.isArray(equippedGear?.preparedSpells) ? equippedGear.preparedSpells : []),
+      ...(Array.isArray(equippedGear?.activatedAbilities) ? equippedGear.activatedAbilities : [])
+    ];
+
+    const itemsById = new Map(Array.from(this.items ?? []).map(item => [item.id, item]));
+
+    for (const itemId of this._normalizeReferenceList(equippedIds)) {
+      const item = itemsById.get(itemId);
+      if (!item) continue;
+
       const actionRefs = this._normalizeReferenceList(item.system?.actions?.ref);
       const formRefs = this._normalizeReferenceList(item.system?.forms?.ref);
 

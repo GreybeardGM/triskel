@@ -123,10 +123,10 @@
         }
       },
       "equippedGear": {
-        "mainHand": "",
-        "offHand": "",
+        "heldItems": [],
         "armor": [],
-        "preparedSpells": []
+        "preparedSpells": [],
+        "activatedAbilities": []
       }
     }
     },
