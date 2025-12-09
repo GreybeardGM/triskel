@@ -8,69 +8,26 @@
       <div class="inventory-category">
         <h3 class="inventory-category__title">{{category.label}}</h3>
         <ul class="inventory-list">
-          {{#if category.isWeaponCategory}}
-            <li class="inventory-list__item inventory-list__item--slot">
-              <span class="inventory-list__slot-label">Main Hand</span>
-              <span class="inventory-list__slot-value">
-                {{#if ../equippedWeapons.mainHand}}
-                  {{../equippedWeapons.mainHand.name}}
-                {{else}}
-                  {{localize "TRISKEL.Items.Empty"}}
-                {{/if}}
-              </span>
-            </li>
-            <li class="inventory-list__item inventory-list__item--slot">
-              <span class="inventory-list__slot-label">Off Hand</span>
-              <span class="inventory-list__slot-value">
-                {{#if ../equippedWeapons.offHand}}
-                  {{../equippedWeapons.offHand.name}}
-                {{else}}
-                  {{localize "TRISKEL.Items.Empty"}}
-                {{/if}}
-              </span>
-            </li>
-          {{/if}}
           {{#if category.items.length}}
             {{#each category.items as |item|}}
               <li
-                class="inventory-list__item {{#if category.hasEquipToggle}}inventory-list__item--has-toggle{{/if}} {{#if category.hasWeaponToggle}}inventory-list__item--has-two-toggles{{/if}}"
+                class="inventory-list__item {{#if category.toggleAction}}inventory-list__item--has-toggle{{/if}}"
                 data-item-id="{{item.id}}"
               >
-                {{#if category.hasEquipToggle}}
+                {{#if category.toggleAction}}
                   <button
                     type="button"
-                    class="inventory-list__toggle {{#if item.isEquipToggleActive}}selected{{/if}}"
-                    data-action="{{#if category.isArmorCategory}}toggleArmorEquip{{else}}togglePreparedSpell{{/if}}"
-                    aria-pressed="{{item.isEquipToggleActive}}"
-                    title="{{#if category.isArmorCategory}}Toggle equipped armor{{else}}Toggle prepared spell{{/if}}"
+                    class="inventory-list__toggle is-interactive {{#if item.isEquipToggleActive}}is-selected{{/if}}"
+                    data-action="{{category.toggleAction}}"
+                    title="{{category.toggleTitle}}"
                   >
-                    <i class="fa-solid fa-check" aria-hidden="true"></i>
-                  </button>
-                {{/if}}
-                {{#if category.hasWeaponToggle}}
-                  <button
-                    type="button"
-                    class="inventory-list__toggle {{#if item.isMainHand}}selected{{/if}}"
-                    data-action="toggleMainHand"
-                    aria-pressed="{{item.isMainHand}}"
-                    title="Toggle main hand weapon"
-                  >
-                    <i class="fa-solid fa-hand-fist" aria-hidden="true"></i>
-                  </button>
-                  <button
-                    type="button"
-                    class="inventory-list__toggle {{#if item.isOffHand}}selected{{/if}}"
-                    data-action="toggleOffHand"
-                    aria-pressed="{{item.isOffHand}}"
-                    title="Toggle off hand weapon"
-                  >
-                    <i class="fa-solid fa-hand" aria-hidden="true"></i>
+                    <i class="fa-solid fa-check"></i>
                   </button>
                 {{/if}}
                 {{#if item.img}}
-                  <img class="inventory-list__item-image" src="{{item.img}}" alt="" aria-hidden="true" />
+                  <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
                 {{else}}
-                  <span class="inventory-list__item-image inventory-list__item-image--placeholder" aria-hidden="true"></span>
+                  <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
                 {{/if}}
                 <span class="inventory-list__item-name">{{item.name}}</span>
                 {{#if item.typeLabel}}
@@ -82,18 +39,16 @@
                     class="inventory-list__item-action"
                     data-action="editItem"
                     title="{{localize 'TRISKEL.Items.Edit'}}"
-                    aria-label="{{localize 'TRISKEL.Items.Edit'}}"
                   >
-                    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                    <i class="fa-solid fa-pen-to-square"></i>
                   </button>
                   <button
                     type="button"
                     class="inventory-list__item-action"
                     data-action="deleteItem"
                     title="{{localize 'TRISKEL.Items.Delete'}}"
-                    aria-label="{{localize 'TRISKEL.Items.Delete'}}"
                   >
-                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                    <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
               </li>
