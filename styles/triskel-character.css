@@ -498,6 +498,7 @@
 
 .triskel .action-card__form-cost {
   font-weight: 700;
+  color: var(--triskel-interactive-highlight);
 }
 
 .triskel .action-card__form:focus-visible {
@@ -547,7 +548,6 @@
 .triskel .inventory-list__toggle {
   height: 2rem;
   width: 2rem;
-  color: #888;
 }
 
 .triskel .inventory-list__toggle.is-selected {
