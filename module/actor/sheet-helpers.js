@@ -49,7 +49,8 @@ export async function onUpdateResourceValue(event, target) {
   const clickedValue = Number(target.dataset.resourceValue ?? NaN);
   if (!resource || !Number.isFinite(clickedValue)) return;
 
-  const property = `system.${resource}.value`;
+  const resourceField = target.dataset.resourceField ?? "value";
+  const property = `system.${resource}.${resourceField}`;
   const currentValue = Number(foundry.utils.getProperty(this.document, property) ?? 0);
 
   let newValue = clickedValue;
@@ -96,15 +97,19 @@ export function prepareReserveBars(bars = {}, codexReference = TRISKEL_RESERVES)
 export function preparePathBars(paths = {}) {
   if (!paths) return {};
 
-  const pathValues = toFiniteNumbers(Object.values(paths), path => path?.value);
+  const pathMaxValues = toFiniteNumbers(Object.values(paths), path => path?.max);
 
-  const MaxSegments = deriveMaxSegments(pathValues);
+  const MaxSegments = deriveMaxSegments(pathMaxValues);
 
   return Object.entries(paths ?? {}).reduce((collection, [id, resource]) => {
     if (!resource) return collection;
 
-    const value = Number(resource.value ?? 0);
-    const _segments = createSegments(MaxSegments, index => index <= value ? "filled" : "empty");
+    const ownMax = Number.isFinite(Number(resource.max))
+      ? Number(resource.max)
+      : MaxSegments;
+
+    const value = Math.min(Number(resource.value ?? 0), ownMax);
+    const _segments = createSegments(ownMax, index => index <= value ? "filled" : "empty");
 
     collection[id] = {
       ...resource,

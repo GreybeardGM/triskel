@@ -1,6 +1,6 @@
 import { TRISKEL_BASE_ACTIONS, TRISKEL_ADVANCED_ACTIONS, TRISKEL_SPELLS } from "../codex/action-codex.js";
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
-import { TRISKEL_RESERVES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
 const createLookupByKey = (collection = []) => new Map(
   (Array.isArray(collection) ? collection : [])
@@ -45,6 +45,22 @@ export class TriskelActor extends Actor {
       );
       reserve.min = minimumFromStrain;
     }
+
+    const parsedTension = Number(this.system?.tension?.value ?? 0);
+    const tension = Number.isFinite(parsedTension) ? parsedTension : 0;
+
+    const paths = this.system?.paths ?? {};
+    Object.entries(paths).forEach(([id, path]) => {
+      if (!path) return;
+
+      const parsedMax = Number(path.max);
+      const codexMax = Number(TRISKEL_PATHS[id]?.steps?.length ?? 0);
+      const max = Number.isFinite(parsedMax) ? parsedMax : codexMax;
+      const safeMax = Math.max(0, max);
+
+      path.max = safeMax;
+      path.value = Math.min(Math.max(0, tension), safeMax);
+    });
 
     const { equippedItems, sanitizedEquippedGear } = this._collectEquippedItems();
     this.system.equippedGear = sanitizedEquippedGear;
