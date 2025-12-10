@@ -22,31 +22,27 @@
 
   <h2>{{localize "TRISKEL.Actor.Skill.Label"}}</h2>
   <div class="skill-grid">
-    {{#each skillColumns as |column|}}
-      <div class="skill-column">
-        {{#each column.categories as |category|}}
-          <div class="skill-category">
-            <h3>{{category.title}}</h3>
-            <ul>
-              {{#each category.skills as |skill|}}
-                <li class="skill-field" title="{{skill.description}}">
-                  <span class="skill-label">{{skill.label}}</span>
-                  {{#if skill.mod}}
-                    <span class="skill-mod" title="{{localize "TRISKEL.Actor.Skill.ModLabel"}}">
-                      {{numberFormat skill.mod decimals=0 sign=true}}
-                    </span>
-                  {{/if}}
-                  <input
-                    type="number"
-                    data-dtype="Number"
-                    name="system.skills.{{skill.id}}.value"
-                    value="{{skill.value}}"
-                  />
-                </li>
-              {{/each}}
-            </ul>
-          </div>
-        {{/each}}
+    {{#each skillCategories as |category|}}
+      <div class="skill-category" style="grid-area:{{category.id}};">
+        <h3>{{category.title}}</h3>
+        <ul>
+          {{#each category.skills as |skill|}}
+            <li class="skill-field" title="{{skill.description}}">
+              <span class="skill-label">{{skill.label}}</span>
+              {{#if skill.mod}}
+                <span class="skill-mod" title="{{localize "TRISKEL.Actor.Skill.ModLabel"}}">
+                  {{numberFormat skill.mod decimals=0 sign=true}}
+                </span>
+              {{/if}}
+              <input
+                type="number"
+                data-dtype="Number"
+                name="system.skills.{{skill.id}}.value"
+                value="{{skill.value}}"
+              />
+            </li>
+          {{/each}}
+        </ul>
       </div>
     {{/each}}
   </div>

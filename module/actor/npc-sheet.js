@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareReserveBars, prepareSkillsDisplay } from "./sheet-helpers.js";
 import { TRISKEL_NPC_STATS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -51,30 +51,18 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.actor ??= this.document;
     context.system ??= this.document.system;
 
-    const { resistances, skillColumns } = prepareSkillsDisplay(
+    const { resistances, skillCategories } = prepareSkillsDisplay(
       context.system.skills,
       context.system.resistances
     );
 
-    const healthValues = [];
-
-    Object.values(context.system.health ?? {}).forEach(entry => {
-      const entryValue = Number(entry?.value);
-      if (Number.isFinite(entryValue)) healthValues.push(entryValue);
-
-      const entryMax = Number(entry?.max);
-      if (Number.isFinite(entryMax)) healthValues.push(entryMax);
-    });
-
-    const MaxSegments = healthValues.length
-      ? Math.max(...healthValues)
-      : 5;
-
-    const health = prepareBars(context.system.health, MaxSegments, TRISKEL_NPC_STATS);
+    const health = prepareReserveBars(context.system.health, TRISKEL_NPC_STATS);
+    const wounds = prepareReserveBars(context.system.wounds, TRISKEL_NPC_STATS);
 
     context.health = health;
+    context.wounds = wounds;
     context.resistances = resistances;
-    context.skillColumns = skillColumns;
+    context.skillCategories = skillCategories;
 
     // Notes Vorbereiten
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(

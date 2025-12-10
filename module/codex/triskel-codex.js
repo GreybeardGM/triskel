@@ -317,20 +317,17 @@ export const TRISKEL_RESERVES = {
   power: {
     id: "power",
     label: "TRISKEL.Actor.Reserve.Power.Label",
-    description: "TRISKEL.Actor.Reserve.Power.Description",
-    sortOrder: 1
+    description: "TRISKEL.Actor.Reserve.Power.Description"
   },
   grace: {
     id: "grace",
     label: "TRISKEL.Actor.Reserve.Grace.Label",
-    description: "TRISKEL.Actor.Reserve.Grace.Description",
-    sortOrder: 2
+    description: "TRISKEL.Actor.Reserve.Grace.Description"
   },
   will: {
     id: "will",
     label: "TRISKEL.Actor.Reserve.Will.Label",
-    description: "TRISKEL.Actor.Reserve.Will.Description",
-    sortOrder: 3
+    description: "TRISKEL.Actor.Reserve.Will.Description"
   }
 };
 
@@ -338,15 +335,13 @@ export const TRISKEL_RESERVES = {
 export const TRISKEL_NPC_STATS = {
   hp: {
     id: "hp",
-    label: "TRISKEL.NPCStats.HP.Label",
-    description: "TRISKEL.NPCStats.HP.Description",
-    sortOrder: 1
+    label: "TRISKEL.Actor.NPC.Stat.HP.Label",
+    description: "TRISKEL.Actor.NPC.Stat.HP.Description"
   },
   wounds: {
     id: "wounds",
-    label: "TRISKEL.NPCStats.Wounds.Label",
-    description: "TRISKEL.NPCStats.Wounds.Description",
-    sortOrder: 2
+    label: "TRISKEL.Actor.NPC.Stat.Wounds.Label",
+    description: "TRISKEL.Actor.NPC.Stat.Wounds.Description"
   }
 };
 
@@ -356,7 +351,6 @@ export const TRISKEL_PATHS = {
     id: "virtue",
     label: "TRISKEL.Actor.Path.Virtue.Label",
     description: "TRISKEL.Actor.Path.Virtue.Description",
-    sortOrder: 1,
     tags: ["Good", "Moralistic"],
     steps: [
       { tier: 1, label: "TRISKEL.Actor.Path.Virtue.Steps.Discipline" },
@@ -368,7 +362,6 @@ export const TRISKEL_PATHS = {
     id: "ward",
     label: "TRISKEL.Actor.Path.Ward.Label",
     description: "TRISKEL.Actor.Path.Ward.Description",
-    sortOrder: 2,
     tags: ["Good", "Naturalistic"],
     steps: [
       { tier: 1, label: "TRISKEL.Actor.Path.Ward.Steps.Presence" },
@@ -380,7 +373,6 @@ export const TRISKEL_PATHS = {
     id: "vice",
     label: "TRISKEL.Actor.Path.Vice.Label",
     description: "TRISKEL.Actor.Path.Vice.Description",
-    sortOrder: 3,
     tags: ["Evil", "Moralistic"],
     steps: [
       { tier: 1, label: "TRISKEL.Actor.Path.Vice.Steps.Indulgence" },
@@ -392,7 +384,6 @@ export const TRISKEL_PATHS = {
     id: "ruin",
     label: "TRISKEL.Actor.Path.Ruin.Label",
     description: "TRISKEL.Actor.Path.Ruin.Description",
-    sortOrder: 4,
     tags: ["Evil", "Naturalistic"],
     steps: [
       { tier: 1, label: "TRISKEL.Actor.Path.Ruin.Steps.Desire" },

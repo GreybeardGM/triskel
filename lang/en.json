@@ -185,6 +185,9 @@
         }
       },
       "NPC": {
+        "Stats": {
+          "Title": "Stat Grid"
+        },
         "Stat": {
           "HP": {
             "Label": "Hitpoints",

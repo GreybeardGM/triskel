@@ -124,7 +124,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.system ??= this.document.system;
 
     // Prepare Sills
-    const { resistances, skillColumns } = prepareSkillsDisplay(
+    const { resistances, skillCategories } = prepareSkillsDisplay(
       context.system.skills,
       context.system.resistances
     );
@@ -138,7 +138,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.reserves = reserves;
     context.paths = paths;
     context.resistances = resistances;
-    context.skillColumns = skillColumns;
+    context.skillCategories = skillCategories;
     const equippedGear = this.document.system?.equippedGear ?? {};
     const equippedLists = Object.fromEntries(
       Object.entries(ITEM_CATEGORY_CONFIG).map(([type]) => [

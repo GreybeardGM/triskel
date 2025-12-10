@@ -24,6 +24,24 @@ export async function onEditImage(event, target) {
   picker.render(true);
 }
 
+const toFiniteNumbers = (collection, extractor) =>
+  collection
+    .map(item => Number(extractor(item)))
+    .filter(Number.isFinite);
+
+const deriveMaxSegments = (values, fallback = 5) =>
+  values.length ? Math.max(...values) : fallback;
+
+const createSegments = (maxSegments, stateResolver) =>
+  Array.from({ length: maxSegments }, (_, index) => {
+    const value = index + 1;
+    return {
+      index: value,
+      value,
+      state: stateResolver(value)
+    };
+  });
+
 export async function onUpdateResourceValue(event, target) {
   event.preventDefault();
 
@@ -40,54 +58,34 @@ export async function onUpdateResourceValue(event, target) {
   await this.document.update({ [property]: newValue });
 }
 
-export function prepareBars(bars, MaxSegments, codexReference = {}) {
+export function prepareReserveBars(bars = {}, codexReference = TRISKEL_RESERVES) {
   if (!bars) return {};
 
-  const globalMax = Number.isFinite(Number(MaxSegments)) ? Number(MaxSegments) : 5;
+  const reserveMax = toFiniteNumbers(Object.values(bars), reserve => reserve?.max);
 
-  const barsWithSorting = Object.entries(bars ?? {}).map(([id, resource]) => ({
-    id,
-    resource,
-    codexEntry: codexReference[id] ?? {},
-    sortOrder: codexReference[id]?.sortOrder ?? Number.MAX_SAFE_INTEGER
-  }));
+  const MaxSegments = deriveMaxSegments(reserveMax);
 
-  barsWithSorting.sort((a, b) => {
-    const orderDifference = a.sortOrder - b.sortOrder;
-    if (orderDifference !== 0) return orderDifference;
+  return Object.entries(bars ?? {}).reduce((collection, [id, resource]) => {
+    if (!resource) return collection;
 
-    const labelA = a.codexEntry.label ?? a.resource?.label ?? "";
-    const labelB = b.codexEntry.label ?? b.resource?.label ?? "";
-    return localize(labelA).localeCompare(localize(labelB), undefined, { sensitivity: "base" });
-  });
+    const min = Number(resource.min ?? 0);
+    const value = Number(resource.value ?? 0);
+    const ownMax = Number.isFinite(Number(resource.max))
+      ? Number(resource.max)
+      : MaxSegments;
 
-  return barsWithSorting.reduce((collection, entry) => {
-    if (!entry.resource) return collection;
+    const _segments = createSegments(MaxSegments, (index) => {
+      if (index <= min) return "strain";
+      if (index <= value) return "filled";
+      if (index <= ownMax) return "empty";
+      return "placeholder";
+    });
 
-    const min = Number(entry.resource.min ?? 0);
-    const value = Number(entry.resource.value ?? 0);
-    const ownMax = Number.isFinite(Number(entry.resource.max)) ? Number(entry.resource.max) : globalMax;
-
-    const _segments = [];
-    for (let index = 1; index <= globalMax; index += 1) {
-      let state = "placeholder";
-      if (index <= min) state = "strain";
-      else if (index <= value) state = "filled";
-      else if (index <= ownMax) state = "empty";
-
-      _segments.push({
-        index,
-        value: index,
-        state,
-        clickable: state !== "placeholder"
-      });
-    }
-
-    collection[entry.id] = {
-      ...entry.resource,
-      id: entry.id,
-      label: localize(entry.codexEntry.label ?? entry.resource.label),
-      description: localize(entry.codexEntry.description ?? entry.resource.description),
+    collection[id] = {
+      ...resource,
+      id,
+      label: localize(codexReference[id]?.label ?? resource.label),
+      description: localize(codexReference[id]?.description ?? resource.description),
       _segments
     };
 
@@ -95,28 +93,29 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
   }, {});
 }
 
-function getMaxValueFromResources(resources = {}) {
-  const numericValues = Object.values(resources).flatMap(resource => {
-    const min = Number(resource?.min);
-    const value = Number(resource?.value);
-    const max = Number(resource?.max);
-
-    return [min, value, max].filter(Number.isFinite);
-  });
-
-  return numericValues.length ? Math.max(...numericValues) : 5;
-}
-
-export function prepareReserveBars(reserves = {}) {
-  const MaxSegments = getMaxValueFromResources(reserves);
-
-  return prepareBars(reserves, MaxSegments, TRISKEL_RESERVES);
-}
-
 export function preparePathBars(paths = {}) {
-  const MaxSegments = getMaxValueFromResources(paths);
+  if (!paths) return {};
 
-  return prepareBars(paths, MaxSegments, TRISKEL_PATHS);
+  const pathValues = toFiniteNumbers(Object.values(paths), path => path?.value);
+
+  const MaxSegments = deriveMaxSegments(pathValues);
+
+  return Object.entries(paths ?? {}).reduce((collection, [id, resource]) => {
+    if (!resource) return collection;
+
+    const value = Number(resource.value ?? 0);
+    const _segments = createSegments(MaxSegments, index => index <= value ? "filled" : "empty");
+
+    collection[id] = {
+      ...resource,
+      id,
+      label: localize(TRISKEL_PATHS[id]?.label ?? resource.label),
+      description: localize(TRISKEL_PATHS[id]?.description ?? resource.description),
+      _segments
+    };
+
+    return collection;
+  }, {});
 }
 
 const SKILL_CATEGORY_LABELS = {
@@ -128,13 +127,6 @@ const SKILL_CATEGORY_LABELS = {
   intellectual: "TRISKEL.Actor.Skill.Category.Intellectual",
   magic: "TRISKEL.Actor.Skill.Category.Magic"
 };
-
-const SKILL_COLUMN_LAYOUT = [
-  { id: "combat", categories: ["offense", "defense"] },
-  { id: "physical", categories: ["physical", "professional"] },
-  { id: "social", categories: ["social", "intellectual"] },
-  { id: "magic", categories: ["magic"] }
-];
 
 export function prepareSkillsDisplay(skills = {}, resistances = {}) {
   const normalizedSkills = skills ?? {};
@@ -175,15 +167,10 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     skillsInCategory.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
   );
 
-  const skillColumns = SKILL_COLUMN_LAYOUT.map(column => ({
-    id: column.id,
-    categories: column.categories
-      .map(category => ({
-        id: category.toLowerCase(),
-        title: localize(SKILL_CATEGORY_LABELS[category] ?? category),
-        skills: byCategory[category] ?? []
-      }))
-      .filter(category => category.skills.length)
+  const skillCategories = Object.entries(byCategory).map(([category, skillsInCategory]) => ({
+    id: category.toLowerCase(),
+    title: localize(SKILL_CATEGORY_LABELS[category] ?? category),
+    skills: skillsInCategory
   }));
 
   const resistancesList = Object.values(TRISKEL_RESISTANCES).map(resistance => {
@@ -199,6 +186,6 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     };
   });
 
-  return { resistances: resistancesList, skillColumns };
+  return { resistances: resistancesList, skillCategories };
 }
 

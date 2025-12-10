@@ -185,6 +185,9 @@
         }
       },
       "NPC": {
+        "Stats": {
+          "Title": "Statusraster"
+        },
         "Stat": {
           "HP": {
             "Label": "Trefferpunkte",
