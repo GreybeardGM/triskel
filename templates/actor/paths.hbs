@@ -5,6 +5,15 @@
       {{#if path}}
         <div class="path-bar {{path.id}}" style="grid-area: {{path.id}};">
           <div class="path-label" title="{{path.description}}">{{path.label}}</div>
+          <input
+            id="path-{{path.id}}-max"
+            class="path-max-input"
+            type="number"
+            min="0"
+            data-dtype="Number"
+            name="system.paths.{{path.id}}.max"
+            value="{{path.max}}"
+          />
           <div class="path-segments">
             {{#each path._segments as |segment|}}
               <div
