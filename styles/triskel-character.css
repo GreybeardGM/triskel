@@ -104,19 +104,35 @@
 .triskel .reserves .reserve-grid,
 .triskel .npc-stats .stat-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 4fr)
-    minmax(0, 1fr) minmax(0, 4fr)
-    minmax(0, 1fr) minmax(0, 4fr)
-    minmax(0, 1fr);
   gap: 1rem;
+}
+
+.triskel .reserves .reserve-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas: "power grace will";
+}
+
+.triskel .npc-stats .stat-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas: "health wounds";
+}
+
+.triskel .npc-stats .stat-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.triskel .reserves .reserve {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .triskel .resource-input {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding-right: 1rem;
-  border-right: 1px dotted;
 }
 
 .triskel .resource-max {
@@ -228,6 +244,7 @@
 
 .triskel .resource-box.segment-strain {
   background: var(--triskel-color-strain);
+  pointer-events: none;
 }
 
 .triskel .resource-box.segment-empty {
@@ -237,6 +254,7 @@
 .triskel .resource-box.segment-placeholder {
   background: var(--triskel-color-segment-placeholder);
   opacity: 0.05;
+  pointer-events: none;
 }
 
 .triskel .resource-box.segment-filled {
@@ -285,6 +303,18 @@
   font-weight: 700;
 }
 
+.triskel .path-max-input {
+  width: 2.25rem;
+  padding: 0.1rem 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--triskel-color-text-strong);
+  background: var(--triskel-color-surface-muted);
+  border: 1px solid var(--triskel-color-border-muted);
+  border-radius: 6px;
+}
+
 .triskel .path-segments {
   display: flex;
   gap: 0.25em;
@@ -300,11 +330,6 @@
 .triskel .vice .path-segments {
   flex-direction: row-reverse;
 }
-
-.triskel .path-bar.virtue { grid-area: virtue; }
-.triskel .path-bar.vice { grid-area: vice; }
-.triskel .path-bar.ward { grid-area: ward; }
-.triskel .path-bar.ruin { grid-area: ruin; }
 
 .triskel .tension-card {
   grid-area: tension;
@@ -348,13 +373,11 @@
 
 .triskel .skill-grid {
   display: grid;
+  grid-template-areas:
+    "offense defense social magic"
+    "physical professional intellectual magic";
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.4rem;
-}
-
-.triskel .skill-column {
-  display: flex;
-  flex-direction: column;
 }
 
 .triskel .skill-category {

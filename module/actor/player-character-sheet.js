@@ -1,11 +1,10 @@
 import {
   onEditImage,
   onUpdateResourceValue,
-  preparePathBars,
-  prepareReserveBars,
+  prepareBars,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
-import { ITEM_CATEGORY_CONFIG, TRISKEL_TIERS } from "../codex/triskel-codex.js";
+import { ITEM_CATEGORY_CONFIG, TRISKEL_RESERVES, TRISKEL_PATHS, TRISKEL_TIERS } from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -124,21 +123,21 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.system ??= this.document.system;
 
     // Prepare Sills
-    const { resistances, skillColumns } = prepareSkillsDisplay(
+    const { resistances, skillCategories } = prepareSkillsDisplay(
       context.system.skills,
       context.system.resistances
     );
 
     // Prepare Reserves
-    const reserves = prepareReserveBars(context.system.reserves);
+    const reserves = prepareBars(context.system.reserves, TRISKEL_RESERVES);
 
     // Prepare Paths
-    const paths = preparePathBars(context.system.paths);
+    const paths = prepareBars(context.system.paths, TRISKEL_PATHS);
 
     context.reserves = reserves;
     context.paths = paths;
     context.resistances = resistances;
-    context.skillColumns = skillColumns;
+    context.skillCategories = skillCategories;
     const equippedGear = this.document.system?.equippedGear ?? {};
     const equippedLists = Object.fromEntries(
       Object.entries(ITEM_CATEGORY_CONFIG).map(([type]) => [
