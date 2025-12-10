@@ -23,6 +23,9 @@
         "Character": "Player Character",
         "NPC": "NPC"
       },
+      "Tension": {
+        "Label": "Tension"
+      },
       "Tier": {
         "Novice": {
           "Label": "Novice"

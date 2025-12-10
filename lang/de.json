@@ -23,6 +23,9 @@
         "Character": "Spielercharakter",
         "NPC": "NSC"
       },
+      "Tension": {
+        "Label": "Spannung"
+      },
       "Tier": {
         "Novice": {
           "Label": "Novize"
