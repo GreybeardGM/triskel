@@ -95,32 +95,7 @@ export function prepareReserveBars(bars = {}, codexReference = TRISKEL_RESERVES)
 }
 
 export function preparePathBars(paths = {}) {
-  if (!paths) return {};
-
-  const pathMaxValues = toFiniteNumbers(Object.values(paths), path => path?.max);
-
-  const MaxSegments = deriveMaxSegments(pathMaxValues);
-
-  return Object.entries(paths ?? {}).reduce((collection, [id, resource]) => {
-    if (!resource) return collection;
-
-    const ownMax = Number.isFinite(Number(resource.max))
-      ? Number(resource.max)
-      : MaxSegments;
-
-    const value = Math.min(Number(resource.value ?? 0), ownMax);
-    const _segments = createSegments(ownMax, index => index <= value ? "filled" : "empty");
-
-    collection[id] = {
-      ...resource,
-      id,
-      label: localize(TRISKEL_PATHS[id]?.label ?? resource.label),
-      description: localize(TRISKEL_PATHS[id]?.description ?? resource.description),
-      _segments
-    };
-
-    return collection;
-  }, {});
+  return prepareReserveBars(paths, TRISKEL_PATHS);
 }
 
 const SKILL_CATEGORY_LABELS = {
