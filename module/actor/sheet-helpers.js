@@ -1,4 +1,4 @@
-import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+import { TRISKEL_RESERVES, TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
 const localize = (value) => {
   if (!value) return "";
@@ -59,7 +59,7 @@ export async function onUpdateResourceValue(event, target) {
   await this.document.update({ [property]: newValue });
 }
 
-export function prepareReserveBars(bars = {}, codexReference = TRISKEL_RESERVES) {
+export function prepareBars(bars = {}, codexReference = TRISKEL_RESERVES) {
   if (!bars) return {};
 
   const reserveMax = toFiniteNumbers(Object.values(bars), reserve => reserve?.max);
@@ -92,10 +92,6 @@ export function prepareReserveBars(bars = {}, codexReference = TRISKEL_RESERVES)
 
     return collection;
   }, {});
-}
-
-export function preparePathBars(paths = {}) {
-  return prepareReserveBars(paths, TRISKEL_PATHS);
 }
 
 const SKILL_CATEGORY_LABELS = {
