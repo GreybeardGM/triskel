@@ -146,22 +146,22 @@
         "virtue": {
           "id": "virtue",
           "min": 1,
-          "value": 1
+          "max": 1
         },
         "vice": {
           "id": "vice",
           "min": 1,
-          "value": 1
+          "max": 1
         },
         "ward": {
           "id": "ward",
           "min": 1,
-          "value": 1
+          "max": 1
         },
         "ruin": {
           "id": "ruin",
           "min": 1,
-          "value": 1
+          "max": 1
         }
       },
       "reserves": {

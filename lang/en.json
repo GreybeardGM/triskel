@@ -171,6 +171,7 @@
         }
       },
       "Reserve": {
+        "Label": "Reserves",
         "Power": {
           "Label": "Power",
           "Description": "Physical force and exertion."
@@ -185,6 +186,9 @@
         }
       },
       "NPC": {
+        "Stats": {
+          "Title": "Stat Grid"
+        },
         "Stat": {
           "HP": {
             "Label": "Hitpoints",
@@ -197,6 +201,7 @@
         }
       },
       "Path": {
+        "Label": "Paths",
         "Virtue": {
           "Label": "Virtue",
           "Description": "Capacity for discipline and moral steadiness.",
