@@ -2,13 +2,13 @@
   <h2>{{localize "TRISKEL.Actor.NPC.Stats.Title"}}</h2>
   <div class="stat-grid">
     <div class="stat-column" style="grid-area: health;">
-      {{#each health as |resource key|}}
-        <div class="resource-bar {{key}}">
+      {{#with (lookup health "hp") as |resource|}}
+        <div class="resource-bar hp">
           {{#each resource._segments as |segment|}}
             <div
               class="resource-box is-interactive segment-{{segment.state}}"
               data-action="updateResourceValue"
-              data-resource="health.{{key}}"
+              data-resource="health.hp"
               data-resource-value="{{segment.index}}"
             >
               {{segment.index}}
@@ -17,28 +17,28 @@
         </div>
         <div class="resource-input">
           <div class="resource-max">
-            <label class="resource-name" for="health-{{key}}-max" title="{{resource.description}}">{{resource.label}}</label>
+            <label class="resource-name" for="health-hp-max" title="{{resource.description}}">{{resource.label}}</label>
             <input
-              id="health-{{key}}-max"
+              id="health-hp-max"
               class="resource-max-input"
               type="number"
               data-dtype="Number"
-              name="system.health.{{key}}.max"
+              name="system.health.hp.max"
               value="{{resource.max}}"
             />
           </div>
         </div>
-      {{/each}}
+      {{/with}}
     </div>
 
     <div class="stat-column" style="grid-area: wounds;">
-      {{#each wounds as |resource key|}}
-        <div class="resource-bar {{key}}">
+      {{#with (lookup health "wounds") as |resource|}}
+        <div class="resource-bar wounds">
           {{#each resource._segments as |segment|}}
             <div
               class="resource-box is-interactive segment-{{segment.state}}"
               data-action="updateResourceValue"
-              data-resource="wounds.{{key}}"
+              data-resource="health.wounds"
               data-resource-value="{{segment.index}}"
             >
               {{segment.index}}
@@ -47,18 +47,18 @@
         </div>
         <div class="resource-input">
           <div class="resource-max">
-            <label class="resource-name" for="wounds-{{key}}-max" title="{{resource.description}}">{{resource.label}}</label>
+            <label class="resource-name" for="health-wounds-max" title="{{resource.description}}">{{resource.label}}</label>
             <input
-              id="wounds-{{key}}-max"
+              id="health-wounds-max"
               class="resource-max-input"
               type="number"
               data-dtype="Number"
-              name="system.wounds.{{key}}.max"
+              name="system.health.wounds.max"
               value="{{resource.max}}"
             />
           </div>
         </div>
-      {{/each}}
+      {{/with}}
     </div>
   </div>
 </section>

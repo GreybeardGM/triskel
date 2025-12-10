@@ -57,10 +57,8 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     );
 
     const health = prepareBars(context.system.health, TRISKEL_NPC_STATS);
-    const wounds = prepareBars(context.system.wounds, TRISKEL_NPC_STATS);
 
     context.health = health;
-    context.wounds = wounds;
     context.resistances = resistances;
     context.skillCategories = skillCategories;
 
