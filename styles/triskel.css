@@ -46,6 +46,7 @@
   background: var(--triskel-interactive-background);
   border: 1px solid var(--triskel-interactive-border);
   transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  cursor: pointer;
 }
 
 .triskel .is-interactive:hover {
