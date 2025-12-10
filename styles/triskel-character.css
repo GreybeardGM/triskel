@@ -204,7 +204,7 @@
 .triskel .vice ,
 .triskel .ward ,
 .triskel .ruin {
-  --triskel-interactive-highlight: #ffbf00;
+  --triskel-interactive-highlight: var(--triskel-color-resource-tension);
 }
 
 .triskel .resource-bar {
@@ -224,11 +224,6 @@
   color: var(--triskel-color-text-inverse);
 }
 
-.triskel .resource-box[data-action="updateResourceValue"] {
-  cursor: pointer;
-  transition: box-shadow 0.2s ease;
-}
-
 .triskel .resource-box.segment-strain {
   background: var(--triskel-color-strain);
   pointer-events: none;
@@ -239,13 +234,11 @@
 }
 
 .triskel .resource-box.segment-placeholder {
-  background: var(--triskel-color-segment-placeholder);
-  opacity: 0.05;
+  opacity: 0;
   pointer-events: none;
 }
 
 .triskel .resource-box.segment-filled {
-  border-color: color-mix( in srgb, var(--triskel-interactive-highlight) 50%, var(--triskel-interactive-background) 50% );
   background: var(--triskel-interactive-highlight);
 }
 
