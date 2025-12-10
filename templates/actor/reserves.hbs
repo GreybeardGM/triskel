@@ -47,21 +47,5 @@
         </footer>
       </div>
     {{/each}}
-    {{#if tension._segments}}
-      <div class="resource-bar tension">
-        {{#each tension._segments as |segment|}}
-          <div
-            class="resource-box is-interactive segment-{{segment.state}}"
-            {{#if segment.clickable}}
-              data-action="updateResourceValue"
-              data-resource="tension"
-              data-resource-value="{{segment.index}}"
-            {{/if}}
-          >
-            {{segment.index}}
-          </div>
-        {{/each}}
-      </div>
-    {{/if}}
   </div>
 </section>

@@ -1,4 +1,4 @@
-import { TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+import { TRISKEL_PATHS, TRISKEL_RESERVES, TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
 
 const localize = (value) => {
   if (!value) return "";
@@ -93,6 +93,30 @@ export function prepareBars(bars, MaxSegments, codexReference = {}) {
 
     return collection;
   }, {});
+}
+
+function getMaxValueFromResources(resources = {}) {
+  const numericValues = Object.values(resources).flatMap(resource => {
+    const min = Number(resource?.min);
+    const value = Number(resource?.value);
+    const max = Number(resource?.max);
+
+    return [min, value, max].filter(Number.isFinite);
+  });
+
+  return numericValues.length ? Math.max(...numericValues) : 5;
+}
+
+export function prepareReserveBars(reserves = {}) {
+  const MaxSegments = getMaxValueFromResources(reserves);
+
+  return prepareBars(reserves, MaxSegments, TRISKEL_RESERVES);
+}
+
+export function preparePathBars(paths = {}) {
+  const MaxSegments = getMaxValueFromResources(paths);
+
+  return prepareBars(paths, MaxSegments, TRISKEL_PATHS);
 }
 
 const SKILL_CATEGORY_LABELS = {

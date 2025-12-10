@@ -189,10 +189,6 @@
   --triskel-interactive-highlight: var(--triskel-color-resource-wounds);
 }
 
-.triskel .tension {
-  --triskel-interactive-highlight: var(--triskel-color-resource-tension);
-}
-
 .triskel .virtue {
   --triskel-interactive-highlight: var(--triskel-color-path-virtue);
 }
@@ -269,8 +265,10 @@
 
 .triskel .paths-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.25rem 2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) minmax(140px, 0.8fr) repeat(2, minmax(0, 1fr));
+  grid-template-areas: "virtue vice tension ward ruin";
+  align-items: center;
+  gap: 0.5rem 1rem;
 }
 
 .triskel .path-bar {
@@ -301,6 +299,28 @@
 .triskel .virtue .path-segments,
 .triskel .vice .path-segments {
   flex-direction: row-reverse;
+}
+
+.triskel .path-bar.virtue { grid-area: virtue; }
+.triskel .path-bar.vice { grid-area: vice; }
+.triskel .path-bar.ward { grid-area: ward; }
+.triskel .path-bar.ruin { grid-area: ruin; }
+
+.triskel .tension-card {
+  grid-area: tension;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--triskel-interactive-border);
+  border-radius: 6px;
+  background: var(--triskel-interactive-background);
+}
+
+.triskel .tension-input {
+  width: 100%;
+  text-align: center;
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
