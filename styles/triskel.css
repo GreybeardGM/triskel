@@ -9,15 +9,12 @@
   --triskel-color-resource-will: #5bc0de;
   --triskel-color-resource-hp: #ffd15c;
   --triskel-color-resource-wounds: #7a1f1f;
+  --triskel-color-resource-tension: #ffd15c;
   --triskel-color-strain: #a00000;
   --triskel-color-segment-empty: #4a4a4a;
   --triskel-color-segment-placeholder: #000000;
-  --triskel-color-path-virtue: #ffffee;
-  --triskel-color-path-vice: #9e9178;
-  --triskel-color-path-ward: #90bab9;
-  --triskel-color-path-ruin: #bbb3ce;
   --triskel-interactive-background: #0f141b;
-  --triskel-interactive-border: rgba(255, 255, 255, 0.14);
+  --triskel-interactive-border: #444;
   --triskel-interactive-highlight: #d5e3f4;
 }
 
@@ -49,10 +46,11 @@
   background: var(--triskel-interactive-background);
   border: 1px solid var(--triskel-interactive-border);
   transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  cursor: pointer;
 }
 
 .triskel .is-interactive:hover {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--triskel-interactive-highlight) 55%, transparent);
+  box-shadow: 0 0 0 2px var(--triskel-interactive-highlight);
 }
 
 .triskel .is-selected {
