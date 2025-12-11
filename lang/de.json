@@ -171,6 +171,7 @@
         }
       },
       "Reserve": {
+        "Label": "Reserven",
         "Power": {
           "Label": "Kraft",
           "Description": "Körperliche Stärke und Anstrengung."
@@ -200,6 +201,7 @@
         }
       },
       "Path": {
+        "Label": "Pfade",
         "Virtue": {
           "Label": "Tugend",
           "Description": "Fähigkeit zu Disziplin und moralischer Beständigkeit.",
