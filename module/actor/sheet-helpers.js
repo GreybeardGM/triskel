@@ -53,10 +53,8 @@ export async function onUpdateResourceValue(event, target) {
   const property = `system.${resource}.${resourceField}`;
   const currentValue = Number(foundry.utils.getProperty(this.document, property) ?? 0);
 
-  const allowToggle = target.dataset.allowToggle !== "false";
-
   let newValue = clickedValue;
-  if (allowToggle && currentValue === clickedValue) newValue = clickedValue - 1;
+  if (currentValue === clickedValue) newValue = clickedValue - 1;
 
   await this.document.update({ [property]: newValue });
 }
