@@ -1,33 +1,19 @@
 import { onEditImage } from "../actor/sheet-helpers.js";
-import { TRISKEL_ALL_ACTIONS } from "../codex/action-codex.js";
-import { TRISKEL_FORMS } from "../codex/form-codex.js";
-import { TRISKEL_ITEM_CATEGORIES_BY_ID, TRISKEL_SKILLS, TRISKEL_SKILLS_BY_ID } from "../codex/triskel-codex.js";
 
-const localize = (value) => {
-  if (!value) return "";
-
-  try {
-    return game?.i18n?.localize?.(value) ?? value;
-  } catch (error) {
-    console.warn("[Triskel] Failed to localize value", { value, error });
-    return value;
-  }
-};
+const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
+const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-const ACTION_REFERENCE_OPTIONS = () => TRISKEL_ALL_ACTIONS
-  .map(action => ({ value: action.id, label: localize(action.label ?? action.id) }))
-  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+const ACTION_REFERENCE_OPTIONS = () => (getTriskellCodex().actions ?? [])
+  .map(action => ({ value: action.id, label: action.label ?? action.id }));
 
-const FORM_REFERENCE_OPTIONS = () => TRISKEL_FORMS
-  .map(form => ({ value: form.id, label: localize(form.label ?? form.id) }))
-  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+const FORM_REFERENCE_OPTIONS = () => (getTriskellCodex().forms ?? [])
+  .map(form => ({ value: form.id, label: form.label ?? form.id }));
 
-const MODIFIER_SKILL_OPTIONS = () => TRISKEL_SKILLS
-  .map(skill => ({ value: skill.id, label: localize(skill.label ?? skill.id) }))
-  .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+const MODIFIER_SKILL_OPTIONS = () => (getTriskellCodex().skills ?? [])
+  .map(skill => ({ value: skill.id, label: skill.label ?? skill.id }));
 
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static DEFAULT_OPTIONS = {
@@ -76,17 +62,18 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.system ??= this.document.system ?? {};
 
     const itemTypeKey = context.item?.type ?? "";
-    const labelKey = TRISKEL_ITEM_CATEGORIES_BY_ID[itemTypeKey]?.label ?? `TRISKEL.Item.Type.${itemTypeKey}`;
+    const itemCategories = getTriskellIndex().itemCategories ?? {};
+    const labelKey = itemCategories[itemTypeKey]?.label ?? `TRISKEL.Item.Type.${itemTypeKey}`;
 
-    context.itemTypeLabel = localize(labelKey) || itemTypeKey;
+    context.itemTypeLabel = labelKey || itemTypeKey;
 
     context.referenceOptions = {
       actions: ACTION_REFERENCE_OPTIONS(),
       forms: FORM_REFERENCE_OPTIONS()
     };
     context.references = {
-      actions: this.constructor.prepareReferenceEntries(context.system.actions?.ref, TRISKEL_ALL_ACTIONS),
-      forms: this.constructor.prepareReferenceEntries(context.system.forms?.ref, TRISKEL_FORMS)
+      actions: this.constructor.prepareReferenceEntries(context.system.actions?.ref, getTriskellCodex().actions),
+      forms: this.constructor.prepareReferenceEntries(context.system.forms?.ref, getTriskellCodex().forms)
     };
     context.modifiers = this.constructor.prepareModifiers(context.system.modifiers);
     context.modifierOptions = MODIFIER_SKILL_OPTIONS();
@@ -108,19 +95,21 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       const id = typeof entry === "string" ? entry : entry?.id ?? "";
       const label = collection.find(item => item.id === id)?.label ?? id;
 
-      return { id, label: localize(label), index };
+      return { id, label, index };
     });
   }
 
   static prepareModifiers(modifiers = []) {
     if (!Array.isArray(modifiers)) return [];
 
+    const skillsById = getTriskellIndex().skills ?? {};
+
     return modifiers.map((modifier, index) => {
-      const skill = TRISKEL_SKILLS_BY_ID[modifier.skill] ?? {};
+      const skill = skillsById[modifier.skill] ?? {};
 
       return {
         ...modifier,
-        label: localize(skill.label ?? modifier.skill ?? ""),
+        label: skill.label ?? modifier.skill ?? "",
         index
       };
     });

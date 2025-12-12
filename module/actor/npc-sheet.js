@@ -1,5 +1,6 @@
 import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
-import { TRISKEL_NPC_STATS_BY_ID } from "../codex/triskel-codex.js";
+
+const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -56,7 +57,7 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       context.system.resistances
     );
 
-    const health = prepareBars(context.system.health, TRISKEL_NPC_STATS_BY_ID);
+    const health = prepareBars(context.system.health, getTriskellIndex().npcStats);
 
     context.health = health;
     context.resistances = resistances;
