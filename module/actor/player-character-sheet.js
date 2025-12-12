@@ -4,16 +4,12 @@ import {
   prepareBars,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
-import {
-  TRISKEL_ITEM_CATEGORIES,
-  TRISKEL_ITEM_CATEGORIES_BY_ID,
-  TRISKEL_PATHS_BY_ID,
-  TRISKEL_RESERVES_BY_ID,
-  TRISKEL_TIERS
-} from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
+
+const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
+const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
@@ -124,9 +120,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-  
+
     context.actor ??= this.document;
     context.system ??= this.document.system;
+
+    const codex = getTriskellCodex();
+    const index = getTriskellIndex();
 
     // Prepare Sills
     const { resistances, skillCategories } = prepareSkillsDisplay(
@@ -135,35 +134,28 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     );
 
     // Prepare Reserves
-    const reserves = prepareBars(context.system.reserves, TRISKEL_RESERVES_BY_ID);
+    const reserves = prepareBars(context.system.reserves, index.reserves);
 
     // Prepare Paths
-    const paths = prepareBars(context.system.paths, TRISKEL_PATHS_BY_ID);
+    const paths = prepareBars(context.system.paths, index.paths);
 
     context.reserves = reserves;
     context.paths = paths;
     context.resistances = resistances;
     context.skillCategories = skillCategories;
     const equippedGear = this.document.system?.equippedGear ?? {};
+    const itemCategories = codex.itemCategories ?? [];
+    const itemCategoriesById = index.itemCategories ?? {};
+
     const equippedLists = Object.fromEntries(
-      TRISKEL_ITEM_CATEGORIES.map(({ id }) => [
+      itemCategories.map(({ id }) => [
         id,
         getEquippedList(id, equippedGear)
       ])
     );
 
-  const localizedCategoryLabels = Object.fromEntries(
-    TRISKEL_ITEM_CATEGORIES.map(category => [
-      category.id,
-      {
-        label: game.i18n.localize(category.label),
-        labelPlural: game.i18n.localize(category.labelPlural)
-      }
-    ])
-  );
-
     const items = Array.from(this.document.items ?? []).map(item => {
-      const categoryConfig = TRISKEL_ITEM_CATEGORIES_BY_ID[item.type];
+      const categoryConfig = itemCategoriesById[item.type];
       const equippedList = categoryConfig ? equippedLists[item.type] ?? [] : [];
       const isEquipToggleActive = categoryConfig ? equippedList.includes(item.id) : false;
       return {
@@ -181,16 +173,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.items = items;
 
-  context.itemsByType = TRISKEL_ITEM_CATEGORIES.map(category => ({
-    type: category.id,
-    itemLabel: localizedCategoryLabels[category.id]?.label ?? game.i18n.localize(category.label),
-    label: localizedCategoryLabels[category.id]?.labelPlural ?? game.i18n.localize(category.labelPlural),
-    toggleAction: category.toggleAction,
-    items: items.filter(item => item.categoryType === category.id)
-  }));
+    context.itemsByType = itemCategories.map(category => ({
+      type: category.id,
+      itemLabel: category.label,
+      label: category.labelPlural,
+      toggleAction: category.toggleAction,
+      items: items.filter(item => item.categoryType === category.id)
+    }));
+
     const tierValue = Number(context.system.tier?.value);
-    const tierLabelKey = TRISKEL_TIERS.find(tier => tier.tier === tierValue)?.label;
-    context.tierLabel = tierLabelKey ? game.i18n.localize(tierLabelKey) : "";
+    const tierLabel = codex.tiers?.find(tier => tier.tier === tierValue)?.label;
+    context.tierLabel = tierLabel ?? "";
 
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(

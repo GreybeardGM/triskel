@@ -2,7 +2,11 @@ import { TriskelActor } from "./actor/triskel-actor.js";
 import { PlayerCharacterSheet } from "./actor/player-character-sheet.js";
 import { NpcSheet } from "./actor/npc-sheet.js";
 import { TriskelItemSheet } from "./item/triskel-item-sheet.js";
-import { TRISKEL_CODEX, TRISKEL_CODEX_INDEX, TRISKEL_ITEM_CATEGORIES } from "./codex/triskel-codex.js";
+import {
+  TRISKEL_CODEX,
+  TRISKEL_CODEX_INDEX,
+  TRISKEL_ITEM_CATEGORIES
+} from "./codex/triskel-codex.js";
 import { localizeCodexCollections } from "./codex/codex-localization.js";
 
 Hooks.once("init", function() {
@@ -52,8 +56,8 @@ Hooks.once("init", function() {
     };
   }, CONFIG.Item.typeLabels ?? {});
 
-  CONFIG.triskel = {
-    ...(CONFIG.triskel ?? {}),
+  CONFIG.triskell = {
+    ...(CONFIG.triskell ?? {}),
     codex: TRISKEL_CODEX,
     index: TRISKEL_CODEX_INDEX
   };
@@ -62,5 +66,5 @@ Hooks.once("init", function() {
 Hooks.once("ready", () => {
   const localize = game.i18n.localize.bind(game.i18n);
 
-  localizeCodexCollections(CONFIG.triskel?.codex, CONFIG.triskel?.index, localize);
+  localizeCodexCollections(CONFIG.triskell?.codex, CONFIG.triskell?.index, localize);
 });

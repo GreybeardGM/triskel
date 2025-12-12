@@ -1,27 +1,11 @@
-import { TRISKEL_BASE_ACTIONS, TRISKEL_ADVANCED_ACTIONS, TRISKEL_SPELLS } from "../codex/action-codex.js";
-import { TRISKEL_FORMS } from "../codex/form-codex.js";
-import { TRISKEL_PATHS_BY_ID, TRISKEL_RESERVES_BY_ID, TRISKEL_SKILLS_BY_ID } from "../codex/triskel-codex.js";
-
 const createLookupById = (collection = []) => (Array.isArray(collection) ? collection : [])
   .reduce((index, entry) => {
     if (entry?.id) index[entry.id] = entry;
     return index;
   }, {});
 
-const ADVANCED_ACTIONS_BY_ID = createLookupById(TRISKEL_ADVANCED_ACTIONS);
-const SPELLS_BY_ID = createLookupById(TRISKEL_SPELLS);
-const FORMS_BY_ID = createLookupById(TRISKEL_FORMS);
-
-const localize = (value) => {
-  if (!value) return "";
-
-  try {
-    return game?.i18n?.localize?.(value) ?? value;
-  } catch (error) {
-    console.warn("[Triskel] Failed to localize value", { value, error });
-    return value;
-  }
-};
+const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
+const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 
 export class TriskelActor extends Actor {
   /** @override */
@@ -33,6 +17,8 @@ export class TriskelActor extends Actor {
   /** @override */
   prepareDerivedData() {
     super.prepareDerivedData();
+
+    const triskellIndex = getTriskellIndex();
 
     // Globale Ableitungen für alle Actor-Typen
     const reserves = this.system?.reserves ?? {};
@@ -54,7 +40,7 @@ export class TriskelActor extends Actor {
       if (!path) return;
 
       const parsedMax = Number(path.max);
-      const codexMax = Number(TRISKEL_PATHS_BY_ID[id]?.steps?.length ?? 0);
+      const codexMax = Number(triskellIndex.paths?.[id]?.steps?.length ?? 0);
       const max = Number.isFinite(parsedMax) ? parsedMax : codexMax;
       const safeMax = Math.max(0, max);
 
@@ -132,6 +118,8 @@ export class TriskelActor extends Actor {
   _prepareSkillModifiers(equippedContext = []) {
     const modifiersBySkill = {};
 
+    const skillsById = getTriskellIndex().skills ?? {};
+
     for (const { modifiers: itemModifiers, id, image } of Array.from(equippedContext)) {
       for (const modifier of itemModifiers) {
         const skill = modifier?.skill ?? modifier?.id ?? "";
@@ -154,11 +142,11 @@ export class TriskelActor extends Actor {
     }
 
     return Object.values(modifiersBySkill).map(modifier => {
-      const skill = TRISKEL_SKILLS_BY_ID[modifier.skill] ?? {};
+      const skill = skillsById[modifier.skill] ?? {};
 
       return {
         ...modifier,
-        label: localize(skill.label ?? modifier.skill ?? "")
+        label: skill.label ?? modifier.skill ?? ""
       };
     });
   }
@@ -203,8 +191,9 @@ export class TriskelActor extends Actor {
   }
 
   _formatAction(action, { source, image }) {
-    const skill = TRISKEL_SKILLS_BY_ID[action.skill] ?? {};
-    const reserve = TRISKEL_RESERVES_BY_ID[action.reserve] ?? {};
+    const index = getTriskellIndex();
+    const skill = index.skills?.[action.skill] ?? {};
+    const reserve = index.reserves?.[action.reserve] ?? {};
     const actorSkill = this.system?.skills?.[action.skill] ?? {};
 
     const parsedSkillTotal = Number(actorSkill.total ?? actorSkill.value ?? 0);
@@ -212,10 +201,10 @@ export class TriskelActor extends Actor {
 
     return {
       ...action,
-      label: localize(action.label ?? action.id),
-      description: localize(action.description ?? ""),
-      skillLabel: localize(skill.label ?? action.skill ?? ""),
-      reserveLabel: localize(reserve.label ?? action.reserve ?? ""),
+      label: action.label ?? action.id,
+      description: action.description ?? "",
+      skillLabel: skill.label ?? action.skill ?? "",
+      reserveLabel: reserve.label ?? action.reserve ?? "",
       skillTotal,
       source,
       image: image ?? action.image ?? action.img ?? null
@@ -223,15 +212,16 @@ export class TriskelActor extends Actor {
   }
 
   _formatForm(form, { source, image }) {
-    const reserve = TRISKEL_RESERVES_BY_ID[form.reserve] ?? {};
-    const skill = TRISKEL_SKILLS_BY_ID[form.skill] ?? {};
+    const index = getTriskellIndex();
+    const reserve = index.reserves?.[form.reserve] ?? {};
+    const skill = index.skills?.[form.skill] ?? {};
 
     return {
       ...form,
-      label: localize(form.label ?? form.id),
-      description: localize(form.description ?? ""),
-      reserveLabel: localize(reserve.label ?? form.reserve ?? ""),
-      skillLabel: localize(skill.label ?? form.skill ?? ""),
+      label: form.label ?? form.id,
+      description: form.description ?? "",
+      reserveLabel: reserve.label ?? form.reserve ?? "",
+      skillLabel: skill.label ?? form.skill ?? "",
       source,
       image: image ?? form.image ?? form.img ?? null
     };
@@ -242,9 +232,17 @@ export class TriskelActor extends Actor {
     const spells = [];
     const forms = [];
 
+    const codex = getTriskellCodex();
+    const index = getTriskellIndex();
+
     const actionIds = new Set();
     const spellIds = new Set();
     const formIds = new Set();
+
+    const baseActions = codex.baseActions ?? [];
+    const advancedActionsById = index.advancedActions ?? createLookupById(codex.advancedActions ?? []);
+    const spellsById = index.spells ?? createLookupById(codex.spells ?? []);
+    const formsById = index.forms ?? createLookupById(codex.forms ?? []);
 
     const addAction = (action, { source = null, image } = {}) => {
       if (!action?.id || actionIds.has(action.id)) return;
@@ -264,19 +262,19 @@ export class TriskelActor extends Actor {
       forms.push(this._formatForm(form, { source, image }));
     };
 
-    TRISKEL_BASE_ACTIONS.forEach(action => addAction(action, { image: action.image ?? action.img }));
+    baseActions.forEach(action => addAction(action, { image: action.image ?? action.img }));
 
     for (const { actionRefs, formRefs, id, image } of Array.from(equippedContext)) {
       actionRefs.forEach(actionId => {
-        const advancedAction = ADVANCED_ACTIONS_BY_ID[actionId];
+        const advancedAction = advancedActionsById[actionId];
         if (advancedAction) addAction(advancedAction, { source: id, image });
 
-        const spell = SPELLS_BY_ID[actionId];
+        const spell = spellsById[actionId];
         if (spell) addSpell(spell, { source: id, image });
       });
 
       formRefs.forEach(formId => {
-        const form = FORMS_BY_ID[formId];
+        const form = formsById[formId];
         if (form) addForm(form, { source: id, image });
       });
     }
