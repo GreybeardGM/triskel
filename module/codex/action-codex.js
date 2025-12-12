@@ -2,7 +2,7 @@
 
 export const TRISKEL_BASE_ACTIONS = [
   {
-    key: "strike",
+    id: "strike",
     label: "TRISKEL.Action.Base.Strike.Label",
     type: "action",
     category: "combat",
@@ -15,7 +15,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["action", "melee", "offense", "strike"]
   },
   {
-    key: "bind",
+    id: "bind",
     label: "TRISKEL.Action.Base.Bind.Label",
     type: "action",
     category: "combat",
@@ -28,7 +28,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["action", "melee", "offense", "control", "bind"]
   },
   {
-    key: "expose",
+    id: "expose",
     label: "TRISKEL.Action.Base.Expose.Label",
     type: "action",
     category: "combat",
@@ -41,7 +41,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["action", "melee", "offense", "control", "expose"]
   },
   {
-    key: "push",
+    id: "push",
     label: "TRISKEL.Action.Base.Push.Label",
     type: "action",
     category: "combat",
@@ -54,7 +54,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["action", "melee", "offense", "control", "push"]
   },
   {
-    key: "brace",
+    id: "brace",
     label: "TRISKEL.Action.Base.Brace.Label",
     type: "reaction",
     category: "combat",
@@ -67,7 +67,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["reaction", "melee", "defense", "brace", "resilience"]
   },
   {
-    key: "guard",
+    id: "guard",
     label: "TRISKEL.Action.Base.Guard.Label",
     type: "reaction",
     category: "combat",
@@ -80,7 +80,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["reaction", "melee", "defense", "guard", "protection"]
   },
   {
-    key: "evade",
+    id: "evade",
     label: "TRISKEL.Action.Base.Evade.Label",
     type: "reaction",
     category: "combat",
@@ -93,7 +93,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["reaction", "defense", "evasion"]
   },
   {
-    key: "grapple",
+    id: "grapple",
     label: "TRISKEL.Action.Base.Grapple.Label",
     type: "action",
     category: "combat",
@@ -106,7 +106,7 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["action", "melee", "offense", "control", "grapple"]
   },
   {
-    key: "break",
+    id: "break",
     label: "TRISKEL.Action.Base.Break.Label",
     type: "action",
     category: "combat",
@@ -122,7 +122,7 @@ export const TRISKEL_BASE_ACTIONS = [
 
 export const TRISKEL_ADVANCED_ACTIONS = [
   {
-    key: "shoot",
+    id: "shoot",
     label: "TRISKEL.Action.Advanced.Shoot.Label",
     type: "action",
     category: "combat",
@@ -134,7 +134,7 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     keywords: ["action", "ranged", "offense", "aim", "shoot"]
   },
   {
-    key: "throw",
+    id: "throw",
     label: "TRISKEL.Action.Advanced.Throw.Label",
     type: "action",
     category: "combat",
@@ -149,7 +149,7 @@ export const TRISKEL_ADVANCED_ACTIONS = [
 
 export const TRISKEL_SPELLS = [
   {
-    key: "arc",
+    id: "arc",
     label: "TRISKEL.Action.Spell.Arc.Label",
     type: "action",
     category: "spell",
@@ -161,7 +161,7 @@ export const TRISKEL_SPELLS = [
     keywords: ["spell", "arcane", "action", "manifestation", "lightning"]
   },
   {
-    key: "glue",
+    id: "glue",
     label: "TRISKEL.Action.Spell.Glue.Label",
     type: "action",
     category: "spell",
@@ -173,7 +173,7 @@ export const TRISKEL_SPELLS = [
     keywords: ["spell", "arcane", "action", "manifestation"]
   },
   {
-    key: "rebukeEvil",
+    id: "rebukeEvil",
     label: "TRISKEL.Action.Spell.RebukeEvil.Label",
     type: "action",
     category: "spell",
@@ -185,7 +185,7 @@ export const TRISKEL_SPELLS = [
     keywords: ["spell", "divine", "action", "transposition"]
   },
   {
-    key: "protectivePrayer",
+    id: "protectivePrayer",
     label: "TRISKEL.Action.Spell.ProtectivePrayer.Label",
     type: "reaction",
     category: "spell",

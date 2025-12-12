@@ -4,7 +4,7 @@
 
 export const TRISKEL_FORMS = [
   {
-    key: "power_strike",
+    id: "power_strike",
     label: "TRISKEL.Form.PowerStrike.Label",
     cost: 1,
     reserve: "power",
@@ -13,7 +13,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.PowerStrike.Description"
   },
   {
-    key: "tripping_hook",
+    id: "tripping_hook",
     label: "TRISKEL.Form.TrippingHook.Label",
     cost: 1,
     reserve: "grace",
@@ -22,7 +22,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.TrippingHook.Description"
   },
   {
-    key: "locking_bind",
+    id: "locking_bind",
     label: "TRISKEL.Form.LockingBind.Label",
     cost: 1,
     reserve: "grace",
@@ -31,7 +31,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.LockingBind.Description"
   },
   {
-    key: "precision_thrust",
+    id: "precision_thrust",
     label: "TRISKEL.Form.PrecisionThrust.Label",
     cost: 1,
     reserve: "grace",
@@ -40,7 +40,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.PrecisionThrust.Description"
   },
   {
-    key: "push_through",
+    id: "push_through",
     label: "TRISKEL.Form.PushThrough.Label",
     cost: 1,
     reserve: "power",
@@ -49,7 +49,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.PushThrough.Description"
   },
   {
-    key: "counterguard",
+    id: "counterguard",
     label: "TRISKEL.Form.Counterguard.Label",
     cost: 1,
     reserve: "grace",
@@ -58,7 +58,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.Counterguard.Description"
   },
   {
-    key: "break_stance",
+    id: "break_stance",
     label: "TRISKEL.Form.BreakStance.Label",
     cost: 1,
     reserve: "power",
@@ -66,7 +66,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.BreakStance.Description"
   },
   {
-    key: "drag",
+    id: "drag",
     label: "TRISKEL.Form.Drag.Label",
     cost: 1,
     reserve: "grace",
@@ -75,7 +75,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.Drag.Description"
   },
   {
-    key: "shield_pull",
+    id: "shield_pull",
     label: "TRISKEL.Form.ShieldPull.Label",
     cost: 1,
     reserve: "grace",
@@ -84,7 +84,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.ShieldPull.Description"
   },
   {
-    key: "shield_cover",
+    id: "shield_cover",
     label: "TRISKEL.Form.ShieldCover.Label",
     cost: 1,
     reserve: "grace",
@@ -93,7 +93,7 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.ShieldCover.Description"
   },
   {
-    key: "blackmagic",
+    id: "blackmagic",
     label: "TRISKEL.Form.Blackmagic.Label",
     cost: 1,
     reserve: "power",

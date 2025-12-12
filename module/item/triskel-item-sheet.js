@@ -1,7 +1,7 @@
 import { onEditImage } from "../actor/sheet-helpers.js";
 import { TRISKEL_ALL_ACTIONS } from "../codex/action-codex.js";
 import { TRISKEL_FORMS } from "../codex/form-codex.js";
-import { ITEM_CATEGORY_CONFIG, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+import { TRISKEL_ITEM_CATEGORIES_BY_ID, TRISKEL_SKILLS, TRISKEL_SKILLS_BY_ID } from "../codex/triskel-codex.js";
 
 const localize = (value) => {
   if (!value) return "";
@@ -18,14 +18,14 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 const ACTION_REFERENCE_OPTIONS = () => TRISKEL_ALL_ACTIONS
-  .map(action => ({ value: action.key, label: localize(action.label ?? action.key) }))
+  .map(action => ({ value: action.id, label: localize(action.label ?? action.id) }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
 const FORM_REFERENCE_OPTIONS = () => TRISKEL_FORMS
-  .map(form => ({ value: form.key, label: localize(form.label ?? form.key) }))
+  .map(form => ({ value: form.id, label: localize(form.label ?? form.id) }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
-const MODIFIER_SKILL_OPTIONS = () => Object.values(TRISKEL_SKILLS)
+const MODIFIER_SKILL_OPTIONS = () => TRISKEL_SKILLS
   .map(skill => ({ value: skill.id, label: localize(skill.label ?? skill.id) }))
   .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
@@ -76,7 +76,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.system ??= this.document.system ?? {};
 
     const itemTypeKey = context.item?.type ?? "";
-    const labelKey = ITEM_CATEGORY_CONFIG[itemTypeKey]?.itemLabelKey ?? `TRISKEL.Item.Type.${itemTypeKey}`;
+    const labelKey = TRISKEL_ITEM_CATEGORIES_BY_ID[itemTypeKey]?.label ?? `TRISKEL.Item.Type.${itemTypeKey}`;
 
     context.itemTypeLabel = localize(labelKey) || itemTypeKey;
 
@@ -105,10 +105,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (!Array.isArray(entries)) return [];
 
     return entries.map((entry, index) => {
-      const key = typeof entry === "string" ? entry : entry?.key ?? "";
-      const label = collection.find(item => item.key === key)?.label ?? key;
+      const id = typeof entry === "string" ? entry : entry?.id ?? "";
+      const label = collection.find(item => item.id === id)?.label ?? id;
 
-      return { key, label: localize(label), index };
+      return { id, label: localize(label), index };
     });
   }
 
@@ -116,7 +116,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (!Array.isArray(modifiers)) return [];
 
     return modifiers.map((modifier, index) => {
-      const skill = TRISKEL_SKILLS[modifier.skill] ?? {};
+      const skill = TRISKEL_SKILLS_BY_ID[modifier.skill] ?? {};
 
       return {
         ...modifier,
@@ -132,7 +132,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (!Array.isArray(current)) return [];
 
     return current
-      .map(entry => (typeof entry === "string" ? entry : entry?.key))
+      .map(entry => (typeof entry === "string" ? entry : entry?.id))
       .filter(Boolean);
   }
 

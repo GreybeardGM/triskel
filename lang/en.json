@@ -2,21 +2,15 @@
   "TRISKEL": {
     "Actor": {
       "Tab": {
-        "Actions": {
-          "Label": "Action Cards",
-          "Tooltip": "Show and select your action cards"
-        },
-        "Skills": {
-          "Label": "Skills",
-          "Tooltip": "Edit skills and resistances"
-        },
-        "Inventory": {
-          "Label": "Equipment",
-          "Tooltip": "Review your carried items"
-        },
-        "Notes": {
-          "Label": "Notes",
-          "Tooltip": "Review character notes"
+        "Actions": "Action Cards",
+        "Skills": "Skills",
+        "Inventory": "Equipment",
+        "Notes": "Notes",
+        "Tooltip": {
+          "Actions": "Show and select your action cards",
+          "Skills": "Edit skills and resistances",
+          "Inventory": "Review your carried items",
+          "Notes": "Review character notes"
         }
       },
       "Type": {
