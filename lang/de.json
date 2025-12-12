@@ -2,21 +2,15 @@
   "TRISKEL": {
     "Actor": {
       "Tab": {
-        "Actions": {
-          "Label": "Aktionskarten",
-          "Tooltip": "Aktionskarten anzeigen und auswählen"
-        },
-        "Skills": {
-          "Label": "Fertigkeiten",
-          "Tooltip": "Fertigkeiten und Resistenzen bearbeiten"
-        },
-        "Inventory": {
-          "Label": "Ausrüstung",
-          "Tooltip": "Alle getragenen Gegenstände ansehen"
-        },
-        "Notes": {
-          "Label": "Notizen",
-          "Tooltip": "Charakternotizen ansehen"
+        "Actions": "Aktionskarten",
+        "Skills": "Fertigkeiten",
+        "Inventory": "Ausrüstung",
+        "Notes": "Notizen",
+        "Tooltip": {
+          "Actions": "Aktionskarten anzeigen und auswählen",
+          "Skills": "Fertigkeiten und Resistenzen bearbeiten",
+          "Inventory": "Alle getragenen Gegenstände ansehen",
+          "Notes": "Charakternotizen ansehen"
         }
       },
       "Type": {

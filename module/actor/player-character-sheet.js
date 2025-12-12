@@ -4,7 +4,13 @@ import {
   prepareBars,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
-import { ITEM_CATEGORY_CONFIG, TRISKEL_RESERVES, TRISKEL_PATHS, TRISKEL_TIERS } from "../codex/triskel-codex.js";
+import {
+  TRISKEL_ITEM_CATEGORIES,
+  TRISKEL_ITEM_CATEGORIES_BY_ID,
+  TRISKEL_PATHS_BY_ID,
+  TRISKEL_RESERVES_BY_ID,
+  TRISKEL_TIERS
+} from "../codex/triskel-codex.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -47,29 +53,29 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           id: "actions",
           group: "sheet",
           icon: "fa-solid fa-bolt",
-          label: "TRISKEL.Actor.Tab.Actions.Label",
-          tooltip: "TRISKEL.Actor.Tab.Actions.Tooltip"
+          label: "TRISKEL.Actor.Tab.Actions",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Actions"
         },
         {
           id: "skills",
           group: "sheet",
           icon: "fa-solid fa-shield-halved",
-          label: "TRISKEL.Actor.Tab.Skills.Label",
-          tooltip: "TRISKEL.Actor.Tab.Skills.Tooltip"
+          label: "TRISKEL.Actor.Tab.Skills",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Skills"
         },
         {
           id: "inventory",
           group: "sheet",
           icon: "fa-solid fa-suitcase",
-          label: "TRISKEL.Actor.Tab.Inventory.Label",
-          tooltip: "TRISKEL.Actor.Tab.Inventory.Tooltip"
+          label: "TRISKEL.Actor.Tab.Inventory",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Inventory"
         },
         {
           id: "notes",
           group: "sheet",
           icon: "fa-solid fa-pen-to-square",
-          label: "TRISKEL.Actor.Tab.Notes.Label",
-          tooltip: "TRISKEL.Actor.Tab.Notes.Tooltip"
+          label: "TRISKEL.Actor.Tab.Notes",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Notes"
         }
       ],
       initial: "actions"
@@ -129,10 +135,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     );
 
     // Prepare Reserves
-    const reserves = prepareBars(context.system.reserves, TRISKEL_RESERVES);
+    const reserves = prepareBars(context.system.reserves, TRISKEL_RESERVES_BY_ID);
 
     // Prepare Paths
-    const paths = prepareBars(context.system.paths, TRISKEL_PATHS);
+    const paths = prepareBars(context.system.paths, TRISKEL_PATHS_BY_ID);
 
     context.reserves = reserves;
     context.paths = paths;
@@ -140,24 +146,24 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.skillCategories = skillCategories;
     const equippedGear = this.document.system?.equippedGear ?? {};
     const equippedLists = Object.fromEntries(
-      Object.entries(ITEM_CATEGORY_CONFIG).map(([type]) => [
-        type,
-        getEquippedList(type, equippedGear)
+      TRISKEL_ITEM_CATEGORIES.map(({ id }) => [
+        id,
+        getEquippedList(id, equippedGear)
       ])
     );
 
-    const localizedCategoryLabels = Object.fromEntries(
-      Object.entries(ITEM_CATEGORY_CONFIG).map(([type, config]) => [
-        type,
-        {
-          itemLabel: game.i18n.localize(config.itemLabelKey),
-          categoryLabel: game.i18n.localize(config.categoryLabelKey)
-        }
-      ])
-    );
+  const localizedCategoryLabels = Object.fromEntries(
+    TRISKEL_ITEM_CATEGORIES.map(category => [
+      category.id,
+      {
+        label: game.i18n.localize(category.label),
+        labelPlural: game.i18n.localize(category.labelPlural)
+      }
+    ])
+  );
 
     const items = Array.from(this.document.items ?? []).map(item => {
-      const categoryConfig = ITEM_CATEGORY_CONFIG[item.type];
+      const categoryConfig = TRISKEL_ITEM_CATEGORIES_BY_ID[item.type];
       const equippedList = categoryConfig ? equippedLists[item.type] ?? [] : [];
       const isEquipToggleActive = categoryConfig ? equippedList.includes(item.id) : false;
       return {
@@ -175,15 +181,15 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.items = items;
 
-    context.itemsByType = Object.entries(ITEM_CATEGORY_CONFIG).map(([type, config]) => ({
-      type,
-      itemLabel: localizedCategoryLabels[type]?.itemLabel ?? game.i18n.localize(config.itemLabelKey),
-      label: localizedCategoryLabels[type]?.categoryLabel ?? game.i18n.localize(config.categoryLabelKey),
-      toggleAction: config.toggleAction,
-      items: items.filter(item => item.categoryType === type)
-    }));
+  context.itemsByType = TRISKEL_ITEM_CATEGORIES.map(category => ({
+    type: category.id,
+    itemLabel: localizedCategoryLabels[category.id]?.label ?? game.i18n.localize(category.label),
+    label: localizedCategoryLabels[category.id]?.labelPlural ?? game.i18n.localize(category.labelPlural),
+    toggleAction: category.toggleAction,
+    items: items.filter(item => item.categoryType === category.id)
+  }));
     const tierValue = Number(context.system.tier?.value);
-    const tierLabelKey = Object.values(TRISKEL_TIERS).find(tier => tier.tier === tierValue)?.label;
+    const tierLabelKey = TRISKEL_TIERS.find(tier => tier.tier === tierValue)?.label;
     context.tierLabel = tierLabelKey ? game.i18n.localize(tierLabelKey) : "";
 
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)

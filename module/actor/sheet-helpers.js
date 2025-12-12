@@ -1,4 +1,10 @@
-import { TRISKEL_RESERVES, TRISKEL_RESISTANCES, TRISKEL_SKILLS } from "../codex/triskel-codex.js";
+import {
+  TRISKEL_RESERVES_BY_ID,
+  TRISKEL_RESISTANCES,
+  TRISKEL_SKILL_CATEGORIES,
+  TRISKEL_SKILL_CATEGORIES_BY_ID,
+  TRISKEL_SKILLS
+} from "../codex/triskel-codex.js";
 
 const localize = (value) => {
   if (!value) return "";
@@ -59,7 +65,7 @@ export async function onUpdateResourceValue(event, target) {
   await this.document.update({ [property]: newValue });
 }
 
-export function prepareBars(bars = {}, codexReference = TRISKEL_RESERVES) {
+export function prepareBars(bars = {}, codexReference = TRISKEL_RESERVES_BY_ID) {
   if (!bars) return {};
 
   const reserveMax = toFiniteNumbers(Object.values(bars), reserve => reserve?.max);
@@ -82,11 +88,13 @@ export function prepareBars(bars = {}, codexReference = TRISKEL_RESERVES) {
       return "placeholder";
     });
 
+    const codexEntry = codexReference[id] ?? {};
+
     collection[id] = {
       ...resource,
       id,
-      label: localize(codexReference[id]?.label ?? resource.label),
-      description: localize(codexReference[id]?.description ?? resource.description),
+      label: localize(codexEntry.label ?? resource.label),
+      description: localize(codexEntry.description ?? resource.description),
       _segments
     };
 
@@ -94,22 +102,13 @@ export function prepareBars(bars = {}, codexReference = TRISKEL_RESERVES) {
   }, {});
 }
 
-const SKILL_CATEGORY_LABELS = {
-  offense: "TRISKEL.Actor.Skill.Category.Offense",
-  defense: "TRISKEL.Actor.Skill.Category.Defense",
-  physical: "TRISKEL.Actor.Skill.Category.Physical",
-  professional: "TRISKEL.Actor.Skill.Category.Professional",
-  social: "TRISKEL.Actor.Skill.Category.Social",
-  intellectual: "TRISKEL.Actor.Skill.Category.Intellectual",
-  magic: "TRISKEL.Actor.Skill.Category.Magic"
-};
-
 export function prepareSkillsDisplay(skills = {}, resistances = {}) {
   const normalizedSkills = skills ?? {};
   const normalizedResistances = resistances ?? {};
 
-  const byCategory = Object.values(TRISKEL_SKILLS).reduce((collection, skill) => {
+  const byCategory = TRISKEL_SKILLS.reduce((collection, skill) => {
     const rawSkill = normalizedSkills[skill.id] ?? {};
+    const category = TRISKEL_SKILL_CATEGORIES_BY_ID[skill.category] ?? {};
 
     const rawValue = rawSkill.value;
     const parsedValue = Number(rawValue);
@@ -126,30 +125,38 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
       value,
       label: localize(skill.label ?? skill.id),
       description: localize(skill.description ?? ""),
-      categoryLabel: localize(skill.categoryLabel ?? skill.category ?? ""),
-      phaseLabel: localize(skill.phaseLabel ?? skill.phase ?? ""),
+      categoryLabel: localize(category.label ?? skill.category ?? ""),
+      phase: category.phase,
+      phaseLabel: localize(category.phaseLabel ?? category.phase ?? ""),
       mod,
       total
     };
-    const category = skill.category ?? "";
+    const categoryId = category.id ?? skill.category ?? "";
 
-    if (!collection[category]) collection[category] = [];
-    collection[category].push(entry);
+    const categoryCollection = collection[categoryId] ?? { category, skills: [] };
+    categoryCollection.skills.push(entry);
+    collection[categoryId] = categoryCollection;
 
     return collection;
   }, {});
 
-  Object.values(byCategory).forEach(skillsInCategory =>
+  Object.values(byCategory).forEach(({ skills: skillsInCategory }) =>
     skillsInCategory.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
   );
 
-  const skillCategories = Object.entries(byCategory).map(([category, skillsInCategory]) => ({
-    id: category.toLowerCase(),
-    title: localize(SKILL_CATEGORY_LABELS[category] ?? category),
-    skills: skillsInCategory
-  }));
+  const skillCategories = TRISKEL_SKILL_CATEGORIES.map(category => {
+    const skillsInCategory = byCategory[category.id]?.skills ?? [];
 
-  const resistancesList = Object.values(TRISKEL_RESISTANCES).map(resistance => {
+    return {
+      id: category.id.toLowerCase(),
+      title: localize(category.label ?? category.id),
+      phase: category.phase,
+      phaseLabel: localize(category.phaseLabel ?? category.phase ?? ""),
+      skills: skillsInCategory
+    };
+  }).filter(category => category.skills.length);
+
+  const resistancesList = TRISKEL_RESISTANCES.map(resistance => {
     const rawValue = normalizedResistances[resistance.id]?.value;
     const parsedValue = Number(rawValue);
     const value = Number.isFinite(parsedValue) ? parsedValue : 0;
