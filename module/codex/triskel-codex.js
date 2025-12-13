@@ -1,6 +1,7 @@
 // triskel-codex.js
 
 import {
+  TRISKEL_ACTION_TYPES,
   TRISKEL_ADVANCED_ACTIONS,
   TRISKEL_ALL_ACTIONS,
   TRISKEL_BASE_ACTIONS,
@@ -366,6 +367,7 @@ export const TRISKEL_PATHS = [
 ];
 
 export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexCollections({
+  actionTypes: TRISKEL_ACTION_TYPES,
   tiers: TRISKEL_TIERS,
   itemCategories: TRISKEL_ITEM_CATEGORIES,
   skillCategories: TRISKEL_SKILL_CATEGORIES,
@@ -385,6 +387,7 @@ export const TRISKEL_TIERS_BY_ID = TRISKEL_CODEX_INDEX.tiers;
 export const TRISKEL_ITEM_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.itemCategories;
 export const TRISKEL_SKILL_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.skillCategories;
 export const TRISKEL_SKILLS_BY_ID = TRISKEL_CODEX_INDEX.skills;
+export const TRISKEL_ACTION_TYPES_BY_ID = TRISKEL_CODEX_INDEX.actionTypes;
 export const TRISKEL_ACTIONS_BY_ID = TRISKEL_CODEX_INDEX.actions;
 export const TRISKEL_FORMS_BY_ID = TRISKEL_CODEX_INDEX.forms;
 export const TRISKEL_RESISTANCES_BY_ID = TRISKEL_CODEX_INDEX.resistances;

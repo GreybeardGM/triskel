@@ -11,6 +11,31 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 
+function createActionTypeFilter({ actionTypes = [], selected = "all" } = {}) {
+  const options = [
+    { id: "all", label: "TRISKEL.Action.Filter.All" },
+    ...(Array.isArray(actionTypes) ? actionTypes : [])
+  ];
+
+  const optionIds = new Set(options.map(option => option.id));
+  const normalizedSelected = optionIds.has(selected) ? selected : "all";
+
+  return {
+    selected: normalizedSelected,
+    options: options.map(option => ({
+      ...option,
+      isActive: option.id === normalizedSelected
+    }))
+  };
+}
+
+function filterActionsByType(actions = [], type = "all") {
+  const entries = Array.isArray(actions) ? actions : [];
+  if (type === "all") return entries;
+
+  return entries.filter(action => (action?.type ?? "") === type);
+}
+
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["triskel", "sheet", "actor", "character"],
@@ -25,6 +50,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       deleteItem: onDeleteItem,
       selectAction: onSelectAction,
       toggleForm: onToggleForm,
+      filterActionType: onFilterActionType,
       toggleWornEquip: onToggleWornEquip,
       toggleSpell: onToggleSpell,
       toggleHeldItem: onToggleHeldItem,
@@ -143,6 +169,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = paths;
     context.resistances = resistances;
     context.skillCategories = skillCategories;
+    const actionFilterSelection = this._actionTypeFilter ?? "all";
     const equippedGear = this.document.system?.equippedGear ?? {};
     const itemCategories = codex.itemCategories ?? [];
     const itemCategoriesById = index.itemCategories ?? {};
@@ -184,6 +211,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const tierValue = Number(context.system.tier?.value);
     const tierLabel = codex.tiers?.find(tier => tier.tier === tierValue)?.label;
     context.tierLabel = tierLabel ?? "";
+
+    const actionTypeFilter = createActionTypeFilter({
+      actionTypes: codex.actionTypes,
+      selected: actionFilterSelection
+    });
+
+    context.actionFilter = {
+      ...actionTypeFilter,
+      actions: filterActionsByType(context.system.actions?.actions, actionFilterSelection),
+      spells: filterActionsByType(context.system.actions?.spells, actionFilterSelection)
+    };
 
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -236,6 +274,14 @@ async function onSelectAction(event, target) {
   if (!actionKey) return;
 
   await this.document?.update({ "system.actions.selected": actionKey });
+}
+
+async function onFilterActionType(event, target) {
+  event.preventDefault();
+
+  const filterValue = target.closest("[data-filter-value]")?.dataset.filterValue ?? "all";
+  this._actionTypeFilter = filterValue;
+  await this.render();
 }
 
 async function onToggleForm(event, target) {
