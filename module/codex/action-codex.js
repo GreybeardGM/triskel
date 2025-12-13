@@ -190,6 +190,18 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["setup", "magic", "invocation"]
   },
   {
+    id: "switchgear",
+    label: "TRISKEL.Action.Base.Switchgear.Label",
+    type: "setup",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Switchgear.Description",
+    keywords: ["setup", "equipment", "inventory", "switchgear"]
+  },
+  {
     id: "move",
     label: "TRISKEL.Action.Base.Move.Label",
     type: "position",
