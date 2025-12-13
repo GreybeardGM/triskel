@@ -75,7 +75,7 @@
     </div>
   {{/inline}}
 
-  {{#if system.actions.actions.length}}
+  {{#if actionFilter.actions.length}}
     <header class="actions-grid__header">
       <h3 class="actions-grid__title">{{localize "TRISKEL.Actor.Tab.Actions"}}</h3>
       {{> actionFilters}}
@@ -83,7 +83,7 @@
     {{> actionCards actionFilter.actions}}
   {{/if}}
 
-  {{#if system.actions.spells.length}}
+  {{#if actionFilter.spells.length}}
     <header class="actions-grid__header">
       <h3 class="actions-grid__title">{{localize "TRISKEL.Item.Type.Spell"}}</h3>
       {{> actionFilters}}
