@@ -282,9 +282,9 @@
           "Label": "Wirkung",
           "Description": "Das wirkungsvolle Handeln während der eigenen Runde."
         },
-        "Reaction": {
-          "Label": "Reaktion",
-          "Description": "Wenn eine Handlung durch einen externen Einfluss ausgelöst wird."
+        "Defense": {
+          "Label": "Verteidigung",
+          "Description": "Wenn eine abwehrende Handlung durch einen externen Einfluss ausgelöst wird."
         }
       },
       "Base": {

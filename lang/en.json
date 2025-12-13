@@ -282,9 +282,9 @@
           "Label": "Impact",
           "Description": "Carries out the decisive action during the character's turn."
         },
-        "Reaction": {
-          "Label": "Reaction",
-          "Description": "Triggered by an external influence or event."
+        "Defense": {
+          "Label": "Defense",
+          "Description": "Protective responses triggered by an external influence or event."
         }
       },
       "Base": {

@@ -9,17 +9,9 @@ import {
 } from "./codex/triskel-codex.js";
 import { localizeCodexCollections } from "./codex/codex-localization.js";
 
-Hooks.once("init", function() {
-  console.log("Triskel | Initializing Triskel system");
+const itemTypes = TRISKEL_ITEM_CATEGORIES.map(category => category.id);
 
-  const localize = game.i18n.localize.bind(game.i18n);
-
-  // Klassen mit Typen verknüpfen
-  CONFIG.Actor.documentClass = TriskelActor;
-  CONFIG.Actor.sheetClasses.character = PlayerCharacterSheet;
-  CONFIG.Actor.sheetClasses.npc = NpcSheet;
-
-  // Sheets registrieren
+const registerSheets = localize => {
   foundry.documents.collections.Actors.registerSheet("triskel", PlayerCharacterSheet, {
     makeDefault: true,
     types: ["character"],
@@ -32,15 +24,14 @@ Hooks.once("init", function() {
     label: localize("TRISKEL.Misc.Sheet.NPC")
   });
 
-  const itemTypes = TRISKEL_ITEM_CATEGORIES.map(category => category.id);
-
   foundry.documents.collections.Items.registerSheet("triskel", TriskelItemSheet, {
     makeDefault: true,
     types: itemTypes,
     label: localize("TRISKEL.Misc.Sheet.Item")
   });
+};
 
-  // L<abens für Typen
+const setTypeLabels = localize => {
   CONFIG.Actor.typeLabels = {
     ...CONFIG.Actor.typeLabels,
     character: localize("TRISKEL.Actor.Type.Character"),
@@ -55,6 +46,15 @@ Hooks.once("init", function() {
       [type]: labelKey ? localize(labelKey) : type
     };
   }, CONFIG.Item.typeLabels ?? {});
+};
+
+Hooks.once("init", function() {
+  console.log("Triskel | Initializing Triskel system");
+
+  // Klassen mit Typen verknüpfen
+  CONFIG.Actor.documentClass = TriskelActor;
+  CONFIG.Actor.sheetClasses.character = PlayerCharacterSheet;
+  CONFIG.Actor.sheetClasses.npc = NpcSheet;
 
   CONFIG.triskell = {
     ...(CONFIG.triskell ?? {}),
@@ -62,6 +62,14 @@ Hooks.once("init", function() {
     index: TRISKEL_CODEX_INDEX
   };
 
-  localizeCodexCollections(CONFIG.triskell?.codex, CONFIG.triskell?.index, localize);
+  Hooks.once("i18nInit", () => {
+    const localize = game.i18n.localize.bind(game.i18n);
+
+    registerSheets(localize);
+    setTypeLabels(localize);
+
+    localizeCodexCollections(CONFIG.triskell?.codex, CONFIG.triskell?.index, localize);
+  });
+
 });
 
