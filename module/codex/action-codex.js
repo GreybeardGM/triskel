@@ -17,9 +17,9 @@ export const TRISKEL_ACTION_TYPES = [
     description: "TRISKEL.Action.Type.Impact.Description"
   },
   {
-    id: "reaction",
-    label: "TRISKEL.Action.Type.Reaction.Label",
-    description: "TRISKEL.Action.Type.Reaction.Description"
+    id: "defense",
+    label: "TRISKEL.Action.Type.Defense.Label",
+    description: "TRISKEL.Action.Type.Defense.Description"
   }
 ];
 
@@ -79,7 +79,7 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "brace",
     label: "TRISKEL.Action.Base.Brace.Label",
-    type: "reaction",
+    type: "defense",
     category: "combat",
     skill: "brace",
     reserve: "power",
@@ -87,12 +87,12 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Brace.Description",
     image: "icons/skills/melee/hand-grip-sword-white-brown.webp",
-    keywords: ["reaction", "melee", "defense", "brace", "resilience"]
+    keywords: ["defense", "melee", "brace", "resilience"]
   },
   {
     id: "guard",
     label: "TRISKEL.Action.Base.Guard.Label",
-    type: "reaction",
+    type: "defense",
     category: "combat",
     skill: "guard",
     reserve: "grace",
@@ -100,12 +100,12 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Guard.Description",
     image: "icons/skills/melee/swords-parry-block-blue.webp",
-    keywords: ["reaction", "melee", "defense", "guard", "protection"]
+    keywords: ["defense", "melee", "guard", "protection"]
   },
   {
     id: "evade",
     label: "TRISKEL.Action.Base.Evade.Label",
-    type: "reaction",
+    type: "defense",
     category: "combat",
     skill: "evasion",
     reserve: "grace",
@@ -113,7 +113,7 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Evade.Description",
     image: "icons/skills/movement/figure-running-gray.webp",
-    keywords: ["reaction", "defense", "evasion"]
+    keywords: ["defense", "evasion"]
   },
   {
     id: "grapple",
@@ -144,38 +144,38 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "grit",
     label: "TRISKEL.Action.Base.Grit.Label",
-    type: "reaction",
+    type: "defense",
     category: "combat",
     skill: "grit",
     reserve: null,
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Grit.Description",
-    keywords: ["reaction", "defense", "resilience", "grit"]
+    keywords: ["defense", "resilience", "grit"]
   },
   {
     id: "snap",
     label: "TRISKEL.Action.Base.Snap.Label",
-    type: "reaction",
+    type: "defense",
     category: "combat",
     skill: "snap",
     reserve: null,
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Snap.Description",
-    keywords: ["reaction", "defense", "reflex", "snap"]
+    keywords: ["defense", "reflex", "snap"]
   },
   {
     id: "resolve",
     label: "TRISKEL.Action.Base.Resolve.Label",
-    type: "reaction",
+    type: "defense",
     category: "combat",
     skill: "resolve",
     reserve: null,
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Resolve.Description",
-    keywords: ["reaction", "defense", "will", "resolve"]
+    keywords: ["defense", "will", "resolve"]
   },
   {
     id: "invocation",
