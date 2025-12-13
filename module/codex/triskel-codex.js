@@ -1,6 +1,11 @@
 // triskel-codex.js
 
-import { TRISKEL_ALL_ACTIONS } from "./action-codex.js";
+import {
+  TRISKEL_ADVANCED_ACTIONS,
+  TRISKEL_ALL_ACTIONS,
+  TRISKEL_BASE_ACTIONS,
+  TRISKEL_SPELLS
+} from "./action-codex.js";
 import { TRISKEL_FORMS } from "./form-codex.js";
 
 const indexById = (entries = []) => entries.reduce((collection, entry) => {

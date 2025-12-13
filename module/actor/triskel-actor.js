@@ -1,9 +1,3 @@
-const createLookupById = (collection = []) => (Array.isArray(collection) ? collection : [])
-  .reduce((index, entry) => {
-    if (entry?.id) index[entry.id] = entry;
-    return index;
-  }, {});
-
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 
@@ -240,9 +234,9 @@ export class TriskelActor extends Actor {
     const formIds = new Set();
 
     const baseActions = codex.baseActions ?? [];
-    const advancedActionsById = index.advancedActions ?? createLookupById(codex.advancedActions ?? []);
-    const spellsById = index.spells ?? createLookupById(codex.spells ?? []);
-    const formsById = index.forms ?? createLookupById(codex.forms ?? []);
+    const advancedActionsById = index.advancedActions ?? {};
+    const spellsById = index.spells ?? {};
+    const formsById = index.forms ?? {};
 
     const addAction = (action, { source = null, image } = {}) => {
       if (!action?.id || actionIds.has(action.id)) return;
