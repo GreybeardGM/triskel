@@ -340,6 +340,10 @@
           "Label": "Anrufung",
           "Description": "Der Charakter ruft kosmische Mächte an."
         },
+        "Switchgear": {
+          "Label": "Umschalten",
+          "Description": "Der Charakter wechselt die geführten Gegenstände."
+        },
         "Move": {
           "Label": "Bewegen",
           "Description": "Du bewegst dich in eine neue Region des Schlachtfelds."

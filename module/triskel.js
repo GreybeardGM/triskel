@@ -61,10 +61,7 @@ Hooks.once("init", function() {
     codex: TRISKEL_CODEX,
     index: TRISKEL_CODEX_INDEX
   };
-});
-
-Hooks.once("ready", () => {
-  const localize = game.i18n.localize.bind(game.i18n);
 
   localizeCodexCollections(CONFIG.triskell?.codex, CONFIG.triskell?.index, localize);
 });
+

@@ -340,6 +340,10 @@
           "Label": "Invocation",
           "Description": "The character calls upon cosmic powers."
         },
+        "Switchgear": {
+          "Label": "Switchgear",
+          "Description": "The character changes which items they are holding."
+        },
         "Move": {
           "Label": "Move",
           "Description": "Shift into a new region of the battlefield."
