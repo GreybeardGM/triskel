@@ -9,7 +9,7 @@
         <div
           class="action-card {{action.reserve}} is-interactive {{#if action.isSelected}}is-selected{{/if}}"
           data-action="selectAction"
-          data-action-key="{{action.key}}"
+          data-action-key="{{action.id}}"
         >
           <div class="action-card__content">
             <header class="action-card__header">
@@ -36,7 +36,7 @@
                       class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
                       title="{{form.description}}"
                       data-action="toggleForm"
-                      data-form-key="{{form.key}}"
+                      data-form-key="{{form.id}}"
                     >
                       {{#if form.image}}
                         <img class="action-card__form-icon" src="{{form.image}}" alt="" />
