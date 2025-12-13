@@ -188,6 +188,30 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Invocation.Description",
     keywords: ["setup", "magic", "invocation"]
+  },
+  {
+    id: "move",
+    label: "TRISKEL.Action.Base.Move.Label",
+    type: "position",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Move.Description",
+    keywords: ["position", "movement", "maneuver", "move"]
+  },
+  {
+    id: "takeCover",
+    label: "TRISKEL.Action.Base.TakeCover.Label",
+    type: "position",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.TakeCover.Description",
+    keywords: ["position", "defense", "cover", "take cover"]
   }
 ];
 

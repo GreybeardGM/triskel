@@ -339,6 +339,14 @@
         "Invocation": {
           "Label": "Anrufung",
           "Description": "Der Charakter ruft kosmische Mächte an."
+        },
+        "Move": {
+          "Label": "Bewegen",
+          "Description": "Du bewegst dich in eine neue Region des Schlachtfelds."
+        },
+        "TakeCover": {
+          "Label": "In Deckung gehen",
+          "Description": "Du machst dich klein und bewegst dich in eine nahegelegene Deckung."
         }
       },
       "Advanced": {

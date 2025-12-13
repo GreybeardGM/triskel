@@ -339,6 +339,14 @@
         "Invocation": {
           "Label": "Invocation",
           "Description": "The character calls upon cosmic powers."
+        },
+        "Move": {
+          "Label": "Move",
+          "Description": "Shift into a new region of the battlefield."
+        },
+        "TakeCover": {
+          "Label": "Take Cover",
+          "Description": "Hunker down and slip into nearby cover."
         }
       },
       "Advanced": {
