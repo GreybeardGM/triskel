@@ -259,11 +259,33 @@
         "SelectAction": "Aktion wählen",
         "Active": "Aktiv"
       },
+      "Filter": {
+        "Label": "Aktionskarten nach Typ filtern",
+        "All": "Alle"
+      },
       "Phase": {
         "Combat": "Kampf",
         "Travel": "Reise",
         "Preparation": "Vorbereitung",
         "Any": "Beliebig"
+      },
+      "Type": {
+        "Position": {
+          "Label": "Position",
+          "Description": "Wenn der Spielercharakter seine Stellung verändert."
+        },
+        "Setup": {
+          "Label": "Ansatz",
+          "Description": "Eine Vorbereitung auf die kommende Wirkung oder auf kommende Reaktionen."
+        },
+        "Impact": {
+          "Label": "Wirkung",
+          "Description": "Das wirkungsvolle Handeln während der eigenen Runde."
+        },
+        "Reaction": {
+          "Label": "Reaktion",
+          "Description": "Wenn eine Handlung durch einen externen Einfluss ausgelöst wird."
+        }
       },
       "Base": {
         "Strike": {
@@ -301,6 +323,30 @@
         "Break": {
           "Label": "Lösen",
           "Description": "Schüttelt negative Zustände ab; reduziert gebunden/offengelegt/gestoßen."
+        },
+        "Grit": {
+          "Label": "Zähigkeit",
+          "Description": "Eine reflexhafte Abhärtung, die sich auf die körperliche Robustheit stützt."
+        },
+        "Snap": {
+          "Label": "Reflex",
+          "Description": "Schnelle instinktive Reaktionen auf plötzliche Bedrohungen."
+        },
+        "Resolve": {
+          "Label": "Willenskraft",
+          "Description": "Ein mentaler Ruck, der die Entschlossenheit des Charakters festigt."
+        },
+        "Invocation": {
+          "Label": "Anrufung",
+          "Description": "Der Charakter ruft kosmische Mächte an."
+        },
+        "Move": {
+          "Label": "Bewegen",
+          "Description": "Du bewegst dich in eine neue Region des Schlachtfelds."
+        },
+        "TakeCover": {
+          "Label": "In Deckung gehen",
+          "Description": "Du machst dich klein und bewegst dich in eine nahegelegene Deckung."
         }
       },
       "Advanced": {
@@ -311,6 +357,18 @@
         "Throw": {
           "Label": "Werfen",
           "Description": "Schleudert eine Waffe oder ein Objekt, um aus der Distanz zu treffen."
+        },
+        "LoadArrow": {
+          "Label": "Pfeil auflegen",
+          "Description": "Der Charakter legt einen neuen Pfeil auf und spannt die Bogensehne."
+        },
+        "RaiseShield": {
+          "Label": "Schild heben",
+          "Description": "Der Charakter positioniert seinen Schild gegen Nah- und Fernkampfangriffe."
+        },
+        "QuickLoad": {
+          "Label": "Schnellspannen",
+          "Description": "Mit dem Schnellspanner einer Armbrust spannt der Charakter die Sehne und bereitet den nächsten Bolzen vor."
         }
       },
       "Spell": {

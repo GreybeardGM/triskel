@@ -1,10 +1,33 @@
 // action-codex.js
 
+export const TRISKEL_ACTION_TYPES = [
+  {
+    id: "position",
+    label: "TRISKEL.Action.Type.Position.Label",
+    description: "TRISKEL.Action.Type.Position.Description"
+  },
+  {
+    id: "setup",
+    label: "TRISKEL.Action.Type.Setup.Label",
+    description: "TRISKEL.Action.Type.Setup.Description"
+  },
+  {
+    id: "impact",
+    label: "TRISKEL.Action.Type.Impact.Label",
+    description: "TRISKEL.Action.Type.Impact.Description"
+  },
+  {
+    id: "reaction",
+    label: "TRISKEL.Action.Type.Reaction.Label",
+    description: "TRISKEL.Action.Type.Reaction.Description"
+  }
+];
+
 export const TRISKEL_BASE_ACTIONS = [
   {
     id: "strike",
     label: "TRISKEL.Action.Base.Strike.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "strike",
     reserve: "power",
@@ -17,7 +40,7 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "bind",
     label: "TRISKEL.Action.Base.Bind.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "control",
     reserve: "grace",
@@ -30,7 +53,7 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "expose",
     label: "TRISKEL.Action.Base.Expose.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "control",
     reserve: "grace",
@@ -43,7 +66,7 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "push",
     label: "TRISKEL.Action.Base.Push.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "strike",
     reserve: "power",
@@ -95,7 +118,7 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "grapple",
     label: "TRISKEL.Action.Base.Grapple.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "control",
     reserve: "power",
@@ -108,7 +131,7 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "break",
     label: "TRISKEL.Action.Base.Break.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "brace",
     reserve: "power",
@@ -117,6 +140,78 @@ export const TRISKEL_BASE_ACTIONS = [
     description: "TRISKEL.Action.Base.Break.Description",
     image: "icons/skills/movement/arrow-upward-yellow.webp",
     keywords: ["action", "melee", "offense", "brace", "break"]
+  },
+  {
+    id: "grit",
+    label: "TRISKEL.Action.Base.Grit.Label",
+    type: "reaction",
+    category: "combat",
+    skill: "grit",
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Grit.Description",
+    keywords: ["reaction", "defense", "resilience", "grit"]
+  },
+  {
+    id: "snap",
+    label: "TRISKEL.Action.Base.Snap.Label",
+    type: "reaction",
+    category: "combat",
+    skill: "snap",
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Snap.Description",
+    keywords: ["reaction", "defense", "reflex", "snap"]
+  },
+  {
+    id: "resolve",
+    label: "TRISKEL.Action.Base.Resolve.Label",
+    type: "reaction",
+    category: "combat",
+    skill: "resolve",
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Resolve.Description",
+    keywords: ["reaction", "defense", "will", "resolve"]
+  },
+  {
+    id: "invocation",
+    label: "TRISKEL.Action.Base.Invocation.Label",
+    type: "setup",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Invocation.Description",
+    keywords: ["setup", "magic", "invocation"]
+  },
+  {
+    id: "move",
+    label: "TRISKEL.Action.Base.Move.Label",
+    type: "position",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Move.Description",
+    keywords: ["position", "movement", "maneuver", "move"]
+  },
+  {
+    id: "takeCover",
+    label: "TRISKEL.Action.Base.TakeCover.Label",
+    type: "position",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.TakeCover.Description",
+    keywords: ["position", "defense", "cover", "take cover"]
   }
 ];
 
@@ -124,7 +219,7 @@ export const TRISKEL_ADVANCED_ACTIONS = [
   {
     id: "shoot",
     label: "TRISKEL.Action.Advanced.Shoot.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "aim",
     reserve: "grace",
@@ -136,7 +231,7 @@ export const TRISKEL_ADVANCED_ACTIONS = [
   {
     id: "throw",
     label: "TRISKEL.Action.Advanced.Throw.Label",
-    type: "action",
+    type: "impact",
     category: "combat",
     skill: "aim",
     reserve: "power",
@@ -144,6 +239,42 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     range: "ranged_weapon",
     description: "TRISKEL.Action.Advanced.Throw.Description",
     keywords: ["action", "ranged", "offense", "aim", "throw"]
+  },
+  {
+    id: "loadArrow",
+    label: "TRISKEL.Action.Advanced.LoadArrow.Label",
+    type: "setup",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "ranged_weapon",
+    description: "TRISKEL.Action.Advanced.LoadArrow.Description",
+    keywords: ["setup", "ranged", "archery", "load"]
+  },
+  {
+    id: "raiseShield",
+    label: "TRISKEL.Action.Advanced.RaiseShield.Label",
+    type: "setup",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Advanced.RaiseShield.Description",
+    keywords: ["setup", "defense", "shield"]
+  },
+  {
+    id: "quickLoad",
+    label: "TRISKEL.Action.Advanced.QuickLoad.Label",
+    type: "setup",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "ranged_weapon",
+    description: "TRISKEL.Action.Advanced.QuickLoad.Description",
+    keywords: ["setup", "ranged", "crossbow", "load"]
   }
 ];
 
@@ -151,7 +282,7 @@ export const TRISKEL_SPELLS = [
   {
     id: "arc",
     label: "TRISKEL.Action.Spell.Arc.Label",
-    type: "action",
+    type: "impact",
     category: "spell",
     skill: "manifest",
     reserve: "will",
@@ -163,7 +294,7 @@ export const TRISKEL_SPELLS = [
   {
     id: "glue",
     label: "TRISKEL.Action.Spell.Glue.Label",
-    type: "action",
+    type: "impact",
     category: "spell",
     skill: "manifest",
     reserve: "will",
@@ -175,7 +306,7 @@ export const TRISKEL_SPELLS = [
   {
     id: "rebukeEvil",
     label: "TRISKEL.Action.Spell.RebukeEvil.Label",
-    type: "action",
+    type: "impact",
     category: "spell",
     skill: "transpose",
     reserve: "will",
@@ -187,14 +318,13 @@ export const TRISKEL_SPELLS = [
   {
     id: "protectivePrayer",
     label: "TRISKEL.Action.Spell.ProtectivePrayer.Label",
-    type: "reaction",
+    type: "setup",
     category: "spell",
-    skill: "ward",
     reserve: "will",
     cost: 2,
     range: "near",
     description: "TRISKEL.Action.Spell.ProtectivePrayer.Description",
-    keywords: ["spell", "divine", "reaction", "warding"]
+    keywords: ["spell", "divine", "setup", "warding"]
   }
 ];
 

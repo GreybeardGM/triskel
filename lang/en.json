@@ -259,11 +259,33 @@
         "SelectAction": "Select action",
         "Active": "Active"
       },
+      "Filter": {
+        "Label": "Filter action cards by type",
+        "All": "All"
+      },
       "Phase": {
         "Combat": "Combat",
         "Travel": "Travel",
         "Preparation": "Preparation",
         "Any": "Any"
+      },
+      "Type": {
+        "Position": {
+          "Label": "Position",
+          "Description": "Shifts the character's stance or placement."
+        },
+        "Setup": {
+          "Label": "Setup",
+          "Description": "Prepares for upcoming impact or reactive options."
+        },
+        "Impact": {
+          "Label": "Impact",
+          "Description": "Carries out the decisive action during the character's turn."
+        },
+        "Reaction": {
+          "Label": "Reaction",
+          "Description": "Triggered by an external influence or event."
+        }
       },
       "Base": {
         "Strike": {
@@ -301,6 +323,30 @@
         "Break": {
           "Label": "Break",
           "Description": "Shakes off negative states; reduces bound/exposed/pushed."
+        },
+        "Grit": {
+          "Label": "Grit",
+          "Description": "A reflexive brace drawing on the character's raw toughness."
+        },
+        "Snap": {
+          "Label": "Snap",
+          "Description": "Quick instinctive reflexes that answer sudden threats."
+        },
+        "Resolve": {
+          "Label": "Resolve",
+          "Description": "A mental rally that steels the character's will."
+        },
+        "Invocation": {
+          "Label": "Invocation",
+          "Description": "The character calls upon cosmic powers."
+        },
+        "Move": {
+          "Label": "Move",
+          "Description": "Shift into a new region of the battlefield."
+        },
+        "TakeCover": {
+          "Label": "Take Cover",
+          "Description": "Hunker down and slip into nearby cover."
         }
       },
       "Advanced": {
@@ -311,6 +357,18 @@
         "Throw": {
           "Label": "Throw",
           "Description": "Hurl a weapon or object to strike at distance."
+        },
+        "LoadArrow": {
+          "Label": "Load Arrow",
+          "Description": "The character sets a new arrow and draws the bowstring."
+        },
+        "RaiseShield": {
+          "Label": "Raise Shield",
+          "Description": "The character positions their shield against melee and ranged attacks."
+        },
+        "QuickLoad": {
+          "Label": "Quick-Load",
+          "Description": "With a crossbow's quick-loader, the character spans the string and readies the next bolt."
         }
       },
       "Spell": {
