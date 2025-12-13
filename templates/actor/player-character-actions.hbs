@@ -3,6 +3,21 @@
   data-tab="{{tabs.actions.id}}"
   data-group="{{tabs.actions.group}}"
 >
+  {{#*inline "actionFilters"}}
+    <div class="actions-grid__filters" role="group" aria-label="{{localize "TRISKEL.Action.Filter.Label"}}">
+      {{#each actionFilter.options as |option|}}
+        <button
+          type="button"
+          class="actions-filter__button {{#if option.isActive}}is-active{{/if}}"
+          data-action="filterActionType"
+          data-filter-value="{{option.id}}"
+        >
+          {{localize option.label}}
+        </button>
+      {{/each}}
+    </div>
+  {{/inline}}
+
   {{#*inline "actionCards"}}
     <div class="actions-grid">
       {{#each this as |action|}}
@@ -60,17 +75,19 @@
     </div>
   {{/inline}}
 
-  {{#if system.actions.actions.length}}
+  {{#if actionFilter.actions.length}}
     <header class="actions-grid__header">
       <h3 class="actions-grid__title">{{localize "TRISKEL.Actor.Tab.Actions"}}</h3>
+      {{> actionFilters}}
     </header>
-    {{> actionCards system.actions.actions}}
+    {{> actionCards actionFilter.actions}}
   {{/if}}
 
-  {{#if system.actions.spells.length}}
+  {{#if actionFilter.spells.length}}
     <header class="actions-grid__header">
       <h3 class="actions-grid__title">{{localize "TRISKEL.Item.Type.Spell"}}</h3>
+      {{> actionFilters}}
     </header>
-    {{> actionCards system.actions.spells}}
+    {{> actionCards actionFilter.spells}}
   {{/if}}
 </section>
