@@ -433,26 +433,28 @@
   background: var(--triskel-interactive-background);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  width: 100%;
 }
 
 
 .triskel .roll-helper__selection-row {
   display: inline-flex;
   gap: 0.5rem;
+  width: 100%;
 }
 
 .triskel .roll-helper__entry {
   display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: auto 1fr auto;
   grid-template-areas:
-    "icon label label cost"
-    "reserve skill bonus scale"
-    "desc desc desc desc";
+    "icon  label cost   " 
+    "bomus skill reserve" 
+    "desc  desc  desc   ";
   align-items: center;
-  gap: 0.35rem 0.5rem;
   border-radius: 0.75rem;
   padding: 0.5rem 0.75rem;
   height: auto;
+  grid-template-rows: 2rem 1.4rem auto;
 }
 
 .triskel .roll-helper__action {
@@ -464,16 +466,17 @@
 }
 
 .triskel .roll-helper__entry-icon {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.8rem;
+  height: 1.8rem;
   object-fit: cover;
-  border-radius: 50%;
   grid-area: icon;
 }
 
 .triskel .roll-helper__entry-label {
   grid-area: label;
-  line-height: 1.1;
+  /*! line-height: 1.1; */
+  font-size: 1.4em;
+  font-weight: 700;
 }
 
 .triskel .roll-helper__entry-reserve {
@@ -494,7 +497,7 @@
   border-radius: 999px;
   padding: 0.1rem 0.6rem;
   font-weight: 700;
-  justify-self: start;
+  /*! justify-self: start; */
 }
 
 .triskel .roll-helper__entry-scale {
@@ -509,12 +512,14 @@
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
   justify-self: end;
+  font-size: 1.6em;
 }
 
 .triskel .roll-helper__entry-description {
   grid-area: desc;
   font-size: 0.85rem;
   opacity: 0.9;
+  color: var(--color-form-hint);
 }
 
 .triskel .roll-helper__form.is-selected {
