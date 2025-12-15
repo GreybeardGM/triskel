@@ -458,6 +458,14 @@
   /*! flex: 1; */
 }
 
+.triskel .roll-helper__selection-row {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 1;
+  gap: 0.5rem;
+  width: 100%;
+}
+
 
 .triskel .roll-helper__action {
   display: inline-flex;
@@ -465,6 +473,8 @@
   border-radius: 0.75rem;
   padding: 0.45rem 0.9rem;
   font-weight: 700;
+  flex: 2;
+  min-width: 0;
 }
 
 .triskel .roll-helper__action-content {
@@ -523,6 +533,7 @@
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
+  flex: 1;
 }
 
 
@@ -586,6 +597,11 @@
 }
 
 .triskel .roll-helper__form.is-selected {
+  border-color: var(--triskel-interactive-highlight);
+  box-shadow: 0 0 0 1px var(--triskel-interactive-highlight);
+}
+
+.triskel .roll-helper__action.is-selected {
   border-color: var(--triskel-interactive-highlight);
   box-shadow: 0 0 0 1px var(--triskel-interactive-highlight);
 }
