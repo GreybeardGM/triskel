@@ -210,12 +210,23 @@ export class TriskelActor extends Actor {
     const reserve = index.reserves?.[form.reserve] ?? {};
     const skill = index.skills?.[form.skill] ?? {};
 
+    const skillBonus = Array.isArray(form.modifiers)
+      ? form.modifiers.reduce((total, modifier) => {
+          const bonus = typeof modifier?.skill === "number"
+            ? modifier.skill
+            : Number(modifier?.value ?? 0);
+
+          return Number.isFinite(bonus) ? total + bonus : total;
+        }, 0)
+      : 0;
+
     return {
       ...form,
       label: form.label ?? form.id,
       description: form.description ?? "",
       reserveLabel: reserve.label ?? form.reserve ?? "",
       skillLabel: skill.label ?? form.skill ?? "",
+      skillBonus,
       source,
       image: image ?? form.image ?? form.img ?? null
     };
