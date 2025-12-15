@@ -13,6 +13,10 @@
           "Notes": "Charakternotizen ansehen"
         }
       },
+      "RollHelper": {
+        "Title": "Roll-Helfer",
+        "FormsLabel": "Verfügbare Formen"
+      },
       "Type": {
         "Character": "Spielercharakter",
         "NPC": "NSC"
