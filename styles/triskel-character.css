@@ -435,134 +435,86 @@
   z-index: 1;
 }
 
+
 .triskel .roll-helper__selection-row {
   display: inline-flex;
   gap: 0.5rem;
 }
 
+.triskel .roll-helper__entry {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  grid-template-areas:
+    "icon label label cost"
+    "reserve skill bonus scale"
+    "desc desc desc desc";
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  height: auto;
+}
 
 .triskel .roll-helper__action {
-  display: grid;
-  grid-template-areas:
-    "icon  label cost " "reserve skill bonus" "desc  desc  desc ";
-  border-radius: 0.75rem;
   flex: 3;
-  height: auto;
 }
-
-.triskel .roll-helper__action-label {
-  grid-area: label;
-  line-height: 1.1;
-}
-
-.triskel .roll-helper__action-skill-row {
-  grid-area: skill;
-  display: inline-flex;
-  gap: 0.35rem;
-  align-items: center;
-  font-size: 0.85rem;
-  opacity: 0.85;
-}
-
-.triskel .roll-helper__action-description {
-  grid-area: desc;
-  font-size: 0.85rem;
-  opacity: 0.9;
-}
-
-.triskel .roll-helper__action-icon {
-  width: 1.4rem;
-  height: 1.4rem;
-  object-fit: cover;
-  grid-area: icon;
-}
-
-.triskel .roll-helper__action-bonus {
-  background: var(--triskel-color-segment-placeholder);
-  border-radius: 999px;
-  padding: 0.1rem 0.6rem;
-  font-weight: 700;
-}
-
-.triskel .roll-helper__action-cost {
-  grid-area: cost;
-  font-weight: 700;
-  color: var(--triskel-interactive-highlight);
-}
-
 
 .triskel .roll-helper__form {
-  border-radius: 0.75rem;
-  padding: 0.35rem 0.7rem;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas:
-    "icon label cost"
-    "skill skill skill"
-    "desc desc desc";
-  align-items: center;
-  gap: 0.2rem 0.35rem;
   flex: 2;
-  height: auto;
 }
 
-.triskel .roll-helper__form-header {
-  grid-area: icon;
-  display: contents;
-}
-
-.triskel .roll-helper__form-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.triskel .roll-helper__form-header {
-  /*! display: grid; */
-  /*! grid-template-columns: auto 1fr auto; */
-  /*! align-items: center; */
-  /*! gap: 0.35rem; */
-}
-
-.triskel .roll-helper__form-icon {
-  width: 1.2rem;
-  height: 1.2rem;
+.triskel .roll-helper__entry-icon {
+  width: 1.4rem;
+  height: 1.4rem;
   object-fit: cover;
   border-radius: 50%;
   grid-area: icon;
 }
 
-.triskel .roll-helper__form-label {
+.triskel .roll-helper__entry-label {
   grid-area: label;
-  white-space: nowrap;
+  line-height: 1.1;
 }
 
-.triskel .roll-helper__form-skill-row {
+.triskel .roll-helper__entry-reserve {
+  grid-area: reserve;
+  font-weight: 700;
+  color: var(--triskel-interactive-highlight);
+}
+
+.triskel .roll-helper__entry-skill {
   grid-area: skill;
-  display: inline-flex;
-  gap: 0.25rem;
-  align-items: center;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   opacity: 0.85;
 }
 
-.triskel .roll-helper__form-description {
-  grid-area: desc;
-  font-size: 0.85rem;
-  opacity: 0.9;
-}
-
-.triskel .roll-helper__form-bonus {
+.triskel .roll-helper__entry-bonus {
+  grid-area: bonus;
   background: var(--triskel-color-segment-placeholder);
   border-radius: 999px;
-  padding: 0.1rem 0.5rem;
+  padding: 0.1rem 0.6rem;
   font-weight: 700;
+  justify-self: start;
 }
 
-.triskel .roll-helper__form-cost {
+.triskel .roll-helper__entry-scale {
+  grid-area: scale;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  justify-self: end;
+}
+
+.triskel .roll-helper__entry-cost {
   grid-area: cost;
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
+  justify-self: end;
+}
+
+.triskel .roll-helper__entry-description {
+  grid-area: desc;
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 
 .triskel .roll-helper__form.is-selected {

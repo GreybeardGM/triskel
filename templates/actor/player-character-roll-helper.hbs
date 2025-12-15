@@ -4,26 +4,38 @@
       <div class="roll-helper__selection-row">
         <button
           type="button"
-          class="roll-helper__action is-interactive is-selected Is-Selected {{rollHelper.action.reserve}}"
+          class="roll-helper__entry roll-helper__action is-interactive is-selected Is-Selected {{rollHelper.action.reserve}}"
           data-action="selectAction"
           data-action-key="{{rollHelper.action.id}}"
           data-reserve="{{rollHelper.action.reserve}}"
         >
-          <div class="roll-helper__action-header">
-            {{#if rollHelper.action.image}}
-              <img class="roll-helper__action-icon" src="{{rollHelper.action.image}}" alt="" />
+          {{#if rollHelper.action.image}}
+            <img class="roll-helper__entry-icon" src="{{rollHelper.action.image}}" alt="" />
+          {{/if}}
+
+          <div class="roll-helper__entry-label">{{rollHelper.action.label}}</div>
+
+          {{#if rollHelper.action.reserveLabel}}
+            <div class="roll-helper__entry-reserve">{{rollHelper.action.reserveLabel}}</div>
+          {{else}}
+            {{#if rollHelper.action.reserve}}
+              <div class="roll-helper__entry-reserve">{{rollHelper.action.reserve}}</div>
             {{/if}}
-            <div class="roll-helper__action-label">{{rollHelper.action.label}}</div>
-            {{#if rollHelper.action.cost}}
-              <div class="roll-helper__action-cost">{{numberFormat rollHelper.action.cost decimals=0}}</div>
-            {{/if}}
-          </div>
-          <div class="roll-helper__action-skill-row">
-            <div class="roll-helper__action-skill">{{rollHelper.action.skillLabel}}</div>
-            <div class="roll-helper__action-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
-          </div>
+          {{/if}}
+
+          <div class="roll-helper__entry-skill">{{rollHelper.action.skillLabel}}</div>
+          <div class="roll-helper__entry-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
+
+          {{#if rollHelper.action.scale}}
+            <div class="roll-helper__entry-scale">{{rollHelper.action.scale}}</div>
+          {{/if}}
+
+          {{#if rollHelper.action.cost}}
+            <div class="roll-helper__entry-cost">{{numberFormat rollHelper.action.cost decimals=0}}</div>
+          {{/if}}
+
           {{#if rollHelper.action.description}}
-            <div class="roll-helper__action-description">{{rollHelper.action.description}}</div>
+            <div class="roll-helper__entry-description">{{rollHelper.action.description}}</div>
           {{/if}}
         </button>
 
@@ -31,27 +43,39 @@
           {{#each rollHelper.forms as |form|}}
             <button
               type="button"
-              class="roll-helper__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
+              class="roll-helper__entry roll-helper__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
               data-action="toggleForm"
               data-form-key="{{form.id}}"
               title="{{form.description}}"
               data-reserve="{{form.reserve}}"
             >
-              <div class="roll-helper__form-header">
-                {{#if form.image}}
-                  <img class="roll-helper__form-icon" src="{{form.image}}" alt="" />
+              {{#if form.image}}
+                <img class="roll-helper__entry-icon" src="{{form.image}}" alt="" />
+              {{/if}}
+
+              <div class="roll-helper__entry-label">{{form.label}}</div>
+
+              {{#if form.reserveLabel}}
+                <div class="roll-helper__entry-reserve">{{form.reserveLabel}}</div>
+              {{else}}
+                {{#if form.reserve}}
+                  <div class="roll-helper__entry-reserve">{{form.reserve}}</div>
                 {{/if}}
-                <div class="roll-helper__form-label">{{form.label}}</div>
-                {{#if form.cost}}
-                  <div class="roll-helper__form-cost">{{numberFormat form.cost decimals=0}}</div>
-                {{/if}}
-              </div>
-              <div class="roll-helper__form-skill-row">
-                <div class="roll-helper__form-skill">{{form.skillLabel}}</div>
-                <div class="roll-helper__form-bonus">{{numberFormat form.skillBonus decimals=0 sign=true}}</div>
-              </div>
+              {{/if}}
+
+              <div class="roll-helper__entry-skill">{{form.skillLabel}}</div>
+              <div class="roll-helper__entry-bonus">{{numberFormat form.skillBonus decimals=0 sign=true}}</div>
+
+              {{#if form.scale}}
+                <div class="roll-helper__entry-scale">{{form.scale}}</div>
+              {{/if}}
+
+              {{#if form.cost}}
+                <div class="roll-helper__entry-cost">{{numberFormat form.cost decimals=0}}</div>
+              {{/if}}
+
               {{#if form.description}}
-                <div class="roll-helper__form-description">{{form.description}}</div>
+                <div class="roll-helper__entry-description">{{form.description}}</div>
               {{/if}}
             </button>
           {{/each}}
