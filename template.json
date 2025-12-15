@@ -1,6 +1,9 @@
 {
   "Actor": {
-    "types": ["character", "npc"],
+    "types": [
+      "character",
+      "npc"
+    ],
     "templates": {
       "base": {
         "details": {
@@ -12,131 +15,109 @@
         },
         "skills": {
           "strike": {
-            "id": "strike",
             "value": 0
           },
           "control": {
-            "id": "control",
             "value": 0
           },
           "aim": {
-            "id": "aim",
             "value": 0
           },
           "guard": {
-            "id": "guard",
             "value": 0
           },
           "brace": {
-            "id": "brace",
             "value": 0
           },
           "evasion": {
-            "id": "evasion",
             "value": 0
           },
           "athletics": {
-            "id": "athletics",
             "value": 0
           },
           "notice": {
-            "id": "notice",
             "value": 0
           },
           "stealth": {
-            "id": "stealth",
             "value": 0
           },
           "craft": {
-            "id": "craft",
             "value": 0
           },
           "track": {
-            "id": "track",
             "value": 0
           },
           "handleBeasts": {
-            "id": "handleBeasts",
             "value": 0
           },
           "impress": {
-            "id": "impress",
             "value": 0
           },
           "influence": {
-            "id": "influence",
             "value": 0
           },
           "insight": {
-            "id": "insight",
             "value": 0
           },
           "akademia": {
-            "id": "akademia",
             "value": 0
           },
           "folklore": {
-            "id": "folklore",
             "value": 0
           },
-        "navigate": {
-          "id": "navigate",
-          "value": 0
+          "navigate": {
+            "value": 0
+          },
+          "manifest": {
+            "value": 0
+          },
+          "alter": {
+            "value": 0
+          },
+          "compel": {
+            "value": 0
+          },
+          "reveal": {
+            "value": 0
+          },
+          "transpose": {
+            "value": 0
+          },
+          "ward": {
+            "value": 0
+          }
         },
-        "manifest": {
-          "id": "manifest",
-          "value": 0
-        },
-        "alter": {
-          "id": "alter",
-          "value": 0
-        },
-        "compel": {
-          "id": "compel",
-          "value": 0
-        },
-        "reveal": {
-          "id": "reveal",
-          "value": 0
-        },
-        "transpose": {
-          "id": "transpose",
-          "value": 0
-        },
-        "ward": {
-          "id": "ward",
-          "value": 0
-        }
-      },
         "resistances": {
           "snap": {
-            "id": "snap",
             "value": 0
           },
           "grit": {
-            "id": "grit",
             "value": 0
           },
           "resolve": {
-            "id": "resolve",
             "value": 0
+          }
+        },
+        "equippedGear": {
+          "held": [],
+          "worn": [],
+          "spell": [],
+          "ability": []
         }
-      },
-      "equippedGear": {
-        "held": [],
-        "worn": [],
-        "spell": [],
-        "ability": []
       }
-    }
     },
     "character": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "tier": {
-        "id": "tier",
         "value": 1
       },
       "actions": {
+        "commit": {
+          "min": 0,
+          "value": 0
+        },
         "actions": [],
         "spells": [],
         "selected": null,
@@ -144,22 +125,18 @@
       },
       "paths": {
         "virtue": {
-          "id": "virtue",
           "min": 1,
           "max": 1
         },
         "vice": {
-          "id": "vice",
           "min": 1,
           "max": 1
         },
         "ward": {
-          "id": "ward",
           "min": 1,
           "max": 1
         },
         "ruin": {
-          "id": "ruin",
           "min": 1,
           "max": 1
         }
@@ -205,7 +182,9 @@
       }
     },
     "npc": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "health": {
         "hp": {
           "label": "Hitpoints",
@@ -223,7 +202,12 @@
     }
   },
   "Item": {
-    "types": ["held", "worn", "ability", "spell"],
+    "types": [
+      "held",
+      "worn",
+      "ability",
+      "spell"
+    ],
     "templates": {
       "base": {
         "description": "",
@@ -238,16 +222,24 @@
         "modifiers": []
       },
       "held": {
-        "templates": ["base"]
+        "templates": [
+          "base"
+        ]
       },
       "worn": {
-        "templates": ["base"]
+        "templates": [
+          "base"
+        ]
       },
       "ability": {
-        "templates": ["base"]
+        "templates": [
+          "base"
+        ]
       },
       "spell": {
-        "templates": ["base"]
+        "templates": [
+          "base"
+        ]
       }
     }
   }
