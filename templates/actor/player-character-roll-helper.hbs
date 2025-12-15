@@ -4,57 +4,70 @@
       <p class="roll-helper__title">{{localize "TRISKEL.Actor.RollHelper.Title"}}</p>
 
       <div class="roll-helper__content">
-        <button
-          type="button"
-          class="roll-helper__action is-interactive {{rollHelper.action.reserve}}"
-          data-action="selectAction"
-          data-action-key="{{rollHelper.action.id}}"
-          data-reserve="{{rollHelper.action.reserve}}"
-        >
-          {{#if rollHelper.action.image}}
-            <img class="roll-helper__action-icon" src="{{rollHelper.action.image}}" alt="" />
-          {{/if}}
-          <span class="roll-helper__action-details">
-            <span class="roll-helper__action-label">{{rollHelper.action.label}}</span>
-            <span class="roll-helper__action-meta">
-              <span class="roll-helper__action-skill">{{rollHelper.action.skillLabel}}</span>
-              <span class="roll-helper__action-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</span>
+        <div class="roll-helper__selection-row">
+          <button
+            type="button"
+            class="roll-helper__action is-interactive is-selected Is-Selected {{rollHelper.action.reserve}}"
+            data-action="selectAction"
+            data-action-key="{{rollHelper.action.id}}"
+            data-reserve="{{rollHelper.action.reserve}}"
+          >
+            <span class="roll-helper__action-content">
+              <span class="roll-helper__action-header">
+                {{#if rollHelper.action.image}}
+                  <img class="roll-helper__action-icon" src="{{rollHelper.action.image}}" alt="" />
+                {{/if}}
+                <span class="roll-helper__action-label">{{rollHelper.action.label}}</span>
+                {{#if rollHelper.action.cost}}
+                  <span class="roll-helper__action-cost">{{numberFormat rollHelper.action.cost decimals=0}}</span>
+                {{/if}}
+              </span>
+              <span class="roll-helper__action-skill-row">
+                <span class="roll-helper__action-skill">{{rollHelper.action.skillLabel}}</span>
+                <span class="roll-helper__action-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</span>
+              </span>
+              {{#if rollHelper.action.description}}
+                <span class="roll-helper__action-description">{{rollHelper.action.description}}</span>
+              {{/if}}
             </span>
-          </span>
-          {{#if rollHelper.action.cost}}
-            <span class="roll-helper__action-cost">{{numberFormat rollHelper.action.cost decimals=0}}</span>
-          {{/if}}
-        </button>
+          </button>
 
-        {{#if rollHelper.forms.length}}
-          <ul class="roll-helper__forms" aria-label="{{localize "TRISKEL.Actor.RollHelper.FormsLabel"}}">
-            {{#each rollHelper.forms as |form|}}
-              <li>
-                <button
-                  type="button"
-                  class="roll-helper__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
-                  data-action="toggleForm"
-                  data-form-key="{{form.id}}"
-                  title="{{form.description}}"
-                  data-reserve="{{form.reserve}}"
-                >
-                  {{#if form.image}}
-                    <img class="roll-helper__form-icon" src="{{form.image}}" alt="" />
-                  {{/if}}
-                  <span class="roll-helper__form-details">
-                    <span class="roll-helper__form-label">{{form.label}}</span>
-                    <span class="roll-helper__form-meta">
-                      <span class="roll-helper__form-bonus">{{numberFormat form.skillBonus decimals=0 sign=true}}</span>
+          {{#if rollHelper.forms.length}}
+            <ul class="roll-helper__forms" aria-label="{{localize "TRISKEL.Actor.RollHelper.FormsLabel"}}">
+              {{#each rollHelper.forms as |form|}}
+                <li>
+                  <button
+                    type="button"
+                    class="roll-helper__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
+                    data-action="toggleForm"
+                    data-form-key="{{form.id}}"
+                    title="{{form.description}}"
+                    data-reserve="{{form.reserve}}"
+                  >
+                    <span class="roll-helper__form-content">
+                      <span class="roll-helper__form-header">
+                        {{#if form.image}}
+                          <img class="roll-helper__form-icon" src="{{form.image}}" alt="" />
+                        {{/if}}
+                        <span class="roll-helper__form-label">{{form.label}}</span>
+                        {{#if form.cost}}
+                          <span class="roll-helper__form-cost">{{numberFormat form.cost decimals=0}}</span>
+                        {{/if}}
+                      </span>
+                      <span class="roll-helper__form-skill-row">
+                        <span class="roll-helper__form-skill">{{form.skillLabel}}</span>
+                        <span class="roll-helper__form-bonus">{{numberFormat form.skillBonus decimals=0 sign=true}}</span>
+                      </span>
+                      {{#if form.description}}
+                        <span class="roll-helper__form-description">{{form.description}}</span>
+                      {{/if}}
                     </span>
-                  </span>
-                  {{#if form.cost}}
-                    <span class="roll-helper__form-cost">{{numberFormat form.cost decimals=0}}</span>
-                  {{/if}}
-                </button>
-              </li>
-            {{/each}}
-          </ul>
-        {{/if}}
+                  </button>
+                </li>
+              {{/each}}
+            </ul>
+          {{/if}}
+        </div>
       </div>
     </div>
   {{/if}}
