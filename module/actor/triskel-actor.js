@@ -29,6 +29,13 @@ export class TriskelActor extends Actor {
     const parsedTension = Number(this.system?.tension?.value ?? 0);
     const tension = Number.isFinite(parsedTension) ? parsedTension : 0;
 
+    const tierValue = Number(this.system?.tier?.value ?? 0);
+    const commit = this.system?.actions?.commit ?? null;
+    if (commit) {
+      const max = Number.isFinite(tierValue) ? tierValue : 0;
+      commit.max = Math.max(0, max);
+    }
+
     const paths = this.system?.paths ?? {};
     Object.entries(paths).forEach(([id, path]) => {
       if (!path) return;
