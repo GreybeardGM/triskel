@@ -21,56 +21,62 @@
   {{#*inline "actionCards"}}
     <div class="actions-grid">
       {{#each this as |action|}}
-        <div
-          class="action-card {{action.reserve}} is-interactive {{#if action.isSelected}}is-selected{{/if}}"
-          data-action="selectAction"
-          data-action-key="{{action.id}}"
-        >
-          <div class="action-card__content">
-            <header class="action-card__header">
-              {{#if action.image}}
-                <img class="action-card__icon" src="{{action.image}}" alt="" />
-              {{/if}}
-              <div class="action-card__summary">
-                <h3 class="action-card__title">{{action.label}}</h3>
-                <p class="action-card__reserve">
-                  {{action.reserveLabel}}{{#if action.cost}} {{numberFormat action.cost decimals=0}}{{/if}}+
-                </p>
-                <p class="action-card__skill">
-                  <span class="action-card__skill-label">{{action.skillLabel}}</span>
-                  <span class="action-card__bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</span>
-                </p>
-              </div>
-            </header>
+        <article class="action-card">
+          <div
+            class="roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.isSelected}}is-selected{{/if}}"
+            role="button"
+            tabindex="0"
+            data-action="selectAction"
+            data-action-key="{{action.id}}"
+            data-reserve="{{action.reserve}}"
+          >
+            {{#if action.image}}
+              <img class="roll-helper__entry-icon" src="{{action.image}}" alt="" />
+            {{/if}}
 
-            {{#if action.forms.length}}
-              <ul class="action-card__forms">
-                {{#each action.forms as |form|}}
-                  <li>
-                    <div
-                      class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
-                      title="{{form.description}}"
-                      data-action="toggleForm"
-                      data-form-key="{{form.id}}"
-                    >
-                      {{#if form.image}}
-                        <img class="action-card__form-icon" src="{{form.image}}" alt="" />
-                      {{/if}}
-                      <span class="action-card__form-label">{{form.label}}</span>
-                      {{#if form.cost}}
-                        <span class="action-card__form-cost">{{numberFormat form.cost decimals=0}}</span>
-                      {{/if}}
-                    </div>
-                  </li>
-                {{/each}}
-              </ul>
+            <div class="roll-helper__entry-label">{{action.label}}</div>
+
+            {{#if action.reserveLabel}}
+              <div class="roll-helper__entry-reserve">{{action.reserveLabel}}</div>
+            {{else}}
+              {{#if action.reserve}}
+                <div class="roll-helper__entry-reserve">{{action.reserve}}</div>
+              {{/if}}
+            {{/if}}
+
+            <div class="roll-helper__entry-skill">{{action.skillLabel}}</div>
+            <div class="roll-helper__entry-bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</div>
+
+            {{#if action.cost}}
+              <div class="roll-helper__entry-cost">{{numberFormat action.cost decimals=0}}</div>
             {{/if}}
 
             {{#if action.description}}
-              <p class="action-card__description">{{action.description}}</p>
+              <div class="roll-helper__entry-description">{{action.description}}</div>
+            {{/if}}
+            {{#if action.forms.length}}
+              <div class="action-card__forms" role="group">
+                {{#each action.forms as |form|}}
+                  <button
+                    type="button"
+                    class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
+                    title="{{form.description}}"
+                    data-action="toggleForm"
+                    data-form-key="{{form.id}}"
+                  >
+                    {{#if form.image}}
+                      <img class="action-card__form-icon" src="{{form.image}}" alt="" />
+                    {{/if}}
+                    <span class="action-card__form-label">{{form.label}}</span>
+                    {{#if form.cost}}
+                      <span class="action-card__form-cost">{{numberFormat form.cost decimals=0}}</span>
+                    {{/if}}
+                  </button>
+                {{/each}}
+              </div>
             {{/if}}
           </div>
-        </div>
+        </article>
       {{/each}}
     </div>
   {{/inline}}
