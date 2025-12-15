@@ -420,33 +420,41 @@
 \*____________________*/
 
 .triskel .roll-helper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.5rem 0.75rem;
+  position: relative;
+  height: 0;
+  overflow: visible;
+}
+
+.triskel .roll-helper__bar {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
   border: 1px solid var(--color-border-light-tertiary);
   border-radius: 0.5rem;
   background: var(--color-bg, var(--triskel-color-surface));
-}
-
-.triskel .roll-helper__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 .triskel .roll-helper__title {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .triskel .roll-helper__content {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex: 1;
 }
 
 .triskel .roll-helper__action {
@@ -464,7 +472,6 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  flex: 1 1 auto;
   flex-wrap: wrap;
 }
 
