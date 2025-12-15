@@ -443,6 +443,16 @@
   width: 100%;
 }
 
+.triskel .roll-helper__commit {
+  display: flex;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.triskel .roll-helper__commit .resource-box {
+  flex: 1;
+}
+
 .triskel .roll-helper__summary-row {
   display: flex;
   gap: 0.75rem;

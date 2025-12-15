@@ -82,18 +82,16 @@
         {{/if}}
 
         <div class="roll-helper__commit {{rollHelper.action.reserve}}">
-          <div class="resource-bar commit">
-            {{#each commit._segments as |segment|}}
-              <div
-                class="resource-box is-interactive segment-{{segment.state}}"
-                data-action="updateResourceValue"
-                data-resource="actions.commit"
-                data-resource-value="{{segment.index}}"
-              >
-                {{segment.index}}
-              </div>
-            {{/each}}
-          </div>
+          {{#each commit._segments as |segment|}}
+            <div
+              class="resource-box is-interactive segment-{{segment.state}}"
+              data-action="updateResourceValue"
+              data-resource="actions.commit"
+              data-resource-value="{{segment.index}}"
+            >
+              {{segment.index}}
+            </div>
+          {{/each}}
         </div>
       </div>
 
@@ -107,7 +105,7 @@
           {{#if rollHelperSummary.reserveCosts.length}}
             <div class="roll-helper__summary-reserves">
               {{#each rollHelperSummary.reserveCosts as |reserve|}}
-                <div class="roll-helper__summary-entry">
+                <div class="roll-helper__summary-entry {{reserve.id}}">
                   <div class="roll-helper__summary-label">{{reserve.label}}</div>
                   <div class="roll-helper__summary-value">{{numberFormat reserve.total decimals=0}}</div>
                 </div>
