@@ -429,9 +429,9 @@
   position: absolute;
   inset: 0 auto auto 0;
   width: 100%;
-  /*! display: inline-flex; */
-  /*! align-items: center; */
-  /*! gap: 0.6rem; */
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0.6rem;
   padding: 0.65rem 0.75rem;
   border: 1px solid var(--triskel-color-border-muted);
   border-radius: 0.5rem;
@@ -440,47 +440,43 @@
   z-index: 1;
 }
 
-.triskel .roll-helper__title {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
+.triskel .roll-helper__selection-row {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 1;
+  gap: 0.5rem;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
-.triskel .roll-helper__content {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  /*! flex: 1; */
-}
 
 .triskel .roll-helper__action {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 999px;
-  /*! border: 1px solid var(--color-border-dark-4, var(--triskel-color-border)); */
-  /*! background: var(--color-bg, var(--triskel-color-surface)); */
-  padding: 0.35rem 0.8rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "icon label cost"
+    "skill skill skill"
+    "desc desc desc";
+  gap: 0.25rem 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.45rem 0.9rem;
   font-weight: 700;
-  /*! cursor: pointer; */
+  flex: 2;
+  min-width: 0;
 }
 
-.triskel .roll-helper__action-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  align-items: flex-start;
+.triskel .roll-helper__action-header {
+  grid-area: icon;
+  display: contents;
 }
 
 .triskel .roll-helper__action-label {
+  grid-area: label;
   line-height: 1.1;
 }
 
-.triskel .roll-helper__action-meta {
+.triskel .roll-helper__action-skill-row {
+  grid-area: skill;
   display: inline-flex;
   gap: 0.35rem;
   align-items: center;
@@ -488,11 +484,18 @@
   opacity: 0.85;
 }
 
+.triskel .roll-helper__action-description {
+  grid-area: desc;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
 .triskel .roll-helper__action-icon {
   width: 1.4rem;
   height: 1.4rem;
   object-fit: cover;
   border-radius: 50%;
+  grid-area: icon;
 }
 
 .triskel .roll-helper__action-bonus {
@@ -503,29 +506,31 @@
 }
 
 .triskel .roll-helper__action-cost {
+  grid-area: cost;
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
-  margin-left: 0.25rem;
-}
-
-.triskel .roll-helper__forms {
-  display: flex;
-  gap: 0.4rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  flex-wrap: wrap;
 }
 
 .triskel .roll-helper__form {
-  border-radius: 999px;
+  border-radius: 0.75rem;
   /*! border: 1px solid var(--color-border-light-tertiary); */
   /*! background: var(--color-bg, var(--triskel-color-surface)); */
-  padding: 0.25rem 0.65rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
   /*! cursor: pointer; */
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "icon label cost"
+    "skill skill skill"
+    "desc desc desc";
+  align-items: center;
+  gap: 0.2rem 0.35rem;
+  flex: 1;
+}
+
+.triskel .roll-helper__form-header {
+  grid-area: icon;
+  display: contents;
 }
 
 .triskel .roll-helper__form-icon {
@@ -533,25 +538,27 @@
   height: 1.2rem;
   object-fit: cover;
   border-radius: 50%;
+  grid-area: icon;
 }
 
 .triskel .roll-helper__form-label {
+  grid-area: label;
   white-space: nowrap;
 }
 
-.triskel .roll-helper__form-details {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.05rem;
-  align-items: flex-start;
-}
-
-.triskel .roll-helper__form-meta {
+.triskel .roll-helper__form-skill-row {
+  grid-area: skill;
   display: inline-flex;
   gap: 0.25rem;
   align-items: center;
   font-size: 0.85rem;
   opacity: 0.85;
+}
+
+.triskel .roll-helper__form-description {
+  grid-area: desc;
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 
 .triskel .roll-helper__form-bonus {
@@ -562,11 +569,17 @@
 }
 
 .triskel .roll-helper__form-cost {
+  grid-area: cost;
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
 }
 
 .triskel .roll-helper__form.is-selected {
+  border-color: var(--triskel-interactive-highlight);
+  box-shadow: 0 0 0 1px var(--triskel-interactive-highlight);
+}
+
+.triskel .roll-helper__action.is-selected {
   border-color: var(--triskel-interactive-highlight);
   box-shadow: 0 0 0 1px var(--triskel-interactive-highlight);
 }
