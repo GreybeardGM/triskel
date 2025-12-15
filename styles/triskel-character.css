@@ -447,7 +447,7 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 0.5rem;
-  align-items: center;
+  /*! align-items: center; */
   flex-wrap: wrap;
 }
 
@@ -480,13 +480,13 @@
   grid-template-columns: auto 1fr auto;
   grid-template-areas:
     "icon  label cost   " 
-    "bomus skill reserve" 
-    "desc  desc  desc   ";
-  align-items: center;
+    "bonus skill reserve" 
+    "desc  desc desc  ";
+  /*! align-items: center; */
   border-radius: 0.75rem;
   padding: 0.5rem 0.75rem;
   height: auto;
-  grid-template-rows: 2rem 1.4rem auto;
+  grid-template-rows: 2rem 1rem auto;
 }
 
 .triskel .roll-helper__action {
@@ -498,8 +498,8 @@
 }
 
 .triskel .roll-helper__entry-icon {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 3em;
+  height: 3em;
   object-fit: cover;
   grid-area: icon;
 }
@@ -532,12 +532,6 @@
   /*! justify-self: start; */
 }
 
-.triskel .roll-helper__entry-scale {
-  grid-area: scale;
-  font-size: 0.85rem;
-  opacity: 0.85;
-  justify-self: end;
-}
 
 .triskel .roll-helper__entry-cost {
   grid-area: cost;
