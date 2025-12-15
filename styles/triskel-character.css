@@ -511,6 +511,7 @@
   color: var(--triskel-interactive-highlight);
 }
 
+
 .triskel .roll-helper__form {
   border-radius: 0.75rem;
   /*! border: 1px solid var(--color-border-light-tertiary); */
@@ -531,6 +532,19 @@
 .triskel .roll-helper__form-header {
   grid-area: icon;
   display: contents;
+}
+
+.triskel .roll-helper__form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.triskel .roll-helper__form-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .triskel .roll-helper__form-icon {
