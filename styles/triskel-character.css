@@ -449,6 +449,7 @@
   white-space: nowrap;
 }
 
+
 .triskel .roll-helper__content {
   display: inline-flex;
   align-items: center;
@@ -457,35 +458,43 @@
   /*! flex: 1; */
 }
 
+
 .triskel .roll-helper__action {
   display: inline-flex;
-  align-items: center;
   gap: 0.5rem;
-  border-radius: 999px;
-  /*! border: 1px solid var(--color-border-dark-4, var(--triskel-color-border)); */
-  /*! background: var(--color-bg, var(--triskel-color-surface)); */
-  padding: 0.35rem 0.8rem;
+  border-radius: 0.75rem;
+  padding: 0.45rem 0.9rem;
   font-weight: 700;
-  /*! cursor: pointer; */
 }
 
-.triskel .roll-helper__action-details {
+.triskel .roll-helper__action-content {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.triskel .roll-helper__action-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .triskel .roll-helper__action-label {
   line-height: 1.1;
 }
 
-.triskel .roll-helper__action-meta {
+.triskel .roll-helper__action-skill-row {
   display: inline-flex;
   gap: 0.35rem;
   align-items: center;
   font-size: 0.85rem;
   opacity: 0.85;
+}
+
+.triskel .roll-helper__action-description {
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 
 .triskel .roll-helper__action-icon {
@@ -505,7 +514,6 @@
 .triskel .roll-helper__action-cost {
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
-  margin-left: 0.25rem;
 }
 
 .triskel .roll-helper__forms {
@@ -517,15 +525,28 @@
   flex-wrap: wrap;
 }
 
+
 .triskel .roll-helper__form {
-  border-radius: 999px;
+  border-radius: 0.75rem;
   /*! border: 1px solid var(--color-border-light-tertiary); */
   /*! background: var(--color-bg, var(--triskel-color-surface)); */
-  padding: 0.25rem 0.65rem;
+  padding: 0.35rem 0.7rem;
   display: inline-flex;
-  align-items: center;
   gap: 0.35rem;
   /*! cursor: pointer; */
+}
+
+.triskel .roll-helper__form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.triskel .roll-helper__form-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .triskel .roll-helper__form-icon {
@@ -539,19 +560,17 @@
   white-space: nowrap;
 }
 
-.triskel .roll-helper__form-details {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.05rem;
-  align-items: flex-start;
-}
-
-.triskel .roll-helper__form-meta {
+.triskel .roll-helper__form-skill-row {
   display: inline-flex;
   gap: 0.25rem;
   align-items: center;
   font-size: 0.85rem;
   opacity: 0.85;
+}
+
+.triskel .roll-helper__form-description {
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 
 .triskel .roll-helper__form-bonus {
