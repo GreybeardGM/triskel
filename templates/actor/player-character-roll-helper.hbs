@@ -81,22 +81,20 @@
           {{/each}}
         {{/if}}
 
-        {{#if commit}}
-          <div class="roll-helper__commit {{rollHelper.action.reserve}}">
-            <div class="resource-bar commit">
-              {{#each commit._segments as |segment|}}
-                <div
-                  class="resource-box is-interactive segment-{{segment.state}}"
-                  data-action="updateResourceValue"
-                  data-resource="actions.commit"
-                  data-resource-value="{{segment.index}}"
-                >
-                  {{segment.index}}
-                </div>
-              {{/each}}
-            </div>
+        <div class="roll-helper__commit {{rollHelper.action.reserve}}">
+          <div class="resource-bar commit">
+            {{#each commit._segments as |segment|}}
+              <div
+                class="resource-box is-interactive segment-{{segment.state}}"
+                data-action="updateResourceValue"
+                data-resource="actions.commit"
+                data-resource-value="{{segment.index}}"
+              >
+                {{segment.index}}
+              </div>
+            {{/each}}
           </div>
-        {{/if}}
+        </div>
       </div>
 
       {{#if rollHelperSummary}}

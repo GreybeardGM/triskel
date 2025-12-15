@@ -214,7 +214,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     // Prepare Commit bar (hidden for now)
     const commit = prepareBars({ commit: context.system.actions?.commit }, index.actions)
-      .commit;
+      .commit ?? { id: "commit", _segments: [] };
 
     // Prepare Paths
     const paths = prepareBars(context.system.paths, index.paths);
