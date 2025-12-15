@@ -22,9 +22,10 @@
     <div class="actions-grid">
       {{#each this as |action|}}
         <article class="action-card">
-          <button
-            type="button"
+          <div
             class="roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.isSelected}}is-selected{{/if}}"
+            role="button"
+            tabindex="0"
             data-action="selectAction"
             data-action-key="{{action.id}}"
             data-reserve="{{action.reserve}}"
@@ -53,13 +54,11 @@
             {{#if action.description}}
               <div class="roll-helper__entry-description">{{action.description}}</div>
             {{/if}}
-          </button>
-
-          {{#if action.forms.length}}
-            <ul class="action-card__forms">
-              {{#each action.forms as |form|}}
-                <li>
-                  <div
+            {{#if action.forms.length}}
+              <div class="action-card__forms" role="group">
+                {{#each action.forms as |form|}}
+                  <button
+                    type="button"
                     class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
                     title="{{form.description}}"
                     data-action="toggleForm"
@@ -72,11 +71,11 @@
                     {{#if form.cost}}
                       <span class="action-card__form-cost">{{numberFormat form.cost decimals=0}}</span>
                     {{/if}}
-                  </div>
-                </li>
-              {{/each}}
-            </ul>
-          {{/if}}
+                  </button>
+                {{/each}}
+              </div>
+            {{/if}}
+          </div>
         </article>
       {{/each}}
     </div>
