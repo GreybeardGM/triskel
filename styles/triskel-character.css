@@ -537,6 +537,11 @@
 }
 
 
+.triskel .roll-helper__entry-scale {
+  font-weight: 700;
+  justify-self: end;
+}
+
 .triskel .roll-helper__entry-cost {
   grid-area: cost;
   font-weight: 700;
@@ -617,7 +622,7 @@
 
 .triskel .action-card__forms {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.35rem;
   margin-top: 0.35rem;
 }
