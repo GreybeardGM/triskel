@@ -81,6 +81,26 @@
           {{/each}}
         {{/if}}
       </div>
+
+      {{#if rollHelperSummary}}
+        <div class="roll-helper__summary-row">
+          <div class="roll-helper__summary-entry">
+            <div class="roll-helper__summary-label">Gesamtbonus</div>
+            <div class="roll-helper__summary-value">{{numberFormat rollHelperSummary.totalSkillBonus decimals=0 sign=true}}</div>
+          </div>
+
+          {{#if rollHelperSummary.reserveCosts.length}}
+            <div class="roll-helper__summary-reserves">
+              {{#each rollHelperSummary.reserveCosts as |reserve|}}
+                <div class="roll-helper__summary-entry">
+                  <div class="roll-helper__summary-label">{{reserve.label}}</div>
+                  <div class="roll-helper__summary-value">{{numberFormat reserve.total decimals=0}}</div>
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+        </div>
+      {{/if}}
     </div>
   {{/if}}
 </section>

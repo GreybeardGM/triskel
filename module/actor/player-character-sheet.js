@@ -36,6 +36,44 @@ function filterActionsByType(actions = [], type = "all") {
   return entries.filter(action => (action?.type ?? "") === type);
 }
 
+function buildRollHelperSummary({ action = null, forms = [], reserves = {} } = {}) {
+  if (!action) return null;
+
+  const reserveLookup = reserves ?? {};
+
+  const toFiniteNumber = value => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
+  const activeForms = Array.isArray(forms) ? forms.filter(form => form?.active) : [];
+
+  const totalSkillBonus = toFiniteNumber(action.skillTotal)
+    + activeForms.reduce((total, form) => total + toFiniteNumber(form.skillBonus), 0);
+
+  const reserveCosts = new Map();
+
+  const addReserveCost = entry => {
+    const reserveId = `${entry?.reserve ?? ""}`.trim();
+    const cost = Number(entry?.cost ?? NaN);
+
+    if (!reserveId || !Number.isFinite(cost)) return;
+
+    const reserveLabel = entry?.reserveLabel ?? reserveLookup?.[reserveId]?.label ?? reserveId;
+    const existing = reserveCosts.get(reserveId) ?? { label: reserveLabel, total: 0 };
+
+    reserveCosts.set(reserveId, { label: existing.label ?? reserveLabel, total: existing.total + cost });
+  };
+
+  addReserveCost(action);
+  activeForms.forEach(addReserveCost);
+
+  return {
+    totalSkillBonus,
+    reserveCosts: Array.from(reserveCosts, ([id, cost]) => ({ id, ...cost }))
+  };
+}
+
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["triskel", "sheet", "actor", "character"],
@@ -237,11 +275,20 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const selectedAction = [...availableActions, ...availableSpells]
       .find(action => action.id === selectedActionId);
 
+    const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
     context.rollHelper = selectedAction
       ? {
           action: selectedAction,
-          forms: Array.isArray(selectedAction.forms) ? selectedAction.forms : []
+          forms: selectedActionForms
         }
+      : null;
+
+    context.rollHelperSummary = selectedAction
+      ? buildRollHelperSummary({
+          action: selectedAction,
+          forms: selectedActionForms,
+          reserves: index.reserves
+        })
       : null;
 
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
