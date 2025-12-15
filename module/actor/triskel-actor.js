@@ -58,14 +58,22 @@ export class TriskelActor extends Actor {
     this.system.modifiers = modifiers;
     this._applySkillModifiers(modifiers);
 
-    const selectedAction = this.system?.actions?.selected ?? null;
-    const selectedForms = this._normalizeSelectedForms(this.system?.actions?.selectedForms ?? []);
+    const baseActions = this.system?.actions ?? {};
+    const selectedAction = baseActions.selected ?? null;
+    const selectedForms = this._normalizeSelectedForms(baseActions.selectedForms ?? []);
     const { actions, spells } = this._prepareActionCollections({
       selectedAction,
       selectedForms,
       equippedContext
     });
-    this.system.actions = { actions, spells, selected: selectedAction, selectedForms };
+    this.system.actions = {
+      ...baseActions,
+      actions,
+      spells,
+      selected: selectedAction,
+      selectedForms,
+      commit
+    };
 
   }
 
