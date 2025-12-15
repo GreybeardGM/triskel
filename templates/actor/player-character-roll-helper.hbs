@@ -1,0 +1,42 @@
+{{#if rollHelper}}
+<section class="roll-helper">
+  <header class="roll-helper__header">
+    <h2 class="roll-helper__title">{{localize "TRISKEL.Actor.RollHelper.Title"}}</h2>
+  </header>
+
+  <div class="roll-helper__content">
+    <button
+      type="button"
+      class="roll-helper__action is-interactive"
+      data-action="selectAction"
+      data-action-key="{{rollHelper.action.id}}"
+    >
+      {{rollHelper.action.label}}
+    </button>
+
+    {{#if rollHelper.forms.length}}
+      <ul class="roll-helper__forms" aria-label="{{localize "TRISKEL.Actor.RollHelper.FormsLabel"}}">
+        {{#each rollHelper.forms as |form|}}
+          <li>
+            <button
+              type="button"
+              class="roll-helper__form is-interactive {{#if form.active}}is-selected{{/if}}"
+              data-action="toggleForm"
+              data-form-key="{{form.id}}"
+              title="{{form.description}}"
+            >
+              {{#if form.image}}
+                <img class="roll-helper__form-icon" src="{{form.image}}" alt="" />
+              {{/if}}
+              <span class="roll-helper__form-label">{{form.label}}</span>
+              {{#if form.cost}}
+                <span class="roll-helper__form-cost">{{numberFormat form.cost decimals=0}}</span>
+              {{/if}}
+            </button>
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </div>
+</section>
+{{/if}}

@@ -5,13 +5,17 @@
         "Actions": "Action Cards",
         "Skills": "Skills",
         "Inventory": "Equipment",
-        "Notes": "Notes",
-        "Tooltip": {
-          "Actions": "Show and select your action cards",
-          "Skills": "Edit skills and resistances",
-          "Inventory": "Review your carried items",
-          "Notes": "Review character notes"
-        }
+      "Notes": "Notes",
+      "Tooltip": {
+        "Actions": "Show and select your action cards",
+        "Skills": "Edit skills and resistances",
+        "Inventory": "Review your carried items",
+        "Notes": "Review character notes"
+      }
+      },
+      "RollHelper": {
+        "Title": "Roll Helper",
+        "FormsLabel": "Available forms"
       },
       "Type": {
         "Character": "Player Character",

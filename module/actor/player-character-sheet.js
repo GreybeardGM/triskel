@@ -105,6 +105,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   };
 
   static PARTS = {
+    rollHelper: {
+      id: "rollHelper",
+      template: "systems/triskel/templates/actor/player-character-roll-helper.hbs"
+    },
     info: {
       id: "info",
       template: "systems/triskel/templates/actor/player-character-info.hbs"
@@ -223,6 +227,23 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       spells: filterActionsByType(context.system.actions?.spells, actionFilterSelection)
     };
 
+    const selectedActionId = context.system.actions?.selected ?? null;
+    const availableActions = Array.isArray(context.system.actions?.actions)
+      ? context.system.actions.actions
+      : [];
+    const availableSpells = Array.isArray(context.system.actions?.spells)
+      ? context.system.actions.spells
+      : [];
+    const selectedAction = [...availableActions, ...availableSpells]
+      .find(action => action.id === selectedActionId);
+
+    context.rollHelper = selectedAction
+      ? {
+          action: selectedAction,
+          forms: Array.isArray(selectedAction.forms) ? selectedAction.forms : []
+        }
+      : null;
+
     // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
       this.document.system.details?.notes ?? "",
@@ -273,7 +294,10 @@ async function onSelectAction(event, target) {
   const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
   if (!actionKey) return;
 
-  await this.document?.update({ "system.actions.selected": actionKey });
+  const currentlySelected = this.document?.system?.actions?.selected ?? null;
+  const nextSelection = currentlySelected === actionKey ? null : actionKey;
+
+  await this.document?.update({ "system.actions.selected": nextSelection });
 }
 
 async function onFilterActionType(event, target) {

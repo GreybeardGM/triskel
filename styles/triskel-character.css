@@ -419,6 +419,87 @@
 | --    ACTIONS     -- |
 \*____________________*/
 
+.triskel .roll-helper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border-light-tertiary);
+  border-radius: 0.5rem;
+  background: var(--color-bg, var(--triskel-color-surface));
+}
+
+.triskel .roll-helper__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.triskel .roll-helper__title {
+  margin: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.triskel .roll-helper__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.triskel .roll-helper__action {
+  border-radius: 999px;
+  border: 1px solid var(--color-border-dark-4, var(--triskel-color-border));
+  background: var(--color-bg, var(--triskel-color-surface));
+  padding: 0.35rem 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.triskel .roll-helper__forms {
+  display: flex;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+}
+
+.triskel .roll-helper__form {
+  border-radius: 999px;
+  border: 1px solid var(--color-border-light-tertiary);
+  background: var(--color-bg, var(--triskel-color-surface));
+  padding: 0.25rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.triskel .roll-helper__form-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.triskel .roll-helper__form-label {
+  white-space: nowrap;
+}
+
+.triskel .roll-helper__form-cost {
+  font-weight: 700;
+  color: var(--triskel-interactive-highlight);
+}
+
+.triskel .roll-helper__form.is-selected {
+  border-color: var(--triskel-interactive-highlight);
+  box-shadow: 0 0 0 1px var(--triskel-interactive-highlight);
+}
+
 .triskel .actions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
