@@ -36,7 +36,7 @@ function filterActionsByType(actions = [], type = "all") {
   return entries.filter(action => (action?.type ?? "") === type);
 }
 
-function buildRollHelperSummary({ action = null, forms = [], reserves = {} } = {}) {
+function buildRollHelperSummary({ action = null, forms = [], reserves = {}, commit = null } = {}) {
   if (!action) return null;
 
   const reserveLookup = reserves ?? {};
@@ -47,9 +47,13 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {} } = {
   };
 
   const activeForms = Array.isArray(forms) ? forms.filter(form => form?.active) : [];
+  const commitValue = toFiniteNumber(commit?.value ?? commit ?? 0);
+  const actionReserveId = `${action?.reserve ?? ""}`.trim();
+  const actionReserveLabel = action?.reserveLabel ?? reserveLookup?.[actionReserveId]?.label ?? actionReserveId;
 
   const totalSkillBonus = toFiniteNumber(action.skillTotal)
-    + activeForms.reduce((total, form) => total + toFiniteNumber(form.skillBonus), 0);
+    + activeForms.reduce((total, form) => total + toFiniteNumber(form.skillBonus), 0)
+    + commitValue;
 
   const reserveCosts = new Map();
 
@@ -67,6 +71,10 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {} } = {
 
   addReserveCost(action);
   activeForms.forEach(addReserveCost);
+
+  if (actionReserveId && commitValue) {
+    addReserveCost({ reserve: actionReserveId, reserveLabel: actionReserveLabel, cost: commitValue });
+  }
 
   return {
     totalSkillBonus,
@@ -204,10 +212,15 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     // Prepare Reserves
     const reserves = prepareBars(context.system.reserves, index.reserves);
 
+    // Prepare Commit bar (hidden for now)
+    const commit = prepareBars({ commit: context.system.actions?.commit }, index.actions)
+      .commit;
+
     // Prepare Paths
     const paths = prepareBars(context.system.paths, index.paths);
 
     context.reserves = reserves;
+    context.commit = commit;
     context.paths = paths;
     context.resistances = resistances;
     context.skillCategories = skillCategories;
@@ -287,7 +300,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       ? buildRollHelperSummary({
           action: selectedAction,
           forms: selectedActionForms,
-          reserves: index.reserves
+          reserves: index.reserves,
+          commit
         })
       : null;
 
