@@ -15,7 +15,8 @@
       },
       "RollHelper": {
         "Title": "Roll-Helfer",
-        "FormsLabel": "Verfügbare Formen"
+        "FormsLabel": "Verfügbare Formen",
+        "TotalBonus": "Gesamtbonus"
       },
       "Type": {
         "Character": "Spielercharakter",
