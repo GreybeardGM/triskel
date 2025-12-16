@@ -55,16 +55,7 @@ export async function chatOutput({
 
   if (roll) {
     if (!roll._evaluated) {
-      await roll.evaluate({ async: true });
-    }
-
-    if (game.dice3d) {
-      try {
-        await game.dice3d.showForRoll(roll, game.user, true, resolvedWhisper ?? null, resolvedBlind);
-      }
-      catch (error) {
-        console.warn("Triskel | Dice So Nice error:", error);
-      }
+      await roll.evaluate();
     }
 
     rollHTML = await roll.render();
@@ -80,14 +71,17 @@ export async function chatOutput({
     content
   };
 
-  const html = await renderTemplate("systems/triskel/templates/chat/chat-output.hbs", templateData);
+  const html = await foundry.applications.handlebars.renderTemplate(
+    "systems/triskel/templates/chat/chat-output.hbs",
+    templateData
+  );
 
   const messageData = {
     user: typeof user === "string" ? user : user?.id ?? game.user.id,
     speaker: resolvedSpeaker,
     content: html,
     flavor,
-    type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : CONST.CHAT_MESSAGE_TYPES.OTHER,
+    style: roll ? CONST.CHAT_MESSAGE_STYLES.ROLL : CONST.CHAT_MESSAGE_STYLES.OTHER,
     rolls: roll ? [roll] : undefined,
     sound: roll ? CONFIG.sounds.dice : undefined,
     whisper: resolvedWhisper ?? undefined,
