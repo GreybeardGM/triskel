@@ -115,6 +115,36 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
   }
 
+  static _getSelectValue(target, selectField) {
+    const form = target.form;
+    const select = form?.elements[selectField] ?? null;
+
+    return select?.value ?? "";
+  }
+
+  static _appendReference({ refPath, entries, key }) {
+    if (entries.includes(key)) {
+      console.debug("[Triskel] #_appendReference aborted: duplicate key", { key });
+      return null;
+    }
+
+    entries.push(key);
+    console.debug("[Triskel] reference list AFTER", entries.slice());
+    return this.document.update({ [refPath]: entries });
+  }
+
+  static _removeReferenceAt({ refPath, index }) {
+    const entries = this.getReferenceList(refPath);
+    if (!entries[index]) return null;
+
+    console.debug("[Triskel] #_removeReferenceAt", { index, before: entries.slice() });
+
+    entries.splice(index, 1);
+
+    console.debug("[Triskel] #_removeReferenceAt after", entries.slice());
+    return this.document.update({ [refPath]: entries });
+  }
+
   getReferenceList(path) {
     const current = foundry.utils.getProperty(this.document, path);
 
@@ -125,112 +155,65 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       .filter(Boolean);
   }
 
-  // ---------- Add / Remove Actions ----------
-
-  static async onAddActionReference(event, target) {
+  static async _handleAddReference(event, target, { defaultSelectField, defaultRefPath }) {
     event.preventDefault();
 
-    const form = target.form;
-    const selectField = target.dataset.selectField ?? "";              // aus data-select-field am Button
-    const refPath = target.dataset.refPath ?? "system.actions.ref";    // aus data-ref-path am Button
+    const selectField = target.dataset.selectField ?? defaultSelectField;
+    const refPath = target.dataset.refPath ?? defaultRefPath;
 
-    const select = form?.elements[selectField] ?? null;
-    const key = select?.value ?? "";
+    const key = this._getSelectValue(target, selectField);
 
-    console.debug("[Triskel] #onAddActionReference called", {
+    console.debug("[Triskel] #_handleAddReference called", {
       selectField,
       refPath,
       key
     });
 
     if (!key) {
-      console.debug("[Triskel] #onAddActionReference aborted: empty key");
+      console.debug("[Triskel] #_handleAddReference aborted: empty key");
       return;
     }
 
     const current = this.getReferenceList(refPath);
-    console.debug("[Triskel] actions ref list BEFORE", current.slice());
+    console.debug("[Triskel] reference list BEFORE", current.slice());
 
-    if (current.includes(key)) {
-      console.debug("[Triskel] #onAddActionReference aborted: duplicate key", { key });
-      return;
-    }
-
-    current.push(key);
-
-    console.debug("[Triskel] actions ref list AFTER", current.slice());
-    await this.document.update({ [refPath]: current });
+    await this._appendReference({ refPath, entries: current, key });
   }
 
-  static async onRemoveActionReference(event, target) {
+  static async _handleRemoveReference(event, target, { defaultRefPath }) {
     event.preventDefault();
 
+    const refPath = target.dataset.refPath ?? defaultRefPath;
     const index = Number(target.dataset.index ?? -1);
     if (index < 0) return;
 
-    const current = this.getReferenceList("system.actions.ref");
-    if (!current[index]) return;
+    await this._removeReferenceAt({ refPath, index });
+  }
 
-    console.debug("[Triskel] #onRemoveActionReference", { index, before: current.slice() });
+  // ---------- Add / Remove Actions ----------
 
-    current.splice(index, 1);
+  static async onAddActionReference(event, target) {
+    await this._handleAddReference(event, target, {
+      defaultSelectField: "",
+      defaultRefPath: "system.actions.ref"
+    });
+  }
 
-    console.debug("[Triskel] #onRemoveActionReference after", current.slice());
-    await this.document.update({ "system.actions.ref": current });
+  static async onRemoveActionReference(event, target) {
+    await this._handleRemoveReference(event, target, { defaultRefPath: "system.actions.ref" });
   }
 
   // ---------- Add / Remove Forms ----------
 
   static async onAddFormReference(event, target) {
-    event.preventDefault();
-
-    const form = target.form;
-    const selectField = target.dataset.selectField ?? "";
-    const refPath = target.dataset.refPath ?? "system.forms.ref";
-
-    const select = form?.elements[selectField] ?? null;
-    const key = select?.value ?? "";
-
-    console.debug("[Triskel] #onAddFormReference called", {
-      selectField,
-      refPath,
-      key
+    await this._handleAddReference(event, target, {
+      defaultSelectField: "",
+      defaultRefPath: "system.forms.ref"
     });
-
-    if (!key) {
-      console.debug("[Triskel] #onAddFormReference aborted: empty key");
-      return;
-    }
-
-    const current = this.getReferenceList(refPath);
-    console.debug("[Triskel] forms ref list BEFORE", current.slice());
-
-    if (current.includes(key)) {
-      console.debug("[Triskel] #onAddFormReference aborted: duplicate key", { key });
-      return;
-    }
-
-    current.push(key);
-
-    console.debug("[Triskel] forms ref list AFTER", current.slice());
-    await this.document.update({ [refPath]: current });
   }
 
   static async onRemoveFormReference(event, target) {
-    event.preventDefault();
-
-    const index = Number(target.dataset.index ?? -1);
-    if (index < 0) return;
-
-    const current = this.getReferenceList("system.forms.ref");
-    if (!current[index]) return;
-
-    console.debug("[Triskel] #onRemoveFormReference", { index, before: current.slice() });
-
-    current.splice(index, 1);
-
-    console.debug("[Triskel] #onRemoveFormReference after", current.slice());
-    await this.document.update({ "system.forms.ref": current });
+    await this._handleRemoveReference(event, target, { defaultRefPath: "system.forms.ref" });
   }
 
   // ---------- Add / Remove Modifiers ----------

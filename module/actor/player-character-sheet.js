@@ -82,6 +82,18 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, comm
   };
 }
 
+async function toggleEquippedItem(event, target, expectedType) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item || item.type !== expectedType) return;
+
+  const equipped = getEquippedList(expectedType, this.document?.system?.equippedGear);
+  const updatedEquipped = toggleIdInList(equipped, item.id);
+
+  await this.document?.update({ [`system.equippedGear.${expectedType}`]: updatedEquipped });
+}
+
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["triskel", "sheet", "actor", "character"],
@@ -399,58 +411,18 @@ function toggleIdInList(list, id) {
 }
 
 async function onToggleWornEquip(event, target) {
-  event.preventDefault();
-
-  const item = getItemFromTarget(this, target);
-  if (!item || item.type !== "worn") return;
-
-  const updatedWorn = toggleIdInList(
-    getEquippedList("worn", this.document?.system?.equippedGear),
-    item.id
-  );
-
-  await this.document?.update({ "system.equippedGear.worn": updatedWorn });
+  await toggleEquippedItem.call(this, event, target, "worn");
 }
 
 async function onToggleSpell(event, target) {
-  event.preventDefault();
-
-  const item = getItemFromTarget(this, target);
-  if (!item || item.type !== "spell") return;
-
-  const updatedSpells = toggleIdInList(
-    getEquippedList("spell", this.document?.system?.equippedGear),
-    item.id
-  );
-
-  await this.document?.update({ "system.equippedGear.spell": updatedSpells });
+  await toggleEquippedItem.call(this, event, target, "spell");
 }
 
 async function onToggleHeldItem(event, target) {
-  event.preventDefault();
-
-  const item = getItemFromTarget(this, target);
-  if (!item || item.type !== "held") return;
-
-  const updatedHeldItems = toggleIdInList(
-    getEquippedList("held", this.document?.system?.equippedGear),
-    item.id
-  );
-
-  await this.document?.update({ "system.equippedGear.held": updatedHeldItems });
+  await toggleEquippedItem.call(this, event, target, "held");
 }
 
 async function onToggleAbility(event, target) {
-  event.preventDefault();
-
-  const item = getItemFromTarget(this, target);
-  if (!item || item.type !== "ability") return;
-
-  const updatedAbilities = toggleIdInList(
-    getEquippedList("ability", this.document?.system?.equippedGear),
-    item.id
-  );
-
-  await this.document?.update({ "system.equippedGear.ability": updatedAbilities });
+  await toggleEquippedItem.call(this, event, target, "ability");
 }
 

@@ -26,23 +26,19 @@ export class TriskelActor extends Actor {
       reserve.min = minimumFromStrain;
     }
 
-    const parsedTension = Number(this.system?.tension?.value ?? 0);
-    const tension = Number.isFinite(parsedTension) ? parsedTension : 0;
-
-    const tierValue = Number(this.system?.tier?.value ?? 0);
+    const tension = this._toFiniteNumber(this.system?.tension?.value);
+    const tierValue = this._toFiniteNumber(this.system?.tier?.value);
     const commit = this.system?.actions?.commit ?? null;
     if (commit) {
-      const max = Number.isFinite(tierValue) ? tierValue : 0;
-      commit.max = Math.max(0, max);
+      commit.max = Math.max(0, tierValue);
     }
 
     const paths = this.system?.paths ?? {};
     Object.entries(paths).forEach(([id, path]) => {
       if (!path) return;
 
-      const parsedMax = Number(path.max);
-      const codexMax = Number(triskellIndex.paths?.[id]?.steps?.length ?? 0);
-      const max = Number.isFinite(parsedMax) ? parsedMax : codexMax;
+      const codexMax = this._toFiniteNumber(triskellIndex.paths?.[id]?.steps?.length);
+      const max = this._toFiniteNumber(path.max, codexMax);
       const safeMax = Math.max(0, max);
 
       path.max = safeMax;
@@ -134,8 +130,7 @@ export class TriskelActor extends Actor {
         const skill = modifier?.skill ?? modifier?.id ?? "";
         if (!skill) continue;
 
-        const parsedValue = Number(modifier.value);
-        const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+        const value = this._toFiniteNumber(modifier.value);
         const existing = modifiersBySkill[skill];
 
         if (!existing || value > (existing.value ?? 0)) {
@@ -174,11 +169,9 @@ export class TriskelActor extends Actor {
     Object.entries(skills).forEach(([skillId, skillData]) => {
       if (!skillData) return;
 
-      const parsedValue = Number(skillData.value);
-      const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+      const value = this._toFiniteNumber(skillData.value);
 
-      const parsedMod = Number(modifiersBySkill[skillId]?.value ?? 0);
-      const mod = Number.isFinite(parsedMod) ? parsedMod : 0;
+      const mod = this._toFiniteNumber(modifiersBySkill[skillId]?.value);
 
       skillData.mod = mod;
       skillData.total = value + mod;
@@ -199,14 +192,19 @@ export class TriskelActor extends Actor {
     return Array.from(new Set(this._normalizeReferenceList(selectedForms)));
   }
 
+  _normalizeKeywords(keywords = []) {
+    return (Array.isArray(keywords) ? keywords : [])
+      .map(keyword => `${keyword}`.trim().toLowerCase())
+      .filter(Boolean);
+  }
+
   _formatAction(action, { source, image }) {
     const index = getTriskellIndex();
     const skill = index.skills?.[action.skill] ?? {};
     const reserve = index.reserves?.[action.reserve] ?? {};
     const actorSkill = this.system?.skills?.[action.skill] ?? {};
 
-    const parsedSkillTotal = Number(actorSkill.total ?? actorSkill.value ?? 0);
-    const skillTotal = Number.isFinite(parsedSkillTotal) ? parsedSkillTotal : 0;
+    const skillTotal = this._toFiniteNumber(actorSkill.total ?? actorSkill.value);
 
     return {
       ...action,
@@ -254,6 +252,7 @@ export class TriskelActor extends Actor {
 
     const codex = getTriskellCodex();
     const index = getTriskellIndex();
+    const collator = new Intl.Collator(undefined, { sensitivity: "base" });
 
     const actionIds = new Set();
     const spellIds = new Set();
@@ -299,22 +298,18 @@ export class TriskelActor extends Actor {
       });
     }
 
-    actions.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
-    spells.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
-
-    const normalizeKeywords = (keywords = []) => (Array.isArray(keywords) ? keywords : [])
-      .map(keyword => `${keyword}`.trim().toLowerCase())
-      .filter(Boolean);
+    actions.sort((a, b) => collator.compare(a.label, b.label));
+    spells.sort((a, b) => collator.compare(a.label, b.label));
 
     forms.forEach(form => {
       form.active = selectedForms.includes(form.id);
-      form.normalizedKeywords = normalizeKeywords(form.keywords);
+      form.normalizedKeywords = this._normalizeKeywords(form.keywords);
     });
 
-    forms.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+    forms.sort((a, b) => collator.compare(a.label, b.label));
 
     const findMatchingForms = entry => {
-      const entryKeywords = normalizeKeywords(entry?.keywords);
+      const entryKeywords = this._normalizeKeywords(entry?.keywords);
       if (!entryKeywords.length) return [];
 
       const entryKeywordSet = new Set(entryKeywords);
@@ -388,9 +383,9 @@ export class TriskelActor extends Actor {
     const normalizedModifiers = modifiers
       .map(modifier => ({
         label: modifier?.label ?? "Modifier",
-        value: Number(modifier?.value ?? 0)
+        value: this._toFiniteNumber(modifier?.value, Number.NaN)
       }))
-      .filter(modifier => !Number.isNaN(modifier.value) && modifier.value !== 0);
+      .filter(modifier => Number.isFinite(modifier.value) && modifier.value !== 0);
 
     const expressionValues = [firstValue, secondValue, ...normalizedModifiers.map(mod => mod.value)];
     const expression = expressionValues
@@ -434,5 +429,10 @@ export class TriskelActor extends Actor {
       difficulty,
       options
     };
+  }
+
+  _toFiniteNumber(value, fallback = 0) {
+    const parsedValue = Number(value);
+    return Number.isFinite(parsedValue) ? parsedValue : fallback;
   }
 }
