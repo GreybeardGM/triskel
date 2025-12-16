@@ -71,14 +71,17 @@ export async function chatOutput({
     content
   };
 
-  const html = await renderTemplate("systems/triskel/templates/chat/chat-output.hbs", templateData);
+  const html = await foundry.applications.handlebars.renderTemplate(
+    "systems/triskel/templates/chat/chat-output.hbs",
+    templateData
+  );
 
   const messageData = {
     user: typeof user === "string" ? user : user?.id ?? game.user.id,
     speaker: resolvedSpeaker,
     content: html,
     flavor,
-    type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : CONST.CHAT_MESSAGE_TYPES.OTHER,
+    style: roll ? "roll" : "other",
     rolls: roll ? [roll] : undefined,
     sound: roll ? CONFIG.sounds.dice : undefined,
     whisper: resolvedWhisper ?? undefined,
