@@ -4,6 +4,7 @@ import {
   toFiniteNumber,
   toFiniteNumbers
 } from "../util/normalization.js";
+import { chatOutput } from "../util/chat-output.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -363,20 +364,21 @@ export class TriskelActor extends Actor {
       modifiers.push({ label: commitLabel, value: commitBonus });
     }
 
-    return this.rollTriskelDice({ modifiers });
+    return this.rollTriskelDice({ modifiers, title: actionLabel });
   }
 
   /**
-   * Roll the standard Triskel 2d10 (tens-as-zero) test with optional modifiers.
+   * Roll a simple 2d10 test with optional modifiers.
    *
    * @param {object} [config={}]             - Configuration for the roll.
    * @param {Array<{label?: string, value?: number}>} [config.modifiers=[]]
    *   Collection of labeled bonuses or penalties to apply to the roll.
    * @param {number|null} [config.difficulty=null]
    *   Optional difficulty value (not yet used mechanically).
+   * @param {string} [config.title=""]      - Optional title for the chat card.
    * @param {object} [config.options={}]     - Placeholder for future options.
    */
-  async rollTriskelDice({ modifiers = [], difficulty = null, options = {} } = {}) {
+  async rollTriskelDice({ modifiers = [], difficulty = null, title = "", options = {} } = {}) {
     const normalizedModifiers = modifiers
       .map(modifier => ({
         label: modifier?.label ?? "Modifier",
@@ -384,99 +386,47 @@ export class TriskelActor extends Actor {
       }))
       .filter(modifier => Number.isFinite(modifier.value) && modifier.value !== 0);
 
-    const modifierFormula = normalizedModifiers
-      .map(modifier => `${modifier.value >= 0 ? "+" : ""}${modifier.value}`)
-      .join("");
+    const terms = [new foundry.dice.terms.Die({ number: 2, faces: 10 })];
 
-    const finalRoll = await new Roll(`2d10${modifierFormula}`).evaluate({ async: true });
-
-    const numericTerms = finalRoll.terms.filter(term => term instanceof foundry.dice.terms.NumericTerm);
-
-    numericTerms.forEach((term, index) => {
-      const source = normalizedModifiers[index];
-      if (!source) return;
-
-      term.options.flavor = source.label;
+    normalizedModifiers.forEach(modifier => {
+      terms.push(new foundry.dice.terms.OperatorTerm({ operator: modifier.value >= 0 ? "+" : "-" }));
+      terms.push(new foundry.dice.terms.NumericTerm({
+        number: Math.abs(modifier.value),
+        options: { flavor: modifier.label }
+      }));
     });
 
-    const d10Term = finalRoll.dice.find(die => die.faces === 10);
-    const convertResult = value => (value === 10 ? 0 : value ?? 0);
+    const roll = Roll.fromTerms(terms);
+    await roll.evaluate({ async: true });
 
-    if (d10Term) {
-      d10Term.results = d10Term.results.map(result => ({
-        ...result,
-        result: convertResult(result.result)
-      }));
+    const modifierTotal = normalizedModifiers.reduce((total, modifier) => total + modifier.value, 0);
+    const escape = foundry.utils?.escapeHTML ?? (value => value);
+    const modifiersContent = normalizedModifiers.length
+      ? `<ul>${normalizedModifiers
+        .map(modifier => `<li>${escape(modifier.label)}: ${modifier.value >= 0 ? "+" : ""}${modifier.value}</li>`)
+        .join("")}</ul>`
+      : `<p>${game.i18n.localize("TRISKEL.Actor.RollHelper.TotalBonus")}: +0</p>`;
 
-      d10Term.total = d10Term.results.reduce(
-        (total, result) => total + (result.count ?? 1) * (result.result ?? 0),
-        0
-      );
-    }
+    const subtitleParts = ["2d10"];
+    if (normalizedModifiers.length) subtitleParts.push(`${game.i18n.localize("TRISKEL.Actor.RollHelper.TotalBonus")}: ${modifierTotal >= 0 ? "+" : ""}${modifierTotal}`);
+    if (Number.isFinite(difficulty)) subtitleParts.push(`${game.i18n.localize("TRISKEL.Actor.RollHelper.Difficulty") ?? "Difficulty"}: ${difficulty}`);
 
-    const diceValues = d10Term?.results?.map(result => result?.result ?? 0) ?? [];
-    const modifierTotal = numericTerms.reduce((total, term) => {
-      const sign = term.operator === "-" ? -1 : 1;
-      return total + sign * (term.total ?? term.number ?? 0);
-    }, 0);
-    const diceTotal = diceValues.reduce((total, value) => total + value, 0);
-    finalRoll._total = diceTotal + modifierTotal;
+    const flavor = subtitleParts.join(" | ");
 
-    const modifierSummary = normalizedModifiers.length
-      ? normalizedModifiers
-        .map(mod => `${mod.label} (${mod.value >= 0 ? "+" : ""}${mod.value})`)
-        .join(", ")
-      : "None";
-
-    const flavorParts = ["2d10 (10→0)"];
-    if (normalizedModifiers.length) {
-      flavorParts.push(`Modifiers: ${modifierSummary}`);
-    }
-    if (Number.isFinite(difficulty)) {
-      flavorParts.push(`Difficulty: ${difficulty}`);
-    }
-
-    const rollMode = game.settings.get("core", "rollMode");
-
-    if (game.dice3d) {
-      const gmRecipients = ChatMessage.getWhisperRecipients("GM").map(user => user.id);
-      let whisper = null;
-      let blind = false;
-      switch (rollMode) {
-        case "selfroll":
-          whisper = [game.user.id];
-          break;
-        case "gmroll":
-          whisper = gmRecipients;
-          break;
-        case "blindroll":
-          whisper = gmRecipients;
-          blind = true;
-          break;
-        default:
-          whisper = null;
-      }
-
-      try {
-        await game.dice3d.showForRoll(finalRoll, game.user, true, whisper ?? null, blind);
-      }
-      catch (error) {
-        console.warn("Triskel | Dice So Nice error:", error);
-      }
-    }
-
-    await finalRoll.toMessage(
-      {
-        speaker: ChatMessage.getSpeaker({ actor: this }),
-        flavor: flavorParts.join(" | ")
-      },
-      { rollMode }
-    );
+    await chatOutput({
+      title: title || game.i18n.localize("TRISKEL.Actor.RollHelper.Title"),
+      subtitle: flavor,
+      roll,
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor,
+      content: modifiersContent,
+      rollMode: options.rollMode ?? null
+    });
 
     return {
-      finalRoll,
-      diceValues,
+      roll,
       modifiers: normalizedModifiers,
+      modifierTotal,
       difficulty,
       options
     };
