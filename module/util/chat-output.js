@@ -60,7 +60,7 @@ export async function chatOutput({
 
     if (game.dice3d) {
       try {
-        await game.dice3d.showForRoll(roll, game.user, true, resolvedWhisper ?? [], resolvedBlind);
+        await game.dice3d.showForRoll(roll, game.user, true, resolvedWhisper ?? null, resolvedBlind);
       }
       catch (error) {
         console.warn("Triskel | Dice So Nice error:", error);
@@ -87,7 +87,9 @@ export async function chatOutput({
     speaker: resolvedSpeaker,
     content: html,
     flavor,
-    type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+    type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : CONST.CHAT_MESSAGE_TYPES.OTHER,
+    rolls: roll ? [roll] : undefined,
+    sound: roll ? CONFIG.sounds.dice : undefined,
     whisper: resolvedWhisper ?? undefined,
     blind: resolvedBlind || undefined
   };
