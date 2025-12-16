@@ -81,7 +81,7 @@ export async function chatOutput({
     speaker: resolvedSpeaker,
     content: html,
     flavor,
-    style: roll ? "roll" : "other",
+    style: roll ? CONST.CHAT_MESSAGE_STYLES.ROLL : CONST.CHAT_MESSAGE_STYLES.OTHER,
     rolls: roll ? [roll] : undefined,
     sound: roll ? CONFIG.sounds.dice : undefined,
     whisper: resolvedWhisper ?? undefined,
