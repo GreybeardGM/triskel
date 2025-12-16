@@ -461,7 +461,7 @@
 .triskel .roll-helper__summary-entry {
   display: flex;
   gap: 0.35rem;
-  align-items: baseline;
+  align-items: center;
   padding: 0.35rem 0.6rem;
   border-radius: 999px;
   background: var(--triskel-color-segment-placeholder);
