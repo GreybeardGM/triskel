@@ -384,17 +384,11 @@ export class TriskelActor extends Actor {
       }))
       .filter(modifier => Number.isFinite(modifier.value) && modifier.value !== 0);
 
-    const modifierTerms = normalizedModifiers.map(modifier => {
-      const isNegative = modifier.value < 0;
-
-      return new foundry.dice.terms.NumericTerm({
-        number: Math.abs(modifier.value),
-        options: {
-          flavor: modifier.label,
-          operator: isNegative ? "-" : "+"
-        }
-      });
-    });
+    const modifierTerms = normalizedModifiers.map(modifier => new foundry.dice.terms.NumericTerm({
+      number: Math.abs(modifier.value),
+      operator: modifier.value < 0 ? "-" : "+",
+      options: { flavor: modifier.label }
+    }));
 
     const finalRoll = await Roll.fromTerms([
       new foundry.dice.terms.Die({ number: 2, faces: 10 }),
@@ -418,7 +412,7 @@ export class TriskelActor extends Actor {
 
     const diceValues = d10Term?.results?.map(result => result?.result ?? 0) ?? [];
     const modifierTotal = modifierTerms.reduce((total, term) => {
-      const sign = term.options?.operator === "-" ? -1 : 1;
+      const sign = term.operator === "-" ? -1 : 1;
       return total + sign * (term.total ?? term.number ?? 0);
     }, 0);
     const diceTotal = diceValues.reduce((total, value) => total + value, 0);
