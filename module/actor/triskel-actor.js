@@ -5,6 +5,7 @@ import {
   toFiniteNumbers
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
+import { convertD10TensToZero } from "../util/roll.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -397,7 +398,8 @@ export class TriskelActor extends Actor {
     });
 
     const roll = Roll.fromTerms(terms);
-    await roll.evaluate({ async: true });
+    await roll.evaluate();
+    convertD10TensToZero(roll);
 
     const modifierTotal = normalizedModifiers.reduce((total, modifier) => total + modifier.value, 0);
     const escape = foundry.utils?.escapeHTML ?? (value => value);
@@ -407,18 +409,17 @@ export class TriskelActor extends Actor {
         .join("")}</ul>`
       : `<p>${game.i18n.localize("TRISKEL.Actor.RollHelper.TotalBonus")}: +0</p>`;
 
-    const subtitleParts = ["2d10"];
+    const subtitleParts = ["2d10 (10→0)"];
     if (normalizedModifiers.length) subtitleParts.push(`${game.i18n.localize("TRISKEL.Actor.RollHelper.TotalBonus")}: ${modifierTotal >= 0 ? "+" : ""}${modifierTotal}`);
     if (Number.isFinite(difficulty)) subtitleParts.push(`${game.i18n.localize("TRISKEL.Actor.RollHelper.Difficulty") ?? "Difficulty"}: ${difficulty}`);
 
-    const flavor = subtitleParts.join(" | ");
+    const subtitle = subtitleParts.join(" | ");
 
     await chatOutput({
       title: title || game.i18n.localize("TRISKEL.Actor.RollHelper.Title"),
-      subtitle: flavor,
+      subtitle,
       roll,
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor,
       content: modifiersContent,
       rollMode: options.rollMode ?? null
     });
