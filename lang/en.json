@@ -15,6 +15,7 @@
       },
       "RollHelper": {
         "Title": "Roll Helper",
+        "Roll": "Roll",
         "FormsLabel": "Available forms",
         "TotalBonus": "Total bonus"
       },

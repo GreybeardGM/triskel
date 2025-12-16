@@ -1,3 +1,5 @@
+import { toFiniteNumber, toFiniteNumbers } from "../util/normalization.js";
+
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 
@@ -13,11 +15,6 @@ export async function onEditImage(event, target) {
 
   picker.render(true);
 }
-
-const toFiniteNumbers = (collection, extractor) =>
-  collection
-    .map(item => Number(extractor(item)))
-    .filter(Number.isFinite);
 
 const deriveMaxSegments = (values, fallback = 5) =>
   values.length ? Math.max(...values) : fallback;
@@ -36,12 +33,12 @@ export async function onUpdateResourceValue(event, target) {
   event.preventDefault();
 
   const resource = target.dataset.resource;
-  const clickedValue = Number(target.dataset.resourceValue ?? NaN);
+  const clickedValue = toFiniteNumber(target.dataset.resourceValue, Number.NaN);
   if (!resource || !Number.isFinite(clickedValue)) return;
 
   const resourceField = target.dataset.resourceField ?? "value";
   const property = `system.${resource}.${resourceField}`;
-  const currentValue = Number(foundry.utils.getProperty(this.document, property) ?? 0);
+  const currentValue = toFiniteNumber(foundry.utils.getProperty(this.document, property));
 
   let newValue = clickedValue;
   if (currentValue === clickedValue) newValue = clickedValue - 1;
@@ -61,11 +58,9 @@ export function prepareBars(bars = {}, codexReference = undefined) {
   return Object.entries(bars ?? {}).reduce((collection, [id, resource]) => {
     if (!resource) return collection;
 
-    const min = Number(resource.min ?? 0);
-    const value = Number(resource.value ?? 0);
-    const ownMax = Number.isFinite(Number(resource.max))
-      ? Number(resource.max)
-      : MaxSegments;
+    const min = toFiniteNumber(resource.min);
+    const value = toFiniteNumber(resource.value);
+    const ownMax = toFiniteNumber(resource.max, MaxSegments);
 
     const _segments = createSegments(MaxSegments, (index) => {
       if (index <= min) return "strain";
@@ -99,15 +94,9 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     const rawSkill = normalizedSkills[skill.id] ?? {};
     const category = index.skillCategories?.[skill.category] ?? {};
 
-    const rawValue = rawSkill.value;
-    const parsedValue = Number(rawValue);
-    const value = Number.isFinite(parsedValue) ? parsedValue : 0;
-
-    const parsedMod = Number(rawSkill.mod);
-    const mod = Number.isFinite(parsedMod) ? parsedMod : 0;
-
-    const parsedTotal = Number(rawSkill.total);
-    const total = Number.isFinite(parsedTotal) ? parsedTotal : value + mod;
+    const value = toFiniteNumber(rawSkill.value);
+    const mod = toFiniteNumber(rawSkill.mod);
+    const total = toFiniteNumber(rawSkill.total, value + mod);
 
     const entry = {
       ...skill,
@@ -147,8 +136,7 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
 
   const resistancesList = (codex.resistances ?? []).map(resistance => {
     const rawValue = normalizedResistances[resistance.id]?.value;
-    const parsedValue = Number(rawValue);
-    const value = Number.isFinite(parsedValue) ? parsedValue : 0;
+    const value = toFiniteNumber(rawValue);
 
     return {
       ...resistance,

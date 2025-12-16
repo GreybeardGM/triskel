@@ -15,6 +15,7 @@
       },
       "RollHelper": {
         "Title": "Roll-Helfer",
+        "Roll": "Würfeln",
         "FormsLabel": "Verfügbare Formen",
         "TotalBonus": "Gesamtbonus"
       },
