@@ -377,16 +377,62 @@ export class TriskelActor extends Actor {
    * @param {object} [config.options={}]     - Placeholder for future options.
    */
   async rollTriskelDice({ modifiers = [], difficulty = null, options = {} } = {}) {
-    const baseRoll = await (new Roll("2d10")).evaluate({ async: true });
-    const d10Term = baseRoll.dice.find(die => die.faces === 10);
-    const [firstResult, secondResult] = d10Term?.results ?? [];
+    const normalizedModifiers = modifiers
+      .map(modifier => ({
+        label: modifier?.label ?? "Modifier",
+        value: toFiniteNumber(modifier?.value, Number.NaN)
+      }))
+      .filter(modifier => Number.isFinite(modifier.value) && modifier.value !== 0);
 
+    const modifierTerms = normalizedModifiers.map(modifier => new foundry.dice.terms.NumericTerm({
+      number: modifier.value,
+      options: {
+        flavor: modifier.label
+      }
+    }));
+
+    const finalRoll = await Roll.fromTerms([
+      new foundry.dice.terms.Die({ number: 2, faces: 10 }),
+      ...modifierTerms
+    ]).evaluate({ async: true });
+
+    const d10Term = finalRoll.dice.find(die => die.faces === 10);
     const convertResult = value => (value === 10 ? 0 : value ?? 0);
-    const firstValue = convertResult(firstResult?.result);
-    const secondValue = convertResult(secondResult?.result);
+
+    if (d10Term) {
+      d10Term.results = d10Term.results.map(result => ({
+        ...result,
+        result: convertResult(result.result)
+      }));
+
+      d10Term.total = d10Term.results.reduce(
+        (total, result) => total + (result.count ?? 1) * (result.result ?? 0),
+        0
+      );
+    }
+
+    const diceValues = d10Term?.results?.map(result => result?.result ?? 0) ?? [];
+    const modifierTotal = modifierTerms.reduce((total, term) => total + (term.total ?? term.number ?? 0), 0);
+    const diceTotal = diceValues.reduce((total, value) => total + value, 0);
+    finalRoll._total = diceTotal + modifierTotal;
+
+    const modifierSummary = normalizedModifiers.length
+      ? normalizedModifiers
+        .map(mod => `${mod.label} (${mod.value >= 0 ? "+" : ""}${mod.value})`)
+        .join(", ")
+      : "None";
+
+    const flavorParts = ["2d10 (10→0)"];
+    if (normalizedModifiers.length) {
+      flavorParts.push(`Modifiers: ${modifierSummary}`);
+    }
+    if (Number.isFinite(difficulty)) {
+      flavorParts.push(`Difficulty: ${difficulty}`);
+    }
+
+    const rollMode = game.settings.get("core", "rollMode");
 
     if (game.dice3d) {
-      const rollMode = game.settings.get("core", "rollMode");
       const gmRecipients = ChatMessage.getWhisperRecipients("GM").map(user => user.id);
       let whisper = null;
       let blind = false;
@@ -406,46 +452,13 @@ export class TriskelActor extends Actor {
       }
 
       try {
-        await game.dice3d.showForRoll(baseRoll, game.user, true, whisper ?? [], blind);
+        await game.dice3d.showForRoll(finalRoll, game.user, true, whisper ?? null, blind);
       }
       catch (error) {
         console.warn("Triskel | Dice So Nice error:", error);
       }
     }
 
-    const normalizedModifiers = modifiers
-      .map(modifier => ({
-        label: modifier?.label ?? "Modifier",
-        value: toFiniteNumber(modifier?.value, Number.NaN)
-      }))
-      .filter(modifier => Number.isFinite(modifier.value) && modifier.value !== 0);
-
-    const expressionValues = [firstValue, secondValue, ...normalizedModifiers.map(mod => mod.value)];
-    const expression = expressionValues
-      .map((value, index) => {
-        if (index === 0) return `${value}`;
-        const operator = value >= 0 ? "+" : "-";
-        return `${operator} ${Math.abs(value)}`;
-      })
-      .join(" ");
-
-    const finalRoll = await (new Roll(expression)).evaluate({ async: true });
-
-    const modifierSummary = normalizedModifiers.length
-      ? normalizedModifiers
-        .map(mod => `${mod.label} (${mod.value >= 0 ? "+" : ""}${mod.value})`)
-        .join(", ")
-      : "None";
-
-    const flavorParts = ["2d10 (10→0)"];
-    if (normalizedModifiers.length) {
-      flavorParts.push(`Modifiers: ${modifierSummary}`);
-    }
-    if (Number.isFinite(difficulty)) {
-      flavorParts.push(`Difficulty: ${difficulty}`);
-    }
-
-    const rollMode = game.settings.get("core", "rollMode");
     await finalRoll.toMessage(
       {
         speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -455,9 +468,8 @@ export class TriskelActor extends Actor {
     );
 
     return {
-      baseRoll,
       finalRoll,
-      diceValues: [firstValue, secondValue],
+      diceValues,
       modifiers: normalizedModifiers,
       difficulty,
       options
