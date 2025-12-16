@@ -17,7 +17,8 @@
         "Title": "Roll Helper",
         "Roll": "Roll",
         "FormsLabel": "Available forms",
-        "TotalBonus": "Total bonus"
+        "TotalBonus": "Total bonus",
+        "Difficulty": "Difficulty"
       },
       "Type": {
         "Character": "Player Character",

@@ -17,7 +17,8 @@
         "Title": "Roll-Helfer",
         "Roll": "Würfeln",
         "FormsLabel": "Verfügbare Formen",
-        "TotalBonus": "Gesamtbonus"
+        "TotalBonus": "Gesamtbonus",
+        "Difficulty": "Schwierigkeit"
       },
       "Type": {
         "Character": "Spielercharakter",
