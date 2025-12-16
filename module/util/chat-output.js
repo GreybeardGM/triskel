@@ -55,16 +55,7 @@ export async function chatOutput({
 
   if (roll) {
     if (!roll._evaluated) {
-      await roll.evaluate({ async: true });
-    }
-
-    if (game.dice3d) {
-      try {
-        await game.dice3d.showForRoll(roll, game.user, true, resolvedWhisper ?? null, resolvedBlind);
-      }
-      catch (error) {
-        console.warn("Triskel | Dice So Nice error:", error);
-      }
+      await roll.evaluate();
     }
 
     rollHTML = await roll.render();
