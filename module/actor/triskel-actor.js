@@ -397,7 +397,6 @@ export class TriskelActor extends Actor {
       if (!source) return;
 
       term.options.flavor = source.label;
-      term.flavor = source.label;
     });
 
     const d10Term = finalRoll.dice.find(die => die.faces === 10);
