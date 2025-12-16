@@ -4,6 +4,7 @@ import {
   prepareBars,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
+import { normalizeIdList, toFiniteNumber } from "../util/normalization.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -41,11 +42,6 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, comm
 
   const reserveLookup = reserves ?? {};
 
-  const toFiniteNumber = value => {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  };
-
   const activeForms = Array.isArray(forms) ? forms.filter(form => form?.active) : [];
   const commitValue = toFiniteNumber(commit?.value ?? commit ?? 0);
   const actionReserveId = `${action?.reserve ?? ""}`.trim();
@@ -59,7 +55,7 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, comm
 
   const addReserveCost = entry => {
     const reserveId = `${entry?.reserve ?? ""}`.trim();
-    const cost = Number(entry?.cost ?? NaN);
+    const cost = toFiniteNumber(entry?.cost, Number.NaN);
 
     if (!reserveId || !Number.isFinite(cost)) return;
 
@@ -108,6 +104,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       deleteItem: onDeleteItem,
       selectAction: onSelectAction,
       toggleForm: onToggleForm,
+      rollHelper: onRollHelper,
       filterActionType: onFilterActionType,
       toggleWornEquip: onToggleWornEquip,
       toggleSpell: onToggleSpell,
@@ -275,7 +272,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       items: items.filter(item => item.categoryType === category.id)
     }));
 
-    const tierValue = Number(context.system.tier?.value);
+    const tierValue = toFiniteNumber(context.system.tier?.value, Number.NaN);
     const tierLabel = codex.tiers?.find(tier => tier.tier === tierValue)?.label;
     context.tierLabel = tierLabel ?? "";
 
@@ -339,8 +336,7 @@ function getItemFromTarget(sheet, target) {
 }
 
 function getEquippedList(gearKey, equippedGear) {
-  const entries = equippedGear?.[gearKey];
-  if (!Array.isArray(entries)) return [];
+  const entries = normalizeIdList(equippedGear?.[gearKey]);
 
   return Array.from(new Set(entries));
 }
@@ -398,6 +394,14 @@ async function onToggleForm(event, target) {
   else normalizedSelection.push(formKey);
 
   await this.document?.update({ "system.actions.selectedForms": normalizedSelection });
+}
+
+async function onRollHelper(event) {
+  event.preventDefault();
+
+  if (typeof this.document?.rollSelectedAction !== "function") return;
+
+  await this.document.rollSelectedAction();
 }
 
 function toggleIdInList(list, id) {

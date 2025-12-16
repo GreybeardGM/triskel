@@ -1,3 +1,10 @@
+import {
+  normalizeIdList,
+  normalizeKeywords,
+  toFiniteNumber,
+  toFiniteNumbers
+} from "../util/normalization.js";
+
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 
@@ -26,8 +33,8 @@ export class TriskelActor extends Actor {
       reserve.min = minimumFromStrain;
     }
 
-    const tension = this._toFiniteNumber(this.system?.tension?.value);
-    const tierValue = this._toFiniteNumber(this.system?.tier?.value);
+    const tension = toFiniteNumber(this.system?.tension?.value);
+    const tierValue = toFiniteNumber(this.system?.tier?.value);
     const commit = this.system?.actions?.commit ?? null;
     if (commit) {
       commit.max = Math.max(0, tierValue);
@@ -37,8 +44,8 @@ export class TriskelActor extends Actor {
     Object.entries(paths).forEach(([id, path]) => {
       if (!path) return;
 
-      const codexMax = this._toFiniteNumber(triskellIndex.paths?.[id]?.steps?.length);
-      const max = this._toFiniteNumber(path.max, codexMax);
+      const codexMax = toFiniteNumber(triskellIndex.paths?.[id]?.steps?.length);
+      const max = toFiniteNumber(path.max, codexMax);
       const safeMax = Math.max(0, max);
 
       path.max = safeMax;
@@ -77,8 +84,7 @@ export class TriskelActor extends Actor {
     const itemsById = new Map(Array.from(this.items ?? []).map(item => [item.id, item]));
 
     const equippedGear = this.system?.equippedGear ?? {};
-    const sanitizeEquippedList = (entries = []) => this
-      ._normalizeReferenceList(entries)
+    const sanitizeEquippedList = (entries = []) => normalizeIdList(entries)
       .filter(itemId => itemsById.has(itemId));
 
     const sanitizedEquippedGear = {
@@ -97,7 +103,7 @@ export class TriskelActor extends Actor {
 
     const equippedItems = [];
     const seenItemIds = new Set();
-    for (const itemId of this._normalizeReferenceList(equippedIds)) {
+    for (const itemId of normalizeIdList(equippedIds)) {
       if (seenItemIds.has(itemId)) continue;
 
       const item = itemsById.get(itemId);
@@ -115,8 +121,8 @@ export class TriskelActor extends Actor {
       id: item.id,
       image: item.img ?? item.image ?? null,
       modifiers: Array.isArray(item?.system?.modifiers) ? item.system.modifiers : [],
-      actionRefs: this._normalizeReferenceList(item.system?.actions?.ref),
-      formRefs: this._normalizeReferenceList(item.system?.forms?.ref)
+      actionRefs: normalizeIdList(item.system?.actions?.ref),
+      formRefs: normalizeIdList(item.system?.forms?.ref)
     }));
   }
 
@@ -130,7 +136,7 @@ export class TriskelActor extends Actor {
         const skill = modifier?.skill ?? modifier?.id ?? "";
         if (!skill) continue;
 
-        const value = this._toFiniteNumber(modifier.value);
+        const value = toFiniteNumber(modifier.value);
         const existing = modifiersBySkill[skill];
 
         if (!existing || value > (existing.value ?? 0)) {
@@ -169,33 +175,19 @@ export class TriskelActor extends Actor {
     Object.entries(skills).forEach(([skillId, skillData]) => {
       if (!skillData) return;
 
-      const value = this._toFiniteNumber(skillData.value);
+      const value = toFiniteNumber(skillData.value);
 
-      const mod = this._toFiniteNumber(modifiersBySkill[skillId]?.value);
+      const mod = toFiniteNumber(modifiersBySkill[skillId]?.value);
 
       skillData.mod = mod;
       skillData.total = value + mod;
     });
   }
 
-  _normalizeReferenceList(entries = []) {
-    if (!Array.isArray(entries)) return [];
-
-    return entries
-      .map(entry => (typeof entry === "string" ? entry : entry?.id ?? ""))
-      .filter(Boolean);
-  }
-
   _normalizeSelectedForms(selectedForms = []) {
     if (!Array.isArray(selectedForms)) return [];
 
-    return Array.from(new Set(this._normalizeReferenceList(selectedForms)));
-  }
-
-  _normalizeKeywords(keywords = []) {
-    return (Array.isArray(keywords) ? keywords : [])
-      .map(keyword => `${keyword}`.trim().toLowerCase())
-      .filter(Boolean);
+    return Array.from(new Set(normalizeIdList(selectedForms)));
   }
 
   _formatAction(action, { source, image }) {
@@ -204,7 +196,7 @@ export class TriskelActor extends Actor {
     const reserve = index.reserves?.[action.reserve] ?? {};
     const actorSkill = this.system?.skills?.[action.skill] ?? {};
 
-    const skillTotal = this._toFiniteNumber(actorSkill.total ?? actorSkill.value);
+    const skillTotal = toFiniteNumber(actorSkill.total ?? actorSkill.value);
 
     return {
       ...action,
@@ -223,15 +215,15 @@ export class TriskelActor extends Actor {
     const reserve = index.reserves?.[form.reserve] ?? {};
     const skill = index.skills?.[form.skill] ?? {};
 
-    const skillBonus = Array.isArray(form.modifiers)
-      ? form.modifiers.reduce((total, modifier) => {
-          const bonus = typeof modifier?.skill === "number"
-            ? modifier.skill
-            : Number(modifier?.value ?? 0);
+    const modifierBonuses = toFiniteNumbers(
+      form.modifiers,
+      modifier => typeof modifier?.skill === "number"
+        ? modifier.skill
+        : modifier?.value,
+      Number.NaN
+    );
 
-          return Number.isFinite(bonus) ? total + bonus : total;
-        }, 0)
-      : 0;
+    const skillBonus = modifierBonuses.reduce((total, bonus) => total + bonus, 0);
 
     return {
       ...form,
@@ -303,13 +295,13 @@ export class TriskelActor extends Actor {
 
     forms.forEach(form => {
       form.active = selectedForms.includes(form.id);
-      form.normalizedKeywords = this._normalizeKeywords(form.keywords);
+      form.normalizedKeywords = normalizeKeywords(form.keywords);
     });
 
     forms.sort((a, b) => collator.compare(a.label, b.label));
 
     const findMatchingForms = entry => {
-      const entryKeywords = this._normalizeKeywords(entry?.keywords);
+      const entryKeywords = normalizeKeywords(entry?.keywords);
       if (!entryKeywords.length) return [];
 
       const entryKeywordSet = new Set(entryKeywords);
@@ -331,6 +323,47 @@ export class TriskelActor extends Actor {
     });
 
     return { actions, spells };
+  }
+
+  async rollSelectedAction() {
+    const actionsData = this.system?.actions ?? {};
+    const selectedId = actionsData.selected ?? null;
+
+    if (!selectedId) return null;
+
+    const availableActions = Array.isArray(actionsData.actions) ? actionsData.actions : [];
+    const availableSpells = Array.isArray(actionsData.spells) ? actionsData.spells : [];
+    const selectedAction = [...availableActions, ...availableSpells]
+      .find(action => action?.id === selectedId);
+
+    if (!selectedAction) return null;
+
+    const modifiers = [];
+
+    const actionLabel = selectedAction.skillLabel ?? selectedAction.label ?? selectedAction.id ?? "";
+    const actionBonus = toFiniteNumber(selectedAction.skillTotal, Number.NaN);
+    if (Number.isFinite(actionBonus) && actionBonus !== 0) {
+      modifiers.push({ label: actionLabel || "Action", value: actionBonus });
+    }
+
+    const activeForms = Array.isArray(selectedAction.forms)
+      ? selectedAction.forms.filter(form => form?.active)
+      : [];
+
+    activeForms.forEach(form => {
+      const formBonus = toFiniteNumber(form?.skillBonus, Number.NaN);
+      if (!Number.isFinite(formBonus) || formBonus === 0) return;
+
+      modifiers.push({ label: form.label ?? form.id ?? "Form", value: formBonus });
+    });
+
+    const commitBonus = toFiniteNumber(actionsData.commit?.value, Number.NaN);
+    if (Number.isFinite(commitBonus) && commitBonus !== 0) {
+      const commitLabel = actionsData.commit?.label ?? "Commit";
+      modifiers.push({ label: commitLabel, value: commitBonus });
+    }
+
+    return this.rollTriskelDice({ modifiers });
   }
 
   /**
@@ -383,7 +416,7 @@ export class TriskelActor extends Actor {
     const normalizedModifiers = modifiers
       .map(modifier => ({
         label: modifier?.label ?? "Modifier",
-        value: this._toFiniteNumber(modifier?.value, Number.NaN)
+        value: toFiniteNumber(modifier?.value, Number.NaN)
       }))
       .filter(modifier => Number.isFinite(modifier.value) && modifier.value !== 0);
 
@@ -431,8 +464,4 @@ export class TriskelActor extends Actor {
     };
   }
 
-  _toFiniteNumber(value, fallback = 0) {
-    const parsedValue = Number(value);
-    return Number.isFinite(parsedValue) ? parsedValue : fallback;
-  }
 }

@@ -92,6 +92,10 @@
           <div class="roll-helper__summary-entry">
             <div class="roll-helper__summary-label">{{localize "TRISKEL.Actor.RollHelper.TotalBonus"}}</div>
             <div class="roll-helper__summary-value">{{numberFormat rollHelperSummary.totalSkillBonus decimals=0 sign=true}}</div>
+            <button type="button" class="roll-helper__summary-roll is-interactive" data-action="rollHelper">
+              <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
+              <span>{{localize "TRISKEL.Actor.RollHelper.Roll"}}</span>
+            </button>
           </div>
 
           {{#if rollHelperSummary.reserveCosts.length}}
