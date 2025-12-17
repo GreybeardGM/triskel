@@ -91,7 +91,7 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
   const codex = getTriskellCodex();
 
   const byCategory = (codex.skills ?? []).reduce((collection, skill) => {
-    const rawSkill = normalizedSkills[skill.id] ?? {};
+    const rawSkill = normalizedSkills[skill.id] ?? normalizedResistances[skill.id] ?? {};
     const category = index.skillCategories?.[skill.category] ?? {};
 
     const value = toFiniteNumber(rawSkill.value);
@@ -134,18 +134,6 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
     };
   }).filter(category => category.skills.length);
 
-  const resistancesList = (codex.resistances ?? []).map(resistance => {
-    const rawValue = normalizedResistances[resistance.id]?.value;
-    const value = toFiniteNumber(rawValue);
-
-    return {
-      ...resistance,
-      value,
-      label: resistance.label ?? resistance.id,
-      description: resistance.description ?? ""
-    };
-  });
-
-  return { resistances: resistancesList, skillCategories };
+  return { skillCategories };
 }
 

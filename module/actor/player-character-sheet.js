@@ -213,7 +213,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const index = getTriskellIndex();
 
     // Prepare Sills
-    const { resistances, skillCategories } = prepareSkillsDisplay(
+    const { skillCategories } = prepareSkillsDisplay(
       context.system.skills,
       context.system.resistances
     );
@@ -231,7 +231,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.reserves = reserves;
     context.commit = commit;
     context.paths = paths;
-    context.resistances = resistances;
     context.skillCategories = skillCategories;
     const actionFilterSelection = this._actionTypeFilter ?? "all";
     const equippedGear = this.document.system?.equippedGear ?? {};

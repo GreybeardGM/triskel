@@ -14,6 +14,15 @@
           "label": ""
         },
         "skills": {
+          "snap": {
+            "value": 0
+          },
+          "grit": {
+            "value": 0
+          },
+          "resolve": {
+            "value": 0
+          },
           "strike": {
             "value": 0
           },
