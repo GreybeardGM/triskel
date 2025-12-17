@@ -52,7 +52,7 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.actor ??= this.document;
     context.system ??= this.document.system;
 
-    const { resistances, skillCategories } = prepareSkillsDisplay(
+    const { skillCategories } = prepareSkillsDisplay(
       context.system.skills,
       context.system.resistances
     );
@@ -60,7 +60,6 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const health = prepareBars(context.system.health, getTriskellIndex().npcStats);
 
     context.health = health;
-    context.resistances = resistances;
     context.skillCategories = skillCategories;
 
     // Notes Vorbereiten

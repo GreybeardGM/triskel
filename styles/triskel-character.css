@@ -346,23 +346,13 @@
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
-| --  RESISTANCES   -- |
-\*____________________*/
-
-.triskel .resistances-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.5rem 1rem;
-  align-items: center;
-}
-
-/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --     SKILLS      -- |
 \*____________________*/
 
 .triskel .skill-grid {
   display: grid;
   grid-template-areas:
+    "resistances resistances resistances resistances"
     "offense defense social magic"
     "physical professional intellectual magic";
   grid-template-columns: repeat(4, minmax(0, 1fr));

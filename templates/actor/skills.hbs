@@ -3,23 +3,6 @@
   data-tab="{{tabs.skills.id}}"
   data-group="{{tabs.skills.group}}"
 >
-  {{#if resistances.length}}
-    <h2>{{localize "TRISKEL.Actor.Resistance.Label"}}</h2>
-    <div class="resistances-row">
-      {{#each resistances as |resistance|}}
-        <label class="skill-field" title="{{resistance.description}}">
-          <span class="skill-label">{{resistance.label}}</span>
-          <input
-            type="number"
-            data-dtype="Number"
-            name="system.resistances.{{resistance.id}}.value"
-            value="{{resistance.value}}"
-          />
-        </label>
-      {{/each}}
-    </div>
-  {{/if}}
-
   <h2>{{localize "TRISKEL.Actor.Skill.Label"}}</h2>
   <div class="skill-grid">
     {{#each skillCategories as |category|}}
