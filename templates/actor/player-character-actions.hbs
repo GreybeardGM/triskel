@@ -30,8 +30,10 @@
             data-action-key="{{action.id}}"
             data-reserve="{{action.reserve}}"
           >
-            {{#if action.image}}
-              <img class="roll-helper__entry-icon" src="{{action.image}}" alt="" />
+            {{#if action.icon}}
+              <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{action.icon}}" aria-hidden="true"></i>
+            {{else if action.image}}
+              <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{action.image}}" alt="" />
             {{/if}}
 
             <div class="roll-helper__entry-label">{{action.label}}</div>

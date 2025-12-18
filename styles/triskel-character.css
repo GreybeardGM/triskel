@@ -494,8 +494,19 @@
 .triskel .roll-helper__entry-icon {
   width: 3em;
   height: 3em;
-  object-fit: cover;
   grid-area: icon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.triskel .roll-helper__entry-icon--fa {
+  font-size: 2rem;
+}
+
+.triskel .roll-helper__entry-icon--image {
+  object-fit: cover;
+  display: block;
 }
 
 .triskel .roll-helper__entry-label {

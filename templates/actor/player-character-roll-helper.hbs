@@ -9,8 +9,10 @@
           data-action-key="{{rollHelper.action.id}}"
           data-reserve="{{rollHelper.action.reserve}}"
         >
-          {{#if rollHelper.action.image}}
-            <img class="roll-helper__entry-icon" src="{{rollHelper.action.image}}" alt="" />
+          {{#if rollHelper.action.icon}}
+            <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{rollHelper.action.icon}}" aria-hidden="true"></i>
+          {{else if rollHelper.action.image}}
+            <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{rollHelper.action.image}}" alt="" />
           {{/if}}
 
           <div class="roll-helper__entry-label">{{rollHelper.action.label}}</div>
@@ -45,8 +47,10 @@
               title="{{form.description}}"
               data-reserve="{{form.reserve}}"
             >
-              {{#if form.image}}
-                <img class="roll-helper__entry-icon" src="{{form.image}}" alt="" />
+              {{#if form.icon}}
+                <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{form.icon}}" aria-hidden="true"></i>
+              {{else if form.image}}
+                <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{form.image}}" alt="" />
               {{/if}}
 
               <div class="roll-helper__entry-label">{{form.label}}</div>
