@@ -393,7 +393,7 @@
         },
         "RebukeEvil": {
           "Label": "Böses Zurückweisen",
-          "Description": "Drängt alle Wesen mit bösen Absichten in der Nähe zurück.\n0-1 -> Gestoßen 1\n2-3 -> Gestoßen 2\n4-5 -> Gestoßen 3\n6+ -> Gestoßen 4"
+          "Description": "Versetzt alle Wesen mit bösen Absichten in der Nähe in Furcht.\n0-1 -> Verängstigt 1\n2-3 -> Verängstigt 2\n4-5 -> Verängstigt 3\n6+ -> Verängstigt 4"
         },
         "ProtectivePrayer": {
           "Label": "Schutzgebet",

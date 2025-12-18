@@ -64,6 +64,12 @@ export class TriskelActor extends Actor {
     this._applySkillModifiers(modifiers);
 
     const baseActions = this.system?.actions ?? {};
+    if (this.type === "character") {
+      baseActions.activations = { value: 1 };
+    } else if (this.type === "npc") {
+      const woundsValue = toFiniteNumber(this.system?.npcStats?.wounds?.value);
+      baseActions.activations = { value: woundsValue };
+    }
     const selectedAction = baseActions.selected ?? null;
     const selectedForms = this._normalizeSelectedForms(baseActions.selectedForms ?? []);
     const { actions, spells } = this._prepareActionCollections({

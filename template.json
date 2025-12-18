@@ -123,6 +123,9 @@
         "value": 1
       },
       "actions": {
+        "activations": {
+          "value": 1
+        },
         "commit": {
           "min": 0,
           "value": 0
@@ -194,15 +197,13 @@
       "templates": [
         "base"
       ],
-      "health": {
+      "npcStats": {
         "hp": {
-          "label": "Hitpoints",
           "min": 0,
-          "value": 4,
-          "max": 4
+          "value": 6,
+          "max": 6
         },
         "wounds": {
-          "label": "Wounds",
           "min": 0,
           "value": 1,
           "max": 1

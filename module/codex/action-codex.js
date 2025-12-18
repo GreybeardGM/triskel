@@ -320,7 +320,7 @@ export const TRISKEL_SPELLS = [
     label: "TRISKEL.Action.Spell.RebukeEvil.Label",
     type: "impact",
     category: "spell",
-    skill: "transpose",
+    skill: "compel",
     reserve: "will",
     cost: 3,
     range: "self",
