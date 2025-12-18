@@ -358,6 +358,14 @@
         "TakeCover": {
           "Label": "In Deckung gehen",
           "Description": "Du machst dich klein und bewegst dich in eine nahegelegene Deckung."
+        },
+        "TraverseHazard": {
+          "Label": "Gefahr überwinden",
+          "Description": "Überquere ein gefährliches Hindernis mit athletischem Schritt und Balance."
+        },
+        "SecurePassage": {
+          "Label": "Weg sichern",
+          "Description": "Stabilisiert oder räumt den Weg, damit andere sicher passieren können."
         }
       },
       "Advanced": {

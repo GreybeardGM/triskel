@@ -34,7 +34,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "melee_weapon",
     description: "TRISKEL.Action.Base.Strike.Description",
-    image: "icons/skills/melee/strike-sword-steel-yellow.webp",
+    icon: "fa-solid fa-swords",
     keywords: ["action", "melee", "offense", "strike"]
   },
   {
@@ -47,7 +47,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "melee_weapon",
     description: "TRISKEL.Action.Base.Bind.Description",
-    image: "icons/skills/melee/weapons-crossed-swords-black-gray.webp",
+    icon: "fa-solid fa-link",
     keywords: ["action", "melee", "offense", "control", "bind"]
   },
   {
@@ -60,7 +60,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "melee_weapon",
     description: "TRISKEL.Action.Base.Expose.Description",
-    image: "icons/skills/melee/shield-damaged-broken-blue.webp",
+    icon: "fa-solid fa-shield-halved",
     keywords: ["action", "melee", "offense", "control", "expose"]
   },
   {
@@ -73,7 +73,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "melee_weapon",
     description: "TRISKEL.Action.Base.Push.Description",
-    image: "icons/skills/melee/shield-block-bash-blue.webp",
+    icon: "fa-solid fa-people-pulling",
     keywords: ["action", "melee", "offense", "control", "push"]
   },
   {
@@ -86,7 +86,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Brace.Description",
-    image: "icons/skills/melee/hand-grip-sword-white-brown.webp",
+    icon: "fa-solid fa-hand-fist",
     keywords: ["defense", "melee", "brace", "resilience"]
   },
   {
@@ -99,7 +99,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Guard.Description",
-    image: "icons/skills/melee/swords-parry-block-blue.webp",
+    icon: "fa-solid fa-user-shield",
     keywords: ["defense", "melee", "guard", "protection"]
   },
   {
@@ -112,7 +112,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Evade.Description",
-    image: "icons/skills/movement/figure-running-gray.webp",
+    icon: "fa-solid fa-person-running",
     keywords: ["defense", "evasion"]
   },
   {
@@ -125,7 +125,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "hand",
     description: "TRISKEL.Action.Base.Grapple.Description",
-    image: "icons/skills/melee/unarmed-punch-fist.webp",
+    icon: "fa-solid fa-hand-holding-hand",
     keywords: ["action", "melee", "offense", "control", "grapple"]
   },
   {
@@ -138,7 +138,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Break.Description",
-    image: "icons/skills/movement/arrow-upward-yellow.webp",
+    icon: "fa-solid fa-burst",
     keywords: ["action", "melee", "offense", "brace", "break"]
   },
   {
@@ -151,6 +151,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Grit.Description",
+    icon: "fa-solid fa-shield-heart",
     keywords: ["defense", "resilience", "grit"]
   },
   {
@@ -163,6 +164,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Snap.Description",
+    icon: "fa-solid fa-bolt",
     keywords: ["defense", "reflex", "snap"]
   },
   {
@@ -175,6 +177,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Resolve.Description",
+    icon: "fa-solid fa-brain",
     keywords: ["defense", "will", "resolve"]
   },
   {
@@ -187,6 +190,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Invocation.Description",
+    icon: "fa-solid fa-wand-sparkles",
     keywords: ["setup", "magic", "invocation"]
   },
   {
@@ -199,6 +203,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Switchgear.Description",
+    icon: "fa-solid fa-screwdriver-wrench",
     keywords: ["setup", "equipment", "inventory", "switchgear"]
   },
   {
@@ -211,6 +216,7 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Move.Description",
+    icon: "fa-solid fa-person-walking",
     keywords: ["position", "movement", "maneuver", "move"]
   },
   {
@@ -223,7 +229,34 @@ export const TRISKEL_BASE_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.TakeCover.Description",
+    icon: "fa-solid fa-shield",
     keywords: ["position", "defense", "cover", "take cover"]
+  },
+  {
+    id: "traverseHazard",
+    label: "TRISKEL.Action.Base.TraverseHazard.Label",
+    type: "position",
+    category: "combat",
+    skill: "athletics",
+    reserve: "grace",
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.TraverseHazard.Description",
+    icon: "fa-solid fa-person-hiking",
+    keywords: ["position", "movement", "athletics", "hazard", "traverse"]
+  },
+  {
+    id: "securePassage",
+    label: "TRISKEL.Action.Base.SecurePassage.Label",
+    type: "impact",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.SecurePassage.Description",
+    icon: "fa-solid fa-route",
+    keywords: ["action", "support", "passage", "secure"]
   }
 ];
 
