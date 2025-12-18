@@ -78,13 +78,6 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.modifiers = this.constructor.prepareModifiers(context.system.modifiers);
     context.modifierOptions = MODIFIER_SKILL_OPTIONS();
 
-    console.debug("[Triskel] ItemSheet _prepareContext", {
-      item: context.item?.name,
-      referenceOptions: context.referenceOptions,
-      modifierOptions: context.modifierOptions,
-      system: context.system
-    });
-
     return context;
   }
 
@@ -124,12 +117,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   static _appendReference({ refPath, entries, key }) {
     if (entries.includes(key)) {
-      console.debug("[Triskel] #_appendReference aborted: duplicate key", { key });
       return null;
     }
 
     entries.push(key);
-    console.debug("[Triskel] reference list AFTER", entries.slice());
     return this.document.update({ [refPath]: entries });
   }
 
@@ -137,11 +128,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const entries = this.getReferenceList(refPath);
     if (!entries[index]) return null;
 
-    console.debug("[Triskel] #_removeReferenceAt", { index, before: entries.slice() });
-
     entries.splice(index, 1);
-
-    console.debug("[Triskel] #_removeReferenceAt after", entries.slice());
     return this.document.update({ [refPath]: entries });
   }
 
@@ -163,19 +150,11 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     const key = this._getSelectValue(target, selectField);
 
-    console.debug("[Triskel] #_handleAddReference called", {
-      selectField,
-      refPath,
-      key
-    });
-
     if (!key) {
-      console.debug("[Triskel] #_handleAddReference aborted: empty key");
       return;
     }
 
     const current = this.getReferenceList(refPath);
-    console.debug("[Triskel] reference list BEFORE", current.slice());
 
     await this._appendReference({ refPath, entries: current, key });
   }
@@ -232,25 +211,13 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const skill = skillInput?.value ?? "";
     const value = Number(valueInput?.value ?? NaN);
 
-    console.debug("[Triskel] #onAddModifier called", {
-      skillField,
-      valueField,
-      refPath,
-      skill,
-      rawValue: valueInput?.value
-    });
-
     if (!skill || !Number.isFinite(value)) {
-      console.debug("[Triskel] #onAddModifier aborted: invalid skill/value");
       return;
     }
 
     const modifiers = foundry.utils.duplicate(this.document.system?.modifiers ?? []);
-    console.debug("[Triskel] modifiers BEFORE", modifiers.slice());
 
     modifiers.push({ skill, value });
-
-    console.debug("[Triskel] modifiers AFTER", modifiers.slice());
     await this.document.update({ [refPath]: modifiers });
 
     if (valueInput) valueInput.value = "0";
@@ -265,11 +232,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const modifiers = foundry.utils.duplicate(this.document.system?.modifiers ?? []);
     if (!Array.isArray(modifiers) || !modifiers[index]) return;
 
-    console.debug("[Triskel] #onRemoveModifier", { index, before: modifiers.slice() });
-
     modifiers.splice(index, 1);
-
-    console.debug("[Triskel] #onRemoveModifier after", modifiers.slice());
     await this.document.update({ "system.modifiers": modifiers });
   }
 }
