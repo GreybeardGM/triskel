@@ -358,6 +358,14 @@
         "TakeCover": {
           "Label": "Take Cover",
           "Description": "Hunker down and slip into nearby cover."
+        },
+        "TraverseHazard": {
+          "Label": "Traverse Hazard",
+          "Description": "Cross a dangerous obstacle by relying on athletic footing and balance."
+        },
+        "SecurePassage": {
+          "Label": "Secure Passage",
+          "Description": "Stabilize or clear the way so others can move through safely."
         }
       },
       "Advanced": {

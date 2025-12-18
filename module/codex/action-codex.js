@@ -224,6 +224,30 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.TakeCover.Description",
     keywords: ["position", "defense", "cover", "take cover"]
+  },
+  {
+    id: "traverseHazard",
+    label: "TRISKEL.Action.Base.TraverseHazard.Label",
+    type: "position",
+    category: "combat",
+    skill: "athletics",
+    reserve: "grace",
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.TraverseHazard.Description",
+    keywords: ["position", "movement", "athletics", "hazard", "traverse"]
+  },
+  {
+    id: "securePassage",
+    label: "TRISKEL.Action.Base.SecurePassage.Label",
+    type: "impact",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.SecurePassage.Description",
+    keywords: ["action", "support", "passage", "secure"]
   }
 ];
 
