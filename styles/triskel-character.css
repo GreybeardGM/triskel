@@ -474,14 +474,14 @@
 
 .triskel .roll-helper__entry {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 2.5em 1fr 2.5em;
   grid-template-areas:
     "icon    label cost   " "bonus   skill reserve" "form    form  form   " "desc    desc  desc   ";
-  border-radius: 0.75rem;
-  padding: 0.5rem 0.75rem;
+  border-radius: 0.75em;
+  padding: 0.5em 0.75em;
   height: auto;
-  grid-template-rows: 2.5rem 1.25rem auto;
-  gap: 0.35rem;
+  grid-template-rows: 2.5em 1.25em auto;
+  gap: 0.35em;
 }
 
 .triskel .roll-helper__action {
@@ -502,7 +502,10 @@
 }
 
 .triskel .roll-helper__entry-icon--fa {
-  font-size: 2rem;
+  font-size: 2em;
+  /*! align-content: center; */
+  align-self: center;
+  /*! margin: 0; */
 }
 
 .triskel .roll-helper__entry-icon--image {
@@ -521,28 +524,17 @@
 
 .triskel .roll-helper__entry-reserve {
   grid-area: reserve;
-  font-weight: 700;
   color: var(--triskel-interactive-highlight);
-  align-content: baseline;
 }
 
 .triskel .roll-helper__entry-skill {
   grid-area: skill;
-  font-size: 0.9rem;
-  opacity: 0.85;
   text-align: center;
-  align-content: baseline;
 }
 
 .triskel .roll-helper__entry-bonus {
   grid-area: bonus;
-  background: var(--triskel-color-segment-placeholder);
-  border-radius: 999px;
-  /*! padding: 0.1rem 0.6rem; */
-  font-weight: 700;
   text-align: center;
-  align-content: baseline;
-  border: 1px solid var(--triskel-color-border-muted);
 }
 
 
@@ -568,11 +560,6 @@
 }
 
 .triskel .roll-helper__form.is-selected {
-  border-color: var(--triskel-interactive-highlight);
-  box-shadow: 0 0 0 1px var(--triskel-interactive-highlight);
-}
-
-.triskel .roll-helper__action.is-selected {
   border-color: var(--triskel-interactive-highlight);
   box-shadow: 0 0 0 1px var(--triskel-interactive-highlight);
 }
@@ -613,7 +600,7 @@
   color: var(--color-text-light-highlight, #fff);
 }
 
-.triskel .actions-grid__forms {
+.triskel .action-card__forms {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
