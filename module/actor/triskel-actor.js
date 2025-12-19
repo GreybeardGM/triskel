@@ -55,9 +55,8 @@ export class TriskelActor extends Actor {
     });
 
     const items = Array.from(this.items ?? []);
-    const { assets, assetsByType, activeActionSources, modifiers } = this._prepareItemAssets(items);
+    const { assets, activeActionSources, modifiers } = this._prepareItemAssets(items);
     this.system.assets = assets;
-    this.system.itemsByType = assetsByType;
 
     this.system.modifiers = modifiers;
     this._applySkillModifiers(modifiers);
@@ -172,7 +171,6 @@ export class TriskelActor extends Actor {
     const index = getTriskellIndex();
     const codex = getTriskellCodex();
     const itemCategoryIndex = index.itemCategories ?? {};
-    const itemCategories = Array.isArray(codex.itemCategories) ? codex.itemCategories : [];
 
     const assets = {};
     Object.keys(itemCategoryIndex).forEach(categoryId => {
@@ -232,13 +230,6 @@ export class TriskelActor extends Actor {
     const sortByName = entries => entries.sort((a, b) => collator.compare(a.name ?? "", b.name ?? ""));
     Object.values(assets).forEach(list => sortByName(list));
 
-    const assetsByType = itemCategories.map(category => ({
-      type: category.id,
-      itemLabel: category.label ?? category.id,
-      label: category.labelPlural ?? category.label ?? category.id,
-      items: assets[category.id] ?? []
-    }));
-
     const modifiers = Object.values(modifiersBySkill).map(modifier => {
       const skill = skillsById[modifier.skill] ?? {};
 
@@ -248,7 +239,7 @@ export class TriskelActor extends Actor {
       };
     });
 
-    return { assets, assetsByType, activeActionSources, modifiers };
+    return { assets, activeActionSources, modifiers };
   }
 
   _applySkillModifiers(modifiers = []) {
