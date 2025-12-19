@@ -65,25 +65,14 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, rese
       + commitValue
   );
 
-  const costSource = action.cost;
-  const reserveCosts = (() => {
-    if (Number.isFinite(costSource) && hasActionReserve) {
-      return [{ id: actionReserveId, label: resolveReserveLabel(actionReserveId), total: toFiniteNumber(costSource) }];
-    }
+  const reserveCosts = Object.entries(action.cost ?? {}).reduce((collection, [reserveId, value]) => {
+    const cost = toFiniteNumber(value, Number.NaN);
+    if (!Number.isFinite(cost) || cost === 0) return collection;
 
-    if (costSource && typeof costSource === "object" && !Array.isArray(costSource)) {
-      return Object.entries(costSource).reduce((collection, [reserveId, value]) => {
-        const cost = toFiniteNumber(value, Number.NaN);
-        if (!Number.isFinite(cost) || cost === 0) return collection;
-
-        const reserveLabel = resolveReserveLabel(reserveId);
-        collection.push({ id: reserveId, label: reserveLabel, total: cost });
-        return collection;
-      }, []);
-    }
-
-    return [];
-  })();
+    const reserveLabel = resolveReserveLabel(reserveId);
+    collection.push({ id: reserveId, label: reserveLabel, total: cost });
+    return collection;
+  }, []);
 
   const reserveAvailability = new Map(
     Object.entries(reserveValues).map(([reserveId, reserve]) => {
