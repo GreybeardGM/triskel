@@ -84,7 +84,7 @@
           {{/each}}
         {{/if}}
 
-        {{#if rollHelper.action.reserve}}
+        {{#if rollHelper.action.roll.commit}}
           <div class="roll-helper__commit {{rollHelper.action.reserve}}">
             {{#each commit._segments as |segment|}}
               <div
@@ -106,7 +106,7 @@
         <div class="roll-helper__summary-entry">
           <div class="roll-helper__summary-label">{{localize "TRISKEL.Actor.RollHelper.TotalBonus"}}</div>
           <div class="roll-helper__summary-value">{{numberFormat rollHelperSummary.totalSkillBonus decimals=0 sign=true}}</div>
-          {{#if rollHelper.action.skill}}
+          {{#if rollHelper.action.roll.active}}
             <button
               type="button"
               class="roll-helper__summary-roll is-interactive"

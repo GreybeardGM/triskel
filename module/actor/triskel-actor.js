@@ -114,9 +114,15 @@ export class TriskelActor extends Actor {
       }
 
       const totalBonus = rollModifiers.reduce((total, modifier) => total + toFiniteNumber(modifier?.value, 0), 0);
+      const hasSkill = Boolean(selected.action.skill);
+      const hasReserve = Boolean(selected.action.reserve);
 
       selected.action.modifiers = rollModifiers;
-      selected.action.roll = { totalBonus };
+      selected.action.roll = {
+        totalBonus,
+        active: hasSkill,
+        commit: hasReserve
+      };
     }
 
     this.system.actions = {
@@ -436,7 +442,7 @@ export class TriskelActor extends Actor {
 
     const selectedAction = actionsData.selected?.action ?? null;
 
-    if (!selectedAction) return null;
+    if (!selectedAction || selectedAction?.roll?.active === false) return null;
 
     const actionLabel = selectedAction.skillLabel ?? selectedAction.label ?? selectedAction.id ?? "";
 
