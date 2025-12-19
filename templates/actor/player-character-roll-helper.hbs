@@ -28,8 +28,12 @@
           <div class="roll-helper__entry-skill">{{rollHelper.action.skillLabel}}</div>
           <div class="roll-helper__entry-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
 
-          {{#if rollHelper.action.cost}}
-            <div class="roll-helper__entry-cost">{{numberFormat rollHelper.action.cost decimals=0}}</div>
+          {{#if rollHelperSummary.reserveCosts.length}}
+            <div class="roll-helper__entry-cost">
+              {{#each rollHelperSummary.reserveCosts as |reserve|}}
+                <span class="{{reserve.id}}">{{reserve.label}} {{numberFormat reserve.total decimals=0}}</span>
+              {{/each}}
+            </div>
           {{/if}}
 
           {{#if rollHelper.action.description}}
