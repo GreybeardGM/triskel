@@ -65,14 +65,25 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, rese
       + commitValue
   );
 
-  const reserveCosts = Object.entries(action.cost ?? {}).reduce((collection, [reserveId, value]) => {
-    const cost = toFiniteNumber(value, Number.NaN);
-    if (!Number.isFinite(cost) || cost === 0) return collection;
+  const costSource = action.cost;
+  const reserveCosts = (() => {
+    if (Number.isFinite(costSource) && hasActionReserve) {
+      return [{ id: actionReserveId, label: resolveReserveLabel(actionReserveId), total: toFiniteNumber(costSource) }];
+    }
 
-    const reserveLabel = resolveReserveLabel(reserveId);
-    collection.push({ id: reserveId, label: reserveLabel, total: cost });
-    return collection;
-  }, []);
+    if (costSource && typeof costSource === "object" && !Array.isArray(costSource)) {
+      return Object.entries(costSource).reduce((collection, [reserveId, value]) => {
+        const cost = toFiniteNumber(value, Number.NaN);
+        if (!Number.isFinite(cost) || cost === 0) return collection;
+
+        const reserveLabel = resolveReserveLabel(reserveId);
+        collection.push({ id: reserveId, label: reserveLabel, total: cost });
+        return collection;
+      }, []);
+    }
+
+    return [];
+  })();
 
   const reserveAvailability = new Map(
     Object.entries(reserveValues).map(([reserveId, reserve]) => {
@@ -255,7 +266,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     };
 
     const selectedActionId = context.system.actions?.selected?.ref ?? null;
-    const selectedAction = context.system.actions?.selected
+    const selectedAction = context.system.actions?.selected?.action
       ?? (() => {
         const availableActions = Array.isArray(context.system.actions?.actions)
           ? context.system.actions.actions
@@ -269,12 +280,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
     const hasSelectedAction = Boolean(selectedAction);
-    const rollHelperCost = hasSelectedAction
-      ? (() => {
-          const numericCost = toFiniteNumber(selectedAction?.cost, Number.NaN);
-          return Number.isFinite(numericCost) ? numericCost : null;
-        })()
-      : null;
+    const rollHelperCost = hasSelectedAction ? selectedAction?.cost ?? null : null;
     context.rollHelper = {
       action: selectedAction ?? {},
       forms: hasSelectedAction ? selectedActionForms : [],

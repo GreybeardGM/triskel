@@ -18,19 +18,3 @@ export function normalizeIdList(entries = []) {
     .map(entry => (typeof entry === "string" ? entry : entry?.id ?? ""))
     .filter(Boolean);
 }
-
-export function normalizeKeywords(keywords = []) {
-  if (typeof keywords === "string") {
-    keywords = [keywords];
-  } else if (!Array.isArray(keywords)) {
-    keywords = [];
-  }
-
-  return keywords
-    .map(keyword => `${keyword}`.trim().toLowerCase())
-    .filter(Boolean);
-}
-
-export function normalizeKeyword(keyword = null) {
-  return normalizeKeywords(keyword)[0] ?? null;
-}

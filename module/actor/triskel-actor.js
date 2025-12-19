@@ -1,9 +1,6 @@
 import {
   normalizeIdList,
-  normalizeKeyword,
-  normalizeKeywords,
-  toFiniteNumber,
-  toFiniteNumbers
+  toFiniteNumber
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { convertD10TensToZero } from "../util/roll.js";
@@ -93,31 +90,18 @@ export class TriskelActor extends Actor {
       }
     };
     const selected = selectedPrepared
-      ? cloneAction({ ref: selectedRef, ...selectedPrepared })
+      ? { ref: selectedRef, action: cloneAction(selectedPrepared) }
       : selectedRef
-        ? { ref: selectedRef }
+        ? { ref: selectedRef, action: null }
         : null;
 
-    if (selected) {
-      const reserveCosts = { power: 0, grace: 0, will: 0 };
-      const addReserveCost = entry => {
-        const reserveId = `${entry?.reserve ?? ""}`.trim();
-        const cost = toFiniteNumber(entry?.cost, Number.NaN);
-        if (!reserveId || !Number.isFinite(cost)) return;
-        if (reserveId in reserveCosts) reserveCosts[reserveId] += cost;
-      };
-
-      addReserveCost(selected);
-      const activeForms = Array.isArray(selected.forms) ? selected.forms.filter(form => form?.active) : [];
-      activeForms.forEach(addReserveCost);
+    if (selected?.action) {
+      const activeForms = Array.isArray(selected.action.forms) ? selected.action.forms.filter(form => form?.active) : [];
       const commitValue = toFiniteNumber(commit?.value, Number.NaN);
-      if (selected.reserve && Number.isFinite(commitValue)) {
-        addReserveCost({ reserve: selected.reserve, cost: commitValue });
-      }
 
       const rollModifiers = [];
-      const actionLabel = selected.skillLabel ?? selected.label ?? selected.id ?? "";
-      const actionBonus = toFiniteNumber(selected.skillTotal, Number.NaN);
+      const actionLabel = selected.action.skillLabel ?? selected.action.label ?? selected.action.id ?? "";
+      const actionBonus = toFiniteNumber(selected.action.skillTotal, Number.NaN);
       if (Number.isFinite(actionBonus) && actionBonus !== 0) rollModifiers.push({ label: actionLabel || "Action", value: actionBonus });
 
       activeForms.forEach(form => {
@@ -126,16 +110,15 @@ export class TriskelActor extends Actor {
         rollModifiers.push({ label: form.label ?? form.id ?? "Form", value: formBonus });
       });
 
-      if (selected.reserve && Number.isFinite(commitValue) && commitValue !== 0) {
+      if (selected.action.reserve && Number.isFinite(commitValue) && commitValue !== 0) {
         const commitLabel = commit?.label ?? "Commit";
         rollModifiers.push({ label: commitLabel, value: commitValue });
       }
 
       const totalBonus = rollModifiers.reduce((total, modifier) => total + toFiniteNumber(modifier?.value, 0), 0);
 
-      selected.cost = reserveCosts;
-      selected.modifiers = rollModifiers;
-      selected.roll = { totalBonus };
+      selected.action.modifiers = rollModifiers;
+      selected.action.roll = { totalBonus };
     }
 
     this.system.actions = {
@@ -301,8 +284,6 @@ export class TriskelActor extends Actor {
     const actorSkill = this.system?.skills?.[action.skill] ?? {};
 
     const skillTotal = toFiniteNumber(actorSkill.total ?? actorSkill.value);
-    const normalizedKeywords = normalizeKeywords(action.keywords);
-
     return {
       ...action,
       label: action.label ?? action.id,
@@ -311,7 +292,6 @@ export class TriskelActor extends Actor {
       reserveLabel: reserve.label ?? action.reserve ?? "",
       skillTotal,
       source,
-      normalizedKeywords,
       image: image ?? action.image ?? action.img ?? null
     };
   }
@@ -400,22 +380,25 @@ export class TriskelActor extends Actor {
     spells.sort((a, b) => collator.compare(a.label, b.label));
 
     const formsByKeyword = new Map();
+    const getKeyword = entry => {
+      const keyword = entry?.keyword ?? (Array.isArray(entry?.keywords) ? entry.keywords[0] : null);
+      return keyword ? `${keyword}`.trim() : null;
+    };
+
     forms.forEach(form => {
-      const normalizedKeyword = normalizeKeyword(form.keyword ?? form.keywords);
-      form.normalizedKeyword = normalizedKeyword;
-      form.normalizedKeywords = normalizedKeyword ? [normalizedKeyword] : [];
+      const keyword = getKeyword(form);
       form.active = selectedForms.includes(form.id);
 
-      if (!normalizedKeyword) return;
-      const formsWithKeyword = formsByKeyword.get(normalizedKeyword) ?? [];
+      if (!keyword) return;
+      const formsWithKeyword = formsByKeyword.get(keyword) ?? [];
       formsWithKeyword.push(form);
-      formsByKeyword.set(normalizedKeyword, formsWithKeyword);
+      formsByKeyword.set(keyword, formsWithKeyword);
     });
 
     forms.sort((a, b) => collator.compare(a.label, b.label));
 
     const findMatchingForms = entry => {
-      const entryKeyword = entry?.normalizedKeywords?.[0] ?? normalizeKeyword(entry?.keywords);
+      const entryKeyword = getKeyword(entry);
       if (!entryKeyword) return [];
 
       return formsByKeyword.get(entryKeyword) ?? [];
@@ -454,7 +437,7 @@ export class TriskelActor extends Actor {
 
     if (!selectedRef) return null;
 
-    const selectedAction = actionsData.selected;
+    const selectedAction = actionsData.selected?.action ?? null;
 
     if (!selectedAction) return null;
 
