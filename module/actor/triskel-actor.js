@@ -373,14 +373,14 @@ export class TriskelActor extends Actor {
     actions.sort((a, b) => collator.compare(a.label, b.label));
     spells.sort((a, b) => collator.compare(a.label, b.label));
 
-    const formsByKeyword = new Map();
-    const getKeyword = entry => {
+    const normalizeKeyword = entry => {
       const keyword = entry?.keyword ?? (Array.isArray(entry?.keywords) ? entry.keywords[0] : null);
-      return keyword ? `${keyword}`.trim() : null;
+      return keyword ? `${keyword}`.trim().toLowerCase() : null;
     };
+    const formsByKeyword = new Map();
 
     forms.forEach(form => {
-      const keyword = getKeyword(form);
+      const keyword = normalizeKeyword(form);
       form.active = selectedForms.includes(form.id);
 
       if (!keyword) return;
@@ -392,7 +392,7 @@ export class TriskelActor extends Actor {
     forms.sort((a, b) => collator.compare(a.label, b.label));
 
     const findMatchingForms = entry => {
-      const entryKeyword = getKeyword(entry);
+      const entryKeyword = normalizeKeyword(entry);
       if (!entryKeyword) return [];
 
       return formsByKeyword.get(entryKeyword) ?? [];
