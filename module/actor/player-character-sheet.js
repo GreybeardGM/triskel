@@ -230,7 +230,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const items = assets.all ?? [];
 
     context.items = items;
-    context.itemsByType = [];
+    context.itemsByType = Array.isArray(context.system?.itemsByType) ? context.system.itemsByType : [];
 
     context.tierLabel = context.system?.tier?.label ?? "";
 

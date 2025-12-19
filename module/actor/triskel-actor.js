@@ -55,8 +55,9 @@ export class TriskelActor extends Actor {
     });
 
     const items = Array.from(this.items ?? []);
-    const { assets, activeActionSources, modifiers } = this._prepareItemAssets(items);
+    const { assets, assetsByType, activeActionSources, modifiers } = this._prepareItemAssets(items);
     this.system.assets = assets;
+    this.system.itemsByType = assetsByType;
 
     this.system.modifiers = modifiers;
     this._applySkillModifiers(modifiers);
