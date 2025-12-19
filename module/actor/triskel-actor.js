@@ -366,7 +366,7 @@ export class TriskelActor extends Actor {
     });
 
     const commitBonus = toFiniteNumber(actionsData.commit?.value, Number.NaN);
-    if (Number.isFinite(commitBonus) && commitBonus !== 0) {
+    if (selectedAction.reserve && Number.isFinite(commitBonus) && commitBonus !== 0) {
       const commitLabel = actionsData.commit?.label ?? "Commit";
       modifiers.push({ label: commitLabel, value: commitBonus });
     }

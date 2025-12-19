@@ -37,15 +37,24 @@ function filterActionsByType(actions = [], type = "all") {
   return entries.filter(action => (action?.type ?? "") === type);
 }
 
-function buildRollHelperSummary({ action = null, forms = [], reserves = {}, commit = null } = {}) {
+function buildRollHelperSummary({ action = null, forms = [], reserves = {}, reserveIndex = {}, commit = null } = {}) {
   if (!action) return null;
 
-  const reserveLookup = reserves ?? {};
+  const reserveLookup = reserveIndex ?? {};
+  const reserveValues = reserves ?? {};
 
   const activeForms = Array.isArray(forms) ? forms.filter(form => form?.active) : [];
-  const commitValue = toFiniteNumber(commit?.value ?? commit ?? 0);
   const actionReserveId = `${action?.reserve ?? ""}`.trim();
-  const actionReserveLabel = action?.reserveLabel ?? reserveLookup?.[actionReserveId]?.label ?? actionReserveId;
+  const hasActionReserve = Boolean(actionReserveId);
+  const commitValue = hasActionReserve ? toFiniteNumber(commit?.value ?? commit ?? 0) : 0;
+  const resolveReserveLabel = (reserveId) => {
+    if (!reserveId) return reserveId;
+    if (reserveId === actionReserveId && action?.reserveLabel) return action.reserveLabel;
+
+    return reserveLookup?.[reserveId]?.label
+      ?? reserveValues?.[reserveId]?.label
+      ?? reserveId;
+  };
 
   const totalSkillBonus = toFiniteNumber(action.skillTotal)
     + activeForms.reduce((total, form) => total + toFiniteNumber(form.skillBonus), 0)
@@ -59,7 +68,7 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, comm
 
     if (!reserveId || !Number.isFinite(cost)) return;
 
-    const reserveLabel = entry?.reserveLabel ?? reserveLookup?.[reserveId]?.label ?? reserveId;
+    const reserveLabel = entry?.reserveLabel ?? resolveReserveLabel(reserveId);
     const existing = reserveCosts.get(reserveId) ?? { label: reserveLabel, total: 0 };
 
     reserveCosts.set(reserveId, { label: existing.label ?? reserveLabel, total: existing.total + cost });
@@ -68,13 +77,34 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, comm
   addReserveCost(action);
   activeForms.forEach(addReserveCost);
 
-  if (actionReserveId && commitValue) {
+  if (hasActionReserve && commitValue) {
+    const actionReserveLabel = resolveReserveLabel(actionReserveId);
     addReserveCost({ reserve: actionReserveId, reserveLabel: actionReserveLabel, cost: commitValue });
   }
 
+  const reserveAvailability = new Map(
+    Object.entries(reserveValues).map(([reserveId, reserve]) => {
+      const available = toFiniteNumber(reserve?.value, 0);
+      const minimum = toFiniteNumber(reserve?.min);
+
+      const usableValue = Number.isFinite(available)
+        ? Math.max(available - Math.max(minimum, 0), 0)
+        : Number.NaN;
+
+      return [reserveId, usableValue];
+    })
+  );
+
+  const normalizedCosts = Array.from(reserveCosts, ([id, cost]) => ({ id, ...cost }));
+  const exceedsReserves = normalizedCosts.some(({ id, total }) => {
+    const available = reserveAvailability.has(id) ? reserveAvailability.get(id) : 0;
+    return Number.isFinite(available) ? total > available : false;
+  });
+
   return {
     totalSkillBonus,
-    reserveCosts: Array.from(reserveCosts, ([id, cost]) => ({ id, ...cost }))
+    reserveCosts: normalizedCosts,
+    canAfford: !exceedsReserves
   };
 }
 
@@ -308,7 +338,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       ? buildRollHelperSummary({
           action: selectedAction,
           forms: selectedActionForms,
-          reserves: index.reserves,
+          reserves,
+          reserveIndex: index.reserves,
           commit
         })
       : null;
@@ -400,7 +431,10 @@ async function onRollHelper(event) {
 
   if (typeof this.document?.rollSelectedAction !== "function") return;
 
-  await this.document.rollSelectedAction();
+  const rollResult = await this.document.rollSelectedAction();
+  if (rollResult) {
+    await this.document.update({ "system.actions.commit.value": 0 });
+  }
 }
 
 function toggleIdInList(list, id) {
@@ -428,4 +462,3 @@ async function onToggleHeldItem(event, target) {
 async function onToggleAbility(event, target) {
   await toggleEquippedItem.call(this, event, target, "ability");
 }
-

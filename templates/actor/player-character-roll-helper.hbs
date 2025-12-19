@@ -77,18 +77,20 @@
           {{/each}}
         {{/if}}
 
-        <div class="roll-helper__commit {{rollHelper.action.reserve}}">
-          {{#each commit._segments as |segment|}}
-            <div
-              class="resource-box is-interactive segment-{{segment.state}}"
-              data-action="updateResourceValue"
-              data-resource="actions.commit"
-              data-resource-value="{{segment.index}}"
-            >
-              {{segment.index}}
-            </div>
-          {{/each}}
-        </div>
+        {{#if rollHelper.action.reserve}}
+          <div class="roll-helper__commit {{rollHelper.action.reserve}}">
+            {{#each commit._segments as |segment|}}
+              <div
+                class="resource-box is-interactive segment-{{segment.state}}"
+                data-action="updateResourceValue"
+                data-resource="actions.commit"
+                data-resource-value="{{segment.index}}"
+              >
+                {{segment.index}}
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
       </div>
 
       {{#if rollHelperSummary}}
@@ -96,10 +98,17 @@
           <div class="roll-helper__summary-entry">
             <div class="roll-helper__summary-label">{{localize "TRISKEL.Actor.RollHelper.TotalBonus"}}</div>
             <div class="roll-helper__summary-value">{{numberFormat rollHelperSummary.totalSkillBonus decimals=0 sign=true}}</div>
-            <button type="button" class="roll-helper__summary-roll is-interactive" data-action="rollHelper">
-              <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
-              <span>{{localize "TRISKEL.Actor.RollHelper.Roll"}}</span>
-            </button>
+            {{#if rollHelper.action.skill}}
+              <button
+                type="button"
+                class="roll-helper__summary-roll is-interactive"
+                data-action="rollHelper"
+                {{#unless rollHelperSummary.canAfford}}disabled{{/unless}}
+              >
+                <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
+                <span>{{localize "TRISKEL.Actor.RollHelper.Roll"}}</span>
+              </button>
+            {{/if}}
           </div>
 
           {{#if rollHelperSummary.reserveCosts.length}}
