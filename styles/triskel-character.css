@@ -613,15 +613,7 @@
   color: var(--color-text-light-highlight, #fff);
 }
 
-.triskel .action-card {
-  display: flex;
-  /*! flex-direction: column; */
-  /*! gap: 0.35rem; */
-  /*! cursor: pointer; */
-  /*! border-radius: 8px; */
-}
-
-.triskel .action-card__forms {
+.triskel .actions-grid__forms {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -629,29 +621,29 @@
   grid-area: form;
 }
 
-.triskel .action-card__form {
+.triskel .actions-grid__form {
   border-radius: 999px;
   padding: 0.15rem 0.6rem;
   font-size: 0.85rem;
 }
 
-.triskel .action-card__form-icon {
+.triskel .actions-grid__form-icon {
   width: 1.1rem;
   height: 1.1rem;
   object-fit: cover;
   border-radius: 50%;
 }
 
-.triskel .action-card__form-label {
+.triskel .actions-grid__form-label {
   flex: 1 1 auto;
 }
 
-.triskel .action-card__form-cost {
+.triskel .actions-grid__form-cost {
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
 }
 
-.triskel .action-card__form:focus-visible {
+.triskel .actions-grid__form:focus-visible {
   outline: 2px solid var(--color-primary-3);
   outline-offset: 1px;
 }

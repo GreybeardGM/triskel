@@ -268,14 +268,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       })();
 
     const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
-    context.rollHelper = selectedAction
-      ? {
-          action: selectedAction,
-          forms: selectedActionForms
-        }
-      : null;
+    const hasSelectedAction = Boolean(selectedAction);
+    context.rollHelper = {
+      action: selectedAction ?? {},
+      forms: hasSelectedAction ? selectedActionForms : [],
+      hasSelection: hasSelectedAction
+    };
 
-    context.rollHelperSummary = selectedAction
+    context.rollHelperSummary = hasSelectedAction
       ? buildRollHelperSummary({
           action: selectedAction,
           forms: selectedActionForms,
