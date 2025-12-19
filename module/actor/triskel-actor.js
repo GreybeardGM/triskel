@@ -174,7 +174,7 @@ export class TriskelActor extends Actor {
     const itemCategoryIndex = index.itemCategories ?? {};
     const itemCategories = Array.isArray(codex.itemCategories) ? codex.itemCategories : [];
 
-    const assets = { all: [] };
+    const assets = {};
     Object.keys(itemCategoryIndex).forEach(categoryId => {
       assets[categoryId] = [];
     });
@@ -200,7 +200,6 @@ export class TriskelActor extends Actor {
         isActive
       };
 
-      assets.all.push(assetEntry);
       if (!assets[type]) assets[type] = [];
       assets[type].push(assetEntry);
 
