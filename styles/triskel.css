@@ -42,18 +42,13 @@
 }
 
 .triskel .is-interactive {
-  position: relative;
-  background: var(--triskel-interactive-background);
-  border: 1px solid var(--triskel-interactive-border);
-  transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
   cursor: pointer;
 }
 
 .triskel .is-interactive:hover {
-  box-shadow: 0 0 0 2px var(--triskel-interactive-highlight);
+  outline: 2px solid var(--triskel-interactive-highlight);
 }
 
 .triskel .is-selected {
-  border-color: var(--triskel-interactive-highlight);
-  background: color-mix(in srgb, var(--triskel-interactive-highlight) 10%, var(--triskel-interactive-background));
+  outline: 2px solid;
 }
