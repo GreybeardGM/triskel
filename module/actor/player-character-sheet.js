@@ -266,17 +266,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     };
 
     const selectedActionId = context.system.actions?.selected?.ref ?? null;
-    const selectedAction = context.system.actions?.selected?.action
-      ?? (() => {
-        const availableActions = Array.isArray(context.system.actions?.actions)
-          ? context.system.actions.actions
-          : [];
-        const availableSpells = Array.isArray(context.system.actions?.spells)
-          ? context.system.actions.spells
-          : [];
-        return [...availableActions, ...availableSpells]
-          .find(action => action.id === selectedActionId);
-      })();
+    const selectedAction = context.system.actions?.selected?.action ?? null;
 
     const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
     const hasSelectedAction = Boolean(selectedAction);
