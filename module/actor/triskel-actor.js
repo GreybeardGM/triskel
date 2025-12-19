@@ -55,9 +55,8 @@ export class TriskelActor extends Actor {
     });
 
     const items = Array.from(this.items ?? []);
-    const { assets, assetsByType, activeActionSources, modifiers } = this._prepareItemAssets(items);
+    const { assets, activeActionSources, modifiers } = this._prepareItemAssets(items);
     this.system.assets = assets;
-    this.system.itemsByType = assetsByType;
 
     this.system.modifiers = modifiers;
     this._applySkillModifiers(modifiers);
@@ -76,7 +75,6 @@ export class TriskelActor extends Actor {
       selectedForms,
       activeActionSources
     });
-    const actionTypes = triskellCodex.actionTypes ?? [];
     const actionsByType = this._bucketActionsByType(actions);
     const spellsByType = this._bucketActionsByType(spells);
     const selectedPrepared = [...actions, ...spells].find(action => action.id === selectedRef);
@@ -125,7 +123,6 @@ export class TriskelActor extends Actor {
       ...baseActions,
       actions,
       spells,
-      actionTypes,
       actionsByType,
       spellsByType,
       selected,

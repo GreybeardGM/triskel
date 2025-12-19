@@ -239,23 +239,20 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const actionFilterSelection = this._actionTypeFilter ?? "all";
     const assets = context.system?.assets ?? {};
     const items = assets.all ?? [];
-    const derivedItemsByType = Array.isArray(context.system?.itemsByType) ? context.system.itemsByType : [];
     const itemCategories = codex.itemCategories ?? [];
 
     context.items = items;
-    context.itemsByType = derivedItemsByType.length
-      ? derivedItemsByType
-      : itemCategories.map(category => ({
-          type: category.id,
-          itemLabel: category.label,
-          label: category.labelPlural ?? category.label,
-          items: assets[category.id] ?? []
-        }));
+    context.itemsByType = itemCategories.map(category => ({
+      type: category.id,
+      itemLabel: category.label,
+      label: category.labelPlural ?? category.label,
+      items: assets[category.id] ?? []
+    }));
 
     context.tierLabel = context.system?.tier?.label ?? "";
 
     const actionTypeFilter = createActionTypeFilter({
-      actionTypes: actions.actionTypes ?? codex.actionTypes,
+      actionTypes: codex.actionTypes,
       selected: actionFilterSelection
     });
 
