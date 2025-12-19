@@ -22,7 +22,7 @@
     <div class="actions-grid">
       {{#each this as |action|}}
         <article
-          class="action-card roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.isSelected}}is-selected{{/if}}"
+          class="roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.isSelected}}is-selected{{/if}}"
           role="button"
           tabindex="0"
           data-action="selectAction"
@@ -56,21 +56,21 @@
             <div class="roll-helper__entry-description">{{action.description}}</div>
           {{/if}}
           {{#if action.forms.length}}
-            <div class="action-card__forms" role="group">
+            <div class="actions-grid__forms" role="group">
               {{#each action.forms as |form|}}
                 <button
                   type="button"
-                  class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
+                  class="actions-grid__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
                   title="{{form.description}}"
                   data-action="toggleForm"
                   data-form-key="{{form.id}}"
                 >
                   {{#if form.image}}
-                    <img class="action-card__form-icon" src="{{form.image}}" alt="" />
+                    <img class="actions-grid__form-icon" src="{{form.image}}" alt="" />
                   {{/if}}
-                  <span class="action-card__form-label">{{form.label}}</span>
+                  <span class="actions-grid__form-label">{{form.label}}</span>
                   {{#if form.cost}}
-                    <span class="action-card__form-cost">{{numberFormat form.cost decimals=0}}</span>
+                    <span class="actions-grid__form-cost">{{numberFormat form.cost decimals=0}}</span>
                   {{/if}}
                 </button>
               {{/each}}
