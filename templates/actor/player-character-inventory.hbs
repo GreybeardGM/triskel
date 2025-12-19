@@ -14,17 +14,16 @@
                 class="inventory-list__item"
                 data-item-id="{{item.id}}"
               >
-                {{#if category.toggleAction}}
-                  <button
-                    type="button"
-                    class="inventory-list__toggle is-interactive {{#if item.isEquipToggleActive}}is-selected{{/if}}"
-                    data-action="{{category.toggleAction}}"
-                  >
-                    {{#if item.isEquipToggleActive}}
-                      <i class="fa-solid fa-check"></i>
-                    {{/if}}
-                  </button>
-                {{/if}}
+                <button
+                  type="button"
+                  class="inventory-list__toggle is-interactive {{#if item.isActive}}is-selected{{/if}}"
+                  data-action="toggleActiveItem"
+                  data-item-type="{{item.type}}"
+                >
+                  {{#if item.isActive}}
+                    <i class="fa-solid fa-check"></i>
+                  {{/if}}
+                </button>
                 {{#if item.img}}
                   <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
                 {{else}}

@@ -1,6 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
-
-const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
+import { onEditImage, onUpdateResourceValue } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -28,13 +26,9 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   static PARTS = {
-    info: {
-      id: "info",
-      template: "systems/triskel/templates/actor/npc-info.hbs"
-    },
-    stats: {
-      id: "stats",
-      template: "systems/triskel/templates/actor/npc-stats.hbs"
+    core: {
+      id: "core",
+      template: "systems/triskel/templates/actor/npc-core.hbs"
     },
     skills: {
       id: "skills",
@@ -52,15 +46,8 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.actor ??= this.document;
     context.system ??= this.document.system;
 
-    const { skillCategories } = prepareSkillsDisplay(
-      context.system.skills,
-      context.system.resistances
-    );
-
-    const npcStats = prepareBars(context.system.npcStats, getTriskellIndex().npcStats);
-
-    context.npcStats = npcStats;
-    context.skillCategories = skillCategories;
+    context.npcStats = context.system?.npcStats ?? {};
+    context.skillCategories = context.system?.skillCategories ?? [];
 
     // Notes Vorbereiten
     context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(

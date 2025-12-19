@@ -1,11 +1,13 @@
 import {
   normalizeIdList,
+  normalizeKeyword,
   normalizeKeywords,
   toFiniteNumber,
   toFiniteNumbers
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { convertD10TensToZero } from "../util/roll.js";
+import { prepareBars, prepareSkillsDisplay } from "./sheet-helpers.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -22,6 +24,7 @@ export class TriskelActor extends Actor {
     super.prepareDerivedData();
 
     const triskellIndex = getTriskellIndex();
+    const triskellCodex = getTriskellCodex();
 
     // Globale Ableitungen für alle Actor-Typen
     const reserves = this.system?.reserves ?? {};
@@ -70,20 +73,112 @@ export class TriskelActor extends Actor {
       const woundsValue = toFiniteNumber(this.system?.npcStats?.wounds?.value);
       baseActions.activations = { value: woundsValue };
     }
-    const selectedAction = baseActions.selected ?? null;
+    const selectedRef = baseActions.selected?.ref ?? baseActions.selected ?? null;
     const selectedForms = this._normalizeSelectedForms(baseActions.selectedForms ?? []);
     const { actions, spells } = this._prepareActionCollections({
-      selectedAction,
+      selectedAction: selectedRef,
       selectedForms,
       equippedContext
     });
+    const actionTypes = triskellCodex.actionTypes ?? [];
+    const actionsByType = this._bucketActionsByType(actions);
+    const spellsByType = this._bucketActionsByType(spells);
+    const selectedPrepared = [...actions, ...spells].find(action => action.id === selectedRef);
+    const cloneAction = value => {
+      if (!value) return null;
+      if (foundry.utils?.deepClone) return foundry.utils.deepClone(value);
+      try {
+        return structuredClone(value);
+      } catch (error) {
+        return JSON.parse(JSON.stringify(value));
+      }
+    };
+    const selected = selectedPrepared
+      ? cloneAction({ ref: selectedRef, ...selectedPrepared })
+      : selectedRef
+        ? { ref: selectedRef }
+        : null;
+
+    if (selected) {
+      const reserveCosts = { power: 0, grace: 0, will: 0 };
+      const addReserveCost = entry => {
+        const reserveId = `${entry?.reserve ?? ""}`.trim();
+        const cost = toFiniteNumber(entry?.cost, Number.NaN);
+        if (!reserveId || !Number.isFinite(cost)) return;
+        if (reserveId in reserveCosts) reserveCosts[reserveId] += cost;
+      };
+
+      addReserveCost(selected);
+      const activeForms = Array.isArray(selected.forms) ? selected.forms.filter(form => form?.active) : [];
+      activeForms.forEach(addReserveCost);
+      const commitValue = toFiniteNumber(commit?.value, Number.NaN);
+      if (selected.reserve && Number.isFinite(commitValue)) {
+        addReserveCost({ reserve: selected.reserve, cost: commitValue });
+      }
+
+      const rollModifiers = [];
+      const actionLabel = selected.skillLabel ?? selected.label ?? selected.id ?? "";
+      const actionBonus = toFiniteNumber(selected.skillTotal, Number.NaN);
+      if (Number.isFinite(actionBonus) && actionBonus !== 0) rollModifiers.push({ label: actionLabel || "Action", value: actionBonus });
+
+      activeForms.forEach(form => {
+        const formBonus = toFiniteNumber(form?.skillBonus, Number.NaN);
+        if (!Number.isFinite(formBonus) || formBonus === 0) return;
+        rollModifiers.push({ label: form.label ?? form.id ?? "Form", value: formBonus });
+      });
+
+      if (selected.reserve && Number.isFinite(commitValue) && commitValue !== 0) {
+        const commitLabel = commit?.label ?? "Commit";
+        rollModifiers.push({ label: commitLabel, value: commitValue });
+      }
+
+      const totalBonus = rollModifiers.reduce((total, modifier) => total + toFiniteNumber(modifier?.value, 0), 0);
+
+      selected.cost = reserveCosts;
+      selected.modifiers = rollModifiers;
+      selected.roll = { totalBonus };
+    }
+
     this.system.actions = {
       ...baseActions,
       actions,
       spells,
-      selected: selectedAction,
+      actionTypes,
+      actionsByType,
+      spellsByType,
+      selected,
       selectedForms,
       commit
+    };
+
+    if (this.type === "character") {
+      const preparedReserves = prepareBars(this.system?.reserves, triskellIndex.reserves);
+      const preparedPaths = prepareBars(this.system?.paths, triskellIndex.paths);
+      const preparedCommit = prepareBars({ commit: this.system?.actions?.commit }, triskellIndex.actions)?.commit
+        ?? { id: "commit", _segments: [] };
+
+      this.system.reserves = preparedReserves;
+      this.system.paths = preparedPaths;
+      this.system.actions.commit = preparedCommit;
+    } else if (this.type === "npc") {
+      const preparedNpcStats = prepareBars(this.system?.npcStats, triskellIndex.npcStats);
+      this.system.npcStats = preparedNpcStats;
+    }
+
+    const { skillCategories } = prepareSkillsDisplay(
+      this.system?.skills,
+      this.system?.resistances
+    );
+
+    const tierValue = toFiniteNumber(this.system?.tier?.value, Number.NaN);
+    const tierLabel = this.type === "character"
+      ? triskellCodex.tiers?.find(tier => tier.tier === tierValue)?.label ?? ""
+      : "";
+
+    this.system.skillCategories = skillCategories;
+    this.system.tier = {
+      ...this.system.tier,
+      label: tierLabel
     };
 
   }
@@ -205,6 +300,7 @@ export class TriskelActor extends Actor {
     const actorSkill = this.system?.skills?.[action.skill] ?? {};
 
     const skillTotal = toFiniteNumber(actorSkill.total ?? actorSkill.value);
+    const normalizedKeywords = normalizeKeywords(action.keywords);
 
     return {
       ...action,
@@ -214,6 +310,7 @@ export class TriskelActor extends Actor {
       reserveLabel: reserve.label ?? action.reserve ?? "",
       skillTotal,
       source,
+      normalizedKeywords,
       image: image ?? action.image ?? action.img ?? null
     };
   }
@@ -223,15 +320,10 @@ export class TriskelActor extends Actor {
     const reserve = index.reserves?.[form.reserve] ?? {};
     const skill = index.skills?.[form.skill] ?? {};
 
-    const modifierBonuses = toFiniteNumbers(
-      form.modifiers,
-      modifier => typeof modifier?.skill === "number"
-        ? modifier.skill
-        : modifier?.value,
-      Number.NaN
+    const modifierBonus = toFiniteNumber(
+      typeof form?.modifier?.skill === "number" ? form.modifier.skill : form?.modifier?.value,
+      0
     );
-
-    const skillBonus = modifierBonuses.reduce((total, bonus) => total + bonus, 0);
 
     return {
       ...form,
@@ -239,7 +331,7 @@ export class TriskelActor extends Actor {
       description: form.description ?? "",
       reserveLabel: reserve.label ?? form.reserve ?? "",
       skillLabel: skill.label ?? form.skill ?? "",
-      skillBonus,
+      skillBonus: modifierBonus,
       source,
       image: image ?? form.image ?? form.img ?? null
     };
@@ -301,23 +393,26 @@ export class TriskelActor extends Actor {
     actions.sort((a, b) => collator.compare(a.label, b.label));
     spells.sort((a, b) => collator.compare(a.label, b.label));
 
+    const formsByKeyword = new Map();
     forms.forEach(form => {
+      const normalizedKeyword = normalizeKeyword(form.keyword ?? form.keywords);
+      form.normalizedKeyword = normalizedKeyword;
+      form.normalizedKeywords = normalizedKeyword ? [normalizedKeyword] : [];
       form.active = selectedForms.includes(form.id);
-      form.normalizedKeywords = normalizeKeywords(form.keywords);
+
+      if (!normalizedKeyword) return;
+      const formsWithKeyword = formsByKeyword.get(normalizedKeyword) ?? [];
+      formsWithKeyword.push(form);
+      formsByKeyword.set(normalizedKeyword, formsWithKeyword);
     });
 
     forms.sort((a, b) => collator.compare(a.label, b.label));
 
     const findMatchingForms = entry => {
-      const entryKeywords = normalizeKeywords(entry?.keywords);
-      if (!entryKeywords.length) return [];
+      const entryKeyword = entry?.normalizedKeywords?.[0] ?? normalizeKeyword(entry?.keywords);
+      if (!entryKeyword) return [];
 
-      const entryKeywordSet = new Set(entryKeywords);
-
-      return forms.filter(form =>
-        form.normalizedKeywords.length > 0
-        && form.normalizedKeywords.every(keyword => entryKeywordSet.has(keyword))
-      );
+      return formsByKeyword.get(entryKeyword) ?? [];
     };
 
     actions.forEach(action => {
@@ -333,43 +428,33 @@ export class TriskelActor extends Actor {
     return { actions, spells };
   }
 
+  _bucketActionsByType(entries = []) {
+    const bucket = { all: Array.from(entries) };
+
+    for (const entry of entries) {
+      const type = entry?.type ?? "";
+      if (!type) continue;
+
+      if (!bucket[type]) bucket[type] = [];
+      bucket[type].push(entry);
+    }
+
+    return bucket;
+  }
+
   async rollSelectedAction() {
     const actionsData = this.system?.actions ?? {};
-    const selectedId = actionsData.selected ?? null;
+    const selectedRef = actionsData.selected?.ref ?? null;
 
-    if (!selectedId) return null;
+    if (!selectedRef) return null;
 
-    const availableActions = Array.isArray(actionsData.actions) ? actionsData.actions : [];
-    const availableSpells = Array.isArray(actionsData.spells) ? actionsData.spells : [];
-    const selectedAction = [...availableActions, ...availableSpells]
-      .find(action => action?.id === selectedId);
+    const selectedAction = actionsData.selected;
 
     if (!selectedAction) return null;
 
-    const modifiers = [];
-
     const actionLabel = selectedAction.skillLabel ?? selectedAction.label ?? selectedAction.id ?? "";
-    const actionBonus = toFiniteNumber(selectedAction.skillTotal, Number.NaN);
-    if (Number.isFinite(actionBonus) && actionBonus !== 0) {
-      modifiers.push({ label: actionLabel || "Action", value: actionBonus });
-    }
 
-    const activeForms = Array.isArray(selectedAction.forms)
-      ? selectedAction.forms.filter(form => form?.active)
-      : [];
-
-    activeForms.forEach(form => {
-      const formBonus = toFiniteNumber(form?.skillBonus, Number.NaN);
-      if (!Number.isFinite(formBonus) || formBonus === 0) return;
-
-      modifiers.push({ label: form.label ?? form.id ?? "Form", value: formBonus });
-    });
-
-    const commitBonus = toFiniteNumber(actionsData.commit?.value, Number.NaN);
-    if (selectedAction.reserve && Number.isFinite(commitBonus) && commitBonus !== 0) {
-      const commitLabel = actionsData.commit?.label ?? "Commit";
-      modifiers.push({ label: commitLabel, value: commitBonus });
-    }
+    const modifiers = Array.isArray(selectedAction.modifiers) ? [...selectedAction.modifiers] : [];
 
     return this.rollTriskelDice({ modifiers, title: actionLabel });
   }
