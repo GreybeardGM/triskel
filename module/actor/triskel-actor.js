@@ -57,12 +57,11 @@ export class TriskelActor extends Actor {
       path.value = Math.min(Math.max(0, tension), safeMax);
     });
 
-    const { equippedItems, sanitizedEquippedGear } = this._collectEquippedItems();
-    this.system.equippedGear = sanitizedEquippedGear;
+    const items = Array.from(this.items ?? []);
+    const { assets, assetsByType, activeActionSources, modifiers } = this._prepareItemAssets(items);
+    this.system.assets = assets;
+    this.system.itemsByType = assetsByType;
 
-    const equippedContext = this._buildEquippedContext(equippedItems);
-
-    const modifiers = this._prepareSkillModifiers(equippedContext);
     this.system.modifiers = modifiers;
     this._applySkillModifiers(modifiers);
 
@@ -78,7 +77,7 @@ export class TriskelActor extends Actor {
     const { actions, spells } = this._prepareActionCollections({
       selectedAction: selectedRef,
       selectedForms,
-      equippedContext
+      activeActionSources
     });
     const actionTypes = triskellCodex.actionTypes ?? [];
     const actionsByType = this._bucketActionsByType(actions);
@@ -170,7 +169,6 @@ export class TriskelActor extends Actor {
       this.system?.resistances
     );
 
-    const tierValue = toFiniteNumber(this.system?.tier?.value, Number.NaN);
     const tierLabel = this.type === "character"
       ? triskellCodex.tiers?.find(tier => tier.tier === tierValue)?.label ?? ""
       : "";
@@ -183,58 +181,49 @@ export class TriskelActor extends Actor {
 
   }
 
-  _collectEquippedItems() {
-    const itemsById = new Map(Array.from(this.items ?? []).map(item => [item.id, item]));
+  _prepareItemAssets(items = []) {
+    const index = getTriskellIndex();
+    const codex = getTriskellCodex();
+    const itemCategoryIndex = index.itemCategories ?? {};
+    const itemCategories = Array.isArray(codex.itemCategories) ? codex.itemCategories : [];
 
-    const equippedGear = this.system?.equippedGear ?? {};
-    const sanitizeEquippedList = (entries = []) => normalizeIdList(entries)
-      .filter(itemId => itemsById.has(itemId));
+    const assets = { all: [] };
+    Object.keys(itemCategoryIndex).forEach(categoryId => {
+      assets[categoryId] = [];
+    });
 
-    const sanitizedEquippedGear = {
-      worn: sanitizeEquippedList(equippedGear?.worn ?? []),
-      held: sanitizeEquippedList(equippedGear?.held ?? []),
-      spell: sanitizeEquippedList(equippedGear?.spell ?? []),
-      ability: sanitizeEquippedList(equippedGear?.ability ?? [])
-    };
+    const collator = new Intl.Collator(undefined, { sensitivity: "base" });
 
-    const equippedIds = [
-      ...sanitizedEquippedGear.worn,
-      ...sanitizedEquippedGear.held,
-      ...sanitizedEquippedGear.spell,
-      ...sanitizedEquippedGear.ability
-    ];
+    const activeActionSources = [];
+    const modifiersBySkill = {};
+    const skillsById = index.skills ?? {};
 
-    const equippedItems = [];
-    const seenItemIds = new Set();
-    for (const itemId of normalizeIdList(equippedIds)) {
-      if (seenItemIds.has(itemId)) continue;
-
-      const item = itemsById.get(itemId);
+    for (const item of Array.from(items)) {
       if (!item) continue;
 
-      equippedItems.push(item);
-      seenItemIds.add(itemId);
-    }
+      const type = item.type ?? "";
+      const image = item.img ?? item.image ?? null;
+      const isActive = Boolean(item.system?.active);
 
-    return { equippedItems, sanitizedEquippedGear };
-  }
+      const assetEntry = {
+        id: item.id,
+        name: item.name ?? "",
+        img: image,
+        type,
+        isActive
+      };
 
-  _buildEquippedContext(equippedItems = []) {
-    return Array.from(equippedItems).map(item => ({
-      id: item.id,
-      image: item.img ?? item.image ?? null,
-      modifiers: Array.isArray(item?.system?.modifiers) ? item.system.modifiers : [],
-      actionRefs: normalizeIdList(item.system?.actions?.ref),
-      formRefs: normalizeIdList(item.system?.forms?.ref)
-    }));
-  }
+      assets.all.push(assetEntry);
+      if (!assets[type]) assets[type] = [];
+      assets[type].push(assetEntry);
 
-  _prepareSkillModifiers(equippedContext = []) {
-    const modifiersBySkill = {};
+      if (!isActive) continue;
 
-    const skillsById = getTriskellIndex().skills ?? {};
+      const actionRefs = normalizeIdList(item.system?.actions?.ref);
+      const formRefs = normalizeIdList(item.system?.forms?.ref);
+      activeActionSources.push({ id: item.id, image, actionRefs, formRefs });
 
-    for (const { modifiers: itemModifiers, id, image } of Array.from(equippedContext)) {
+      const itemModifiers = Array.isArray(item?.system?.modifiers) ? item.system.modifiers : [];
       for (const modifier of itemModifiers) {
         const skill = modifier?.skill ?? modifier?.id ?? "";
         if (!skill) continue;
@@ -247,14 +236,24 @@ export class TriskelActor extends Actor {
             ...modifier,
             skill,
             value,
-            source: id ?? null,
+            source: item.id ?? null,
             image
           };
         }
       }
     }
 
-    return Object.values(modifiersBySkill).map(modifier => {
+    const sortByName = entries => entries.sort((a, b) => collator.compare(a.name ?? "", b.name ?? ""));
+    Object.values(assets).forEach(list => sortByName(list));
+
+    const assetsByType = itemCategories.map(category => ({
+      type: category.id,
+      itemLabel: category.label ?? category.id,
+      label: category.labelPlural ?? category.label ?? category.id,
+      items: assets[category.id] ?? []
+    }));
+
+    const modifiers = Object.values(modifiersBySkill).map(modifier => {
       const skill = skillsById[modifier.skill] ?? {};
 
       return {
@@ -262,6 +261,8 @@ export class TriskelActor extends Actor {
         label: skill.label ?? modifier.skill ?? ""
       };
     });
+
+    return { assets, assetsByType, activeActionSources, modifiers };
   }
 
   _applySkillModifiers(modifiers = []) {
@@ -337,7 +338,7 @@ export class TriskelActor extends Actor {
     };
   }
 
-  _prepareActionCollections({ selectedAction = null, selectedForms = [], equippedContext = [] } = {}) {
+  _prepareActionCollections({ selectedAction = null, selectedForms = [], activeActionSources = [] } = {}) {
     const actions = [];
     const spells = [];
     const forms = [];
@@ -375,7 +376,12 @@ export class TriskelActor extends Actor {
 
     baseActions.forEach(action => addAction(action, { image: action.image ?? action.img }));
 
-    for (const { actionRefs, formRefs, id, image } of Array.from(equippedContext)) {
+    for (const item of Array.from(activeActionSources)) {
+      const id = item?.id ?? null;
+      const image = item?.image ?? null;
+      const actionRefs = normalizeIdList(item?.actionRefs);
+      const formRefs = normalizeIdList(item?.formRefs);
+
       actionRefs.forEach(actionId => {
         const advancedAction = advancedActionsById[actionId];
         if (advancedAction) addAction(advancedAction, { source: id, image });

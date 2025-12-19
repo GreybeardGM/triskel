@@ -106,12 +106,6 @@
           "resolve": {
             "value": 0
           }
-        },
-        "equippedGear": {
-          "held": [],
-          "worn": [],
-          "spell": [],
-          "ability": []
         }
       }
     },
@@ -221,6 +215,7 @@
     "templates": {
       "base": {
         "description": "",
+        "active": false,
         "actions": {
           "add": [],
           "ref": []

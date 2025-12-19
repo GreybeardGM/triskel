@@ -2,7 +2,7 @@ import {
   onEditImage,
   onUpdateResourceValue
 } from "./sheet-helpers.js";
-import { normalizeIdList, toFiniteNumber } from "../util/normalization.js";
+import { toFiniteNumber } from "../util/normalization.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -104,12 +104,10 @@ async function toggleActiveItem(event, target, expectedType) {
 
   const item = getItemFromTarget(this, target);
   const itemType = expectedType ?? target?.dataset?.itemType ?? target.closest("[data-item-type]")?.dataset.itemType;
-  if (!item || item.type !== itemType) return;
+  if (!item || (itemType && item.type !== itemType)) return;
 
-  const equipped = getEquippedList(itemType, this.document?.system?.equippedGear);
-  const updatedEquipped = toggleIdInList(equipped, item.id);
-
-  await this.document?.update({ [`system.equippedGear.${itemType}`]: updatedEquipped });
+  const isActive = Boolean(item.system?.active);
+  await item.update({ "system.active": !isActive });
 }
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -228,49 +226,20 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.paths = paths;
     context.skillCategories = skillCategories;
     const actionFilterSelection = this._actionTypeFilter ?? "all";
-    const equippedGear = this.document.system?.equippedGear ?? {};
+    const assets = context.system?.assets ?? {};
+    const items = assets.all ?? [];
+    const derivedItemsByType = Array.isArray(context.system?.itemsByType) ? context.system.itemsByType : [];
     const itemCategories = codex.itemCategories ?? [];
-    const itemCategoriesById = index.itemCategories ?? {};
-
-    const equippedLists = Object.fromEntries(
-      itemCategories.map(({ id }) => [
-        id,
-        getEquippedList(id, equippedGear)
-      ])
-    );
-
-    const itemsByType = itemCategories.reduce((collection, category) => {
-      collection[category.id] = [];
-      return collection;
-    }, {});
-
-    const items = Array.from(this.document.items ?? []).map(item => {
-      const equippedList = equippedLists[item.type] ?? [];
-      const isActive = equippedList.includes(item.id);
-      const entry = {
-        id: item.id,
-        name: item.name,
-        img: item.img,
-        type: item.type,
-        isActive
-      };
-
-      if (itemsByType[item.type]) itemsByType[item.type].push(entry);
-
-      return entry;
-    });
-
-    items.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
-    Object.values(itemsByType).forEach(itemList => itemList.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" })));
 
     context.items = items;
-
-    context.itemsByType = itemCategories.map(category => ({
-      type: category.id,
-      itemLabel: category.label,
-      label: category.labelPlural,
-      items: itemsByType[category.id] ?? []
-    }));
+    context.itemsByType = derivedItemsByType.length
+      ? derivedItemsByType
+      : itemCategories.map(category => ({
+          type: category.id,
+          itemLabel: category.label,
+          label: category.labelPlural ?? category.label,
+          items: assets[category.id] ?? []
+        }));
 
     context.tierLabel = context.system?.tier?.label ?? "";
 
@@ -337,12 +306,6 @@ function getItemFromTarget(sheet, target) {
   return sheet.document?.items?.get(itemId) ?? null;
 }
 
-function getEquippedList(gearKey, equippedGear) {
-  const entries = normalizeIdList(equippedGear?.[gearKey]);
-
-  return Array.from(new Set(entries));
-}
-
 async function onEditItem(event, target) {
   event.preventDefault();
 
@@ -407,16 +370,6 @@ async function onRollHelper(event) {
   if (rollResult) {
     await this.document.update({ "system.actions.commit.value": 0 });
   }
-}
-
-function toggleIdInList(list, id) {
-  const normalized = Array.isArray(list) ? [...list] : [];
-  const existingIndex = normalized.indexOf(id);
-
-  if (existingIndex >= 0) normalized.splice(existingIndex, 1);
-  else normalized.push(id);
-
-  return normalized;
 }
 
 async function onToggleActiveItem(event, target) {
