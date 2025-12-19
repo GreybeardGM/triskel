@@ -258,11 +258,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.actionFilter = {
       ...actionTypeFilter,
-      actions: filterActionsByType(actions.actionsByType ?? context.system.actions?.actions, actionFilterSelection),
-      spells: filterActionsByType(actions.spellsByType ?? context.system.actions?.spells, actionFilterSelection)
+      actions: filterActionsByType(actions.actionsByType, actionFilterSelection),
+      spells: filterActionsByType(actions.spellsByType, actionFilterSelection)
     };
 
-    const selectedActionId = context.system.actions?.selected?.ref ?? null;
     const selectedAction = context.system.actions?.selected?.action ?? null;
 
     const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
