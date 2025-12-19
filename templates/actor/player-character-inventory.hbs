@@ -3,8 +3,8 @@
   data-tab="{{tabs.inventory.id}}"
   data-group="{{tabs.inventory.group}}"
 >
-  {{#if itemsByType.length}}
-    {{#each itemsByType as |category|}}
+  {{#if inventoryCategories.length}}
+    {{#each inventoryCategories as |category|}}
       <div class="inventory-category">
         <h3 class="inventory-category__title">{{category.label}}</h3>
         <ul class="inventory-list">

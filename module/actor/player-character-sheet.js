@@ -227,54 +227,32 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.skillCategories = skillCategories;
     const actionFilterSelection = this._actionTypeFilter ?? "all";
     const assets = context.system?.assets ?? {};
-    const items = assets.all ?? [];
-    const derivedItemsByType = Array.isArray(context.system?.itemsByType) ? context.system.itemsByType : [];
     const itemCategories = codex.itemCategories ?? [];
 
-    context.items = items;
-    context.itemsByType = derivedItemsByType.length
-      ? derivedItemsByType
-      : itemCategories.map(category => ({
-          type: category.id,
-          itemLabel: category.label,
-          label: category.labelPlural ?? category.label,
-          items: assets[category.id] ?? []
-        }));
+    context.inventoryCategories = itemCategories.map(category => ({
+      type: category.id,
+      label: category.labelPlural ?? category.label ?? category.id,
+      items: assets?.[category.id] ?? []
+    }));
 
     context.tierLabel = context.system?.tier?.label ?? "";
 
     const actionTypeFilter = createActionTypeFilter({
-      actionTypes: actions.actionTypes ?? codex.actionTypes,
+      actionTypes: codex.actionTypes,
       selected: actionFilterSelection
     });
 
     context.actionFilter = {
       ...actionTypeFilter,
-      actions: filterActionsByType(actions.actionsByType ?? context.system.actions?.actions, actionFilterSelection),
-      spells: filterActionsByType(actions.spellsByType ?? context.system.actions?.spells, actionFilterSelection)
+      actions: filterActionsByType(actions.actionsByType, actionFilterSelection),
+      spells: filterActionsByType(actions.spellsByType, actionFilterSelection)
     };
 
-    const selectedActionId = context.system.actions?.selected?.ref ?? null;
-    const selectedAction = context.system.actions?.selected
-      ?? (() => {
-        const availableActions = Array.isArray(context.system.actions?.actions)
-          ? context.system.actions.actions
-          : [];
-        const availableSpells = Array.isArray(context.system.actions?.spells)
-          ? context.system.actions.spells
-          : [];
-        return [...availableActions, ...availableSpells]
-          .find(action => action.id === selectedActionId);
-      })();
+    const selectedAction = context.system.actions?.selected?.action ?? null;
 
     const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
     const hasSelectedAction = Boolean(selectedAction);
-    const rollHelperCost = hasSelectedAction
-      ? (() => {
-          const numericCost = toFiniteNumber(selectedAction?.cost, Number.NaN);
-          return Number.isFinite(numericCost) ? numericCost : null;
-        })()
-      : null;
+    const rollHelperCost = hasSelectedAction ? selectedAction?.cost ?? null : null;
     context.rollHelper = {
       action: selectedAction ?? {},
       forms: hasSelectedAction ? selectedActionForms : [],
