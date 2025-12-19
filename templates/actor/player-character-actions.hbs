@@ -21,63 +21,61 @@
   {{#*inline "actionCards"}}
     <div class="actions-grid">
       {{#each this as |action|}}
-        <article class="action-card">
-          <div
-            class="roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.isSelected}}is-selected{{/if}}"
-            role="button"
-            tabindex="0"
-            data-action="selectAction"
-            data-action-key="{{action.id}}"
-            data-reserve="{{action.reserve}}"
-          >
-            {{#if action.icon}}
-              <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{action.icon}}" aria-hidden="true"></i>
-            {{else if action.image}}
-              <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{action.image}}" alt="" />
-            {{/if}}
+        <article
+          class="action-card roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.isSelected}}is-selected{{/if}}"
+          role="button"
+          tabindex="0"
+          data-action="selectAction"
+          data-action-key="{{action.id}}"
+          data-reserve="{{action.reserve}}"
+        >
+          {{#if action.icon}}
+            <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{action.icon}}" aria-hidden="true"></i>
+          {{else if action.image}}
+            <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{action.image}}" alt="" />
+          {{/if}}
 
-            <div class="roll-helper__entry-label">{{action.label}}</div>
+          <div class="roll-helper__entry-label">{{action.label}}</div>
 
-            {{#if action.reserveLabel}}
-              <div class="roll-helper__entry-reserve">{{action.reserveLabel}}</div>
-            {{else}}
-              {{#if action.reserve}}
-                <div class="roll-helper__entry-reserve">{{action.reserve}}</div>
-              {{/if}}
+          {{#if action.reserveLabel}}
+            <div class="roll-helper__entry-reserve">{{action.reserveLabel}}</div>
+          {{else}}
+            {{#if action.reserve}}
+              <div class="roll-helper__entry-reserve">{{action.reserve}}</div>
             {{/if}}
+          {{/if}}
 
-            <div class="roll-helper__entry-skill">{{action.skillLabel}}</div>
-            <div class="roll-helper__entry-bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</div>
+          <div class="roll-helper__entry-skill">{{action.skillLabel}}</div>
+          <div class="roll-helper__entry-bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</div>
 
-            {{#if action.cost}}
-              <div class="roll-helper__entry-cost">{{numberFormat action.cost decimals=0}}</div>
-            {{/if}}
+          {{#if action.cost}}
+            <div class="roll-helper__entry-cost">{{numberFormat action.cost decimals=0}}</div>
+          {{/if}}
 
-            {{#if action.description}}
-              <div class="roll-helper__entry-description">{{action.description}}</div>
-            {{/if}}
-            {{#if action.forms.length}}
-              <div class="action-card__forms" role="group">
-                {{#each action.forms as |form|}}
-                  <button
-                    type="button"
-                    class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
-                    title="{{form.description}}"
-                    data-action="toggleForm"
-                    data-form-key="{{form.id}}"
-                  >
-                    {{#if form.image}}
-                      <img class="action-card__form-icon" src="{{form.image}}" alt="" />
-                    {{/if}}
-                    <span class="action-card__form-label">{{form.label}}</span>
-                    {{#if form.cost}}
-                      <span class="action-card__form-cost">{{numberFormat form.cost decimals=0}}</span>
-                    {{/if}}
-                  </button>
-                {{/each}}
-              </div>
-            {{/if}}
-          </div>
+          {{#if action.description}}
+            <div class="roll-helper__entry-description">{{action.description}}</div>
+          {{/if}}
+          {{#if action.forms.length}}
+            <div class="action-card__forms" role="group">
+              {{#each action.forms as |form|}}
+                <button
+                  type="button"
+                  class="action-card__form {{form.reserve}} is-interactive {{#if form.active}}is-selected{{/if}}"
+                  title="{{form.description}}"
+                  data-action="toggleForm"
+                  data-form-key="{{form.id}}"
+                >
+                  {{#if form.image}}
+                    <img class="action-card__form-icon" src="{{form.image}}" alt="" />
+                  {{/if}}
+                  <span class="action-card__form-label">{{form.label}}</span>
+                  {{#if form.cost}}
+                    <span class="action-card__form-cost">{{numberFormat form.cost decimals=0}}</span>
+                  {{/if}}
+                </button>
+              {{/each}}
+            </div>
+          {{/if}}
         </article>
       {{/each}}
     </div>
