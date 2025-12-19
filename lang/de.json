@@ -18,7 +18,8 @@
         "Roll": "Würfeln",
         "FormsLabel": "Verfügbare Formen",
         "TotalBonus": "Gesamtbonus",
-        "Difficulty": "Schwierigkeit"
+        "Difficulty": "Schwierigkeit",
+        "NoActionSelected": "Keine Aktion ausgewählt"
       },
       "Type": {
         "Character": "Spielercharakter",

@@ -18,7 +18,8 @@
         "Roll": "Roll",
         "FormsLabel": "Available forms",
         "TotalBonus": "Total bonus",
-        "Difficulty": "Difficulty"
+        "Difficulty": "Difficulty",
+        "NoActionSelected": "No action selected"
       },
       "Type": {
         "Character": "Player Character",

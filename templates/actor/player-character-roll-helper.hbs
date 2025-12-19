@@ -1,14 +1,15 @@
 <section class="roll-helper">
-  {{#if rollHelper}}
-    <div class="roll-helper__bar">
-      <div class="roll-helper__selection-row">
-        <button
-          type="button"
-          class="roll-helper__entry roll-helper__action is-interactive is-selected {{rollHelper.action.reserve}}"
-          data-action="selectAction"
-          data-action-key="{{rollHelper.action.id}}"
-          data-reserve="{{rollHelper.action.reserve}}"
-        >
+  <div class="roll-helper__bar">
+    <div class="roll-helper__selection-row">
+      <button
+        type="button"
+        class="roll-helper__entry roll-helper__action is-interactive {{#if rollHelper.hasSelection}}is-selected{{/if}} {{rollHelper.action.reserve}}"
+        data-action="selectAction"
+        data-action-key="{{rollHelper.action.id}}"
+        data-reserve="{{rollHelper.action.reserve}}"
+        {{#unless rollHelper.hasSelection}}disabled{{/unless}}
+      >
+        {{#if rollHelper.hasSelection}}
           {{#if rollHelper.action.icon}}
             <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{rollHelper.action.icon}}" aria-hidden="true"></i>
           {{else if rollHelper.action.image}}
@@ -28,19 +29,21 @@
           <div class="roll-helper__entry-skill">{{rollHelper.action.skillLabel}}</div>
           <div class="roll-helper__entry-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
 
-          {{#if rollHelperSummary.reserveCosts.length}}
+          {{#if rollHelper.cost}}
             <div class="roll-helper__entry-cost">
-              {{#each rollHelperSummary.reserveCosts as |reserve|}}
-                <span class="{{reserve.id}}">{{reserve.label}} {{numberFormat reserve.total decimals=0}}</span>
-              {{/each}}
+              {{numberFormat rollHelper.cost decimals=0}}
             </div>
           {{/if}}
 
           {{#if rollHelper.action.description}}
             <div class="roll-helper__entry-description">{{rollHelper.action.description}}</div>
           {{/if}}
-        </button>
+        {{else}}
+          <div class="roll-helper__entry-label">{{localize "TRISKEL.Actor.RollHelper.NoActionSelected"}}</div>
+        {{/if}}
+      </button>
 
+      {{#if rollHelper.hasSelection}}
         {{#if rollHelper.forms.length}}
           {{#each rollHelper.forms as |form|}}
             <button
@@ -95,38 +98,38 @@
             {{/each}}
           </div>
         {{/if}}
-      </div>
-
-      {{#if rollHelperSummary}}
-        <div class="roll-helper__summary-row">
-          <div class="roll-helper__summary-entry">
-            <div class="roll-helper__summary-label">{{localize "TRISKEL.Actor.RollHelper.TotalBonus"}}</div>
-            <div class="roll-helper__summary-value">{{numberFormat rollHelperSummary.totalSkillBonus decimals=0 sign=true}}</div>
-            {{#if rollHelper.action.skill}}
-              <button
-                type="button"
-                class="roll-helper__summary-roll is-interactive"
-                data-action="rollHelper"
-                {{#unless rollHelperSummary.canAfford}}disabled{{/unless}}
-              >
-                <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
-                <span>{{localize "TRISKEL.Actor.RollHelper.Roll"}}</span>
-              </button>
-            {{/if}}
-          </div>
-
-          {{#if rollHelperSummary.reserveCosts.length}}
-            <div class="roll-helper__summary-reserves">
-              {{#each rollHelperSummary.reserveCosts as |reserve|}}
-                <div class="roll-helper__summary-entry {{reserve.id}}">
-                  <div class="roll-helper__summary-label">{{reserve.label}}</div>
-                  <div class="roll-helper__summary-value">{{numberFormat reserve.total decimals=0}}</div>
-                </div>
-              {{/each}}
-            </div>
-          {{/if}}
-        </div>
       {{/if}}
     </div>
-  {{/if}}
+
+    {{#if rollHelperSummary}}
+      <div class="roll-helper__summary-row">
+        <div class="roll-helper__summary-entry">
+          <div class="roll-helper__summary-label">{{localize "TRISKEL.Actor.RollHelper.TotalBonus"}}</div>
+          <div class="roll-helper__summary-value">{{numberFormat rollHelperSummary.totalSkillBonus decimals=0 sign=true}}</div>
+          {{#if rollHelper.action.skill}}
+            <button
+              type="button"
+              class="roll-helper__summary-roll is-interactive"
+              data-action="rollHelper"
+              {{#unless rollHelperSummary.canAfford}}disabled{{/unless}}
+            >
+              <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
+              <span>{{localize "TRISKEL.Actor.RollHelper.Roll"}}</span>
+            </button>
+          {{/if}}
+        </div>
+
+        {{#if rollHelperSummary.reserveCosts.length}}
+          <div class="roll-helper__summary-reserves">
+            {{#each rollHelperSummary.reserveCosts as |reserve|}}
+              <div class="roll-helper__summary-entry {{reserve.id}}">
+                <div class="roll-helper__summary-label">{{reserve.label}}</div>
+                <div class="roll-helper__summary-value">{{numberFormat reserve.total decimals=0}}</div>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
 </section>
