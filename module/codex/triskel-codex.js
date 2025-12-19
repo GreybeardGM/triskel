@@ -39,26 +39,22 @@ export const TRISKEL_ITEM_CATEGORIES = [
   {
     id: "held",
     label: "TRISKEL.Item.Type.Held",
-    labelPlural: "TRISKEL.Item.Category.Held",
-    toggleAction: "toggleHeldItem"
+    labelPlural: "TRISKEL.Item.Category.Held"
   },
   {
     id: "worn",
     label: "TRISKEL.Item.Type.Worn",
-    labelPlural: "TRISKEL.Item.Category.Worn",
-    toggleAction: "toggleWornEquip"
+    labelPlural: "TRISKEL.Item.Category.Worn"
   },
   {
     id: "ability",
     label: "TRISKEL.Item.Type.Ability",
-    labelPlural: "TRISKEL.Item.Category.Ability",
-    toggleAction: "toggleAbility"
+    labelPlural: "TRISKEL.Item.Category.Ability"
   },
   {
     id: "spell",
     label: "TRISKEL.Item.Type.Spell",
-    labelPlural: "TRISKEL.Item.Category.Spell",
-    toggleAction: "toggleSpell"
+    labelPlural: "TRISKEL.Item.Category.Spell"
   }
 ];
 

@@ -20,7 +20,17 @@ export function normalizeIdList(entries = []) {
 }
 
 export function normalizeKeywords(keywords = []) {
-  return (Array.isArray(keywords) ? keywords : [])
+  if (typeof keywords === "string") {
+    keywords = [keywords];
+  } else if (!Array.isArray(keywords)) {
+    keywords = [];
+  }
+
+  return keywords
     .map(keyword => `${keyword}`.trim().toLowerCase())
     .filter(Boolean);
+}
+
+export function normalizeKeyword(keyword = null) {
+  return normalizeKeywords(keyword)[0] ?? null;
 }

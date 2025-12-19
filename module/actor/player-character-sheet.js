@@ -1,8 +1,6 @@
 import {
   onEditImage,
-  onUpdateResourceValue,
-  prepareBars,
-  prepareSkillsDisplay
+  onUpdateResourceValue
 } from "./sheet-helpers.js";
 import { normalizeIdList, toFiniteNumber } from "../util/normalization.js";
 
@@ -31,10 +29,14 @@ function createActionTypeFilter({ actionTypes = [], selected = "all" } = {}) {
 }
 
 function filterActionsByType(actions = [], type = "all") {
-  const entries = Array.isArray(actions) ? actions : [];
-  if (type === "all") return entries;
+  if (Array.isArray(actions)) {
+    if (type === "all") return actions;
+    return actions.filter(action => (action?.type ?? "") === type);
+  }
 
-  return entries.filter(action => (action?.type ?? "") === type);
+  const buckets = actions ?? {};
+  if (type === "all") return buckets.all ?? [];
+  return buckets[type] ?? [];
 }
 
 function buildRollHelperSummary({ action = null, forms = [], reserves = {}, reserveIndex = {}, commit = null } = {}) {
@@ -56,31 +58,21 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, rese
       ?? reserveId;
   };
 
-  const totalSkillBonus = toFiniteNumber(action.skillTotal)
-    + activeForms.reduce((total, form) => total + toFiniteNumber(form.skillBonus), 0)
-    + commitValue;
+  const totalSkillBonus = toFiniteNumber(
+    action.roll?.totalBonus,
+    toFiniteNumber(action.skillTotal)
+      + activeForms.reduce((total, form) => total + toFiniteNumber(form.skillBonus), 0)
+      + commitValue
+  );
 
-  const reserveCosts = new Map();
+  const reserveCosts = Object.entries(action.cost ?? {}).reduce((collection, [reserveId, value]) => {
+    const cost = toFiniteNumber(value, Number.NaN);
+    if (!Number.isFinite(cost) || cost === 0) return collection;
 
-  const addReserveCost = entry => {
-    const reserveId = `${entry?.reserve ?? ""}`.trim();
-    const cost = toFiniteNumber(entry?.cost, Number.NaN);
-
-    if (!reserveId || !Number.isFinite(cost)) return;
-
-    const reserveLabel = entry?.reserveLabel ?? resolveReserveLabel(reserveId);
-    const existing = reserveCosts.get(reserveId) ?? { label: reserveLabel, total: 0 };
-
-    reserveCosts.set(reserveId, { label: existing.label ?? reserveLabel, total: existing.total + cost });
-  };
-
-  addReserveCost(action);
-  activeForms.forEach(addReserveCost);
-
-  if (hasActionReserve && commitValue) {
-    const actionReserveLabel = resolveReserveLabel(actionReserveId);
-    addReserveCost({ reserve: actionReserveId, reserveLabel: actionReserveLabel, cost: commitValue });
-  }
+    const reserveLabel = resolveReserveLabel(reserveId);
+    collection.push({ id: reserveId, label: reserveLabel, total: cost });
+    return collection;
+  }, []);
 
   const reserveAvailability = new Map(
     Object.entries(reserveValues).map(([reserveId, reserve]) => {
@@ -95,29 +87,29 @@ function buildRollHelperSummary({ action = null, forms = [], reserves = {}, rese
     })
   );
 
-  const normalizedCosts = Array.from(reserveCosts, ([id, cost]) => ({ id, ...cost }));
-  const exceedsReserves = normalizedCosts.some(({ id, total }) => {
+  const exceedsReserves = reserveCosts.some(({ id, total }) => {
     const available = reserveAvailability.has(id) ? reserveAvailability.get(id) : 0;
     return Number.isFinite(available) ? total > available : false;
   });
 
   return {
     totalSkillBonus,
-    reserveCosts: normalizedCosts,
+    reserveCosts,
     canAfford: !exceedsReserves
   };
 }
 
-async function toggleEquippedItem(event, target, expectedType) {
+async function toggleActiveItem(event, target, expectedType) {
   event.preventDefault();
 
   const item = getItemFromTarget(this, target);
-  if (!item || item.type !== expectedType) return;
+  const itemType = expectedType ?? target?.dataset?.itemType ?? target.closest("[data-item-type]")?.dataset.itemType;
+  if (!item || item.type !== itemType) return;
 
-  const equipped = getEquippedList(expectedType, this.document?.system?.equippedGear);
+  const equipped = getEquippedList(itemType, this.document?.system?.equippedGear);
   const updatedEquipped = toggleIdInList(equipped, item.id);
 
-  await this.document?.update({ [`system.equippedGear.${expectedType}`]: updatedEquipped });
+  await this.document?.update({ [`system.equippedGear.${itemType}`]: updatedEquipped });
 }
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -136,10 +128,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       toggleForm: onToggleForm,
       rollHelper: onRollHelper,
       filterActionType: onFilterActionType,
-      toggleWornEquip: onToggleWornEquip,
-      toggleSpell: onToggleSpell,
-      toggleHeldItem: onToggleHeldItem,
-      toggleAbility: onToggleAbility
+      toggleActiveItem: onToggleActiveItem
     },
     actor: {
       type: 'character'
@@ -194,22 +183,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: "rollHelper",
       template: "systems/triskel/templates/actor/player-character-roll-helper.hbs"
     },
-    info: {
-      id: "info",
-      template: "systems/triskel/templates/actor/player-character-info.hbs"
-    },
-    reserves: {
-      id: "reserves",
-      template: "systems/triskel/templates/actor/reserves.hbs"
-    },
-    paths: {
-      id: "paths",
-      template: "systems/triskel/templates/actor/paths.hbs"
-    },
-    tabs: {
-      id: "tabs",
-      template: "systems/triskel/templates/actor/player-character-tabs.hbs",
-      sort: 50
+    core: {
+      id: "core",
+      template: "systems/triskel/templates/actor/player-character-core.hbs"
     },
     actions: {
       id: "actions",
@@ -241,22 +217,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const codex = getTriskellCodex();
     const index = getTriskellIndex();
-
-    // Prepare Sills
-    const { skillCategories } = prepareSkillsDisplay(
-      context.system.skills,
-      context.system.resistances
-    );
-
-    // Prepare Reserves
-    const reserves = prepareBars(context.system.reserves, index.reserves);
-
-    // Prepare Commit bar (hidden for now)
-    const commit = prepareBars({ commit: context.system.actions?.commit }, index.actions)
-      .commit ?? { id: "commit", _segments: [] };
-
-    // Prepare Paths
-    const paths = prepareBars(context.system.paths, index.paths);
+    const reserves = context.system?.reserves ?? {};
+    const commit = context.system?.actions?.commit ?? { id: "commit", _segments: [] };
+    const paths = context.system?.paths ?? {};
+    const skillCategories = context.system?.skillCategories ?? [];
+    const actions = context.system?.actions ?? {};
 
     context.reserves = reserves;
     context.commit = commit;
@@ -274,22 +239,29 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       ])
     );
 
+    const itemsByType = itemCategories.reduce((collection, category) => {
+      collection[category.id] = [];
+      return collection;
+    }, {});
+
     const items = Array.from(this.document.items ?? []).map(item => {
-      const categoryConfig = itemCategoriesById[item.type];
-      const equippedList = categoryConfig ? equippedLists[item.type] ?? [] : [];
-      const isEquipToggleActive = categoryConfig ? equippedList.includes(item.id) : false;
-      return {
+      const equippedList = equippedLists[item.type] ?? [];
+      const isActive = equippedList.includes(item.id);
+      const entry = {
         id: item.id,
         name: item.name,
         img: item.img,
         type: item.type,
-        categoryType: categoryConfig ? item.type : undefined,
-        isEquipToggleActive,
-        toggleAction: categoryConfig?.toggleAction
+        isActive
       };
+
+      if (itemsByType[item.type]) itemsByType[item.type].push(entry);
+
+      return entry;
     });
 
     items.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
+    Object.values(itemsByType).forEach(itemList => itemList.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" })));
 
     context.items = items;
 
@@ -297,34 +269,34 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       type: category.id,
       itemLabel: category.label,
       label: category.labelPlural,
-      toggleAction: category.toggleAction,
-      items: items.filter(item => item.categoryType === category.id)
+      items: itemsByType[category.id] ?? []
     }));
 
-    const tierValue = toFiniteNumber(context.system.tier?.value, Number.NaN);
-    const tierLabel = codex.tiers?.find(tier => tier.tier === tierValue)?.label;
-    context.tierLabel = tierLabel ?? "";
+    context.tierLabel = context.system?.tier?.label ?? "";
 
     const actionTypeFilter = createActionTypeFilter({
-      actionTypes: codex.actionTypes,
+      actionTypes: actions.actionTypes ?? codex.actionTypes,
       selected: actionFilterSelection
     });
 
     context.actionFilter = {
       ...actionTypeFilter,
-      actions: filterActionsByType(context.system.actions?.actions, actionFilterSelection),
-      spells: filterActionsByType(context.system.actions?.spells, actionFilterSelection)
+      actions: filterActionsByType(actions.actionsByType ?? context.system.actions?.actions, actionFilterSelection),
+      spells: filterActionsByType(actions.spellsByType ?? context.system.actions?.spells, actionFilterSelection)
     };
 
-    const selectedActionId = context.system.actions?.selected ?? null;
-    const availableActions = Array.isArray(context.system.actions?.actions)
-      ? context.system.actions.actions
-      : [];
-    const availableSpells = Array.isArray(context.system.actions?.spells)
-      ? context.system.actions.spells
-      : [];
-    const selectedAction = [...availableActions, ...availableSpells]
-      .find(action => action.id === selectedActionId);
+    const selectedActionId = context.system.actions?.selected?.ref ?? null;
+    const selectedAction = context.system.actions?.selected
+      ?? (() => {
+        const availableActions = Array.isArray(context.system.actions?.actions)
+          ? context.system.actions.actions
+          : [];
+        const availableSpells = Array.isArray(context.system.actions?.spells)
+          ? context.system.actions.spells
+          : [];
+        return [...availableActions, ...availableSpells]
+          .find(action => action.id === selectedActionId);
+      })();
 
     const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
     context.rollHelper = selectedAction
@@ -393,10 +365,10 @@ async function onSelectAction(event, target) {
   const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
   if (!actionKey) return;
 
-  const currentlySelected = this.document?.system?.actions?.selected ?? null;
+  const currentlySelected = this.document?.system?.actions?.selected?.ref ?? null;
   const nextSelection = currentlySelected === actionKey ? null : actionKey;
 
-  await this.document?.update({ "system.actions.selected": nextSelection });
+  await this.document?.update({ "system.actions.selected.ref": nextSelection });
 }
 
 async function onFilterActionType(event, target) {
@@ -447,18 +419,6 @@ function toggleIdInList(list, id) {
   return normalized;
 }
 
-async function onToggleWornEquip(event, target) {
-  await toggleEquippedItem.call(this, event, target, "worn");
-}
-
-async function onToggleSpell(event, target) {
-  await toggleEquippedItem.call(this, event, target, "spell");
-}
-
-async function onToggleHeldItem(event, target) {
-  await toggleEquippedItem.call(this, event, target, "held");
-}
-
-async function onToggleAbility(event, target) {
-  await toggleEquippedItem.call(this, event, target, "ability");
+async function onToggleActiveItem(event, target) {
+  await toggleActiveItem.call(this, event, target);
 }
