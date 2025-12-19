@@ -55,5 +55,5 @@
 
 .triskel .is-selected {
   border-color: var(--triskel-interactive-highlight);
-  background: color-mix(in srgb, var(--triskel-interactive-highlight) 10%, var(--triskel-interactive-background));
+  box-shadow: 0 0 0 2px var(--triskel-interactive-highlight);
 }
