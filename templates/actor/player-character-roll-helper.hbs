@@ -29,9 +29,9 @@
           <div class="roll-helper__entry-skill">{{rollHelper.action.skillLabel}}</div>
           <div class="roll-helper__entry-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
 
-          {{#if rollHelper.action.cost}}
+          {{#if rollHelper.cost}}
             <div class="roll-helper__entry-cost">
-              {{numberFormat rollHelper.action.cost decimals=0}}
+              {{numberFormat rollHelper.cost decimals=0}}
             </div>
           {{/if}}
 

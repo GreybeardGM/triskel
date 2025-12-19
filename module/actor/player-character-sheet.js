@@ -269,10 +269,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
     const hasSelectedAction = Boolean(selectedAction);
+    const rollHelperCost = hasSelectedAction
+      ? (() => {
+          const numericCost = toFiniteNumber(selectedAction?.cost, Number.NaN);
+          return Number.isFinite(numericCost) ? numericCost : null;
+        })()
+      : null;
     context.rollHelper = {
       action: selectedAction ?? {},
       forms: hasSelectedAction ? selectedActionForms : [],
-      hasSelection: hasSelectedAction
+      hasSelection: hasSelectedAction,
+      cost: rollHelperCost
     };
 
     context.rollHelperSummary = hasSelectedAction
