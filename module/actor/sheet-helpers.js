@@ -95,15 +95,65 @@ export function prepareActorSkillsContext(actor = null) {
 /**
  * Actions für Action Cards vorbereiten (Grundgerüst).
  *
- * @returns {{collections: {types: Array}}}
+ * @param {Actor|null} actor
+ * @returns {object} Actions nach Typen gruppiert.
  */
-export function prepareActorActionsContext() {
-  const actionTypes = getTriskellCodex()?.actionTypes ?? [];
+export function prepareActorActionsContext(actor = null) {
+  const codex = getTriskellCodex();
+  const index = getTriskellIndex();
+
+  const actionTypes = (codex?.actionTypes ?? []).map(type => ({
+    ...type,
+    collection: Array.isArray(type.collection) ? [...type.collection] : []
+  }));
+  const typesById = actionTypes.reduce((collection, type) => {
+    collection[type.id] = type;
+    return collection;
+  }, {});
+
+  const ensureType = (typeId) => {
+    if (!typesById[typeId]) {
+      typesById[typeId] = {
+        id: typeId,
+        label: typeId,
+        collection: []
+      };
+      actionTypes.push(typesById[typeId]);
+    }
+    return typesById[typeId];
+  };
+
+  const addActionToType = (action, { source = null, image = null } = {}) => {
+    if (!action) return;
+    const typeId = action.type ?? "untyped";
+    const bucket = ensureType(typeId);
+    bucket.collection.push({
+      ...action,
+      source,
+      image: image ?? action.image ?? action.img ?? null
+    });
+  };
+
+  // Base Actions immer einhängen.
+  (codex?.baseActions ?? []).forEach(action => addActionToType(action, { image: action.image ?? action.img }));
+
+  // Advanced Actions aus den ActionRefs holen.
+  const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
+  const advancedActionsById = index.advancedActions ?? {};
+  actionRefs.forEach(ref => addActionToType(advancedActionsById[ref.id], { source: ref.itemId ?? null, image: ref.image ?? null }));
+
+  const collator = new Intl.Collator(undefined, { sensitivity: "base" });
+  actionTypes.sort((a, b) => {
+    const sortA = toFiniteNumber(a.sort);
+    const sortB = toFiniteNumber(b.sort);
+    if (sortA !== sortB) return sortA - sortB;
+    return collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? "");
+  });
+  actionTypes.forEach(type => type.collection.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? "")));
 
   return {
-    collections: {
-      types: actionTypes
-    }
+    ...typesById,
+    types: actionTypes
   };
 }
 
