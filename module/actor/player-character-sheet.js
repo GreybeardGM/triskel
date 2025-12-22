@@ -1,103 +1,12 @@
 import {
   onEditImage,
-  onUpdateResourceValue
+  onUpdateResourceValue,
+  prepareActorItemsContext,
+  prepareActorSkillsContext,
+  prepareActorActionsContext
 } from "./sheet-helpers.js";
-import { toFiniteNumber } from "../util/normalization.js";
-
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
-
-const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
-const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
-
-function createActionTypeFilter({ actionTypes = [], selected = "all" } = {}) {
-  const options = [
-    { id: "all", label: "TRISKEL.Action.Filter.All" },
-    ...(Array.isArray(actionTypes) ? actionTypes : [])
-  ];
-
-  const optionIds = new Set(options.map(option => option.id));
-  const normalizedSelected = optionIds.has(selected) ? selected : "all";
-
-  return {
-    selected: normalizedSelected,
-    options: options.map(option => ({
-      ...option,
-      isActive: option.id === normalizedSelected
-    }))
-  };
-}
-
-function filterActionsByType(actions = [], type = "all") {
-  if (Array.isArray(actions)) {
-    if (type === "all") return actions;
-    return actions.filter(action => (action?.type ?? "") === type);
-  }
-
-  const buckets = actions ?? {};
-  if (type === "all") return buckets.all ?? [];
-  return buckets[type] ?? [];
-}
-
-function buildRollHelperSummary({ action = null, forms = [], reserves = {}, reserveIndex = {}, commit = null } = {}) {
-  if (!action) return null;
-
-  const reserveLookup = reserveIndex ?? {};
-  const reserveValues = reserves ?? {};
-
-  const activeForms = Array.isArray(forms) ? forms.filter(form => form?.active) : [];
-  const actionReserveId = `${action?.reserve ?? ""}`.trim();
-  const hasActionReserve = Boolean(actionReserveId);
-  const commitValue = hasActionReserve ? toFiniteNumber(commit?.value ?? commit ?? 0) : 0;
-  const resolveReserveLabel = (reserveId) => {
-    if (!reserveId) return reserveId;
-    if (reserveId === actionReserveId && action?.reserveLabel) return action.reserveLabel;
-
-    return reserveLookup?.[reserveId]?.label
-      ?? reserveValues?.[reserveId]?.label
-      ?? reserveId;
-  };
-
-  const totalSkillBonus = toFiniteNumber(
-    action.roll?.totalBonus,
-    toFiniteNumber(action.skillTotal)
-      + activeForms.reduce((total, form) => total + toFiniteNumber(form.skillBonus), 0)
-      + commitValue
-  );
-
-  const reserveCosts = Object.entries(action.cost ?? {}).reduce((collection, [reserveId, value]) => {
-    const cost = toFiniteNumber(value, Number.NaN);
-    if (!Number.isFinite(cost) || cost === 0) return collection;
-
-    const reserveLabel = resolveReserveLabel(reserveId);
-    collection.push({ id: reserveId, label: reserveLabel, total: cost });
-    return collection;
-  }, []);
-
-  const reserveAvailability = new Map(
-    Object.entries(reserveValues).map(([reserveId, reserve]) => {
-      const available = toFiniteNumber(reserve?.value, 0);
-      const minimum = toFiniteNumber(reserve?.min);
-
-      const usableValue = Number.isFinite(available)
-        ? Math.max(available - Math.max(minimum, 0), 0)
-        : Number.NaN;
-
-      return [reserveId, usableValue];
-    })
-  );
-
-  const exceedsReserves = reserveCosts.some(({ id, total }) => {
-    const available = reserveAvailability.has(id) ? reserveAvailability.get(id) : 0;
-    return Number.isFinite(available) ? total > available : false;
-  });
-
-  return {
-    totalSkillBonus,
-    reserveCosts,
-    canAfford: !exceedsReserves
-  };
-}
 
 async function toggleActiveItem(event, target, expectedType) {
   event.preventDefault();
@@ -111,6 +20,27 @@ async function toggleActiveItem(event, target, expectedType) {
 }
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+
+    // Tier-Label aus Codex/Index ermitteln.
+    const tierValue = this.document?.system?.tier?.value;
+    const tierLabel = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+      ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+      ?? null;
+    if (context.system) {
+      context.system.tier ??= {};
+      context.system.tier.label = tierLabel;
+    }
+
+    const { skillCategories } = prepareActorSkillsContext(this.document);
+    context.skillCategories = skillCategories;
+    context.assets = prepareActorItemsContext(this.document);
+    context.actions = prepareActorActionsContext();
+
+    return context;
+  }
+
   static DEFAULT_OPTIONS = {
     classes: ["triskel", "sheet", "actor", "character"],
     template: "systems/triskel/templates/actor/player-character-sheet.hbs",
@@ -206,81 +136,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       sort: 250
     }
   };
-
-  async _prepareContext(options) {
-    const context = await super._prepareContext(options);
-
-    context.actor ??= this.document;
-    context.system ??= this.document.system;
-
-    const codex = getTriskellCodex();
-    const index = getTriskellIndex();
-    const reserves = context.system?.reserves ?? {};
-    const commit = context.system?.actions?.commit ?? { id: "commit", _segments: [] };
-    const paths = context.system?.paths ?? {};
-    const skillCategories = context.system?.skillCategories ?? [];
-    const actions = context.system?.actions ?? {};
-
-    context.reserves = reserves;
-    context.commit = commit;
-    context.paths = paths;
-    context.skillCategories = skillCategories;
-    const actionFilterSelection = this._actionTypeFilter ?? "all";
-    const assets = context.system?.assets ?? {};
-    const itemCategories = codex.itemCategories ?? [];
-
-    context.inventoryCategories = itemCategories.map(category => ({
-      type: category.id,
-      label: category.labelPlural ?? category.label ?? category.id,
-      items: assets?.[category.id] ?? []
-    }));
-
-    context.tierLabel = context.system?.tier?.label ?? "";
-
-    const actionTypeFilter = createActionTypeFilter({
-      actionTypes: codex.actionTypes,
-      selected: actionFilterSelection
-    });
-
-    context.actionFilter = {
-      ...actionTypeFilter,
-      actions: filterActionsByType(actions.actionsByType, actionFilterSelection),
-      spells: filterActionsByType(actions.spellsByType, actionFilterSelection)
-    };
-
-    const selectedAction = context.system.actions?.selected?.action ?? null;
-
-    const selectedActionForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
-    const hasSelectedAction = Boolean(selectedAction);
-    const rollHelperCost = hasSelectedAction ? selectedAction?.cost ?? null : null;
-    context.rollHelper = {
-      action: selectedAction ?? {},
-      forms: hasSelectedAction ? selectedActionForms : [],
-      hasSelection: hasSelectedAction,
-      cost: rollHelperCost
-    };
-
-    context.rollHelperSummary = hasSelectedAction
-      ? buildRollHelperSummary({
-          action: selectedAction,
-          forms: selectedActionForms,
-          reserves,
-          reserveIndex: index.reserves,
-          commit
-        })
-      : null;
-
-    // Notes vorbereiten (aus der letzten Runde, falls noch nicht drin)
-    context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-      this.document.system.details?.notes ?? "",
-      {
-        secrets: this.document.isOwner,
-        relativeTo: this.document
-      }
-    );
-  
-    return context;
-  }
 
 }
 

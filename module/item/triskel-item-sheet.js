@@ -1,19 +1,9 @@
 import { onEditImage } from "../actor/sheet-helpers.js";
 
-const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
-
-const ACTION_REFERENCE_OPTIONS = () => (getTriskellCodex().actions ?? [])
-  .map(action => ({ value: action.id, label: action.label ?? action.id }));
-
-const FORM_REFERENCE_OPTIONS = () => (getTriskellCodex().forms ?? [])
-  .map(form => ({ value: form.id, label: form.label ?? form.id }));
-
-const MODIFIER_SKILL_OPTIONS = () => (getTriskellCodex().skills ?? [])
-  .map(skill => ({ value: skill.id, label: skill.label ?? skill.id }));
 
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static DEFAULT_OPTIONS = {
@@ -54,32 +44,6 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       template: "systems/triskel/templates/item/triskel-item-modifiers.hbs"
     }
   };
-
-  async _prepareContext(options) {
-    const context = await super._prepareContext(options);
-
-    context.item ??= this.document;
-    context.system ??= this.document.system ?? {};
-
-    const itemTypeKey = context.item?.type ?? "";
-    const itemCategories = getTriskellIndex().itemCategories ?? {};
-    const labelKey = itemCategories[itemTypeKey]?.label ?? `TRISKEL.Item.Type.${itemTypeKey}`;
-
-    context.itemTypeLabel = labelKey || itemTypeKey;
-
-    context.referenceOptions = {
-      actions: ACTION_REFERENCE_OPTIONS(),
-      forms: FORM_REFERENCE_OPTIONS()
-    };
-    context.references = {
-      actions: this.constructor.prepareReferenceEntries(context.system.actions?.ref, getTriskellCodex().actions),
-      forms: this.constructor.prepareReferenceEntries(context.system.forms?.ref, getTriskellCodex().forms)
-    };
-    context.modifiers = this.constructor.prepareModifiers(context.system.modifiers);
-    context.modifierOptions = MODIFIER_SKILL_OPTIONS();
-
-    return context;
-  }
 
   static prepareReferenceEntries(entries = [], collection = []) {
     if (!Array.isArray(entries)) return [];
