@@ -133,21 +133,40 @@ export function prepareActorActionsContext(actor = null) {
   };
 
   // Base Actions immer einhängen.
-  (codex?.baseActions ?? []).forEach(action => addActionToType(action, { image: action.image ?? action.img }));
+  const baseActions = codex?.baseActions ?? [];
+  for (let i = 0; i < baseActions.length; i += 1) {
+    const action = baseActions[i];
+    addActionToType(action, { image: action?.image ?? action?.img ?? null });
+  }
 
   // Advanced Actions aus den ActionRefs holen.
   const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
-  const advancedActionsById = index.advancedActions ?? {};
-  actionRefs.forEach(ref => addActionToType(advancedActionsById[ref.id], { source: ref.itemId ?? null, image: ref.image ?? null }));
+  if (actionRefs.length) {
+    const advancedActionsById = index.advancedActions ?? {};
+    for (let i = 0; i < actionRefs.length; i += 1) {
+      const ref = actionRefs[i];
+      if (!ref?.id) continue;
+      const advancedAction = advancedActionsById[ref.id];
+      if (!advancedAction) continue;
+      addActionToType(advancedAction, { source: ref.itemId ?? null, image: ref.image ?? null });
+    }
+  }
 
   const collator = new Intl.Collator(undefined, { sensitivity: "base" });
-  actionTypes.sort((a, b) => {
-    const sortA = toFiniteNumber(a.sort);
-    const sortB = toFiniteNumber(b.sort);
-    if (sortA !== sortB) return sortA - sortB;
-    return collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? "");
-  });
-  actionTypes.forEach(type => type.collection.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? "")));
+  if (actionTypes.length > 1) {
+    actionTypes.sort((a, b) => {
+      const sortA = toFiniteNumber(a.sort);
+      const sortB = toFiniteNumber(b.sort);
+      if (sortA !== sortB) return sortA - sortB;
+      return collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? "");
+    });
+  }
+  for (let i = 0; i < actionTypes.length; i += 1) {
+    const type = actionTypes[i];
+    if (type.collection.length > 1) {
+      type.collection.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+    }
+  }
 
   return {
     ...typesById,
