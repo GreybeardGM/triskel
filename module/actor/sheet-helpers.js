@@ -1,7 +1,7 @@
 import { toFiniteNumber, toFiniteNumbers } from "../util/normalization.js";
 
-const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
-const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
+export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
+export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 const ACTIONS_CACHE = new WeakMap();
 
 export async function onEditImage(event, target) {

@@ -354,7 +354,6 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   spells: TRISKEL_SPELLS,
   actions: TRISKEL_ALL_ACTIONS,
   forms: TRISKEL_FORMS,
-  resistances: TRISKEL_RESISTANCES,
   reserves: TRISKEL_RESERVES,
   npcStats: TRISKEL_NPC_STATS,
   paths: TRISKEL_PATHS
@@ -367,7 +366,6 @@ export const TRISKEL_SKILLS_BY_ID = TRISKEL_CODEX_INDEX.skills;
 export const TRISKEL_ACTION_TYPES_BY_ID = TRISKEL_CODEX_INDEX.actionTypes;
 export const TRISKEL_ACTIONS_BY_ID = TRISKEL_CODEX_INDEX.actions;
 export const TRISKEL_FORMS_BY_ID = TRISKEL_CODEX_INDEX.forms;
-export const TRISKEL_RESISTANCES_BY_ID = TRISKEL_CODEX_INDEX.resistances;
 export const TRISKEL_RESERVES_BY_ID = TRISKEL_CODEX_INDEX.reserves;
 export const TRISKEL_NPC_STATS_BY_ID = TRISKEL_CODEX_INDEX.npcStats;
 export const TRISKEL_PATHS_BY_ID = TRISKEL_CODEX_INDEX.paths;
