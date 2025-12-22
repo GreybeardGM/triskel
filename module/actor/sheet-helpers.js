@@ -103,6 +103,13 @@ export function prepareActorActionsContext(actor = null) {
   const codex = getTriskellCodex();
   const index = getTriskellIndex();
 
+  const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
+  const cacheKey = actionRefs
+    .map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`)
+    .join("|");
+  const cached = ACTIONS_CACHE.get(actor);
+  if (cached && cached.key === cacheKey) return cached.value;
+
   const typesById = {};
   const actionTypes = Array.isArray(codex?.actionTypes)
     ? codex.actionTypes.map(type => {
@@ -141,11 +148,6 @@ export function prepareActorActionsContext(actor = null) {
   }
 
   // Advanced Actions aus den ActionRefs holen.
-  const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
-  const cacheKey = actionRefs.map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`).join("|");
-  const cached = ACTIONS_CACHE.get(actor);
-  if (cached && cached.key === cacheKey) return cached.value;
-
   if (actionRefs.length) {
     const advancedActionsById = index.advancedActions ?? {};
     for (let i = 0; i < actionRefs.length; i += 1) {
