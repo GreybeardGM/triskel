@@ -92,15 +92,6 @@ export class TriskelActor extends Actor {
     if (commit && Number.isFinite(tierValue)) {
       commit.max = Math.max(0, tierValue);
     }
-    const commitData = commit ?? { id: "commit", min: 0, max: 0, value: 0 };
-
-    // Alle Bars mit Segmenten vorbereiten (globales Maximum je Gruppe).
-    this.system.reserves = prepareBars(reserves, triskellIndex.reserves);
-    this.system.paths = prepareBars(paths, triskellIndex.paths);
-    this.system.actions = {
-      ...this.system.actions,
-      commit: prepareBars({ commit: commitData }, triskellIndex.actions)?.commit ?? commitData
-    };
   }
 
   /**
@@ -238,15 +229,12 @@ export class TriskelActor extends Actor {
 
   /**
    * Platzhalter: NPC-Ressourcen vorbereiten.
-   * Übernimmt aktuell nur den Activations-Wert aus npcStats.wounds.value
-   * und bereitet NPC-Stats wie Reserven auf.
+   * Übernimmt aktuell nur den Activations-Wert aus npcStats.wounds.value.
    */
   _prepareNpcResources() {
     if (this.type !== "npc") return;
 
     const woundsValue = toFiniteNumber(this.system?.npcStats?.wounds?.value);
-    const npcStats = prepareBars(this.system?.npcStats, getTriskellIndex().npcStats);
-    this.system.npcStats = npcStats;
 
     if (Number.isFinite(woundsValue)) {
       this.system.actions = {

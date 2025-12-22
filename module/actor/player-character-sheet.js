@@ -3,7 +3,8 @@ import {
   onUpdateResourceValue,
   prepareActorItemsContext,
   prepareActorSkillsContext,
-  prepareActorActionsContext
+  prepareActorActionsContext,
+  prepareActorBarsContext
 } from "./sheet-helpers.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -37,6 +38,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
     context.actions = prepareActorActionsContext();
+    const { reserves, paths, commit } = prepareActorBarsContext(this.document);
+    if (context.system) {
+      if (reserves) context.system.reserves = reserves;
+      if (paths) context.system.paths = paths;
+      if (commit) context.system.actions = { ...(context.system.actions ?? {}), commit };
+    }
 
     return context;
   }

@@ -107,6 +107,34 @@ export function prepareActorActionsContext() {
   };
 }
 
+/**
+ * Bars (Reserven/Wege/Commit/NPC-Stats) für das Sheet vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {{reserves?: object, paths?: object, commit?: object, npcStats?: object}}
+ */
+export function prepareActorBarsContext(actor = null) {
+  if (!actor?.system) return {};
+
+  const index = getTriskellIndex();
+  const result = {};
+
+  if (actor.type === "character") {
+    const reserves = prepareBars(actor.system.reserves, index.reserves);
+    const paths = prepareBars(actor.system.paths, index.paths);
+    const commitData = actor.system.actions?.commit ?? { id: "commit", min: 0, max: 0, value: 0 };
+    const commit = prepareBars({ commit: commitData }, index.actions)?.commit ?? commitData;
+
+    result.reserves = reserves;
+    result.paths = paths;
+    result.commit = commit;
+  } else if (actor.type === "npc") {
+    result.npcStats = prepareBars(actor.system.npcStats, index.npcStats);
+  }
+
+  return result;
+}
+
 export function prepareBars(bars = {}, codexReference = undefined) {
   if (!bars) return {};
 
