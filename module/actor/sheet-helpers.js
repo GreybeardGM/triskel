@@ -2,6 +2,7 @@ import { toFiniteNumber, toFiniteNumbers } from "../util/normalization.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
+const ACTIONS_CACHE = new WeakMap();
 
 export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
@@ -141,6 +142,10 @@ export function prepareActorActionsContext(actor = null) {
 
   // Advanced Actions aus den ActionRefs holen.
   const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
+  const cacheKey = actionRefs.map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`).join("|");
+  const cached = ACTIONS_CACHE.get(actor);
+  if (cached && cached.key === cacheKey) return cached.value;
+
   if (actionRefs.length) {
     const advancedActionsById = index.advancedActions ?? {};
     for (let i = 0; i < actionRefs.length; i += 1) {
@@ -168,10 +173,14 @@ export function prepareActorActionsContext(actor = null) {
     }
   }
 
-  return {
+  const result = {
     ...typesById,
     types: actionTypes
   };
+
+  if (actor) ACTIONS_CACHE.set(actor, { key: cacheKey, value: result });
+
+  return result;
 }
 
 /**
