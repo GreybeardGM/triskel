@@ -1,4 +1,6 @@
 import {
+  getTriskellCodex,
+  getTriskellIndex,
   onEditImage,
   onUpdateResourceValue,
   prepareActorItemsContext,
