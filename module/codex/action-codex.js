@@ -4,22 +4,30 @@ export const TRISKEL_ACTION_TYPES = [
   {
     id: "position",
     label: "TRISKEL.Action.Type.Position.Label",
-    description: "TRISKEL.Action.Type.Position.Description"
+    description: "TRISKEL.Action.Type.Position.Description",
+    category: "combat_phase",
+    sort: 1
   },
   {
     id: "setup",
     label: "TRISKEL.Action.Type.Setup.Label",
-    description: "TRISKEL.Action.Type.Setup.Description"
+    description: "TRISKEL.Action.Type.Setup.Description",
+    category: "combat_phase",
+    sort: 2
   },
   {
     id: "impact",
     label: "TRISKEL.Action.Type.Impact.Label",
-    description: "TRISKEL.Action.Type.Impact.Description"
+    description: "TRISKEL.Action.Type.Impact.Description",
+    category: "combat_phase",
+    sort: 3
   },
   {
     id: "defense",
     label: "TRISKEL.Action.Type.Defense.Label",
-    description: "TRISKEL.Action.Type.Defense.Description"
+    description: "TRISKEL.Action.Type.Defense.Description",
+    category: "combat_phase",
+    sort: 4
   }
 ];
 
