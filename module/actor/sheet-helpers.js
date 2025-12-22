@@ -102,25 +102,23 @@ export function prepareActorActionsContext(actor = null) {
   const codex = getTriskellCodex();
   const index = getTriskellIndex();
 
-  const actionTypes = (codex?.actionTypes ?? []).map(type => ({
-    ...type,
-    collection: Array.isArray(type.collection) ? [...type.collection] : []
-  }));
-  const typesById = actionTypes.reduce((collection, type) => {
-    collection[type.id] = type;
-    return collection;
-  }, {});
+  const typesById = {};
+  const actionTypes = Array.isArray(codex?.actionTypes)
+    ? codex.actionTypes.map(type => {
+      const entry = { ...type, collection: [] };
+      typesById[type.id] = entry;
+      return entry;
+    })
+    : [];
 
   const ensureType = (typeId) => {
-    if (!typesById[typeId]) {
-      typesById[typeId] = {
-        id: typeId,
-        label: typeId,
-        collection: []
-      };
-      actionTypes.push(typesById[typeId]);
+    const key = typeId || "untyped";
+    if (!typesById[key]) {
+      const entry = { id: key, label: key, collection: [] };
+      typesById[key] = entry;
+      actionTypes.push(entry);
     }
-    return typesById[typeId];
+    return typesById[key];
   };
 
   const addActionToType = (action, { source = null, image = null } = {}) => {
