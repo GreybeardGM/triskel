@@ -58,34 +58,7 @@ export const TRISKEL_ITEM_CATEGORIES = [
   }
 ];
 
-export const TRISKEL_RESISTANCES = [
-  {
-    id: "snap",
-    label: "TRISKEL.Actor.Resistance.Snap.Label",
-    description: "TRISKEL.Actor.Resistance.Snap.Description",
-    phase: "Any"
-  },
-  {
-    id: "grit",
-    label: "TRISKEL.Actor.Resistance.Grit.Label",
-    description: "TRISKEL.Actor.Resistance.Grit.Description",
-    phase: "Any"
-  },
-  {
-    id: "resolve",
-    label: "TRISKEL.Actor.Resistance.Resolve.Label",
-    description: "TRISKEL.Actor.Resistance.Resolve.Description",
-    phase: "Any"
-  }
-];
-
 export const TRISKEL_SKILL_CATEGORIES = [
-  {
-    id: "resistances",
-    label: "TRISKEL.Actor.Resistance.Label",
-    phase: "any",
-    phaseLabel: "TRISKEL.Action.Phase.Any"
-  },
   {
     id: "offense",
     label: "TRISKEL.Actor.Skill.Category.Offense",
@@ -290,13 +263,7 @@ const TRISKEL_BASE_SKILLS = [
   }
 ];
 
-export const TRISKEL_SKILLS = [
-  ...TRISKEL_BASE_SKILLS,
-  ...TRISKEL_RESISTANCES.map(resistance => ({
-    ...resistance,
-    category: "resistances"
-  }))
-];
+export const TRISKEL_SKILLS = TRISKEL_BASE_SKILLS;
 
 export const TRISKEL_RESERVES = [
   {

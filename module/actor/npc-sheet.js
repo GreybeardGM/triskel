@@ -1,9 +1,22 @@
-import { onEditImage, onUpdateResourceValue } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareActorItemsContext, prepareActorSkillsContext, prepareActorActionsContext, prepareActorBarsContext } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+
+    const { skillCategories } = prepareActorSkillsContext(this.document);
+    context.skillCategories = skillCategories;
+    context.assets = prepareActorItemsContext(this.document);
+    context.actions = prepareActorActionsContext();
+    const { npcStats } = prepareActorBarsContext(this.document);
+    if (context.system && npcStats) context.system.npcStats = npcStats;
+
+    return context;
+  }
+
   static DEFAULT_OPTIONS = {
     classes: ["triskel", "sheet", "actor", "npc"],
     form: {
@@ -39,26 +52,5 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       template: "systems/triskel/templates/actor/player-character-notes.hbs"
     }
   };
-
-  async _prepareContext(options) {
-    const context = await super._prepareContext(options);
-
-    context.actor ??= this.document;
-    context.system ??= this.document.system;
-
-    context.npcStats = context.system?.npcStats ?? {};
-    context.skillCategories = context.system?.skillCategories ?? [];
-
-    // Notes Vorbereiten
-    context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-      this.document.system.details?.notes ?? "",
-      {
-        secrets: this.document.isOwner,
-        relativeTo: this.document
-      }
-    );
-
-    return context;
-  }
 
 }

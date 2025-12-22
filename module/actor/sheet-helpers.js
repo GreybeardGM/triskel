@@ -2,6 +2,7 @@ import { toFiniteNumber, toFiniteNumbers } from "../util/normalization.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
+const ACTIONS_CACHE = new WeakMap();
 
 export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
@@ -22,10 +23,14 @@ const deriveMaxSegments = (values, fallback = 5) =>
 const createSegments = (maxSegments, stateResolver) =>
   Array.from({ length: maxSegments }, (_, index) => {
     const value = index + 1;
+    const state = stateResolver(value);
+    const interactive = state === "filled" || state === "empty";
+
     return {
       index: value,
       value,
-      state: stateResolver(value)
+      state,
+      interactive
     };
   });
 
@@ -46,52 +51,218 @@ export async function onUpdateResourceValue(event, target) {
   await this.document.update({ [property]: newValue });
 }
 
+/**
+ * Items für Actor-Sheets vorbereiten und nach Kategorien bündeln.
+ *
+ * @param {Actor|null} actor
+ * @returns {object} assets nach Item-Kategorien
+ */
+export function prepareActorItemsContext(actor = null) {
+  const itemCategories = getTriskellIndex().itemCategories ?? {};
+  const assets = Object.entries(itemCategories).reduce((collection, [id, category]) => {
+    collection[id] = {
+      id,
+      label: category.label ?? id,
+      labelPlural: category.labelPlural ?? category.label ?? id,
+      collection: []
+    };
+    return collection;
+  }, {});
+
+  if (!actor?.items) return assets;
+
+  for (const item of actor.items) {
+    const type = item?.type ?? "";
+    if (!type || !assets[type]) continue;
+
+    assets[type].collection.push(item);
+  }
+
+  return assets;
+}
+
+/**
+ * Skills für Actor-Sheets vorbereiten und nach Kategorien gruppieren.
+ *
+ * @param {Actor|null} actor
+ * @returns {{skillCategories: Array}}
+ */
+export function prepareActorSkillsContext(actor = null) {
+  const skills = actor?.system?.skills ?? {};
+
+  return prepareSkillsDisplay(skills);
+}
+
+/**
+ * Actions für Action Cards vorbereiten (Grundgerüst).
+ *
+ * @param {Actor|null} actor
+ * @returns {object} Actions nach Typen gruppiert.
+ */
+export function prepareActorActionsContext(actor = null) {
+  const codex = getTriskellCodex();
+  const index = getTriskellIndex();
+
+  const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
+  const cacheKey = actionRefs
+    .map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`)
+    .join("|");
+  const cached = ACTIONS_CACHE.get(actor);
+  if (cached && cached.key === cacheKey) return cached.value;
+
+  const typesById = {};
+  const actionTypes = Array.isArray(codex?.actionTypes)
+    ? codex.actionTypes.map(type => {
+      const entry = { ...type, collection: [] };
+      typesById[type.id] = entry;
+      return entry;
+    })
+    : [];
+
+  const ensureType = (typeId) => {
+    const key = typeId || "untyped";
+    if (!typesById[key]) {
+      const entry = { id: key, label: key, collection: [] };
+      typesById[key] = entry;
+      actionTypes.push(entry);
+    }
+    return typesById[key];
+  };
+
+  const addActionToType = (action, { source = null, image = null } = {}) => {
+    if (!action) return;
+    const typeId = action.type ?? "untyped";
+    const bucket = ensureType(typeId);
+    bucket.collection.push({
+      ...action,
+      source,
+      image: image ?? action.image ?? action.img ?? null
+    });
+  };
+
+  // Base Actions immer einhängen.
+  const baseActions = codex?.baseActions ?? [];
+  for (let i = 0; i < baseActions.length; i += 1) {
+    const action = baseActions[i];
+    addActionToType(action, { image: action?.image ?? action?.img ?? null });
+  }
+
+  // Advanced Actions aus den ActionRefs holen.
+  if (actionRefs.length) {
+    const advancedActionsById = index.advancedActions ?? {};
+    for (let i = 0; i < actionRefs.length; i += 1) {
+      const ref = actionRefs[i];
+      if (!ref?.id) continue;
+      const advancedAction = advancedActionsById[ref.id];
+      if (!advancedAction) continue;
+      addActionToType(advancedAction, { source: ref.itemId ?? null, image: ref.image ?? null });
+    }
+  }
+
+  const collator = new Intl.Collator(undefined, { sensitivity: "base" });
+  if (actionTypes.length > 1) {
+    actionTypes.sort((a, b) => {
+      const sortA = toFiniteNumber(a.sort);
+      const sortB = toFiniteNumber(b.sort);
+      if (sortA !== sortB) return sortA - sortB;
+      return collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? "");
+    });
+  }
+  for (let i = 0; i < actionTypes.length; i += 1) {
+    const type = actionTypes[i];
+    if (type.collection.length > 1) {
+      type.collection.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+    }
+  }
+
+  const result = {
+    ...typesById,
+    types: actionTypes
+  };
+
+  if (actor) ACTIONS_CACHE.set(actor, { key: cacheKey, value: result });
+
+  return result;
+}
+
+/**
+ * Bars (Reserven/Wege/Commit/NPC-Stats) für das Sheet vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {{reserves?: object, paths?: object, commit?: object, npcStats?: object}}
+ */
+export function prepareActorBarsContext(actor = null) {
+  if (!actor?.system) return {};
+
+  const index = getTriskellIndex();
+  const result = {};
+
+  if (actor.type === "character") {
+    const reserves = prepareBars(actor.system.reserves, index.reserves);
+    const paths = prepareBars(actor.system.paths, index.paths);
+    const commitData = actor.system.actions?.commit ?? { id: "commit", min: 0, max: 0, value: 0 };
+    const commit = prepareBars({ commit: commitData }, index.actions)?.commit ?? commitData;
+
+    result.reserves = reserves;
+    result.paths = paths;
+    result.commit = commit;
+  } else if (actor.type === "npc") {
+    result.npcStats = prepareBars(actor.system.npcStats, index.npcStats);
+  }
+
+  return result;
+}
+
 export function prepareBars(bars = {}, codexReference = undefined) {
   if (!bars) return {};
 
   const reference = codexReference ?? getTriskellIndex().reserves ?? {};
+  const entries = Object.entries(bars ?? {});
+  const collection = {};
+  // Track the maximum segment count seen while building bars (default to 1).
+  let maxSegments = 1;
 
-  const reserveMax = toFiniteNumbers(Object.values(bars), reserve => reserve?.max);
+  for (const [id, resource] of entries) {
+    if (!resource) continue;
 
-  const MaxSegments = deriveMaxSegments(reserveMax);
-
-  return Object.entries(bars ?? {}).reduce((collection, [id, resource]) => {
-    if (!resource) return collection;
+    const codexEntry = reference[id] ?? {};
+    const max = toFiniteNumber(resource.max, 1);
+    maxSegments = Math.max(maxSegments, max);
 
     const min = toFiniteNumber(resource.min);
     const value = toFiniteNumber(resource.value);
-    const ownMax = toFiniteNumber(resource.max, MaxSegments);
 
-    const _segments = createSegments(MaxSegments, (index) => {
+    const _segments = createSegments(max, (index) => {
       if (index <= min) return "strain";
       if (index <= value) return "filled";
-      if (index <= ownMax) return "empty";
-      return "placeholder";
+      return "empty";
     });
-
-    const codexEntry = reference[id] ?? {};
 
     collection[id] = {
       ...resource,
       id,
       label: codexEntry.label ?? resource.label,
       description: codexEntry.description ?? resource.description,
+      min,
+      value,
+      max,
       _segments
     };
+  }
 
-    return collection;
-  }, {});
+  collection.maxSegments = maxSegments;
+
+  return collection;
 }
 
-export function prepareSkillsDisplay(skills = {}, resistances = {}) {
+export function prepareSkillsDisplay(skills = {}) {
   const normalizedSkills = skills ?? {};
-  const normalizedResistances = resistances ?? {};
 
   const index = getTriskellIndex();
   const codex = getTriskellCodex();
 
   const byCategory = (codex.skills ?? []).reduce((collection, skill) => {
-    const rawSkill = normalizedSkills[skill.id] ?? normalizedResistances[skill.id] ?? {};
+    const rawSkill = normalizedSkills[skill.id] ?? {};
     const category = index.skillCategories?.[skill.category] ?? {};
 
     const value = toFiniteNumber(rawSkill.value);
@@ -136,4 +307,3 @@ export function prepareSkillsDisplay(skills = {}, resistances = {}) {
 
   return { skillCategories };
 }
-
