@@ -352,9 +352,9 @@
 .triskel .skill-grid {
   display: grid;
   grid-template-areas:
-    "resistances resistances resistances resistances"
-    "offense defense social magic"
-    "physical professional intellectual magic";
+    ". resistances resistances ."
+    "offense physical social magic"
+    "defense professional intellectual magic";
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.4rem;
 }
