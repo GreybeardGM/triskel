@@ -32,9 +32,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     // Tier-Label aus Codex/Index ermitteln.
     const tierValue = this.document?.system?.tier?.value;
-    const tierLabel = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+    const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
       ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
       ?? null;
+    const tierLabel = tierLabelKey ? (game.i18n?.localize?.(tierLabelKey) ?? tierLabelKey) : null;
+
+    context.tierLabel = tierLabel;
     if (context.system) {
       context.system.tier ??= {};
       context.system.tier.label = tierLabel;
@@ -43,7 +46,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
-    context.actions = prepareActorActionsContext();
+    context.actions = prepareActorActionsContext(this.document);
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;

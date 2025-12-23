@@ -66,11 +66,19 @@ export class TriskelActor extends Actor {
       if (!reserve) return;
 
       // Strain-Schritte zählen: Ein Schritt ist aktiv, wenn "active" true ist (Fallback: isActive/boolean).
-      reserve.min = this._calculateStrainMinimum(reserve.strain);
+      const strainMinimum = this._calculateStrainMinimum(reserve.strain);
+      reserve.min = strainMinimum;
 
-      if (Number.isFinite(tierValue)) {
-        reserve.value = Math.max(0, tierValue);
+      const resolvedMax = Math.max(strainMinimum, Math.max(0, toFiniteNumber(reserve.max, 5)));
+
+      if (Number.isFinite(resolvedMax)) {
+        reserve.max = resolvedMax;
       }
+
+      const currentValue = toFiniteNumber(reserve.value, strainMinimum);
+      reserve.value = Number.isFinite(resolvedMax)
+        ? Math.min(Math.max(currentValue, strainMinimum), resolvedMax)
+        : Math.max(currentValue, strainMinimum);
     });
 
     // Paths: Wert folgt der aktuellen Spannung, aber maximal bis zum definierten Maximum.
