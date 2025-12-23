@@ -2,7 +2,7 @@
   <h2>{{localize "TRISKEL.Actor.Path.Label"}}</h2>
   <div class="paths-grid">
     {{#each paths as |path|}}
-      {{#if path}}
+      {{#if path.id}}
         <div class="path-bar {{path.id}}" style="grid-area: {{path.id}};">
           <div class="path-label" title="{{path.description}}">{{path.label}}</div>
           <input
