@@ -8,6 +8,7 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    const item = this.document;
 
     const triskellIndex = getTriskellIndex();
 
@@ -31,6 +32,9 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     return {
       ...context,
+      document: context.document ?? item,
+      item: context.item ?? item,
+      system: context.system ?? item?.system ?? {},
       references,
       referenceOptions,
       modifiers,

@@ -6,12 +6,16 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    const actor = this.document;
 
+    context.actor ??= actor;
+    context.system ??= actor?.system ?? {};
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
     context.actions = prepareActorActionsContext();
     const { npcStats } = prepareActorBarsContext(this.document);
+    if (npcStats) context.npcStats = npcStats;
     if (context.system && npcStats) context.system.npcStats = npcStats;
 
     return context;

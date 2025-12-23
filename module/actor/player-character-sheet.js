@@ -25,6 +25,10 @@ async function toggleActiveItem(event, target, expectedType) {
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    const actor = this.document;
+
+    context.actor ??= actor;
+    context.system ??= actor?.system ?? {};
 
     // Tier-Label aus Codex/Index ermitteln.
     const tierValue = this.document?.system?.tier?.value;
