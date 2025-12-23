@@ -1,4 +1,4 @@
-import { toFiniteNumber, toFiniteNumbers } from "../util/normalization.js";
+import { toFiniteNumber } from "../util/normalization.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
