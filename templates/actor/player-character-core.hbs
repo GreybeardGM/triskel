@@ -36,51 +36,53 @@
   <section class="reserves">
     <h2>{{localize "TRISKEL.Actor.Reserve.Label"}}</h2>
     <div class="reserve-grid">
-      {{#each reserves as |reserve key|}}
-        <div class="reserve" style="grid-area: {{key}};">
-          <div class="resource-bar {{key}}">
-            {{#each reserve._segments as |segment|}}
-              <div
-                class="resource-box is-interactive segment-{{segment.state}}"
-                data-action="updateResourceValue"
-                data-resource="reserves.{{key}}"
-                data-resource-value="{{segment.index}}"
-              >
-                {{segment.index}}
-              </div>
-            {{/each}}
-          </div>
-          <div class="resource-input" data-reserve="{{key}}">
-            <div class="resource-max">
-              <label class="resource-name" for="reserve-{{key}}-max" title="{{reserve.description}}">{{reserve.label}}</label>
-              <input
-                id="reserve-{{key}}-max"
-                class="resource-max-input"
-                type="number"
-                data-dtype="Number"
-                name="system.reserves.{{key}}.max"
-                value="{{reserve.max}}"
-              />
+      {{#each system.reserves as |reserve key|}}
+        {{#if reserve.id}}
+          <div class="reserve" style="grid-area: {{key}};">
+            <div class="resource-bar {{key}}">
+              {{#each reserve._segments as |segment|}}
+                <div
+                  class="resource-box is-interactive segment-{{segment.state}}"
+                  data-action="updateResourceValue"
+                  data-resource="reserves.{{key}}"
+                  data-resource-value="{{segment.index}}"
+                >
+                  {{segment.index}}
+                </div>
+              {{/each}}
             </div>
-            <footer class="reserve-strain">
-              <span>Strains</span>
-              <ul class="strain-track">
-                {{#each reserve.strain as |ischecked strainKey|}}
-                  <li>
-                    <label class="strain-step">
-                      <input
-                        type="checkbox"
-                        name="system.reserves.{{key}}.strain.{{strainKey}}"
-                        {{checked ischecked}}
-                      />
-                      <span>{{strainKey}}</span>
-                    </label>
-                  </li>
-                {{/each}}
-              </ul>
-            </footer>
+            <div class="resource-input" data-reserve="{{key}}">
+              <div class="resource-max">
+                <label class="resource-name" for="reserve-{{key}}-max" title="{{reserve.description}}">{{reserve.label}}</label>
+                <input
+                  id="reserve-{{key}}-max"
+                  class="resource-max-input"
+                  type="number"
+                  data-dtype="Number"
+                  name="system.reserves.{{key}}.max"
+                  value="{{reserve.max}}"
+                />
+              </div>
+              <footer class="reserve-strain">
+                <span>Strains</span>
+                <ul class="strain-track">
+                  {{#each reserve.strain as |ischecked strainKey|}}
+                    <li>
+                      <label class="strain-step">
+                        <input
+                          type="checkbox"
+                          name="system.reserves.{{key}}.strain.{{strainKey}}"
+                          {{checked ischecked}}
+                        />
+                        <span>{{strainKey}}</span>
+                      </label>
+                    </li>
+                  {{/each}}
+                </ul>
+              </footer>
+            </div>
           </div>
-        </div>
+        {{/if}}
       {{/each}}
     </div>
   </section>
@@ -88,8 +90,8 @@
   <section class="paths">
     <h2>{{localize "TRISKEL.Actor.Path.Label"}}</h2>
     <div class="paths-grid">
-      {{#each paths as |path|}}
-        {{#if path}}
+      {{#each system.paths as |path|}}
+        {{#if path.id}}
           <div class="path-bar {{path.id}}" style="grid-area: {{path.id}};">
             <div class="path-label" title="{{path.description}}">{{path.label}}</div>
             <input

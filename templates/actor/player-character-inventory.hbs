@@ -3,24 +3,24 @@
   data-tab="{{tabs.inventory.id}}"
   data-group="{{tabs.inventory.group}}"
 >
-  {{#if inventoryCategories.length}}
-    {{#each inventoryCategories as |category|}}
+  {{#if assets}}
+    {{#each assets as |category|}}
       <div class="inventory-category">
-        <h3 class="inventory-category__title">{{category.label}}</h3>
+        <h3 class="inventory-category__title">{{category.labelPlural}}</h3>
         <ul class="inventory-list">
-          {{#if category.items.length}}
-            {{#each category.items as |item|}}
+          {{#if category.collection.length}}
+            {{#each category.collection as |item|}}
               <li
                 class="inventory-list__item"
                 data-item-id="{{item.id}}"
               >
                 <button
                   type="button"
-                  class="inventory-list__toggle is-interactive {{#if item.isActive}}is-selected{{/if}}"
+                  class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
                   data-action="toggleActiveItem"
                   data-item-type="{{item.type}}"
                 >
-                  {{#if item.isActive}}
+                  {{#if item.system.active}}
                     <i class="fa-solid fa-check"></i>
                   {{/if}}
                 </button>
