@@ -60,6 +60,12 @@ export const TRISKEL_ITEM_CATEGORIES = [
 
 export const TRISKEL_SKILL_CATEGORIES = [
   {
+    id: "resistances",
+    label: "TRISKEL.Actor.Resistance.Label",
+    phase: "any",
+    phaseLabel: "TRISKEL.Action.Phase.Any"
+  },
+  {
     id: "offense",
     label: "TRISKEL.Actor.Skill.Category.Offense",
     phase: "combat",
@@ -103,7 +109,25 @@ export const TRISKEL_SKILL_CATEGORIES = [
   }
 ];
 
-const TRISKEL_BASE_SKILLS = [
+export const TRISKEL_SKILLS = [
+  {
+    id: "grit",
+    label: "TRISKEL.Actor.Resistance.Grit.Label",
+    description: "TRISKEL.Actor.Resistance.Grit.Description",
+    category: "resistances"
+  },
+  {
+    id: "snap",
+    label: "TRISKEL.Actor.Resistance.Snap.Label",
+    description: "TRISKEL.Actor.Resistance.Snap.Description",
+    category: "resistances"
+  },
+  {
+    id: "resolve",
+    label: "TRISKEL.Actor.Resistance.Resolve.Label",
+    description: "TRISKEL.Actor.Resistance.Resolve.Description",
+    category: "resistances"
+  },
   /* ---------------------------------- OFFENSE ---------------------------------- */
   {
     id: "strike",
@@ -262,8 +286,6 @@ const TRISKEL_BASE_SKILLS = [
     category: "magic"
   }
 ];
-
-export const TRISKEL_SKILLS = TRISKEL_BASE_SKILLS;
 
 export const TRISKEL_RESERVES = [
   {
