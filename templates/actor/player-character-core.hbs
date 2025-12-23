@@ -36,7 +36,7 @@
   <section class="reserves">
     <h2>{{localize "TRISKEL.Actor.Reserve.Label"}}</h2>
     <div class="reserve-grid">
-      {{#each system.reserves as |reserve key|}}
+      {{#each reserves as |reserve key|}}
         {{#if reserve.id}}
           <div class="reserve" style="grid-area: {{key}};">
             <div class="resource-bar {{key}}">
@@ -90,7 +90,7 @@
   <section class="paths">
     <h2>{{localize "TRISKEL.Actor.Path.Label"}}</h2>
     <div class="paths-grid">
-      {{#each system.paths as |path|}}
+      {{#each paths as |path|}}
         {{#if path.id}}
           <div class="path-bar {{path.id}}" style="grid-area: {{path.id}};">
             <div class="path-label" title="{{path.description}}">{{path.label}}</div>
