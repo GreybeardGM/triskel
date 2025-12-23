@@ -155,6 +155,10 @@ export class TriskelActor extends Actor {
       if (!type || !assets[type]) continue;
 
       assets[type].collection.push(item);
+      const isActive = Boolean(item?.system?.active);
+
+      // Inaktive Items beeinflussen Actions, Forms oder Modifiers nicht.
+      if (!isActive) continue;
 
       // Action- und Form-Referenzen sammeln, falls vorhanden.
       const itemActionRefs = normalizeIdList(item?.system?.actions?.ref);
