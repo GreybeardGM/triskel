@@ -6,6 +6,39 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+
+    const triskellIndex = getTriskellIndex();
+
+    const actionRefs = this.getReferenceList("system.actions.ref");
+    const formRefs = this.getReferenceList("system.forms.ref");
+
+    const references = {
+      actions: this.constructor.prepareReferenceEntries(actionRefs, Object.values(triskellIndex.actions ?? {})),
+      forms: this.constructor.prepareReferenceEntries(formRefs, Object.values(triskellIndex.forms ?? {}))
+    };
+
+    const referenceOptions = {
+      actions: this.constructor.prepareOptions(triskellIndex.actions),
+      forms: this.constructor.prepareOptions(triskellIndex.forms)
+    };
+
+    const modifiers = this.constructor.prepareModifiers(this.document.system?.modifiers);
+    const modifierOptions = this.constructor.prepareOptions(triskellIndex.skills);
+
+    const itemTypeLabel = CONFIG.Item?.typeLabels?.[this.document.type] ?? this.document.type ?? "";
+
+    return {
+      ...context,
+      references,
+      referenceOptions,
+      modifiers,
+      modifierOptions,
+      itemTypeLabel
+    };
+  }
+
   static DEFAULT_OPTIONS = {
     tag: "form",
     classes: ["triskel", "sheet", "item"],
@@ -70,6 +103,22 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         index
       };
     });
+  }
+
+  static prepareOptions(collection = {}) {
+    const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
+    const entries = Array.isArray(collection) ? collection : Object.values(collection ?? {});
+
+    const options = entries
+      .filter(entry => entry?.id)
+      .map(entry => ({
+        value: entry.id,
+        label: entry.label ?? entry.id
+      }));
+
+    options.sort((a, b) => collator.compare(a.label ?? a.value ?? "", b.label ?? b.value ?? ""));
+
+    return options;
   }
 
   static _getSelectValue(target, selectField) {
