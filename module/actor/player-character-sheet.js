@@ -47,8 +47,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
-    context.forms = prepareActorFormsContext(this.document);
-    context.actions = prepareActorActionsContext(this.document);
+    context.forms = this.document?.preparedForms ?? prepareActorFormsContext(this.document);
+    context.actions = this.document?.preparedActions ?? prepareActorActionsContext(this.document);
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;

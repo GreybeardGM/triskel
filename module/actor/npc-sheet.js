@@ -13,8 +13,8 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
-    context.forms = prepareActorFormsContext(this.document);
-    context.actions = prepareActorActionsContext();
+    context.forms = this.document?.preparedForms ?? prepareActorFormsContext(this.document);
+    context.actions = this.document?.preparedActions ?? prepareActorActionsContext(this.document);
     const { npcStats } = prepareActorBarsContext(this.document);
     if (npcStats) context.npcStats = npcStats;
     if (context.system && npcStats) context.system.npcStats = npcStats;
