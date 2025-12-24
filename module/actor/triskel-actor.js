@@ -4,7 +4,7 @@ import {
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { convertD10TensToZero } from "../util/roll.js";
-import { prepareBars } from "./sheet-helpers.js";
+import { prepareActorActionsContext, prepareActorFormsContext, prepareBars } from "./sheet-helpers.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -35,6 +35,8 @@ export class TriskelActor extends Actor {
       formRefs
     };
     this.system.modifiers = modifiers;
+    this.preparedForms = prepareActorFormsContext(this);
+    this.preparedActions = prepareActorActionsContext(this);
 
     // Skills mit Codex-Infos und Modifikatoren zusammenführen.
     this.system.skills = this._prepareCharacterSkills({

@@ -2,8 +2,6 @@ import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
-const ACTIONS_CACHE = new WeakMap();
-const FORMS_CACHE = new WeakMap();
 
 export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
@@ -102,12 +100,6 @@ export function prepareActorSkillsContext(actor = null) {
  */
 export function prepareActorFormsContext(actor = null) {
   const formRefs = Array.isArray(actor?.system?.actions?.formRefs) ? actor.system.actions.formRefs : [];
-  const cacheKey = formRefs
-    .map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`)
-    .join("|");
-  const canUseCache = Boolean(actor && typeof actor === "object");
-  const cached = canUseCache ? FORMS_CACHE.get(actor) : null;
-  if (cached && cached.key === cacheKey) return cached.value;
 
   const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
   const formsByKeyword = {};
@@ -154,10 +146,7 @@ export function prepareActorFormsContext(actor = null) {
     });
   }
 
-  const result = { keywords, byKeyword: formsByKeyword };
-  if (canUseCache) FORMS_CACHE.set(actor, { key: cacheKey, value: result });
-
-  return result;
+  return { keywords, byKeyword: formsByKeyword };
 }
 
 /**
@@ -171,12 +160,6 @@ export function prepareActorActionsContext(actor = null) {
   const index = getTriskellIndex();
 
   const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
-  const cacheKey = actionRefs
-    .map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`)
-    .join("|");
-  const canUseCache = Boolean(actor && typeof actor === "object");
-  const cached = canUseCache ? ACTIONS_CACHE.get(actor) : null;
-  if (cached && cached.key === cacheKey) return cached.value;
 
   const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
 
@@ -244,13 +227,7 @@ export function prepareActorActionsContext(actor = null) {
     }
   }
 
-  const result = {
-    types: actionTypes
-  };
-
-  if (canUseCache) ACTIONS_CACHE.set(actor, { key: cacheKey, value: result });
-
-  return result;
+  return { types: actionTypes };
 }
 
 /**
