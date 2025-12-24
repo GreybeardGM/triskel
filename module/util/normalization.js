@@ -18,3 +18,8 @@ export function normalizeIdList(entries = []) {
     .map(entry => (typeof entry === "string" ? entry : entry?.id ?? ""))
     .filter(Boolean);
 }
+
+export function normalizeKeyword(keyword, fallback = "untyped") {
+  const normalized = (keyword ?? "").toString().trim().toLowerCase();
+  return normalized || fallback;
+}
