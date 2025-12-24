@@ -1,8 +1,9 @@
-import { toFiniteNumber } from "../util/normalization.js";
+import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 const ACTIONS_CACHE = new WeakMap();
+const FORMS_CACHE = new WeakMap();
 
 export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
@@ -94,6 +95,72 @@ export function prepareActorSkillsContext(actor = null) {
 }
 
 /**
+ * Forms aus den FormRefs vorbereiten und nach Keywords bündeln.
+ *
+ * @param {Actor|null} actor
+ * @returns {{keywords: Array<string>, byKeyword: object, [keyword: string]: Array<object>}}
+ */
+export function prepareActorFormsContext(actor = null) {
+  const formRefs = Array.isArray(actor?.system?.actions?.formRefs) ? actor.system.actions.formRefs : [];
+  const cacheKey = formRefs
+    .map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`)
+    .join("|");
+  const canUseCache = Boolean(actor && typeof actor === "object");
+  const cached = canUseCache ? FORMS_CACHE.get(actor) : null;
+  if (cached && cached.key === cacheKey) return cached.value;
+
+  const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
+  const formsByKeyword = {};
+  const keywords = [];
+  const ensureKeyword = (keyword) => {
+    const keywordKey = normalizeKeyword(keyword);
+
+    if (!formsByKeyword[keywordKey]) {
+      formsByKeyword[keywordKey] = [];
+      keywords.push(keywordKey);
+    }
+
+    return { keywordKey, bucket: formsByKeyword[keywordKey] };
+  };
+
+  if (formRefs.length) {
+    const formsIndex = getTriskellIndex().forms ?? {};
+    formRefs.forEach(ref => {
+      if (!ref?.id) return;
+
+      const form = formsIndex[ref.id] ?? { id: ref.id };
+      const keyword = ref.keyword ?? form.keyword;
+      const { keywordKey, bucket } = ensureKeyword(keyword);
+
+      const mergedForm = {
+        ...form,
+        id: ref.id,
+        keyword: keywordKey,
+        source: ref.itemId ?? ref.source ?? null,
+        image: ref.image ?? form.image ?? form.img ?? null,
+        active: Boolean(ref.active),
+        label: form.label ?? ref.label ?? ref.id ?? form.id
+      };
+
+      bucket.push(mergedForm);
+    });
+
+    keywords.sort((a, b) => collator.compare(a, b));
+    keywords.forEach(keyword => {
+      const bucket = formsByKeyword[keyword];
+      if (bucket.length > 1) {
+        bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+      }
+    });
+  }
+
+  const result = { keywords, byKeyword: formsByKeyword };
+  if (canUseCache) FORMS_CACHE.set(actor, { key: cacheKey, value: result });
+
+  return result;
+}
+
+/**
  * Actions für Action Cards vorbereiten (Grundgerüst).
  *
  * @param {Actor|null} actor
@@ -107,8 +174,11 @@ export function prepareActorActionsContext(actor = null) {
   const cacheKey = actionRefs
     .map(ref => `${ref?.id ?? ""}:${ref?.itemId ?? ""}:${ref?.image ?? ""}:${ref?.active ? 1 : 0}`)
     .join("|");
-  const cached = ACTIONS_CACHE.get(actor);
+  const canUseCache = Boolean(actor && typeof actor === "object");
+  const cached = canUseCache ? ACTIONS_CACHE.get(actor) : null;
   if (cached && cached.key === cacheKey) return cached.value;
+
+  const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
 
   const typesById = {};
   const actionTypes = Array.isArray(codex?.actionTypes)
@@ -159,7 +229,6 @@ export function prepareActorActionsContext(actor = null) {
     }
   }
 
-  const collator = new Intl.Collator(undefined, { sensitivity: "base" });
   if (actionTypes.length > 1) {
     actionTypes.sort((a, b) => {
       const sortA = toFiniteNumber(a.sort);
@@ -176,11 +245,10 @@ export function prepareActorActionsContext(actor = null) {
   }
 
   const result = {
-    ...typesById,
     types: actionTypes
   };
 
-  if (actor) ACTIONS_CACHE.set(actor, { key: cacheKey, value: result });
+  if (canUseCache) ACTIONS_CACHE.set(actor, { key: cacheKey, value: result });
 
   return result;
 }

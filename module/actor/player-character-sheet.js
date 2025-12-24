@@ -5,6 +5,7 @@ import {
   onUpdateResourceValue,
   prepareActorItemsContext,
   prepareActorSkillsContext,
+  prepareActorFormsContext,
   prepareActorActionsContext,
   prepareActorBarsContext
 } from "./sheet-helpers.js";
@@ -46,6 +47,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
+    context.forms = prepareActorFormsContext(this.document);
     context.actions = prepareActorActionsContext(this.document);
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
