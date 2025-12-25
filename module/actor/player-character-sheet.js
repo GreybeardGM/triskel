@@ -32,6 +32,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.actor ??= actor;
     context.system ??= actor?.system ?? {};
+    const selectedActionType = context.system?.actions?.selectedType ?? "impact";
 
     // Tier-Label aus Codex/Index ermitteln.
     const tierValue = this.document?.system?.tier?.value;
@@ -61,13 +62,27 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       selectedActionId,
       selectedForms
     });
+    const actionTypeOrder = ["position", "setup", "impact", "defense"];
+    const actionTypeFilters = actionTypeOrder.map(typeId => {
+      const type = getTriskellCodex()?.actionTypes?.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
+      return {
+        ...type,
+        isSelected: selectedActionType === typeId
+      };
+    });
+    const allActionTypes = Array.isArray(context.actions?.types) ? context.actions.types : [];
+    const filteredTypes = allActionTypes.filter(type => type.id === selectedActionType);
+    context.actions.filteredTypes = filteredTypes.length ? filteredTypes : allActionTypes;
+    context.actions.selectedType = selectedActionType;
+    context.actionTypeFilters = actionTypeFilters;
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;
     if (commit) context.commit = commit;
     const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
       selectedAction: context.actions?.selectedAction ?? null,
-      reserves: context.reserves ?? {}
+      reserves: context.reserves ?? {},
+      commit: context.commit ?? null
     });
     context.rollHelper = rollHelper;
     context.rollHelperSummary = rollHelperSummary;
@@ -211,9 +226,8 @@ async function onSelectAction(event, target) {
 async function onFilterActionType(event, target) {
   event.preventDefault();
 
-  const filterValue = target.closest("[data-filter-value]")?.dataset.filterValue ?? "all";
-  this._actionTypeFilter = filterValue;
-  await this.render();
+  const filterValue = target.closest("[data-filter-value]")?.dataset.filterValue ?? "impact";
+  await this.document?.update({ "system.actions.selectedType": filterValue });
 }
 
 async function onToggleForm(event, target) {

@@ -227,12 +227,14 @@ export class TriskelActor extends Actor {
       const current = skills?.[id] ?? {};
       const mod = toFiniteNumber(modifierBySkill[id], 0);
       const value = toFiniteNumber(current.value);
+      const category = source.category ?? current.category ?? null;
 
       prepared[id] = {
         ...current,
         id,
         label: source.label ?? current.label ?? id,
         description: source.description ?? current.description ?? "",
+        category,
         value,
         mod,
         total: value + mod

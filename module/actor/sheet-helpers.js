@@ -322,7 +322,8 @@ export function prepareActorActionsContext(actor = null) {
  * @param {object} [options.reserves={}] vorbereitete Reserves aus prepareActorBarsContext
  * @returns {{rollHelper: object, rollHelperSummary: object|null}}
  */
-export function prepareRollHelperContext({ selectedAction = null, reserves = {} } = {}) {
+export function prepareRollHelperContext({ selectedAction = null, reserves = {}, commit = null } = {}) {
+  const commitValue = toFiniteNumber(commit?.value, 0);
   const normalizedForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
   const mappedForms = normalizedForms.map(form => {
     const skillBonus = toFiniteNumber(form.skillBonus ?? form.modifier?.skill, Number.NaN);
@@ -341,21 +342,22 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {} 
     hasSelection: Boolean(selectedAction),
     action: preparedAction,
     forms: mappedForms,
-    cost: calculateTotalCost(preparedAction, activeForms)
+    cost: calculateTotalCost(preparedAction, activeForms, commitValue)
   };
 
   const rollHelperSummary = selectedAction
-    ? prepareRollHelperSummary({ action: preparedAction, activeForms, reserves })
+    ? prepareRollHelperSummary({ action: preparedAction, activeForms, reserves, commitValue })
     : null;
 
   return { rollHelper, rollHelperSummary };
 }
 
-function calculateTotalCost(action, activeForms) {
+function calculateTotalCost(action, activeForms, commitValue = 0) {
   const baseCost = toFiniteNumber(action?.cost, 0);
   const formsCost = activeForms.reduce((total, form) => total + toFiniteNumber(form.cost, 0), 0);
+  const commitCost = action?.reserve ? toFiniteNumber(commitValue, 0) : 0;
 
-  return baseCost + formsCost;
+  return baseCost + formsCost + commitCost;
 }
 
 const addReserveCost = (collection, reserveId, cost) => {
@@ -366,10 +368,11 @@ const addReserveCost = (collection, reserveId, cost) => {
   collection[normalizedReserve] = toFiniteNumber(collection[normalizedReserve], 0) + numericCost;
 };
 
-function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {} } = {}) {
+function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}, commitValue = 0 } = {}) {
   const reserveTotals = {};
+  const commitContribution = action?.reserve ? toFiniteNumber(commitValue, 0) : 0;
 
-  addReserveCost(reserveTotals, action.reserve, action.cost);
+  addReserveCost(reserveTotals, action.reserve, (action.cost ?? 0) + commitContribution);
   activeForms.forEach(form => addReserveCost(reserveTotals, form.reserve, form.cost));
 
   const reserveIndex = getTriskellIndex().reserves ?? {};
@@ -389,7 +392,8 @@ function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}
 
   const canAfford = reserveCosts.every(entry => !Number.isFinite(entry.available) || entry.available >= entry.total);
   const totalSkillBonus = toFiniteNumber(action.skillTotal, 0)
-    + activeForms.reduce((sum, form) => sum + toFiniteNumber(form.skillBonus, 0), 0);
+    + activeForms.reduce((sum, form) => sum + toFiniteNumber(form.skillBonus, 0), 0)
+    + commitContribution;
 
   return {
     totalSkillBonus,
