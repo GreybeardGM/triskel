@@ -1,4 +1,5 @@
 import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
+import { getCachedCollator } from "../util/collator.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -96,47 +97,42 @@ export function prepareActorSkillsContext(actor = null) {
  * Forms aus den FormRefs vorbereiten und nach Keywords bündeln.
  *
  * @param {Actor|null} actor
- * @returns {object} Forms nach Keyword und Form-ID: forms[keyword][formId]
+ * @returns {object} Forms nach Keyword, sortiert nach Label: forms[keyword] = Array<Form>
  */
 export function prepareActorFormsContext(actor = null) {
   const formRefs = Array.isArray(actor?.system?.actions?.formRefs) ? actor.system.actions.formRefs : [];
 
-  const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
   const formsByKeyword = {};
 
-  if (formRefs.length) {
-    const formsIndex = getTriskellIndex().forms ?? {};
-    formRefs.forEach(ref => {
-      if (!ref?.id) return;
+  if (!formRefs.length) return formsByKeyword;
 
-      const form = formsIndex[ref.id] ?? { id: ref.id };
-      const keyword = ref.keyword ?? form.keyword;
-      const keywordKey = normalizeKeyword(keyword);
-      if (!formsByKeyword[keywordKey]) {
-        formsByKeyword[keywordKey] = {};
-      }
+  const formsIndex = getTriskellIndex().forms ?? {};
+  formRefs.forEach(ref => {
+    if (!ref?.id) return;
 
-      const mergedForm = {
-        ...form,
-        id: ref.id,
-        keyword: keywordKey,
-        source: ref.itemId ?? ref.source ?? null,
-        image: ref.image ?? form.image ?? form.img ?? null,
-        label: form.label ?? ref.label ?? ref.id ?? form.id
-      };
+    const form = formsIndex[ref.id] ?? { id: ref.id };
+    const keyword = ref.keyword ?? form.keyword;
+    const keywordKey = normalizeKeyword(keyword);
+    if (!formsByKeyword[keywordKey]) {
+      formsByKeyword[keywordKey] = [];
+    }
 
-      formsByKeyword[keywordKey][mergedForm.id] = mergedForm;
-    });
+    const mergedForm = {
+      ...form,
+      id: ref.id,
+      keyword: keywordKey,
+      source: ref.itemId ?? ref.source ?? null,
+      image: ref.image ?? form.image ?? form.img ?? null,
+      label: form.label ?? ref.label ?? ref.id ?? form.id
+    };
 
-    Object.keys(formsByKeyword).forEach(keywordKey => {
-      const bucket = formsByKeyword[keywordKey];
-      const sortedEntries = Object.values(bucket).sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
-      formsByKeyword[keywordKey] = sortedEntries.reduce((collection, entry) => {
-        collection[entry.id] = entry;
-        return collection;
-      }, {});
-    });
-  }
+    formsByKeyword[keywordKey].push(mergedForm);
+  });
+
+  Object.values(formsByKeyword).forEach(bucket =>
+    bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""))
+  );
 
   return formsByKeyword;
 }
@@ -157,9 +153,9 @@ export function prepareActorActionsWithForms({
   selectedActionId = null,
   selectedForms = []
 } = {}) {
-  // prepareActorFormsContext liefert ein Keyword-Mapping: forms[keyword][formId]
+  // prepareActorFormsContext liefert ein Keyword-Mapping: forms[keyword] = Array<Form>
   const formsByKeyword = (forms && typeof forms === "object" && !Array.isArray(forms)) ? forms : {};
-  const selectedFormIds = Array.isArray(selectedForms) ? selectedForms : [];
+  const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
   const result = {
     types: []
   };
@@ -179,13 +175,13 @@ export function prepareActorActionsWithForms({
       keywords.forEach(keyword => {
         const normalized = normalizeKeyword(keyword);
         const formsForKeyword = formsByKeyword?.[normalized];
-        const keywordForms = formsForKeyword ? Object.values(formsForKeyword) : [];
+        const keywordForms = Array.isArray(formsForKeyword) ? formsForKeyword : [];
         if (!keywordForms.length) return;
 
         keywordForms.forEach(form => {
           const preparedForm = {
             ...form,
-            active: selectedFormIds.includes(form.id)
+            active: selectedFormIds.has(form.id)
           };
           attachedForms.push(preparedForm);
         });
@@ -225,7 +221,7 @@ export function prepareActorActionsContext(actor = null) {
 
   const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
 
-  const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
 
   const typesById = {};
   const actionTypes = Array.isArray(codex?.actionTypes)
@@ -473,45 +469,23 @@ export function prepareBars(bars = {}, codexReference = undefined) {
 }
 
 export function prepareSkillsDisplay(skills = {}) {
-  const normalizedSkills = skills ?? {};
+  const preparedSkills = Object.values(skills ?? {});
 
-  const index = getTriskellIndex();
   const codex = getTriskellCodex();
 
-  const byCategory = (codex.skills ?? []).reduce((collection, skill) => {
-    const rawSkill = normalizedSkills[skill.id] ?? {};
-    const category = index.skillCategories?.[skill.category] ?? {};
+  const byCategory = preparedSkills.reduce((collection, skill) => {
+    if (!skill?.id) return collection;
 
-    const value = toFiniteNumber(rawSkill.value);
-    const mod = toFiniteNumber(rawSkill.mod);
-    const total = toFiniteNumber(rawSkill.total, value + mod);
-
-    const entry = {
-      ...skill,
-      value,
-      label: skill.label ?? skill.id,
-      description: skill.description ?? "",
-      categoryLabel: category.label ?? skill.category ?? "",
-      phase: category.phase,
-      phaseLabel: category.phaseLabel ?? category.phase ?? "",
-      mod,
-      total
-    };
-    const categoryId = category.id ?? skill.category ?? "";
-
-    const categoryCollection = collection[categoryId] ?? { category, skills: [] };
-    categoryCollection.skills.push(entry);
-    collection[categoryId] = categoryCollection;
+    const categoryId = skill.category ?? "";
+    const bucket = collection[categoryId] ?? [];
+    bucket.push(skill);
+    collection[categoryId] = bucket;
 
     return collection;
   }, {});
 
-  Object.values(byCategory).forEach(({ skills: skillsInCategory }) =>
-    skillsInCategory.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
-  );
-
   const skillCategories = (codex.skillCategories ?? []).map(category => {
-    const skillsInCategory = byCategory[category.id]?.skills ?? [];
+    const skillsInCategory = byCategory[category.id] ?? [];
 
     return {
       id: category.id.toLowerCase(),
