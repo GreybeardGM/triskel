@@ -4,7 +4,7 @@ import {
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { convertD10TensToZero } from "../util/roll.js";
-import { prepareActorActionsContext, prepareActorFormsContext, prepareBars } from "./sheet-helpers.js";
+import { prepareActorActionsContext, prepareActorActionsWithForms, prepareActorFormsContext, prepareBars } from "./sheet-helpers.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -24,9 +24,7 @@ export class TriskelActor extends Actor {
     this._prepareCharacterDerivedData();
 
     // Platzhalter: zukünftige Item-Auswertung (ActionRefs, FormRefs, Assets, Modifiers).
-    const selectedActionId = this.system?.actions?.selected?.ref ?? null;
-    const selectedForms = Array.isArray(this.system?.actions?.selectedForms) ? this.system.actions.selectedForms : [];
-    const { actionRefs, formRefs, assets, modifiers } = this._prepareActorItems(this.items, selectedActionId, selectedForms);
+    const { actionRefs, formRefs, assets, modifiers } = this._prepareActorItems(this.items);
     this.system.assets = assets;
 
     this.system.actions = {
@@ -36,7 +34,15 @@ export class TriskelActor extends Actor {
     };
     this.system.modifiers = modifiers;
     this.preparedForms = prepareActorFormsContext(this);
-    this.preparedActions = prepareActorActionsContext(this);
+    const preparedActions = prepareActorActionsContext(this);
+    const selectedActionId = this.system?.actions?.selected?.ref ?? null;
+    const selectedForms = Array.isArray(this.system?.actions?.selectedForms) ? this.system.actions.selectedForms : [];
+    this.preparedActions = prepareActorActionsWithForms({
+      actions: preparedActions,
+      forms: this.preparedForms,
+      selectedActionId,
+      selectedForms
+    });
 
     // Skills mit Codex-Infos und Modifikatoren zusammenführen.
     this.system.skills = this._prepareCharacterSkills({
@@ -124,16 +130,14 @@ export class TriskelActor extends Actor {
    * Platzhalter: Hier werden später Items ausgewertet und ActionRefs, FormRefs, Assets, Modifiers erzeugt.
    *
    * @param {Item[]} [items=[]] Item-Daten des Actors.
-   * @param {string|null} [selectedActionId=null] aktuell ausgewählte Action-ID.
-   * @param {Array<string>} [selectedForms=[]] aktuell ausgewählte Form-IDs.
    * @returns {{
-   *  actionRefs: Array<{id: string, itemId: string|null, image: string|null, active: boolean}>,
-   *  formRefs: Array<{id: string, itemId: string|null, image: string|null, active: boolean}>,
+   *  actionRefs: Array<{id: string, itemId: string|null, image: string|null}>,
+   *  formRefs: Array<{id: string, itemId: string|null, image: string|null}>,
    *  assets: object,
    *  modifiers: object
    * }}
    */
-  _prepareActorItems(items = [], selectedActionId = null, selectedForms = []) {
+  _prepareActorItems(items = []) {
     // Grundstruktur für Assets nach Item-Kategorien mit Labeln aufbauen.
     const itemCategories = getTriskellIndex().itemCategories ?? {};
     const assets = Object.entries(itemCategories).reduce((collection, [id, category]) => {
@@ -168,14 +172,12 @@ export class TriskelActor extends Actor {
       itemActionRefs.forEach(actionId => actionRefs.push({
         id: actionId,
         itemId: item?.id ?? null,
-        image: item?.img ?? item?.image ?? null,
-        active: actionId === selectedActionId
+        image: item?.img ?? item?.image ?? null
       }));
       itemFormRefs.forEach(formId => formRefs.push({
         id: formId,
         itemId: item?.id ?? null,
-        image: item?.img ?? item?.image ?? null,
-        active: selectedForms.includes(formId)
+        image: item?.img ?? item?.image ?? null
       }));
 
       if (Array.isArray(item?.system?.modifiers)) {

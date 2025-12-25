@@ -7,7 +7,7 @@
     <div class="actions-grid">
       {{#each this as |action|}}
         <article
-          class="roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.isSelected}}is-selected{{/if}}"
+          class="roll-helper__entry roll-helper__action is-interactive {{action.reserve}} {{#if action.active}}is-selected{{/if}}"
           role="button"
           tabindex="0"
           data-action="selectAction"

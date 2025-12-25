@@ -7,6 +7,7 @@ import {
   prepareActorSkillsContext,
   prepareActorFormsContext,
   prepareActorActionsContext,
+  prepareActorActionsWithForms,
   prepareActorBarsContext
 } from "./sheet-helpers.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -47,17 +48,22 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
-    context.forms = this.document?.preparedForms ?? prepareActorFormsContext(this.document);
-    context.actions = this.document?.preparedActions ?? prepareActorActionsContext(this.document);
+    const preparedForms = this.document?.preparedForms ?? prepareActorFormsContext(this.document);
+    const preparedActions = this.document?.preparedActions ?? prepareActorActionsContext(this.document);
+    const selectedActionId = this.document?.system?.actions?.selected?.ref ?? null;
+    const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
+      ? this.document.system.actions.selectedForms
+      : [];
+    context.actions = prepareActorActionsWithForms({
+      actions: preparedActions,
+      forms: preparedForms,
+      selectedActionId,
+      selectedForms
+    });
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;
     if (commit) context.commit = commit;
-    if (context.system) {
-      if (reserves) context.system.reserves = reserves;
-      if (paths) context.system.paths = paths;
-      if (commit) context.system.actions = { ...(context.system.actions ?? {}), commit };
-    }
 
     return context;
   }
