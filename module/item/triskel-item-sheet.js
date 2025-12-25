@@ -1,4 +1,5 @@
 import { onEditImage } from "../actor/sheet-helpers.js";
+import { getCachedCollator } from "../util/collator.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 
@@ -110,7 +111,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   }
 
   static prepareOptions(collection = {}) {
-    const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
+    const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
     const entries = Array.isArray(collection) ? collection : Object.values(collection ?? {});
 
     const options = entries
