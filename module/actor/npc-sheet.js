@@ -1,4 +1,4 @@
-import { onEditImage, onUpdateResourceValue, prepareActorItemsContext, prepareActorSkillsContext, prepareActorFormsContext, prepareActorActionsContext, prepareActorBarsContext } from "./sheet-helpers.js";
+import { onEditImage, onUpdateResourceValue, prepareActorItemsContext, prepareActorSkillsContext, prepareActorActionsContext, prepareActorBarsContext } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -13,7 +13,6 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
-    context.forms = this.document?.preparedForms ?? prepareActorFormsContext(this.document);
     context.actions = this.document?.preparedActions ?? prepareActorActionsContext(this.document);
     const { npcStats } = prepareActorBarsContext(this.document);
     if (npcStats) context.npcStats = npcStats;

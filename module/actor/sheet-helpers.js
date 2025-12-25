@@ -96,24 +96,13 @@ export function prepareActorSkillsContext(actor = null) {
  * Forms aus den FormRefs vorbereiten und nach Keywords bündeln.
  *
  * @param {Actor|null} actor
- * @returns {{keywords: Array<string>, byKeyword: object, [keyword: string]: Array<object>}}
+ * @returns {object} Forms nach Keyword und Form-ID: forms[keyword][formId]
  */
 export function prepareActorFormsContext(actor = null) {
   const formRefs = Array.isArray(actor?.system?.actions?.formRefs) ? actor.system.actions.formRefs : [];
 
   const collator = new Intl.Collator(game.i18n?.lang, { sensitivity: "base" });
   const formsByKeyword = {};
-  const keywords = [];
-  const ensureKeyword = (keyword) => {
-    const keywordKey = normalizeKeyword(keyword);
-
-    if (!formsByKeyword[keywordKey]) {
-      formsByKeyword[keywordKey] = [];
-      keywords.push(keywordKey);
-    }
-
-    return { keywordKey, bucket: formsByKeyword[keywordKey] };
-  };
 
   if (formRefs.length) {
     const formsIndex = getTriskellIndex().forms ?? {};
@@ -122,7 +111,10 @@ export function prepareActorFormsContext(actor = null) {
 
       const form = formsIndex[ref.id] ?? { id: ref.id };
       const keyword = ref.keyword ?? form.keyword;
-      const { keywordKey, bucket } = ensureKeyword(keyword);
+      const keywordKey = normalizeKeyword(keyword);
+      if (!formsByKeyword[keywordKey]) {
+        formsByKeyword[keywordKey] = {};
+      }
 
       const mergedForm = {
         ...form,
@@ -130,23 +122,94 @@ export function prepareActorFormsContext(actor = null) {
         keyword: keywordKey,
         source: ref.itemId ?? ref.source ?? null,
         image: ref.image ?? form.image ?? form.img ?? null,
-        active: Boolean(ref.active),
         label: form.label ?? ref.label ?? ref.id ?? form.id
       };
 
-      bucket.push(mergedForm);
+      formsByKeyword[keywordKey][mergedForm.id] = mergedForm;
     });
 
-    keywords.sort((a, b) => collator.compare(a, b));
-    keywords.forEach(keyword => {
-      const bucket = formsByKeyword[keyword];
-      if (bucket.length > 1) {
-        bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
-      }
+    Object.keys(formsByKeyword).forEach(keywordKey => {
+      const bucket = formsByKeyword[keywordKey];
+      const sortedEntries = Object.values(bucket).sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+      formsByKeyword[keywordKey] = sortedEntries.reduce((collection, entry) => {
+        collection[entry.id] = entry;
+        return collection;
+      }, {});
     });
   }
 
-  return { keywords, byKeyword: formsByKeyword };
+  return formsByKeyword;
+}
+
+/**
+ * Actions mit vorbereiteten Forms zusammenführen und Selektion kennzeichnen.
+ *
+ * @param {object} [options={}]
+ * @param {object|null} [options.actions=null] vorbereitete Actions (z. B. aus prepareActorActionsContext)
+ * @param {object|null} [options.forms=null] vorbereitete Forms (z. B. aus prepareActorFormsContext)
+ * @param {string|null} [options.selectedActionId=null] aktuell gewählte Action-ID
+ * @param {Array<string>} [options.selectedForms=[]] aktuell gewählte Form-IDs
+ * @returns {{types: Array, selectedAction?: object}} vorbereitete Actions mit angedockten Forms
+ */
+export function prepareActorActionsWithForms({
+  actions = null,
+  forms = null,
+  selectedActionId = null,
+  selectedForms = []
+} = {}) {
+  // prepareActorFormsContext liefert ein Keyword-Mapping: forms[keyword][formId]
+  const formsByKeyword = (forms && typeof forms === "object" && !Array.isArray(forms)) ? forms : {};
+  const selectedFormIds = Array.isArray(selectedForms) ? selectedForms : [];
+  const result = {
+    types: []
+  };
+
+  let resolvedSelectedAction = null;
+
+  const sourceTypes = Array.isArray(actions?.types) ? actions.types : [];
+  result.types = sourceTypes.map(type => {
+    const preparedType = { ...type, collection: [] };
+    const collection = Array.isArray(type?.collection) ? type.collection : [];
+
+    preparedType.collection = collection.map(action => {
+      const isActive = action?.id === selectedActionId;
+      const keywords = Array.isArray(action?.keywords) ? action.keywords : [];
+      const attachedForms = [];
+
+      keywords.forEach(keyword => {
+        const normalized = normalizeKeyword(keyword);
+        const formsForKeyword = formsByKeyword?.[normalized];
+        const keywordForms = formsForKeyword ? Object.values(formsForKeyword) : [];
+        if (!keywordForms.length) return;
+
+        keywordForms.forEach(form => {
+          const preparedForm = {
+            ...form,
+            active: selectedFormIds.includes(form.id)
+          };
+          attachedForms.push(preparedForm);
+        });
+      });
+
+      const preparedAction = {
+        ...action,
+        active: isActive,
+        forms: attachedForms
+      };
+
+      if (isActive) resolvedSelectedAction = preparedAction;
+
+      return preparedAction;
+    });
+
+    return preparedType;
+  });
+
+  if (resolvedSelectedAction) {
+    result.selectedAction = resolvedSelectedAction;
+  }
+
+  return result;
 }
 
 /**
