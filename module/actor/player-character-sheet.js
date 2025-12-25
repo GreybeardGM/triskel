@@ -81,7 +81,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (commit) context.commit = commit;
     const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
       selectedAction: context.actions?.selectedAction ?? null,
-      reserves: context.reserves ?? {}
+      reserves: context.reserves ?? {},
+      commit: context.commit ?? null
     });
     context.rollHelper = rollHelper;
     context.rollHelperSummary = rollHelperSummary;
