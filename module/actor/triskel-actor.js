@@ -33,22 +33,31 @@ export class TriskelActor extends Actor {
       formRefs
     };
     this.system.modifiers = modifiers;
+    // Skills vor Actions vorbereiten, damit Skill-Werte in Actions genutzt werden können.
+    this.system.skills = this._prepareCharacterSkills({
+      skills: this.system?.skills,
+      modifiers: this.system?.modifiers
+    });
+
     this.preparedForms = prepareActorFormsContext(this);
+    const actionsData = this.system?.actions ?? {};
     const preparedActions = prepareActorActionsContext(this);
-    const selectedActionId = this.system?.actions?.selected?.ref ?? null;
-    const selectedForms = Array.isArray(this.system?.actions?.selectedForms) ? this.system.actions.selectedForms : [];
+    const selectedActionId = actionsData?.selected?.ref ?? null;
+    const selectedForms = Array.isArray(actionsData?.selectedForms) ? actionsData.selectedForms : [];
     this.preparedActions = prepareActorActionsWithForms({
       actions: preparedActions,
       forms: this.preparedForms,
       selectedActionId,
       selectedForms
     });
-
-    // Skills mit Codex-Infos und Modifikatoren zusammenführen.
-    this.system.skills = this._prepareCharacterSkills({
-      skills: this.system?.skills,
-      modifiers: this.system?.modifiers
-    });
+    this.system.actions = {
+      ...(this.system.actions ?? {}),
+      selected: {
+        ...(this.system.actions?.selected ?? {}),
+        ref: selectedActionId,
+        action: this.preparedActions?.selectedAction ?? null
+      }
+    };
 
     // Platzhalter: NPC-Ressourcen vorbereiten.
     this._prepareNpcResources();

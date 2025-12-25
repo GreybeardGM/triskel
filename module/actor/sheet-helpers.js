@@ -221,6 +221,7 @@ export function prepareActorActionsWithForms({
 export function prepareActorActionsContext(actor = null) {
   const codex = getTriskellCodex();
   const index = getTriskellIndex();
+  const actorSkills = actor?.system?.skills ?? {};
 
   const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
 
@@ -245,14 +246,38 @@ export function prepareActorActionsContext(actor = null) {
     return typesById[key];
   };
 
+  const resolveSkillData = (action = {}) => {
+    const skillId = action?.skill ?? "";
+    if (!skillId) {
+      return {
+        skillLabel: action?.skillLabel ?? "",
+        skillTotal: toFiniteNumber(action?.skillTotal, 0)
+      };
+    }
+
+    const actorSkill = actorSkills[skillId] ?? {};
+    const indexSkill = index.skills?.[skillId] ?? {};
+    const skillLabel = actorSkill.label ?? indexSkill.label ?? skillId;
+    const skillTotal = Number.isFinite(actorSkill.total)
+      ? actorSkill.total
+      : toFiniteNumber(actorSkill.value, 0) + toFiniteNumber(actorSkill.mod, 0);
+
+    return {
+      skillLabel,
+      skillTotal
+    };
+  };
+
   const addActionToType = (action, { source = null, image = null } = {}) => {
     if (!action) return;
     const typeId = action.type ?? "untyped";
     const bucket = ensureType(typeId);
+    const skillData = resolveSkillData(action);
     bucket.collection.push({
       ...action,
       source,
-      image: image ?? action.image ?? action.img ?? null
+      image: image ?? action.image ?? action.img ?? null,
+      ...skillData
     });
   };
 
@@ -291,6 +316,90 @@ export function prepareActorActionsContext(actor = null) {
   }
 
   return { types: actionTypes };
+}
+
+/**
+ * Roll Helper Kontext aus ausgewählter Action und Ressourcen vorbereiten.
+ *
+ * @param {object} [options={}]
+ * @param {object|null} [options.selectedAction=null] ausgewählte Action (inkl. Forms)
+ * @param {object} [options.reserves={}] vorbereitete Reserves aus prepareActorBarsContext
+ * @returns {{rollHelper: object, rollHelperSummary: object|null}}
+ */
+export function prepareRollHelperContext({ selectedAction = null, reserves = {} } = {}) {
+  const normalizedForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
+  const mappedForms = normalizedForms.map(form => {
+    const skillBonus = toFiniteNumber(form.skillBonus ?? form.modifier?.skill, Number.NaN);
+    const skillLabel = form.skillLabel ?? selectedAction?.skillLabel ?? "";
+
+    return {
+      ...form,
+      skillLabel,
+      skillBonus: Number.isFinite(skillBonus) ? skillBonus : 0
+    };
+  });
+  const preparedAction = selectedAction ? { ...selectedAction, forms: mappedForms } : {};
+  const activeForms = mappedForms.filter(form => form.active);
+
+  const rollHelper = {
+    hasSelection: Boolean(selectedAction),
+    action: preparedAction,
+    forms: mappedForms,
+    cost: calculateTotalCost(preparedAction, activeForms)
+  };
+
+  const rollHelperSummary = selectedAction
+    ? prepareRollHelperSummary({ action: preparedAction, activeForms, reserves })
+    : null;
+
+  return { rollHelper, rollHelperSummary };
+}
+
+function calculateTotalCost(action, activeForms) {
+  const baseCost = toFiniteNumber(action?.cost, 0);
+  const formsCost = activeForms.reduce((total, form) => total + toFiniteNumber(form.cost, 0), 0);
+
+  return baseCost + formsCost;
+}
+
+const addReserveCost = (collection, reserveId, cost) => {
+  const normalizedReserve = reserveId ?? "";
+  const numericCost = toFiniteNumber(cost, Number.NaN);
+  if (!normalizedReserve || !Number.isFinite(numericCost) || numericCost <= 0) return;
+
+  collection[normalizedReserve] = toFiniteNumber(collection[normalizedReserve], 0) + numericCost;
+};
+
+function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {} } = {}) {
+  const reserveTotals = {};
+
+  addReserveCost(reserveTotals, action.reserve, action.cost);
+  activeForms.forEach(form => addReserveCost(reserveTotals, form.reserve, form.cost));
+
+  const reserveIndex = getTriskellIndex().reserves ?? {};
+  const normalizedReserves = reserves && typeof reserves === "object" ? reserves : {};
+
+  const reserveCosts = Object.entries(reserveTotals).map(([reserveId, total]) => {
+    const reserveSource = normalizedReserves[reserveId] ?? reserveIndex[reserveId] ?? {};
+    const available = toFiniteNumber(reserveSource.value, Number.NaN);
+
+    return {
+      id: reserveId,
+      label: reserveSource.label ?? reserveId,
+      total,
+      available
+    };
+  });
+
+  const canAfford = reserveCosts.every(entry => !Number.isFinite(entry.available) || entry.available >= entry.total);
+  const totalSkillBonus = toFiniteNumber(action.skillTotal, 0)
+    + activeForms.reduce((sum, form) => sum + toFiniteNumber(form.skillBonus, 0), 0);
+
+  return {
+    totalSkillBonus,
+    reserveCosts: reserveCosts.map(({ available, ...rest }) => rest),
+    canAfford
+  };
 }
 
 /**
