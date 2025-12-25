@@ -8,7 +8,8 @@ import {
   prepareActorFormsContext,
   prepareActorActionsContext,
   prepareActorActionsWithForms,
-  prepareActorBarsContext
+  prepareActorBarsContext,
+  prepareRollHelperContext
 } from "./sheet-helpers.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -64,6 +65,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;
     if (commit) context.commit = commit;
+    const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
+      selectedAction: context.actions?.selectedAction ?? null,
+      reserves: context.reserves ?? {}
+    });
+    context.rollHelper = rollHelper;
+    context.rollHelperSummary = rollHelperSummary;
 
     return context;
   }
