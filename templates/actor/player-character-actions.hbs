@@ -66,8 +66,27 @@
     </div>
   {{/inline}}
 
-  {{#if actions.types.length}}
-    {{#each actions.types as |actionType|}}
+  {{#if actionTypeFilters.length}}
+    <div class="actions-phase-filter">
+      <span class="actions-phase-filter__label">Phase</span>
+      <div class="actions-phase-filter__options">
+        {{#each actionTypeFilters as |filter|}}
+          <button
+            type="button"
+            class="actions-phase-filter__option {{#if filter.isSelected}}is-selected{{/if}}"
+            data-action="filterActionType"
+            data-filter-value="{{filter.id}}"
+            data-tooltip="{{localize filter.description}}"
+          >
+            {{localize filter.label}}
+          </button>
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if actions.filteredTypes.length}}
+    {{#each actions.filteredTypes as |actionType|}}
       {{#if actionType.collection.length}}
         <header class="actions-grid__header">
           <h3 class="actions-grid__title">{{localize actionType.label}}</h3>
