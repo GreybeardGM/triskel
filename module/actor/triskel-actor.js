@@ -24,13 +24,14 @@ export class TriskelActor extends Actor {
     this._prepareCharacterDerivedData();
 
     // Platzhalter: zukünftige Item-Auswertung (ActionRefs, FormRefs, Assets, Modifiers).
-    const { actionRefs, formRefs, assets, modifiers } = this._prepareActorItems(this.items);
+    const { actionRefs, formRefs, spellRefs, assets, modifiers } = this._prepareActorItems(this.items);
     this.system.assets = assets;
 
     this.system.actions = {
       ...(this.system.actions ?? {}),
       actionRefs,
-      formRefs
+      formRefs,
+      spellRefs
     };
     this.system.modifiers = modifiers;
     // Skills vor Actions vorbereiten, damit Skill-Werte in Actions genutzt werden können.
@@ -142,6 +143,7 @@ export class TriskelActor extends Actor {
    * @returns {{
    *  actionRefs: Array<{id: string, itemId: string|null, image: string|null}>,
    *  formRefs: Array<{id: string, itemId: string|null, image: string|null}>,
+   *  spellRefs: Array<{id: string, itemId: string|null, image: string|null}>,
    *  assets: object,
    *  modifiers: object
    * }}
@@ -161,6 +163,7 @@ export class TriskelActor extends Actor {
 
     const actionRefs = [];
     const formRefs = [];
+    const spellRefs = [];
     const modifiers = {};
 
     // TODO: Iteration über alle Items und Aggregation von ActionRefs, FormRefs und Modifiers.
@@ -189,6 +192,13 @@ export class TriskelActor extends Actor {
         image: item?.img ?? item?.image ?? null
       }));
 
+      const itemSpellRefs = normalizeIdList(item?.system?.spells?.ref);
+      itemSpellRefs.forEach(spellId => spellRefs.push({
+        id: spellId,
+        itemId: item?.id ?? null,
+        image: item?.img ?? item?.image ?? null
+      }));
+
       if (Array.isArray(item?.system?.modifiers)) {
         item.system.modifiers.forEach(modifier => {
           const skill = modifier?.skill ?? modifier?.id ?? "";
@@ -203,6 +213,7 @@ export class TriskelActor extends Actor {
     return {
       actionRefs,
       formRefs,
+      spellRefs,
       assets,
       modifiers
     };
