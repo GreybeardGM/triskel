@@ -242,6 +242,12 @@
   background: var(--triskel-interactive-highlight);
 }
 
+.triskel .resource-spacer {
+  padding: calc(0.125em * var(--resource-spacer-flex, 0));
+  flex-grow: var(--resource-spacer-flex, 0);
+  flex-shrink: 0;
+}
+
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --     PATHS      -- |
 \*____________________*/
