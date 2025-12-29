@@ -15,15 +15,21 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     const actionRefs = this.getReferenceList("system.actions.ref");
     const formRefs = this.getReferenceList("system.forms.ref");
+    const spellRefs = this.getReferenceList("system.spells.ref");
+    const attunementRefs = this.getReferenceList("system.attunements.ref");
 
     const references = {
       actions: this.constructor.prepareReferenceEntries(actionRefs, Object.values(triskellIndex.actions ?? {})),
-      forms: this.constructor.prepareReferenceEntries(formRefs, Object.values(triskellIndex.forms ?? {}))
+      forms: this.constructor.prepareReferenceEntries(formRefs, Object.values(triskellIndex.forms ?? {})),
+      spells: this.constructor.prepareReferenceEntries(spellRefs, Object.values(triskellIndex.spells ?? {})),
+      attunements: this.constructor.prepareReferenceEntries(attunementRefs, Object.values(triskellIndex.attunements ?? {}))
     };
 
     const referenceOptions = {
       actions: this.constructor.prepareOptions(triskellIndex.actions),
-      forms: this.constructor.prepareOptions(triskellIndex.forms)
+      forms: this.constructor.prepareOptions(triskellIndex.forms),
+      spells: this.constructor.prepareOptions(triskellIndex.spells),
+      attunements: this.constructor.prepareOptions(triskellIndex.attunements)
     };
 
     const modifiers = this.constructor.prepareModifiers(this.document.system?.modifiers);
@@ -56,6 +62,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       removeActionReference: this.onRemoveActionReference,
       addFormReference: this.onAddFormReference,
       removeFormReference: this.onRemoveFormReference,
+      addSpellReference: this.onAddSpellReference,
+      removeSpellReference: this.onRemoveSpellReference,
+      addAttunementReference: this.onAddAttunementReference,
+      removeAttunementReference: this.onRemoveAttunementReference,
       addModifier: this.onAddModifier,
       removeModifier: this.onRemoveModifier
     },
@@ -72,6 +82,14 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     actions: {
       id: "actions",
       template: "systems/triskel/templates/item/triskel-item-actions.hbs"
+    },
+    spells: {
+      id: "spells",
+      template: "systems/triskel/templates/item/triskel-item-spells.hbs"
+    },
+    attunements: {
+      id: "attunements",
+      template: "systems/triskel/templates/item/triskel-item-attunements.hbs"
     },
     forms: {
       id: "forms",
@@ -211,6 +229,32 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   static async onRemoveFormReference(event, target) {
     await this._handleRemoveReference(event, target, { defaultRefPath: "system.forms.ref" });
+  }
+
+  // ---------- Add / Remove Spells ----------
+
+  static async onAddSpellReference(event, target) {
+    await this._handleAddReference(event, target, {
+      defaultSelectField: "",
+      defaultRefPath: "system.spells.ref"
+    });
+  }
+
+  static async onRemoveSpellReference(event, target) {
+    await this._handleRemoveReference(event, target, { defaultRefPath: "system.spells.ref" });
+  }
+
+  // ---------- Add / Remove Attunements ----------
+
+  static async onAddAttunementReference(event, target) {
+    await this._handleAddReference(event, target, {
+      defaultSelectField: "",
+      defaultRefPath: "system.attunements.ref"
+    });
+  }
+
+  static async onRemoveAttunementReference(event, target) {
+    await this._handleRemoveReference(event, target, { defaultRefPath: "system.attunements.ref" });
   }
 
   // ---------- Add / Remove Modifiers ----------

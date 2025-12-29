@@ -91,14 +91,5 @@ export const TRISKEL_FORMS = [
     keyword: "evasion",
     modifier: { skill: 2 },
     description: "TRISKEL.Form.ShieldCover.Description"
-  },
-  {
-    id: "blackmagic",
-    label: "TRISKEL.Form.Blackmagic.Label",
-    cost: 1,
-    reserve: "power",
-    keyword: "manifestation",
-    modifier: { skill: 2 },
-    description: "TRISKEL.Form.Blackmagic.Description"
   }
 ];
