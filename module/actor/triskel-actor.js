@@ -39,7 +39,6 @@ export class TriskelActor extends Actor {
     });
 
     const actionsData = this.system?.actions ?? {};
-    const refs = this.preparedRefs ?? {};
     const actionRefs = toArray(refs?.actions);
     const formRefs = toArray(refs?.forms);
     const spellRefs = toArray(refs?.spells);
