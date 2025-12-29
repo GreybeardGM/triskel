@@ -321,6 +321,74 @@ export function prepareActorAttunements(actor = null) {
 }
 
 /**
+ * Spells aus den SpellRefs vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {Array} vorbereitete Spells
+ */
+export function prepareActorSpells(actor = null) {
+  const spellRefs = toArray(actor?.system?.actions?.refs?.spells);
+  const spellsIndex = getTriskellIndex().spells ?? {};
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
+
+  if (!spellRefs.length) return [];
+
+  const spells = spellRefs
+    .map(ref => {
+      if (!ref?.id) return null;
+
+      const spell = spellsIndex[ref.id] ?? { id: ref.id };
+
+      return {
+        ...spell,
+        id: ref.id,
+        source: ref.itemId ?? ref.source ?? null,
+        image: ref.image ?? spell.image ?? spell.img ?? null,
+        label: spell.label ?? ref.label ?? ref.id ?? spell.id
+      };
+    })
+    .filter(Boolean);
+
+  spells.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+
+  return spells;
+}
+
+/**
+ * Attunements aus den AttunementRefs vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {Array} vorbereitete Attunements
+ */
+export function prepareActorAttunements(actor = null) {
+  const attunementRefs = toArray(actor?.system?.actions?.refs?.attunements);
+  const attunementsIndex = getTriskellIndex().attunements ?? {};
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
+
+  if (!attunementRefs.length) return [];
+
+  const attunements = attunementRefs
+    .map(ref => {
+      if (!ref?.id) return null;
+
+      const attunement = attunementsIndex[ref.id] ?? { id: ref.id };
+
+      return {
+        ...attunement,
+        id: ref.id,
+        source: ref.itemId ?? ref.source ?? null,
+        image: ref.image ?? attunement.image ?? attunement.img ?? null,
+        label: attunement.label ?? ref.label ?? ref.id ?? attunement.id
+      };
+    })
+    .filter(Boolean);
+
+  attunements.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+
+  return attunements;
+}
+
+/**
  * Roll Helper Kontext aus ausgewählter Action und Ressourcen vorbereiten.
  *
  * @param {object} [options={}]
