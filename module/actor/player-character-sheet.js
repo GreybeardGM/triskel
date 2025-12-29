@@ -5,8 +5,8 @@ import {
   onUpdateResourceValue,
   prepareActorItemsContext,
   prepareActorSkillsContext,
-  prepareActorFormsContext,
-  prepareActorActionsContext,
+  prepareActorForms,
+  prepareActorActions,
   prepareActorActionsWithForms,
   prepareActorBarsContext,
   prepareRollHelperContext
@@ -50,8 +50,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const { skillCategories } = prepareActorSkillsContext(this.document);
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
-    const preparedForms = this.document?.preparedForms ?? prepareActorFormsContext(this.document);
-    const preparedActions = this.document?.preparedActions ?? prepareActorActionsContext(this.document);
+    const preparedForms = this.document?.preparedForms ?? prepareActorForms(this.document);
+    const preparedActions = this.document?.preparedActions ?? prepareActorActions(this.document);
     const selectedActionId = this.document?.system?.actions?.selected?.ref ?? null;
     const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
       ? this.document.system.actions.selectedForms

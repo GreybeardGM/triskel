@@ -1,10 +1,12 @@
 import {
+  createArrayKey,
   normalizeIdList,
+  toArray,
   toFiniteNumber
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { convertD10TensToZero } from "../util/roll.js";
-import { prepareActorActionsContext, prepareActorActionsWithForms, prepareActorFormsContext, prepareBars } from "./sheet-helpers.js";
+import { prepareActorActions, prepareActorAttunements, prepareActorForms, prepareActorSpells, prepareBars } from "./sheet-helpers.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -24,14 +26,18 @@ export class TriskelActor extends Actor {
     this._prepareCharacterDerivedData();
 
     // Platzhalter: zukünftige Item-Auswertung (ActionRefs, FormRefs, Assets, Modifiers).
-    const { actionRefs, formRefs, spellRefs, assets, modifiers } = this._prepareActorItems(this.items);
+    const { actionRefs, formRefs, spellRefs, attunementRefs, assets, modifiers } = this._prepareActorItems(this.items);
     this.system.assets = assets;
 
     this.system.actions = {
       ...(this.system.actions ?? {}),
-      actionRefs,
-      formRefs,
-      spellRefs
+      refs: {
+        ...(this.system.actions?.refs ?? {}),
+        actions: actionRefs,
+        forms: formRefs,
+        spells: spellRefs,
+        attunements: attunementRefs
+      }
     };
     this.system.modifiers = modifiers;
     // Skills vor Actions vorbereiten, damit Skill-Werte in Actions genutzt werden können.
@@ -40,25 +46,36 @@ export class TriskelActor extends Actor {
       modifiers: this.system?.modifiers
     });
 
-    this.preparedForms = prepareActorFormsContext(this);
     const actionsData = this.system?.actions ?? {};
-    const preparedActions = prepareActorActionsContext(this);
-    const selectedActionId = actionsData?.selected?.ref ?? null;
-    const selectedForms = Array.isArray(actionsData?.selectedForms) ? actionsData.selectedForms : [];
-    this.preparedActions = prepareActorActionsWithForms({
-      actions: preparedActions,
-      forms: this.preparedForms,
-      selectedActionId,
-      selectedForms
-    });
-    this.system.actions = {
-      ...(this.system.actions ?? {}),
-      selected: {
-        ...(this.system.actions?.selected ?? {}),
-        ref: selectedActionId,
-        action: this.preparedActions?.selectedAction ?? null
-      }
-    };
+    const refs = actionsData?.refs ?? {};
+    const actionRefs = toArray(refs?.actions);
+    const formRefs = toArray(refs?.forms);
+    const spellRefs = toArray(refs?.spells);
+    const attunementRefs = toArray(refs?.attunements);
+    const actionRefsKey = createArrayKey(actionRefs);
+    const formRefsKey = createArrayKey(formRefs);
+    const spellRefsKey = createArrayKey(spellRefs);
+    const attunementRefsKey = createArrayKey(attunementRefs);
+
+    if (actionRefsKey !== this._actionRefsKey || !this.preparedActions) {
+      this.preparedActions = prepareActorActions(this);
+      this._actionRefsKey = actionRefsKey;
+    }
+
+    if (formRefsKey !== this._formRefsKey || !this.preparedForms) {
+      this.preparedForms = prepareActorForms(this);
+      this._formRefsKey = formRefsKey;
+    }
+
+    if (spellRefsKey !== this._spellRefsKey || !this.preparedSpells) {
+      this.preparedSpells = prepareActorSpells(this);
+      this._spellRefsKey = spellRefsKey;
+    }
+
+    if (attunementRefsKey !== this._attunementRefsKey || !this.preparedAttunements) {
+      this.preparedAttunements = prepareActorAttunements(this);
+      this._attunementRefsKey = attunementRefsKey;
+    }
 
     // Platzhalter: NPC-Ressourcen vorbereiten.
     this._prepareNpcResources();

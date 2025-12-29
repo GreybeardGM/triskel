@@ -3,6 +3,14 @@ export function toFiniteNumber(value, fallback = 0) {
   return Number.isFinite(parsedValue) ? parsedValue : fallback;
 }
 
+export function toArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+export function createArrayKey(value) {
+  return JSON.stringify(toArray(value));
+}
+
 export function toFiniteNumbers(collection, extractor = (entry) => entry, fallback = 0) {
   const entries = Array.isArray(collection) ? collection : [];
 

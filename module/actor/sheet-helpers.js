@@ -1,4 +1,4 @@
-import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
+import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
 import { getCachedCollator } from "../util/collator.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
@@ -99,8 +99,8 @@ export function prepareActorSkillsContext(actor = null) {
  * @param {Actor|null} actor
  * @returns {object} Forms nach Keyword, sortiert nach Label: forms[keyword] = Array<Form>
  */
-export function prepareActorFormsContext(actor = null) {
-  const formRefs = Array.isArray(actor?.system?.actions?.formRefs) ? actor.system.actions.formRefs : [];
+export function prepareActorForms(actor = null) {
+  const formRefs = toArray(actor?.system?.actions?.refs?.forms);
 
   const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
   const formsByKeyword = {};
@@ -141,8 +141,8 @@ export function prepareActorFormsContext(actor = null) {
  * Actions mit vorbereiteten Forms zusammenführen und Selektion kennzeichnen.
  *
  * @param {object} [options={}]
- * @param {object|null} [options.actions=null] vorbereitete Actions (z. B. aus prepareActorActionsContext)
- * @param {object|null} [options.forms=null] vorbereitete Forms (z. B. aus prepareActorFormsContext)
+ * @param {object|null} [options.actions=null] vorbereitete Actions (z. B. aus prepareActorActions)
+ * @param {object|null} [options.forms=null] vorbereitete Forms (z. B. aus prepareActorForms)
  * @param {string|null} [options.selectedActionId=null] aktuell gewählte Action-ID
  * @param {Array<string>} [options.selectedForms=[]] aktuell gewählte Form-IDs
  * @returns {{types: Array, selectedAction?: object}} vorbereitete Actions mit angedockten Forms
@@ -153,7 +153,7 @@ export function prepareActorActionsWithForms({
   selectedActionId = null,
   selectedForms = []
 } = {}) {
-  // prepareActorFormsContext liefert ein Keyword-Mapping: forms[keyword] = Array<Form>
+  // prepareActorForms liefert ein Keyword-Mapping: forms[keyword] = Array<Form>
   const formsByKeyword = (forms && typeof forms === "object" && !Array.isArray(forms)) ? forms : {};
   const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
   const result = {
@@ -214,12 +214,12 @@ export function prepareActorActionsWithForms({
  * @param {Actor|null} actor
  * @returns {object} Actions nach Typen gruppiert.
  */
-export function prepareActorActionsContext(actor = null) {
+export function prepareActorActions(actor = null) {
   const codex = getTriskellCodex();
   const index = getTriskellIndex();
   const actorSkills = actor?.system?.skills ?? {};
 
-  const actionRefs = Array.isArray(actor?.system?.actions?.actionRefs) ? actor.system.actions.actionRefs : [];
+  const actionRefs = toArray(actor?.system?.actions?.refs?.actions);
 
   const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
 
@@ -312,6 +312,74 @@ export function prepareActorActionsContext(actor = null) {
   }
 
   return { types: actionTypes };
+}
+
+/**
+ * Spells aus den SpellRefs vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {Array} vorbereitete Spells
+ */
+export function prepareActorSpells(actor = null) {
+  const spellRefs = toArray(actor?.system?.actions?.refs?.spells);
+  const spellsIndex = getTriskellIndex().spells ?? {};
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
+
+  if (!spellRefs.length) return [];
+
+  const spells = spellRefs
+    .map(ref => {
+      if (!ref?.id) return null;
+
+      const spell = spellsIndex[ref.id] ?? { id: ref.id };
+
+      return {
+        ...spell,
+        id: ref.id,
+        source: ref.itemId ?? ref.source ?? null,
+        image: ref.image ?? spell.image ?? spell.img ?? null,
+        label: spell.label ?? ref.label ?? ref.id ?? spell.id
+      };
+    })
+    .filter(Boolean);
+
+  spells.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+
+  return spells;
+}
+
+/**
+ * Attunements aus den AttunementRefs vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {Array} vorbereitete Attunements
+ */
+export function prepareActorAttunements(actor = null) {
+  const attunementRefs = toArray(actor?.system?.actions?.refs?.attunements);
+  const attunementsIndex = getTriskellIndex().attunements ?? {};
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
+
+  if (!attunementRefs.length) return [];
+
+  const attunements = attunementRefs
+    .map(ref => {
+      if (!ref?.id) return null;
+
+      const attunement = attunementsIndex[ref.id] ?? { id: ref.id };
+
+      return {
+        ...attunement,
+        id: ref.id,
+        source: ref.itemId ?? ref.source ?? null,
+        image: ref.image ?? attunement.image ?? attunement.img ?? null,
+        label: attunement.label ?? ref.label ?? ref.id ?? attunement.id
+      };
+    })
+    .filter(Boolean);
+
+  attunements.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+
+  return attunements;
 }
 
 /**

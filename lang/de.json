@@ -450,7 +450,9 @@
       "BreakStance": {
         "Label": "Standbruch",
         "Description": "Verwandelt einen schweren Schlag in einen stellungsbrechenden Hieb, der das Ziel offener zurücklässt."
-      },
+      }
+    },
+    "Attunement": {
       "Blackmagic": {
         "Label": "Schwarze Magie",
         "Description": "Der Zauberer legt ein Stück seiner Lebenskraft in den Zauber."
