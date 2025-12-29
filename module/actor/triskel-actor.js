@@ -27,15 +27,10 @@ export class TriskelActor extends Actor {
     this._prepareCharacterDerivedData();
 
     // Platzhalter: zukünftige Item-Auswertung (ActionRefs, FormRefs, Assets, Modifiers).
-    const { actionRefs, formRefs, spellRefs, attunementRefs, assets, modifiers } = this._prepareActorItems(this.items);
+    const { refs, assets, modifiers } = this._prepareActorItems(this.items);
     this.system.assets = assets;
 
-    this.preparedRefs = {
-      actions: actionRefs,
-      forms: formRefs,
-      spells: spellRefs,
-      attunements: attunementRefs
-    };
+    this.preparedRefs = refs;
     this.system.modifiers = modifiers;
     // Skills vor Actions vorbereiten, damit Skill-Werte in Actions genutzt werden können.
     this.system.skills = this._prepareCharacterSkills({
@@ -44,7 +39,6 @@ export class TriskelActor extends Actor {
     });
 
     const actionsData = this.system?.actions ?? {};
-    const refs = this.preparedRefs ?? {};
     const actionRefs = toArray(refs?.actions);
     const formRefs = toArray(refs?.forms);
     const spellRefs = toArray(refs?.spells);
@@ -183,10 +177,12 @@ export class TriskelActor extends Actor {
    *
    * @param {Item[]} [items=[]] Item-Daten des Actors.
    * @returns {{
-   *  actionRefs: Array<{id: string, itemId: string|null, image: string|null}>,
-   *  formRefs: Array<{id: string, itemId: string|null, image: string|null}>,
-   *  spellRefs: Array<{id: string, itemId: string|null, image: string|null}>,
-   *  attunementRefs: Array<{id: string, itemId: string|null, image: string|null}>,
+   *  refs: {
+   *    actions: Array<{id: string, itemId: string|null, image: string|null}>,
+   *    forms: Array<{id: string, itemId: string|null, image: string|null}>,
+   *    spells: Array<{id: string, itemId: string|null, image: string|null}>,
+   *    attunements: Array<{id: string, itemId: string|null, image: string|null}>
+   *  },
    *  assets: object,
    *  modifiers: object
    * }}
@@ -261,14 +257,14 @@ export class TriskelActor extends Actor {
       }
     }
 
-    return {
-      actionRefs,
-      formRefs,
-      spellRefs,
-      attunementRefs,
-      assets,
-      modifiers
+    const refs = {
+      actions: actionRefs,
+      forms: formRefs,
+      spells: spellRefs,
+      attunements: attunementRefs
     };
+
+    return { refs, assets, modifiers };
   }
 
   _collectKeywords(bucket = {}) {
