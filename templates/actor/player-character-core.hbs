@@ -50,6 +50,7 @@
                   {{segment.index}}
                 </div>
               {{/each}}
+              <div class="resource-spacer" style="--resource-spacer-flex: {{reserve._spacerFlex}};"></div>
             </div>
             <div class="resource-input" data-reserve="{{key}}">
               <div class="resource-max">
@@ -115,7 +116,7 @@
                   {{segment.index}}
                 </div>
               {{/each}}
-              <div class="resource-spacer" style="flex-grow: {{path._spacerFlex}};"></div>
+              <div class="resource-spacer" style="--resource-spacer-flex: {{path._spacerFlex}};"></div>
             </div>
           </div>
         {{/if}}
