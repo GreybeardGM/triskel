@@ -14,22 +14,23 @@
             name="system.paths.{{path.id}}.max"
             value="{{path.max}}"
           />
-          <div class="path-segments">
-            {{#each path._segments as |segment|}}
-              <div
-                class="resource-box is-interactive segment-{{segment.state}}"
-                data-action="updateResourceValue"
+            <div class="path-segments">
+              {{#each path._segments as |segment|}}
+                <div
+                  class="resource-box is-interactive segment-{{segment.state}}"
+                  data-action="updateResourceValue"
                 data-resource="tension"
                 data-resource-field="value"
                 data-resource-value="{{segment.index}}"
-              >
-                {{segment.index}}
-              </div>
-            {{/each}}
+                >
+                  {{segment.index}}
+                </div>
+              {{/each}}
+              <div class="resource-spacer" style="flex-grow: {{path._spacerFlex}}; padding: calc({{path._spacerFlex}} * 0.125em);"></div>
+            </div>
           </div>
-        </div>
-      {{/if}}
-    {{/each}}
+        {{/if}}
+      {{/each}}
 
     <div class="tension-card">
       <label class="path-label" for="tension-value">{{localize "TRISKEL.Actor.Tension.Label"}}</label>

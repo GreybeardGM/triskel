@@ -25,20 +25,21 @@
       {{#each npcStats as |resource|}}
         <div class="stat-column" style="grid-area: {{resource.id}};">
           <div class="resource-bar {{resource.id}}">
-            {{#each resource._segments as |segment|}}
-              <div
-                class="resource-box is-interactive segment-{{segment.state}}"
-                data-action="updateResourceValue"
-                data-resource="npcStats.{{resource.id}}"
+          {{#each resource._segments as |segment|}}
+            <div
+              class="resource-box is-interactive segment-{{segment.state}}"
+              data-action="updateResourceValue"
+              data-resource="npcStats.{{resource.id}}"
                 data-resource-value="{{segment.index}}"
-              >
-                {{segment.index}}
-              </div>
-            {{/each}}
-          </div>
-          <div class="resource-input">
-            <div class="resource-max">
-              <label class="resource-name" for="npcStats-{{resource.id}}-max" title="{{resource.description}}">{{resource.label}}</label>
+            >
+              {{segment.index}}
+            </div>
+          {{/each}}
+          <div class="resource-spacer" style="flex-grow: {{resource._spacerFlex}}; padding: calc({{resource._spacerFlex}} * 0.125em);"></div>
+        </div>
+        <div class="resource-input">
+          <div class="resource-max">
+            <label class="resource-name" for="npcStats-{{resource.id}}-max" title="{{resource.description}}">{{resource.label}}</label>
               <input
                 id="npcStats-{{resource.id}}-max"
                 class="resource-max-input"

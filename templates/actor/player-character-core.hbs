@@ -50,6 +50,7 @@
                   {{segment.index}}
                 </div>
               {{/each}}
+              <div class="resource-spacer" style="flex-grow: {{reserve._spacerFlex}}; padding: calc({{reserve._spacerFlex}} * 0.125em);"></div>
             </div>
             <div class="resource-input" data-reserve="{{key}}">
               <div class="resource-max">
@@ -115,6 +116,7 @@
                   {{segment.index}}
                 </div>
               {{/each}}
+              <div class="resource-spacer" style="flex-grow: {{path._spacerFlex}}; padding: calc({{path._spacerFlex}} * 0.125em);"></div>
             </div>
           </div>
         {{/if}}
