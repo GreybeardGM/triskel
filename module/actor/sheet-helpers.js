@@ -93,6 +93,39 @@ export function prepareActorSkillsContext(actor = null) {
   return prepareSkillsDisplay(skills);
 }
 
+function prepareKeywordBuckets({ refs = [], index = {}, keywordField = "keyword" } = {}) {
+  const entriesByKeyword = {};
+  if (!Array.isArray(refs) || !refs.length) return entriesByKeyword;
+
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
+
+  refs.forEach(ref => {
+    if (!ref?.id) return;
+
+    const base = index[ref.id] ?? { id: ref.id };
+    const keyword = ref[keywordField] ?? base[keywordField];
+    const keywordKey = normalizeKeyword(keyword);
+    if (!entriesByKeyword[keywordKey]) entriesByKeyword[keywordKey] = [];
+
+    const merged = {
+      ...base,
+      id: ref.id,
+      keyword: keywordKey,
+      source: ref.itemId ?? ref.source ?? null,
+      image: ref.image ?? base.image ?? base.img ?? null,
+      label: base.label ?? ref.label ?? ref.id ?? base.id
+    };
+
+    entriesByKeyword[keywordKey].push(merged);
+  });
+
+  Object.values(entriesByKeyword).forEach(bucket =>
+    bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""))
+  );
+
+  return entriesByKeyword;
+}
+
 /**
  * Forms aus den FormRefs vorbereiten und nach Keywords bündeln.
  *
@@ -100,41 +133,10 @@ export function prepareActorSkillsContext(actor = null) {
  * @returns {object} Forms nach Keyword, sortiert nach Label: forms[keyword] = Array<Form>
  */
 export function prepareActorForms(actor = null) {
-  const formRefs = toArray(actor?.system?.actions?.refs?.forms);
-
-  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
-  const formsByKeyword = {};
-
-  if (!formRefs.length) return formsByKeyword;
-
+  const formRefs = toArray(actor?.preparedRefs?.forms);
   const formsIndex = getTriskellIndex().forms ?? {};
-  formRefs.forEach(ref => {
-    if (!ref?.id) return;
 
-    const form = formsIndex[ref.id] ?? { id: ref.id };
-    const keyword = ref.keyword ?? form.keyword;
-    const keywordKey = normalizeKeyword(keyword);
-    if (!formsByKeyword[keywordKey]) {
-      formsByKeyword[keywordKey] = [];
-    }
-
-    const mergedForm = {
-      ...form,
-      id: ref.id,
-      keyword: keywordKey,
-      source: ref.itemId ?? ref.source ?? null,
-      image: ref.image ?? form.image ?? form.img ?? null,
-      label: form.label ?? ref.label ?? ref.id ?? form.id
-    };
-
-    formsByKeyword[keywordKey].push(mergedForm);
-  });
-
-  Object.values(formsByKeyword).forEach(bucket =>
-    bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""))
-  );
-
-  return formsByKeyword;
+  return prepareKeywordBuckets({ refs: formRefs, index: formsIndex, keywordField: "keyword" });
 }
 
 /**
@@ -214,104 +216,108 @@ export function prepareActorActionsWithForms({
  * @param {Actor|null} actor
  * @returns {object} Actions nach Typen gruppiert.
  */
-export function prepareActorActions(actor = null) {
-  const codex = getTriskellCodex();
-  const index = getTriskellIndex();
-  const actorSkills = actor?.system?.skills ?? {};
-
-  const actionRefs = toArray(actor?.system?.actions?.refs?.actions);
-
+function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = {}) {
   const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
 
   const typesById = {};
-  const actionTypes = Array.isArray(codex?.actionTypes)
-    ? codex.actionTypes.map(type => {
-      const entry = { ...type, collection: [] };
-      typesById[type.id] = entry;
-      return entry;
-    })
-    : [];
+  const baseActionTypes = getTriskellCodex()?.actionTypes ?? [];
+  const preparedTypes = baseActionTypes.map(type => {
+    const entry = { ...type, collection: [] };
+    typesById[type.id] = entry;
+    return entry;
+  });
 
   const ensureType = (typeId) => {
     const key = typeId || "untyped";
     if (!typesById[key]) {
       const entry = { id: key, label: key, collection: [] };
       typesById[key] = entry;
-      actionTypes.push(entry);
+      preparedTypes.push(entry);
     }
     return typesById[key];
   };
 
-  const resolveSkillData = (action = {}) => {
-    const skillId = action?.skill ?? "";
-    if (!skillId) {
-      return {
-        skillLabel: action?.skillLabel ?? "",
-        skillTotal: toFiniteNumber(action?.skillTotal, 0)
-      };
-    }
-
-    const actorSkill = actorSkills[skillId] ?? {};
-    const indexSkill = index.skills?.[skillId] ?? {};
-    const skillLabel = actorSkill.label ?? indexSkill.label ?? skillId;
-    const skillTotal = Number.isFinite(actorSkill.total)
-      ? actorSkill.total
-      : toFiniteNumber(actorSkill.value, 0) + toFiniteNumber(actorSkill.mod, 0);
-
-    return {
-      skillLabel,
-      skillTotal
-    };
-  };
-
-  const addActionToType = (action, { source = null, image = null } = {}) => {
-    if (!action) return;
-    const typeId = action.type ?? "untyped";
+  const addEntryToType = (entry, { source = null, image = null } = {}) => {
+    if (!entry) return;
+    const typeId = entry.type ?? "untyped";
     const bucket = ensureType(typeId);
-    const skillData = resolveSkillData(action);
     bucket.collection.push({
-      ...action,
+      ...entry,
       source,
-      image: image ?? action.image ?? action.img ?? null,
-      ...skillData
+      image: image ?? entry.image ?? entry.img ?? null
     });
   };
 
-  // Base Actions immer einhängen.
-  const baseActions = codex?.baseActions ?? [];
-  for (let i = 0; i < baseActions.length; i += 1) {
-    const action = baseActions[i];
-    addActionToType(action, { image: action?.image ?? action?.img ?? null });
-  }
+  baseEntries.forEach(base => addEntryToType(base, { image: base?.image ?? base?.img ?? null }));
 
-  // Advanced Actions aus den ActionRefs holen.
-  if (actionRefs.length) {
-    const advancedActionsById = index.advancedActions ?? {};
-    for (let i = 0; i < actionRefs.length; i += 1) {
-      const ref = actionRefs[i];
-      if (!ref?.id) continue;
-      const advancedAction = advancedActionsById[ref.id];
-      if (!advancedAction) continue;
-      addActionToType(advancedAction, { source: ref.itemId ?? null, image: ref.image ?? null });
-    }
-  }
+  refs.forEach(ref => {
+    if (!ref?.id) return;
+    const entry = indexEntries[ref.id];
+    if (!entry) return;
+    addEntryToType(entry, { source: ref.itemId ?? null, image: ref.image ?? null });
+  });
 
-  if (actionTypes.length > 1) {
-    actionTypes.sort((a, b) => {
+  if (preparedTypes.length > 1) {
+    preparedTypes.sort((a, b) => {
       const sortA = toFiniteNumber(a.sort);
       const sortB = toFiniteNumber(b.sort);
       if (sortA !== sortB) return sortA - sortB;
       return collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? "");
     });
   }
-  for (let i = 0; i < actionTypes.length; i += 1) {
-    const type = actionTypes[i];
+  preparedTypes.forEach(type => {
     if (type.collection.length > 1) {
       type.collection.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
     }
-  }
+  });
 
-  return { types: actionTypes };
+  return { types: preparedTypes };
+}
+
+export function prepareActorActions(actor = null) {
+  const codex = getTriskellCodex();
+  const index = getTriskellIndex();
+  const actionRefs = toArray(actor?.preparedRefs?.actions);
+
+  if (!actionRefs.length && !(codex?.baseActions?.length)) return { types: [] };
+
+  return prepareActionLike({
+    refs: actionRefs,
+    indexEntries: index.advancedActions ?? {},
+    baseEntries: codex?.baseActions ?? []
+  });
+}
+
+/**
+ * Spells aus den SpellRefs vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {object} Spells nach Typen gruppiert.
+ */
+export function prepareActorSpells(actor = null) {
+  const spellRefs = toArray(actor?.preparedRefs?.spells);
+  const index = getTriskellIndex();
+
+  if (!spellRefs.length) return { types: [] };
+
+  return prepareActionLike({
+    refs: spellRefs,
+    indexEntries: index.spells ?? {},
+    baseEntries: []
+  });
+}
+
+/**
+ * Attunements aus den AttunementRefs vorbereiten.
+ *
+ * @param {Actor|null} actor
+ * @returns {object} Attunements nach Keyword gruppiert
+ */
+export function prepareActorAttunements(actor = null) {
+  const attunementRefs = toArray(actor?.preparedRefs?.attunements);
+  const attunementsIndex = getTriskellIndex().attunements ?? {};
+
+  return prepareKeywordBuckets({ refs: attunementRefs, index: attunementsIndex, keywordField: "keyword" });
 }
 
 /**
