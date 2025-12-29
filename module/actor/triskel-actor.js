@@ -37,7 +37,7 @@ export class TriskelActor extends Actor {
     const previousRefs = this.refs ?? { keys: {}, keywords: { forms: [], attunements: [] } };
     const previousPrepared = this.preparedActions ?? getEmptyPreparedBundle();
     const { refs, assets, modifiers } = this._prepareActorItems(this.items);
-    this.system.assets = assets;
+    this.assets = assets;
     this.refs = {
       ...refs,
       keys: {

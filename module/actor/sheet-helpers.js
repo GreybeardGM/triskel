@@ -69,6 +69,8 @@ export function prepareActorItemsContext(actor = null) {
     return collection;
   }, {});
 
+  if (actor?.assets) return actor.assets;
+
   if (!actor?.items) return assets;
 
   for (const item of actor.items) {
