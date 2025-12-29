@@ -12,7 +12,7 @@ import { prepareActorActions, prepareActorAttunements, prepareActorForms, prepar
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 const getEmptyPreparedBundle = () => ({
-  refs: { actions: [], forms: [], spells: [], attunements: [], keys: {}, keywords: { forms: [], attunements: [] } },
+  refs: { actions: [], forms: [], spells: [], attunements: [], keys: {} },
   actions: {},
   spells: {},
   forms: {},
@@ -64,8 +64,8 @@ export class TriskelActor extends Actor {
     let preparedForms = previousPrepared.forms ?? null;
     let preparedSpells = previousPrepared.spells ?? null;
     let preparedAttunements = previousPrepared.attunements ?? null;
-    let formKeywords = previousPrepared.keywords?.forms ?? [];
-    let attunementKeywords = previousPrepared.keywords?.attunements ?? [];
+    let formKeywords = previousRefs.keywords?.forms ?? [];
+    let attunementKeywords = previousRefs.keywords?.attunements ?? [];
 
     const actionsChanged = actionRefsKey !== previousRefs.keys?.actions || !preparedActions;
     const formsChanged = formRefsKey !== previousRefs.keys?.forms || !preparedForms;
