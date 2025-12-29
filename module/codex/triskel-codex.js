@@ -7,6 +7,7 @@ import {
   TRISKEL_BASE_ACTIONS,
   TRISKEL_SPELLS
 } from "./action-codex.js";
+import { TRISKEL_ATTUNEMENTS } from "./attunement-codex.js";
 import { TRISKEL_FORMS } from "./form-codex.js";
 
 const indexById = (entries = []) => entries.reduce((collection, entry) => {
@@ -374,6 +375,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   baseActions: TRISKEL_BASE_ACTIONS,
   advancedActions: TRISKEL_ADVANCED_ACTIONS,
   spells: TRISKEL_SPELLS,
+  attunements: TRISKEL_ATTUNEMENTS,
   actions: TRISKEL_ALL_ACTIONS,
   forms: TRISKEL_FORMS,
   reserves: TRISKEL_RESERVES,
@@ -387,6 +389,7 @@ export const TRISKEL_SKILL_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.skillCategorie
 export const TRISKEL_SKILLS_BY_ID = TRISKEL_CODEX_INDEX.skills;
 export const TRISKEL_ACTION_TYPES_BY_ID = TRISKEL_CODEX_INDEX.actionTypes;
 export const TRISKEL_ACTIONS_BY_ID = TRISKEL_CODEX_INDEX.actions;
+export const TRISKEL_ATTUNEMENTS_BY_ID = TRISKEL_CODEX_INDEX.attunements;
 export const TRISKEL_FORMS_BY_ID = TRISKEL_CODEX_INDEX.forms;
 export const TRISKEL_RESERVES_BY_ID = TRISKEL_CODEX_INDEX.reserves;
 export const TRISKEL_NPC_STATS_BY_ID = TRISKEL_CODEX_INDEX.npcStats;

@@ -1,10 +1,13 @@
 import {
+  createArrayKey,
   normalizeIdList,
+  normalizeKeyword,
+  toArray,
   toFiniteNumber
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { convertD10TensToZero } from "../util/roll.js";
-import { prepareActorActionsContext, prepareActorActionsWithForms, prepareActorFormsContext, prepareBars } from "./sheet-helpers.js";
+import { prepareActorActions, prepareActorAttunements, prepareActorForms, prepareActorSpells, prepareBars } from "./sheet-helpers.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -24,13 +27,14 @@ export class TriskelActor extends Actor {
     this._prepareCharacterDerivedData();
 
     // Platzhalter: zukünftige Item-Auswertung (ActionRefs, FormRefs, Assets, Modifiers).
-    const { actionRefs, formRefs, assets, modifiers } = this._prepareActorItems(this.items);
+    const { actionRefs, formRefs, spellRefs, attunementRefs, assets, modifiers } = this._prepareActorItems(this.items);
     this.system.assets = assets;
 
-    this.system.actions = {
-      ...(this.system.actions ?? {}),
-      actionRefs,
-      formRefs
+    this.preparedRefs = {
+      actions: actionRefs,
+      forms: formRefs,
+      spells: spellRefs,
+      attunements: attunementRefs
     };
     this.system.modifiers = modifiers;
     // Skills vor Actions vorbereiten, damit Skill-Werte in Actions genutzt werden können.
@@ -39,23 +43,62 @@ export class TriskelActor extends Actor {
       modifiers: this.system?.modifiers
     });
 
-    this.preparedForms = prepareActorFormsContext(this);
     const actionsData = this.system?.actions ?? {};
-    const preparedActions = prepareActorActionsContext(this);
-    const selectedActionId = actionsData?.selected?.ref ?? null;
-    const selectedForms = Array.isArray(actionsData?.selectedForms) ? actionsData.selectedForms : [];
-    this.preparedActions = prepareActorActionsWithForms({
-      actions: preparedActions,
+    const refs = this.preparedRefs ?? {};
+    const actionRefs = toArray(refs?.actions);
+    const formRefs = toArray(refs?.forms);
+    const spellRefs = toArray(refs?.spells);
+    const attunementRefs = toArray(refs?.attunements);
+    const actionRefsKey = createArrayKey(actionRefs);
+    const formRefsKey = createArrayKey(formRefs);
+    const spellRefsKey = createArrayKey(spellRefs);
+    const attunementRefsKey = createArrayKey(attunementRefs);
+
+    const actionsChanged = actionRefsKey !== this._actionRefsKey || !this.preparedActions;
+    const formsChanged = formRefsKey !== this._formRefsKey || !this.preparedForms;
+    const spellsChanged = spellRefsKey !== this._spellRefsKey || !this.preparedSpells;
+    const attunementsChanged = attunementRefsKey !== this._attunementRefsKey || !this.preparedAttunements;
+
+    if (actionsChanged) {
+      this.preparedActions = prepareActorActions(this);
+      this._actionRefsKey = actionRefsKey;
+    }
+
+    if (formsChanged) {
+      this.preparedForms = prepareActorForms(this);
+      this.formKeywords = this._collectKeywords(this.preparedForms);
+      this._formRefsKey = formRefsKey;
+    }
+
+    if (spellsChanged) {
+      this.preparedSpells = prepareActorSpells(this);
+      this._spellRefsKey = spellRefsKey;
+    }
+
+    if (attunementsChanged) {
+      this.preparedAttunements = prepareActorAttunements(this);
+      this.attunementKeywords = this._collectKeywords(this.preparedAttunements);
+      this._attunementRefsKey = attunementRefsKey;
+    }
+
+    if (actionsChanged || formsChanged) {
+      const sharedKeywords = new Set((this.formKeywords ?? []).map(keyword => normalizeKeyword(keyword)));
+      this.preparedActions = this._applyAvailableKeywords(this.preparedActions, sharedKeywords);
+    }
+
+    if (spellsChanged || attunementsChanged) {
+      const sharedAttunementKeywords = new Set((this.attunementKeywords ?? []).map(keyword => normalizeKeyword(keyword)));
+      this.preparedSpells = this._applyAvailableKeywords(this.preparedSpells, sharedAttunementKeywords);
+    }
+
+    this.preparedActions = {
+      actions: this.preparedActions,
+      spells: this.preparedSpells,
       forms: this.preparedForms,
-      selectedActionId,
-      selectedForms
-    });
-    this.system.actions = {
-      ...(this.system.actions ?? {}),
-      selected: {
-        ...(this.system.actions?.selected ?? {}),
-        ref: selectedActionId,
-        action: this.preparedActions?.selectedAction ?? null
+      attunements: this.preparedAttunements,
+      keywords: {
+        forms: this.formKeywords ?? [],
+        attunements: this.attunementKeywords ?? []
       }
     };
 
@@ -142,6 +185,8 @@ export class TriskelActor extends Actor {
    * @returns {{
    *  actionRefs: Array<{id: string, itemId: string|null, image: string|null}>,
    *  formRefs: Array<{id: string, itemId: string|null, image: string|null}>,
+   *  spellRefs: Array<{id: string, itemId: string|null, image: string|null}>,
+   *  attunementRefs: Array<{id: string, itemId: string|null, image: string|null}>,
    *  assets: object,
    *  modifiers: object
    * }}
@@ -161,6 +206,8 @@ export class TriskelActor extends Actor {
 
     const actionRefs = [];
     const formRefs = [];
+    const spellRefs = [];
+    const attunementRefs = [];
     const modifiers = {};
 
     // TODO: Iteration über alle Items und Aggregation von ActionRefs, FormRefs und Modifiers.
@@ -189,6 +236,20 @@ export class TriskelActor extends Actor {
         image: item?.img ?? item?.image ?? null
       }));
 
+      const itemSpellRefs = normalizeIdList(item?.system?.spells?.ref);
+      itemSpellRefs.forEach(spellId => spellRefs.push({
+        id: spellId,
+        itemId: item?.id ?? null,
+        image: item?.img ?? item?.image ?? null
+      }));
+
+      const itemAttunementRefs = normalizeIdList(item?.system?.attunements?.ref);
+      itemAttunementRefs.forEach(attunementId => attunementRefs.push({
+        id: attunementId,
+        itemId: item?.id ?? null,
+        image: item?.img ?? item?.image ?? null
+      }));
+
       if (Array.isArray(item?.system?.modifiers)) {
         item.system.modifiers.forEach(modifier => {
           const skill = modifier?.skill ?? modifier?.id ?? "";
@@ -203,9 +264,35 @@ export class TriskelActor extends Actor {
     return {
       actionRefs,
       formRefs,
+      spellRefs,
+      attunementRefs,
       assets,
       modifiers
     };
+  }
+
+  _collectKeywords(bucket = {}) {
+    return Object.keys(bucket ?? {});
+  }
+
+  _applyAvailableKeywords(collectionByType = null, keywordSet = new Set()) {
+    if (!collectionByType || typeof collectionByType !== "object") return collectionByType;
+    const mappedTypes = Array.isArray(collectionByType.types) ? collectionByType.types.map(type => {
+      const collection = Array.isArray(type?.collection) ? type.collection : [];
+      return {
+        ...type,
+        collection: collection.map(entry => {
+          const keywords = Array.isArray(entry?.keywords) ? entry.keywords : [];
+          const availableKeywords = keywords
+            .map(keyword => ({ original: keyword, normalized: normalizeKeyword(keyword) }))
+            .filter(entry => keywordSet.has(entry.normalized))
+            .map(entry => entry.normalized);
+          return { ...entry, availableKeywords };
+        })
+      };
+    }) : [];
+
+    return { ...collectionByType, types: mappedTypes };
   }
 
   /**
