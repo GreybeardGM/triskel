@@ -5,7 +5,6 @@ import {
   onUpdateResourceValue,
   prepareActorItemsContext,
   prepareActorSkillsContext,
-  prepareActorActions,
   prepareActorActionsWithForms,
   prepareActorBarsContext,
   prepareRollHelperContext
