@@ -130,16 +130,8 @@ function prepareKeywordBuckets({ refs = [], index = {}, keywordField = "keyword"
 
 /**
  * Forms aus den FormRefs vorbereiten und nach Keywords bündeln.
- *
- * @param {Actor|null} actor
- * @returns {object} Forms nach Keyword, sortiert nach Label: forms[keyword] = Array<Form>
  */
-export function prepareActorForms(actor = null) {
-  const formRefs = toArray(actor?.refs?.forms);
-  const formsIndex = getTriskellIndex().forms ?? {};
-
-  return prepareKeywordBuckets({ refs: formRefs, index: formsIndex, keywordField: "keyword" });
-}
+// (Jetzt in den Actor verschoben.)
 
 /**
  * Actions mit vorbereiteten Forms zusammenführen und Selektion kennzeichnen.
@@ -149,13 +141,15 @@ export function prepareActorForms(actor = null) {
  * @param {object|null} [options.forms=null] vorbereitete Forms (z. B. aus prepareActorForms)
  * @param {string|null} [options.selectedActionId=null] aktuell gewählte Action-ID
  * @param {Array<string>} [options.selectedForms=[]] aktuell gewählte Form-IDs
+ * @param {object} [options.skills={}] vorbereitete Actor-Skills aus prepareDerivedData
  * @returns {{types: Array, selectedAction?: object}} vorbereitete Actions mit angedockten Forms
  */
 export function prepareActorActionsWithForms({
   actions = null,
   forms = null,
   selectedActionId = null,
-  selectedForms = []
+  selectedForms = [],
+  skills = {}
 } = {}) {
   // prepareActorForms liefert ein Keyword-Mapping: forms[keyword] = Array<Form>
   const formsByKeyword = (forms && typeof forms === "object" && !Array.isArray(forms)) ? forms : {};
@@ -167,17 +161,21 @@ export function prepareActorActionsWithForms({
   const actionTypes = getTriskellCodex()?.actionTypes ?? [];
   const actionsByType = (actions && typeof actions === "object" && !Array.isArray(actions)) ? actions : {};
 
+  const resolveNormalizedKeywords = (action) => {
+    const availableKeywords = Array.isArray(action?.availableKeywords) ? action.availableKeywords : [];
+    return availableKeywords.map(keyword => normalizeKeyword(keyword));
+  };
+
   result.types = actionTypes.map(type => {
     const collection = Array.isArray(actionsByType?.[type.id]) ? actionsByType[type.id] : [];
 
     const preparedCollection = collection.map(action => {
       const isActive = action?.id === selectedActionId;
-      const keywords = Array.isArray(action?.keywords) ? action.keywords : [];
+      const keywords = resolveNormalizedKeywords(action);
       const attachedForms = [];
 
       keywords.forEach(keyword => {
-        const normalized = normalizeKeyword(keyword);
-        const formsForKeyword = formsByKeyword?.[normalized];
+        const formsForKeyword = formsByKeyword?.[keyword];
         const keywordForms = Array.isArray(formsForKeyword) ? formsForKeyword : [];
         if (!keywordForms.length) return;
 
@@ -195,6 +193,12 @@ export function prepareActorActionsWithForms({
         active: isActive,
         forms: attachedForms
       };
+
+      const skillId = preparedAction.skill ?? preparedAction.skillId ?? null;
+      const skillSource = skillId ? skills?.[skillId] : null;
+      preparedAction.skill = skillId ?? preparedAction.skill ?? null;
+      preparedAction.skillLabel = skillSource?.label ?? preparedAction.skillLabel ?? skillId ?? "";
+      preparedAction.skillTotal = toFiniteNumber(skillSource?.total, toFiniteNumber(preparedAction.skillTotal, 0));
 
       if (isActive) resolvedSelectedAction = preparedAction;
 
@@ -217,97 +221,6 @@ export function prepareActorActionsWithForms({
  * @param {Actor|null} actor
  * @returns {object} Actions nach Typen gruppiert.
  */
-function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = {}) {
-  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
-  const result = {};
-  const baseActionTypes = getTriskellCodex()?.actionTypes ?? [];
-  const typeOrder = baseActionTypes.map(type => type.id);
-
-  const ensureType = (typeId) => {
-    const key = typeId || "untyped";
-    if (!result[key]) result[key] = [];
-    return result[key];
-  };
-
-  const addEntryToType = (entry, { source = null, image = null } = {}) => {
-    if (!entry) return;
-    const typeId = entry.type ?? "untyped";
-    const bucket = ensureType(typeId);
-    bucket.push({
-      ...entry,
-      source,
-      image: image ?? entry.image ?? entry.img ?? null
-    });
-  };
-
-  baseEntries.forEach(base => addEntryToType(base, { image: base?.image ?? base?.img ?? null }));
-
-  refs.forEach(ref => {
-    if (!ref?.id) return;
-    const entry = indexEntries[ref.id];
-    if (!entry) return;
-    addEntryToType(entry, { source: ref.itemId ?? null, image: ref.image ?? null });
-  });
-
-  // Sort buckets
-  Object.values(result).forEach(bucket => {
-    if (bucket.length > 1) {
-      bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
-    }
-  });
-
-  // Ensure all known action types exist, keep insertion order from codex
-  typeOrder.forEach(typeId => ensureType(typeId));
-
-  return result;
-}
-
-export function prepareActorActions(actor = null) {
-  const codex = getTriskellCodex();
-  const index = getTriskellIndex();
-  const actionRefs = toArray(actor?.refs?.actions);
-
-  if (!actionRefs.length && !(codex?.baseActions?.length)) return {};
-
-  return prepareActionLike({
-    refs: actionRefs,
-    indexEntries: index.advancedActions ?? {},
-    baseEntries: codex?.baseActions ?? []
-  });
-}
-
-/**
- * Spells aus den SpellRefs vorbereiten.
- *
- * @param {Actor|null} actor
- * @returns {object} Spells nach Typen gruppiert.
- */
-export function prepareActorSpells(actor = null) {
-  const spellRefs = toArray(actor?.refs?.spells);
-  const index = getTriskellIndex();
-
-  if (!spellRefs.length) return {};
-
-  return prepareActionLike({
-    refs: spellRefs,
-    indexEntries: index.spells ?? {},
-    baseEntries: []
-  });
-}
-
-/**
- * Attunements aus den AttunementRefs vorbereiten.
- *
- * @param {Actor|null} actor
- * @returns {object} Attunements nach Keyword gruppiert
- */
-export function prepareActorAttunements(actor = null) {
-  const attunementRefs = toArray(actor?.refs?.attunements);
-  const attunementsIndex = getTriskellIndex().attunements ?? {};
-
-  return prepareKeywordBuckets({ refs: attunementRefs, index: attunementsIndex, keywordField: "keyword" });
-}
-
 /**
  * Roll Helper Kontext aus ausgewählter Action und Ressourcen vorbereiten.
  *
