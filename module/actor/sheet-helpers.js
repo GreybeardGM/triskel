@@ -106,6 +106,7 @@ export function prepareActorActionsWithForms({
   const formsByKeyword = (forms && typeof forms === "object" && !Array.isArray(forms)) ? forms : {};
   const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
   const result = { types: [] };
+  const reservesIndex = getTriskellIndex().reserves ?? {};
 
   let resolvedSelectedAction = null;
 
@@ -115,6 +116,12 @@ export function prepareActorActionsWithForms({
   const resolveNormalizedKeywords = (action) => {
     const availableKeywords = Array.isArray(action?.availableKeywords) ? action.availableKeywords : [];
     return availableKeywords.map(keyword => normalizeKeyword(keyword));
+  };
+
+  const resolveReserveLabel = (reserveId) => {
+    if (!reserveId) return "";
+    const reserve = reservesIndex[reserveId] ?? {};
+    return reserve.label ?? reserveId;
   };
 
   result.types = actionTypes.map(type => {
@@ -133,7 +140,8 @@ export function prepareActorActionsWithForms({
         keywordForms.forEach(form => {
           const preparedForm = {
             ...form,
-            active: selectedFormIds.has(form.id)
+            active: selectedFormIds.has(form.id),
+            reserveLabel: resolveReserveLabel(form.reserve)
           };
           attachedForms.push(preparedForm);
         });
@@ -142,14 +150,21 @@ export function prepareActorActionsWithForms({
       const preparedAction = {
         ...action,
         active: isActive,
-        forms: attachedForms
+        forms: attachedForms,
+        reserveLabel: resolveReserveLabel(action.reserve)
       };
 
-      const skillId = preparedAction.skill ?? preparedAction.skillId ?? null;
-      const skillSource = skillId ? skills?.[skillId] : null;
-      preparedAction.skill = skillId ?? preparedAction.skill ?? null;
-      preparedAction.skillLabel = skillSource?.label ?? preparedAction.skillLabel ?? skillId ?? "";
-      preparedAction.skillTotal = toFiniteNumber(skillSource?.total, toFiniteNumber(preparedAction.skillTotal, 0));
+      const skillId = action?.skill ?? null;
+      preparedAction.skill = skillId ?? null;
+
+      if (skillId) {
+        const skillSource = skills?.[skillId] ?? null;
+        preparedAction.skillLabel = skillSource?.label ?? skillId;
+        preparedAction.skillTotal = toFiniteNumber(skillSource?.total, 0);
+      } else {
+        preparedAction.skillLabel = null;
+        preparedAction.skillTotal = null;
+      }
 
       if (isActive) resolvedSelectedAction = preparedAction;
 
