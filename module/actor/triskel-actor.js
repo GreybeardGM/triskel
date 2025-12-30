@@ -7,7 +7,7 @@ import {
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { convertD10TensToZero } from "../util/roll.js";
-import { prepareActorActions, prepareActorAttunements, prepareActorForms, prepareActorSpells, prepareBars } from "./sheet-helpers.js";
+import { getCachedCollator } from "../util/collator.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -452,4 +452,121 @@ export class TriskelActor extends Actor {
     };
   }
 
+}
+
+function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = {}) {
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
+  const result = {};
+  const baseActionTypes = getTriskellCodex()?.actionTypes ?? [];
+  const typeOrder = baseActionTypes.map(type => type.id);
+
+  const ensureType = (typeId) => {
+    const key = typeId || "untyped";
+    if (!result[key]) result[key] = [];
+    return result[key];
+  };
+
+  const addEntryToType = (entry, { source = null, image = null } = {}) => {
+    if (!entry) return;
+    const typeId = entry.type ?? "untyped";
+    const bucket = ensureType(typeId);
+    bucket.push({
+      ...entry,
+      source,
+      image: image ?? entry.image ?? entry.img ?? null
+    });
+  };
+
+  baseEntries.forEach(base => addEntryToType(base, { image: base?.image ?? base?.img ?? null }));
+
+  refs.forEach(ref => {
+    if (!ref?.id) return;
+    const entry = indexEntries[ref.id];
+    if (!entry) return;
+    addEntryToType(entry, { source: ref.itemId ?? null, image: ref.image ?? null });
+  });
+
+  Object.values(result).forEach(bucket => {
+    if (bucket.length > 1) {
+      bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""));
+    }
+  });
+
+  typeOrder.forEach(typeId => ensureType(typeId));
+
+  return result;
+}
+
+function prepareActorActions(actor = null) {
+  const codex = getTriskellCodex();
+  const index = getTriskellIndex();
+  const actionRefs = toArray(actor?.refs?.actions);
+
+  if (!actionRefs.length && !(codex?.baseActions?.length)) return {};
+
+  return prepareActionLike({
+    refs: actionRefs,
+    indexEntries: index.advancedActions ?? {},
+    baseEntries: codex?.baseActions ?? []
+  });
+}
+
+function prepareActorSpells(actor = null) {
+  const spellRefs = toArray(actor?.refs?.spells);
+  const index = getTriskellIndex();
+
+  if (!spellRefs.length) return {};
+
+  return prepareActionLike({
+    refs: spellRefs,
+    indexEntries: index.spells ?? {},
+    baseEntries: []
+  });
+}
+
+function prepareActorAttunements(actor = null) {
+  const attunementRefs = toArray(actor?.refs?.attunements);
+  const attunementsIndex = getTriskellIndex().attunements ?? {};
+
+  return prepareKeywordBucketsActor({ refs: attunementRefs, index: attunementsIndex, keywordField: "keyword" });
+}
+
+function prepareActorForms(actor = null) {
+  const formRefs = toArray(actor?.refs?.forms);
+  const formsIndex = getTriskellIndex().forms ?? {};
+
+  return prepareKeywordBucketsActor({ refs: formRefs, index: formsIndex, keywordField: "keyword" });
+}
+
+function prepareKeywordBucketsActor({ refs = [], index = {}, keywordField = "keyword" } = {}) {
+  const entriesByKeyword = {};
+  if (!Array.isArray(refs) || !refs.length) return entriesByKeyword;
+
+  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
+
+  refs.forEach(ref => {
+    if (!ref?.id) return;
+
+    const base = index[ref.id] ?? { id: ref.id };
+    const keyword = ref[keywordField] ?? base[keywordField];
+    const keywordKey = normalizeKeyword(keyword);
+    if (!entriesByKeyword[keywordKey]) entriesByKeyword[keywordKey] = [];
+
+    const merged = {
+      ...base,
+      id: ref.id,
+      keyword: keywordKey,
+      source: ref.itemId ?? ref.source ?? null,
+      image: ref.image ?? base.image ?? base.img ?? null,
+      label: base.label ?? ref.label ?? ref.id ?? base.id
+    };
+
+    entriesByKeyword[keywordKey].push(merged);
+  });
+
+  Object.values(entriesByKeyword).forEach(bucket =>
+    bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""))
+  );
+
+  return entriesByKeyword;
 }

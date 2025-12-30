@@ -5,8 +5,6 @@ import {
   onUpdateResourceValue,
   prepareActorItemsContext,
   prepareActorSkillsContext,
-  prepareActorForms,
-  prepareActorActions,
   prepareActorActionsWithForms,
   prepareActorBarsContext,
   prepareRollHelperContext
@@ -51,8 +49,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
     const preparedBundle = this.document?.preparedActions ?? {};
-    const preparedForms = preparedBundle.forms ?? prepareActorForms(this.document);
-    const preparedActions = preparedBundle.actions ?? prepareActorActions(this.document);
+    const preparedForms = preparedBundle.forms ?? {};
+    const preparedActions = preparedBundle.actions ?? {};
     const selectedActionId = this.document?.system?.actions?.selected?.ref ?? null;
     const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
       ? this.document.system.actions.selectedForms
@@ -61,7 +59,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       actions: preparedActions,
       forms: preparedForms,
       selectedActionId,
-      selectedForms
+      selectedForms,
+      skills: this.document?.system?.skills ?? {}
     });
     const actionTypeOrder = ["position", "setup", "impact", "defense"];
     const actionTypeFilters = actionTypeOrder.map(typeId => {
