@@ -461,9 +461,8 @@ export function prepareBars(bars = {}, codexReference = undefined) {
     };
   }
 
-  collection.maxSegments = maxSegments;
   Object.entries(collection).forEach(([id, entry]) => {
-    if (id === "maxSegments" || !entry || typeof entry !== "object") return;
+    if (!entry || typeof entry !== "object") return;
     const entryMax = toFiniteNumber(entry.max, maxSegments);
     entry._spacerFlex = Math.max(0, maxSegments - entryMax);
   });
