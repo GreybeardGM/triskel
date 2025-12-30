@@ -58,6 +58,8 @@ export async function onUpdateResourceValue(event, target) {
  * @returns {object} assets nach Item-Kategorien
  */
 export function prepareActorItemsContext(actor = null) {
+  if (actor?.assets) return actor.assets;
+
   const itemCategories = getTriskellIndex().itemCategories ?? {};
   const assets = Object.entries(itemCategories).reduce((collection, [id, category]) => {
     collection[id] = {
@@ -68,8 +70,6 @@ export function prepareActorItemsContext(actor = null) {
     };
     return collection;
   }, {});
-
-  if (actor?.assets) return actor.assets;
 
   if (!actor?.items) return assets;
 
