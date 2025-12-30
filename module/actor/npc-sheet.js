@@ -3,7 +3,6 @@ import {
   onUpdateResourceValue,
   prepareActorItemsContext,
   prepareActorSkillsContext,
-  prepareActorActions,
   prepareActorBarsContext
 } from "./sheet-helpers.js";
 
