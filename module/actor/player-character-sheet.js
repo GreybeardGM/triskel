@@ -4,10 +4,10 @@ import {
   onEditImage,
   onUpdateResourceValue,
   prepareActorItemsContext,
-  prepareActorSkillsContext,
   prepareActorActionsWithForms,
   prepareActorBarsContext,
-  prepareRollHelperContext
+  prepareRollHelperContext,
+  prepareSkillsDisplay
 } from "./sheet-helpers.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -45,7 +45,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       context.system.tier.label = tierLabel;
     }
 
-    const { skillCategories } = prepareActorSkillsContext(this.document);
+    const { skillCategories } = prepareSkillsDisplay(this.document?.system?.skills ?? {});
     context.skillCategories = skillCategories;
     context.assets = prepareActorItemsContext(this.document);
     const preparedBundle = this.document?.preparedActions ?? {};

@@ -1,5 +1,4 @@
-import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
-import { getCachedCollator } from "../util/collator.js";
+import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -16,9 +15,6 @@ export async function onEditImage(event, target) {
 
   picker.render(true);
 }
-
-const deriveMaxSegments = (values, fallback = 5) =>
-  values.length ? Math.max(...values) : fallback;
 
 const createSegments = (maxSegments, stateResolver) =>
   Array.from({ length: maxSegments }, (_, index) => {
@@ -81,51 +77,6 @@ export function prepareActorItemsContext(actor = null) {
   }
 
   return assets;
-}
-
-/**
- * Skills für Actor-Sheets vorbereiten und nach Kategorien gruppieren.
- *
- * @param {Actor|null} actor
- * @returns {{skillCategories: Array}}
- */
-export function prepareActorSkillsContext(actor = null) {
-  const skills = actor?.system?.skills ?? {};
-
-  return prepareSkillsDisplay(skills);
-}
-
-function prepareKeywordBuckets({ refs = [], index = {}, keywordField = "keyword" } = {}) {
-  const entriesByKeyword = {};
-  if (!Array.isArray(refs) || !refs.length) return entriesByKeyword;
-
-  const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
-
-  refs.forEach(ref => {
-    if (!ref?.id) return;
-
-    const base = index[ref.id] ?? { id: ref.id };
-    const keyword = ref[keywordField] ?? base[keywordField];
-    const keywordKey = normalizeKeyword(keyword);
-    if (!entriesByKeyword[keywordKey]) entriesByKeyword[keywordKey] = [];
-
-    const merged = {
-      ...base,
-      id: ref.id,
-      keyword: keywordKey,
-      source: ref.itemId ?? ref.source ?? null,
-      image: ref.image ?? base.image ?? base.img ?? null,
-      label: base.label ?? ref.label ?? ref.id ?? base.id
-    };
-
-    entriesByKeyword[keywordKey].push(merged);
-  });
-
-  Object.values(entriesByKeyword).forEach(bucket =>
-    bucket.sort((a, b) => collator.compare(a.label ?? a.id ?? "", b.label ?? b.id ?? ""))
-  );
-
-  return entriesByKeyword;
 }
 
 /**
