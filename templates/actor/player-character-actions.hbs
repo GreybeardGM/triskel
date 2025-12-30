@@ -24,23 +24,27 @@
           {{/if}}
 
           <div class="action-row__label">{{action.label}}</div>
-          <div class="action-row__bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</div>
-          <div class="action-row__skill">{{action.skillLabel}}</div>
-          <div class="action-row__cost">{{numberFormat action.cost decimals=0}}</div>
-          <div class="action-row__reserve">
-            {{#if action.reserveLabel}}
-              {{action.reserveLabel}}
-            {{else}}
-              {{action.reserve}}
-            {{/if}}
-          </div>
+          {{#if action.skill}}
+            <div class="action-row__bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</div>
+            <div class="action-row__skill">{{action.skillLabel}}</div>
+          {{/if}}
+          {{#if action.reserve}}
+            <div class="action-row__cost">{{numberFormat action.cost decimals=0}}</div>
+            <div class="action-row__reserve">
+              {{#if action.reserveLabel}}
+                {{action.reserveLabel}}
+              {{else}}
+                {{action.reserve}}
+              {{/if}}
+            </div>
+          {{/if}}
           <div class="action-row__forms" role="group">
             {{#if action.forms.length}}
               {{#each action.forms as |form|}}
                 <button
                   type="button"
                   class="action-row__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
-                  title="{{form.description}}"
+                  title="{{#if form.description}}{{form.label}} — {{form.description}}{{else}}{{form.label}}{{/if}}"
                   data-action="toggleForm"
                   data-form-key="{{form.id}}"
                   data-reserve="{{form.reserve}}"
@@ -48,7 +52,6 @@
                   {{#if form.image}}
                     <img class="action-row__form-icon" src="{{form.image}}" alt="" />
                   {{/if}}
-                  <span class="action-row__form-label">{{form.label}}</span>
                   {{#if form.cost}}
                     <span class="action-row__form-cost">{{numberFormat form.cost decimals=0}}</span>
                   {{/if}}

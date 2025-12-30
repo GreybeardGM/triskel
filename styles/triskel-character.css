@@ -609,13 +609,19 @@
 .triskel .action-row {
   display: grid;
   grid-template-columns: 2em 1.5fr 2em 1fr 2em 1fr 1.5fr;
+  grid-template-areas: "icon label bonus skill cost reserve forms";
   align-items: center;
   gap: 0.5rem;
   padding: 0.25em 0.5em;
   background: var(--triskel-interactive-background);
 }
 
+.triskel .actions-list .action-row:nth-child(even) {
+  background: var(--triskel-interactive-background-alt, color-mix(in srgb, var(--triskel-interactive-background) 85%, #fff 15%));
+}
+
 .triskel .action-row__icon {
+  grid-area: icon;
   width: 1.5em;
   height: 1.5em;
   object-fit: cover;
@@ -627,31 +633,37 @@
 }
 
 .triskel .action-row__label {
+  grid-area: label;
   font-weight: 700;
   /*! font-size: 1.05rem; */
 }
 
 .triskel .action-row__bonus {
+  grid-area: bonus;
   text-align: right;
   font-weight: 700;
 }
 
 .triskel .action-row__skill {
+  grid-area: skill;
   color: var(--color-text-subtle);
   /*! text-align: center; */
 }
 
 .triskel .action-row__cost {
+  grid-area: cost;
   text-align: right;
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
 }
 
 .triskel .action-row__reserve {
+  grid-area: reserve;
   color: var(--triskel-interactive-highlight);
 }
 
 .triskel .action-row__forms {
+  grid-area: forms;
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
