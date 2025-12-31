@@ -19,7 +19,7 @@
 }
 
 .triskel .window-content {
-  overflow: auto;
+  overflow: overlay;
   gap: 1em;
 }
 
