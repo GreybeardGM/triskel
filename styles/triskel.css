@@ -20,6 +20,14 @@
 
 .triskel .window-content {
   overflow: overlay;
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  grid-template-areas:
+    "sidebar core"
+    "sidebar core"
+    "sidebar tabbar"
+    "sidebar tabcontent";
+  align-items: start;
   gap: 1em;
 }
 

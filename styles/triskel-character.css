@@ -67,6 +67,20 @@
   align-items: center;
 }
 
+.triskel .player-character-core,
+.triskel .npc-core {
+  grid-area: core;
+}
+
+.triskel nav.sheet-tabs,
+.triskel .sheet-tabs-nav {
+  grid-area: tabbar;
+}
+
+.triskel .tab {
+  grid-area: tabcontent;
+}
+
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --      TABS      -- |
 \*____________________*/
@@ -422,6 +436,8 @@
   overflow: visible;
   margin: -0.5rem;
   height: 0;
+  grid-area: sidebar;
+  align-self: start;
 }
 
 .triskel .roll-helper__bar {
@@ -432,13 +448,18 @@
   background: var(--triskel-interactive-background);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 
 .triskel .roll-helper__selection-row {
-  display: inline-flex;
+  display: flex;
   gap: 0.5rem;
   width: 100%;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .triskel .roll-helper__commit {
@@ -451,7 +472,8 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 0.5rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .triskel .roll-helper__summary-entry {
@@ -461,12 +483,14 @@
   padding: 0.35rem 0.6rem;
   border-radius: 999px;
   background: var(--triskel-color-segment-placeholder);
+  justify-content: space-between;
+  width: 100%;
 }
 
 .triskel .roll-helper__summary-reserves {
   display: flex;
+  flex-direction: column;
   gap: 0.35rem;
-  flex-wrap: wrap;
 }
 
 .triskel .roll-helper__summary-label {
