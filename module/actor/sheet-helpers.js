@@ -85,36 +85,46 @@ export function prepareActorItemsContext(actor = null) {
 // (Jetzt in den Actor verschoben.)
 
 /**
- * Actions mit vorbereiteten Forms zusammenführen und Selektion kennzeichnen.
+ * Actions oder Spells mit Forms oder Attunements zusammenführen und Selektion kennzeichnen.
  *
  * @param {object} [options={}]
- * @param {object|null} [options.actions=null] vorbereitete Actions (z. B. aus prepareActorActions)
- * @param {object|null} [options.forms=null] vorbereitete Forms (z. B. aus prepareActorForms)
- * @param {string|null} [options.selectedActionId=null] aktuell gewählte Action-ID
- * @param {Array<string>} [options.selectedForms=[]] aktuell gewählte Form-IDs
+ * @param {object|null} [options.actionLikes=null] vorbereitete Actions oder Spells
+ * @param {object|null} [options.keywordBuckets=null] vorbereitete Forms oder Attunements
+ * @param {string|null} [options.selectedActionId=null] aktuell gewählte Action-/Spell-ID
+ * @param {Array<string>} [options.selectedKeywords=[]] aktuell gewählte Form-/Attunement-IDs
  * @param {object} [options.skills={}] vorbereitete Actor-Skills aus prepareDerivedData
- * @returns {{types: Array, selectedAction?: object}} vorbereitete Actions mit angedockten Forms
+ * @param {string|null} [options.selectedTypeId=null] gewählte Action-Phase
+ * @param {string} [options.keywordProperty="forms"] Zielfeld für angehängte Keywords (forms|attunements)
+ * @param {string} [options.selectionCollection="selectedForms"] Auswahl-Feld im Actor-Datenmodell
+ * @returns {{types: Array, filteredTypes: Array, selectedType: string|null, selectedAction?: object}}
+ *  vorbereitete Actions/Spells mit angedockten Forms/Attunements
  */
-export function prepareActorActionsWithForms({
-  actions = null,
-  forms = null,
+export function prepareActionLikesWithKeywords({
+  actionLikes = null,
+  keywordBuckets = null,
   selectedActionId = null,
-  selectedForms = [],
-  skills = {}
+  selectedKeywords = [],
+  skills = {},
+  selectedTypeId = null,
+  keywordProperty = "forms",
+  selectionCollection = "selectedForms"
 } = {}) {
-  // prepareActorForms liefert ein Keyword-Mapping: forms[keyword] = Array<Form>
-  const formsByKeyword = (forms && typeof forms === "object" && !Array.isArray(forms)) ? forms : {};
-  const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
+  const bucketsByKeyword = (keywordBuckets && typeof keywordBuckets === "object" && !Array.isArray(keywordBuckets))
+    ? keywordBuckets
+    : {};
+  const selectedKeywordIds = new Set(Array.isArray(selectedKeywords) ? selectedKeywords : []);
   const result = { types: [] };
   const reservesIndex = getTriskellIndex().reserves ?? {};
 
   let resolvedSelectedAction = null;
 
   const actionTypes = getTriskellCodex()?.actionTypes ?? [];
-  const actionsByType = (actions && typeof actions === "object" && !Array.isArray(actions)) ? actions : {};
+  const actionLikesByType = (actionLikes && typeof actionLikes === "object" && !Array.isArray(actionLikes))
+    ? actionLikes
+    : {};
 
-  const resolveNormalizedKeywords = (action) => {
-    const availableKeywords = Array.isArray(action?.availableKeywords) ? action.availableKeywords : [];
+  const resolveNormalizedKeywords = (entry) => {
+    const availableKeywords = Array.isArray(entry?.availableKeywords) ? entry.availableKeywords : [];
     return availableKeywords.map(keyword => normalizeKeyword(keyword));
   };
 
@@ -125,36 +135,41 @@ export function prepareActorActionsWithForms({
   };
 
   result.types = actionTypes.map(type => {
-    const collection = Array.isArray(actionsByType?.[type.id]) ? actionsByType[type.id] : [];
+    const collection = Array.isArray(actionLikesByType?.[type.id]) ? actionLikesByType[type.id] : [];
 
-    const preparedCollection = collection.map(action => {
-      const isActive = action?.id === selectedActionId;
-      const keywords = resolveNormalizedKeywords(action);
-      const attachedForms = [];
+    const preparedCollection = collection.map(entry => {
+      const isActive = entry?.id === selectedActionId;
+      const keywords = resolveNormalizedKeywords(entry);
+      const attachedKeywords = [];
 
       keywords.forEach(keyword => {
-        const formsForKeyword = formsByKeyword?.[keyword];
-        const keywordForms = Array.isArray(formsForKeyword) ? formsForKeyword : [];
-        if (!keywordForms.length) return;
+        const keywordsForBucket = bucketsByKeyword?.[keyword];
+        const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
+        if (!keywordCollection.length) return;
 
-        keywordForms.forEach(form => {
-          const preparedForm = {
-            ...form,
-            active: selectedFormIds.has(form.id),
-            reserveLabel: resolveReserveLabel(form.reserve)
+        keywordCollection.forEach(keywordEntry => {
+          const preparedKeywordEntry = {
+            ...keywordEntry,
+            active: selectedKeywordIds.has(keywordEntry.id),
+            reserveLabel: resolveReserveLabel(keywordEntry.reserve)
           };
-          attachedForms.push(preparedForm);
+          attachedKeywords.push(preparedKeywordEntry);
         });
       });
 
       const preparedAction = {
-        ...action,
+        ...entry,
         active: isActive,
-        forms: attachedForms,
-        reserveLabel: resolveReserveLabel(action.reserve)
+        reserveLabel: resolveReserveLabel(entry.reserve),
+        selectionCollection,
+        [keywordProperty]: attachedKeywords
       };
 
-      const skillId = action?.skill ?? null;
+      // Kompatibilität: Forms oder Attunements optional auch im jeweils anderen Feld ablegen.
+      if (keywordProperty !== "forms" && !preparedAction.forms) preparedAction.forms = attachedKeywords;
+      if (keywordProperty !== "attunements" && !preparedAction.attunements) preparedAction.attunements = attachedKeywords;
+
+      const skillId = entry?.skill ?? null;
       preparedAction.skill = skillId ?? null;
 
       if (skillId) {
@@ -174,6 +189,18 @@ export function prepareActorActionsWithForms({
     return { ...type, collection: preparedCollection };
   });
 
+  const filteredTypes = selectedTypeId
+    ? result.types.filter(type => type.id === selectedTypeId)
+    : result.types;
+
+  const hasEntries = result.types.some(type => Array.isArray(type.collection) && type.collection.length > 0);
+  const hasFilteredEntries = filteredTypes.some(type => Array.isArray(type.collection) && type.collection.length > 0);
+
+  result.filteredTypes = filteredTypes.length ? filteredTypes : result.types;
+  result.selectedType = selectedTypeId ?? null;
+  result.hasEntries = hasEntries;
+  result.hasFilteredEntries = hasFilteredEntries;
+
   if (resolvedSelectedAction) {
     result.selectedAction = resolvedSelectedAction;
   }
@@ -181,12 +208,6 @@ export function prepareActorActionsWithForms({
   return result;
 }
 
-/**
- * Actions für Action Cards vorbereiten (Grundgerüst).
- *
- * @param {Actor|null} actor
- * @returns {object} Actions nach Typen gruppiert.
- */
 /**
  * Roll Helper Kontext aus ausgewählter Action und Ressourcen vorbereiten.
  *
@@ -197,7 +218,9 @@ export function prepareActorActionsWithForms({
  */
 export function prepareRollHelperContext({ selectedAction = null, reserves = {}, commit = null } = {}) {
   const commitValue = toFiniteNumber(commit?.value, 0);
-  const normalizedForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
+  const normalizedForms = Array.isArray(selectedAction?.forms)
+    ? selectedAction.forms
+    : (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : []);
   const mappedForms = normalizedForms.map(form => {
     const skillBonus = toFiniteNumber(form.skillBonus ?? form.modifier?.skill, Number.NaN);
     const skillLabel = form.skillLabel ?? selectedAction?.skillLabel ?? "";

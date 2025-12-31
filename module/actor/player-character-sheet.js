@@ -4,7 +4,7 @@ import {
   onEditImage,
   onUpdateResourceValue,
   prepareActorItemsContext,
-  prepareActorActionsWithForms,
+  prepareActionLikesWithKeywords,
   prepareActorBarsContext,
   prepareRollHelperContext,
   prepareSkillsDisplay
@@ -50,17 +50,30 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.assets = prepareActorItemsContext(this.document);
     const preparedBundle = this.document?.preparedActions ?? {};
     const preparedForms = preparedBundle.forms ?? {};
+    const preparedAttunements = preparedBundle.attunements ?? {};
     const preparedActions = preparedBundle.actions ?? {};
+    const preparedSpells = preparedBundle.spells ?? {};
     const selectedActionId = this.document?.system?.actions?.selected?.ref ?? null;
     const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
       ? this.document.system.actions.selectedForms
       : [];
-    context.actions = prepareActorActionsWithForms({
-      actions: preparedActions,
-      forms: preparedForms,
+    context.actions = prepareActionLikesWithKeywords({
+      actionLikes: preparedActions,
+      keywordBuckets: preparedForms,
       selectedActionId,
-      selectedForms,
-      skills: this.document?.system?.skills ?? {}
+      selectedKeywords: selectedForms,
+      skills: this.document?.system?.skills ?? {},
+      selectedTypeId: selectedActionType,
+      keywordProperty: "forms"
+    });
+    context.spells = prepareActionLikesWithKeywords({
+      actionLikes: preparedSpells,
+      keywordBuckets: preparedAttunements,
+      selectedActionId,
+      selectedKeywords: selectedForms,
+      skills: this.document?.system?.skills ?? {},
+      selectedTypeId: selectedActionType,
+      keywordProperty: "attunements"
     });
     const actionTypeOrder = ["position", "setup", "impact", "defense"];
     const actionTypeFilters = actionTypeOrder.map(typeId => {
@@ -70,17 +83,16 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         isSelected: selectedActionType === typeId
       };
     });
-    const allActionTypes = Array.isArray(context.actions?.types) ? context.actions.types : [];
-    const filteredTypes = allActionTypes.filter(type => type.id === selectedActionType);
-    context.actions.filteredTypes = filteredTypes.length ? filteredTypes : allActionTypes;
-    context.actions.selectedType = selectedActionType;
+    context.actions.selectedType = context.actions?.selectedType ?? selectedActionType;
+    context.spells.selectedType = context.spells?.selectedType ?? selectedActionType;
     context.actionTypeFilters = actionTypeFilters;
+    const selectedAction = context.actions?.selectedAction ?? context.spells?.selectedAction ?? null;
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;
     if (commit) context.commit = commit;
     const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
-      selectedAction: context.actions?.selectedAction ?? null,
+      selectedAction,
       reserves: context.reserves ?? {},
       commit: context.commit ?? null
     });
@@ -236,8 +248,12 @@ async function onToggleForm(event, target) {
   const formKey = target.closest("[data-form-key]")?.dataset.formKey;
   if (!formKey) return;
 
-  const currentSelection = Array.isArray(this.document?.system?.actions?.selectedForms)
-    ? [...this.document.system.actions.selectedForms]
+  const selectionCollection = target.closest("[data-selection-collection]")?.dataset.selectionCollection
+    ?? "selectedForms";
+  const selectionPath = `system.actions.${selectionCollection}`;
+
+  const currentSelection = Array.isArray(this.document?.system?.actions?.[selectionCollection])
+    ? [...this.document.system.actions[selectionCollection]]
     : [];
 
   const normalizedSelection = Array.from(new Set(currentSelection));
@@ -246,7 +262,7 @@ async function onToggleForm(event, target) {
   if (selectedIndex >= 0) normalizedSelection.splice(selectedIndex, 1);
   else normalizedSelection.push(formKey);
 
-  await this.document?.update({ "system.actions.selectedForms": normalizedSelection });
+  await this.document?.update({ [selectionPath]: normalizedSelection });
 }
 
 async function onRollHelper(event) {
