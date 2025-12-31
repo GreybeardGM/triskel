@@ -88,9 +88,6 @@
   {{#if actions.filteredTypes.length}}
     {{#each actions.filteredTypes as |actionType|}}
       {{#if actionType.collection.length}}
-        <header class="actions-grid__header">
-          <h3 class="actions-grid__title">{{localize actionType.label}}</h3>
-        </header>
         {{> actionRows actionType.collection}}
       {{/if}}
     {{/each}}
