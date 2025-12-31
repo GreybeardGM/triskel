@@ -50,6 +50,7 @@
                   data-action="toggleForm"
                   data-form-key="{{form.id}}"
                   data-reserve="{{form.reserve}}"
+                  data-selection-collection="{{action.selectionCollection}}"
                 >
                   {{#if form.image}}
                     <img class="action-row__form-icon" src="{{form.image}}" alt="" />
@@ -85,10 +86,20 @@
     </div>
   {{/if}}
 
-  {{#if actions.filteredTypes.length}}
+  {{#if actions.hasFilteredEntries}}
+    <h3 class="actions-subtitle">{{localize "TRISKEL.Actor.Tab.Actions"}}</h3>
     {{#each actions.filteredTypes as |actionType|}}
       {{#if actionType.collection.length}}
         {{> actionRows actionType.collection}}
+      {{/if}}
+    {{/each}}
+  {{/if}}
+
+  {{#if spells.hasFilteredEntries}}
+    <h3 class="actions-subtitle">{{localize "TRISKEL.Item.Type.Spell"}}</h3>
+    {{#each spells.filteredTypes as |spellType|}}
+      {{#if spellType.collection.length}}
+        {{> actionRows spellType.collection}}
       {{/if}}
     {{/each}}
   {{/if}}
