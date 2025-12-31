@@ -29,7 +29,9 @@
             <div class="action-row__skill">{{action.skillLabel}}</div>
           {{/if}}
           {{#if action.reserve}}
-            <div class="action-row__cost">{{numberFormat action.cost decimals=0}}</div>
+            {{#if action.cost}}
+              <div class="action-row__cost">{{numberFormat action.cost decimals=0}}</div>
+            {{/if}}
             <div class="action-row__reserve">
               {{#if action.reserveLabel}}
                 {{action.reserveLabel}}
@@ -86,9 +88,6 @@
   {{#if actions.filteredTypes.length}}
     {{#each actions.filteredTypes as |actionType|}}
       {{#if actionType.collection.length}}
-        <header class="actions-grid__header">
-          <h3 class="actions-grid__title">{{localize actionType.label}}</h3>
-        </header>
         {{> actionRows actionType.collection}}
       {{/if}}
     {{/each}}
