@@ -19,7 +19,8 @@
 }
 
 .triskel .window-content {
-  overflow: overlay;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
   display: grid;
   grid-template-columns: minmax(260px, 320px) 1fr;
   grid-template-areas:
