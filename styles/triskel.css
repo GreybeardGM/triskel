@@ -22,18 +22,20 @@
   overflow-y: auto;
   scrollbar-gutter: stable;
   display: grid;
-  grid-template-columns: 14em 1fr;
+  grid-template-columns: 13rem 1fr;
   grid-template-areas:
     "sidebar core"
+    "sidebar core"
+    "sidebar tabbar"
     "sidebar tabcontent";
   align-items: start;
-  gap: 1em;
+  gap: 1rem;
 }
 
 .triskel .window-content h2 {
   font-family: Modesto Condensed;
   text-align: center;
-  margin: 0.25em 0;
+  margin: 0.25rem 0;
   display: flex;
   color: var(--color-text-secondary);
 
