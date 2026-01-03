@@ -74,7 +74,7 @@
 
 .triskel nav.sheet-tabs,
 .triskel .sheet-tabs-nav {
-  grid-area: tabbar;
+  margin-top: 1rem;
 }
 
 .triskel .tab {
@@ -224,7 +224,6 @@
 .triskel .resource-bar {
   display: flex;
   flex-direction: column-reverse;
-  gap: 0.25rem;
   flex: 1;
 }
 
@@ -299,15 +298,14 @@
 .triskel .path-label {
   font-family: Modesto Condensed;
   letter-spacing: 0.5px;
-  font-size: 1.1rem;
   font-weight: 700;
-  min-width: 4rem;
+  min-width: 3.5rem;
   text-align: center;
 }
 
 .triskel .path-max-input {
-  width: 2.25rem;
-  height: 1.4rem;
+  width: 2.25em;
+  height: 1.2em;
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
@@ -317,21 +315,8 @@
   border-radius: 999px;
 }
 
-.triskel .path-max-input {
-  width: 2.25rem;
-  padding: 0.1rem 0.25rem;
-  font-size: 1rem;
-  font-weight: 700;
-  text-align: center;
-  color: var(--triskel-color-text-strong);
-  background: var(--triskel-color-surface-muted);
-  border: 1px solid var(--triskel-color-border-muted);
-  border-radius: 6px;
-}
-
 .triskel .path-segments {
   display: flex;
-  gap: 0.25em;
   width: 100%;
 }
 
@@ -533,9 +518,7 @@
 
 .triskel .roll-helper__entry-icon--fa {
   font-size: 2em;
-  /*! align-content: center; */
   align-self: center;
-  /*! margin: 0; */
 }
 
 .triskel .roll-helper__entry-icon--image {
@@ -683,7 +666,6 @@
 .triskel .action-row__skill {
   grid-area: skill;
   color: var(--color-text-subtle);
-  /*! text-align: center; */
 }
 
 .triskel .action-row__cost {
