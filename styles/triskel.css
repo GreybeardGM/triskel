@@ -29,6 +29,7 @@
   align-items: start;
   gap: 1rem;
   padding: 8px 1px 8px 8px;
+  grid-auto-rows: max-content;
 }
 
 .triskel .window-content h2 {
