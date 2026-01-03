@@ -416,35 +416,14 @@
 
 .triskel .roll-helper {
   position: sticky;
-  top: 0;
-  z-index: 5;
-  overflow: visible;
-  margin: -0.5rem;
-  height: 0;
   grid-area: sidebar;
-  align-self: start;
-}
-
-.triskel .roll-helper__bar {
-  position: relative;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid var(--triskel-color-border-muted);
-  border-radius: 0.5rem;
-  background: var(--triskel-interactive-background);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
 
 .triskel .roll-helper__selection-row {
   display: flex;
   gap: 0.5rem;
-  width: 100%;
   flex-direction: column;
-  align-items: stretch;
 }
 
 .triskel .roll-helper__commit {
@@ -489,27 +468,18 @@
 
 .triskel .roll-helper__entry {
   display: grid;
-  grid-template-columns: 2.5em 1fr 2.5em;
+  grid-template-columns: 2.5rem 1fr 2.5rem;
   grid-template-areas:
-    "icon    label cost   " "bonus   skill reserve" "form    form  form   " "desc    desc  desc   ";
+    "icon  label cost   " "bonus skill reserve" "desc  desc  desc   ";
   border-radius: 0.75em;
   padding: 0.5em 0.75em;
   height: auto;
-  grid-template-rows: 2.5em 1.25em auto;
   gap: 0.35em;
 }
 
-.triskel .roll-helper__action {
-  flex: 3;
-}
-
-.triskel .roll-helper__form {
-  flex: 2;
-}
-
 .triskel .roll-helper__entry-icon {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   grid-area: icon;
   display: flex;
   align-items: center;
@@ -517,8 +487,7 @@
 }
 
 .triskel .roll-helper__entry-icon--fa {
-  font-size: 2em;
-  align-self: center;
+  font-size: 2.5rem;
 }
 
 .triskel .roll-helper__entry-icon--image {
@@ -528,7 +497,7 @@
 
 .triskel .roll-helper__entry-label {
   grid-area: label;
-  font-size: 1.4em;
+  font-size: 1.2rem;
   font-weight: 700;
   text-align: center;
   line-height: 1em;
@@ -538,6 +507,7 @@
 .triskel .roll-helper__entry-reserve {
   grid-area: reserve;
   color: var(--triskel-interactive-highlight);
+  justify-self: end;
 }
 
 .triskel .roll-helper__entry-skill {
@@ -548,6 +518,9 @@
 .triskel .roll-helper__entry-bonus {
   grid-area: bonus;
   text-align: center;
+  background: black;
+  border-radius: 999px;
+  color: white;
 }
 
 
@@ -561,7 +534,7 @@
   font-weight: 700;
   color: var(--triskel-interactive-highlight);
   justify-self: end;
-  font-size: 1.6em;
+  font-size: 1.6rem;
   align-content: center;
 }
 
@@ -654,7 +627,6 @@
 .triskel .action-row__label {
   grid-area: label;
   font-weight: 700;
-  /*! font-size: 1.05rem; */
 }
 
 .triskel .action-row__bonus {
