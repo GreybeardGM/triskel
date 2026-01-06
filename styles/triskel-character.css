@@ -48,12 +48,9 @@
   gap: 0.25rem;
 }
 
-.triskel .charname {
-  margin: 0;
-}
-
 .triskel .charname input {
   height: auto;
+  text-align: center;
 }
 
 .triskel .character-class label {
@@ -62,41 +59,24 @@
 }
 
 .triskel .player-character-info {
-  grid-area: sidebar;
-  grid-row: 1;
+  grid-area: info;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  align-self: start;
+  align-items: center;
 }
 
-.triskel .player-character-info .profile-img {
-  align-self: center;
-}
-
-.triskel .player-character-info .profile-img img {
+.triskel .profile-img img {
   width: 100%;
-  max-width: 160px;
+  max-height: 14rem;
   height: auto;
-  aspect-ratio: 1 / 1;
 }
 
-.triskel .player-character-info .charname h1 {
+.triskel .charname h1 {
   margin: 0;
 }
 
-.triskel .player-character-info .charname input {
-  width: 100%;
-}
-
-.triskel .player-character-info .character-class,
-.triskel .player-character-info .tier-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.triskel .player-character-info .tier-input {
+.triskel .tier-input {
   justify-content: flex-start;
 }
 
@@ -108,10 +88,6 @@
 .triskel nav.sheet-tabs,
 .triskel .sheet-tabs-nav {
   margin-top: 1rem;
-}
-
-.triskel .tab {
-  grid-area: tabcontent;
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
@@ -446,17 +422,8 @@
 \*____________________*/
 
 .triskel .roll-helper {
-  position: sticky;
-  top: 0;
-  grid-column: 1;
-  grid-row: 2;
-  align-self: start;
+  grid-area: roll;
 }
-
-.triskel .player-character-info + .roll-helper {
-  margin-top: 0.75rem;
-}
-
 
 .triskel .roll-helper__selection-row {
   display: flex;
