@@ -390,10 +390,8 @@
 .triskel .skill-grid {
   display: grid;
   grid-template-areas:
-    ". resistances resistances ."
-    "offense physical social magic"
-    "defense professional intellectual magic";
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+    "offense defense      resistances " "physical     professional       magic" "social intellectual magic";
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.4rem;
 }
 
@@ -695,7 +693,6 @@
 .triskel .action-row__forms {
   grid-area: forms;
   display: flex;
-  flex-wrap: wrap;
   gap: 0.35rem;
   justify-content: flex-end;
 }
