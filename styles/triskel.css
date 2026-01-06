@@ -24,8 +24,7 @@
   display: grid;
   grid-template-columns: minmax(0, 14rem) 1fr;
   grid-template-areas:
-    "sidebar core"
-    "sidebar tabcontent";
+    "info core      " "roll tabcontent";
   align-items: start;
   gap: 1rem;
   padding: 8px 1px 8px 8px;
