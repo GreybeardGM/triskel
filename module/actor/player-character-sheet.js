@@ -168,13 +168,20 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   };
 
   static PARTS = {
+    info: {
+      id: "info",
+      template: "systems/triskel/templates/actor/player-character-info.hbs",
+      sort: 5
+    },
     rollHelper: {
       id: "rollHelper",
-      template: "systems/triskel/templates/actor/player-character-roll-helper.hbs"
+      template: "systems/triskel/templates/actor/player-character-roll-helper.hbs",
+      sort: 10
     },
     core: {
       id: "core",
-      template: "systems/triskel/templates/actor/player-character-core.hbs"
+      template: "systems/triskel/templates/actor/player-character-core.hbs",
+      sort: 20
     },
     actions: {
       id: "actions",

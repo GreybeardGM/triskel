@@ -185,6 +185,30 @@
         "Will": {
           "Label": "Will",
           "Description": "Focus, intent, mental pressure, assertion."
+        },
+        "Strain": {
+          "Label": "Strain Steps",
+          "Power": {
+            "S1": "Spent",
+            "S2": "Weakened",
+            "S3": "Injured",
+            "S4": "Wounded",
+            "S5": "Scarred"
+          },
+          "Grace": {
+            "S1": "Offbeat",
+            "S2": "Unsteady",
+            "S3": "Out of Form",
+            "S4": "Off His Game",
+            "S5": "Locked Up"
+          },
+          "Will": {
+            "S1": "Unfocused",
+            "S2": "Unstable",
+            "S3": "Shaken",
+            "S4": "Fractured",
+            "S5": "Trauma"
+          }
         }
       },
       "NPC": {

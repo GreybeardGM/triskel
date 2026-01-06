@@ -30,6 +30,15 @@ const createSegments = (maxSegments, stateResolver) =>
     };
   });
 
+const isStrainActive = (entry) => {
+  if (!entry) return false;
+  if (typeof entry === "object") {
+    return Boolean(entry?.active ?? entry?.isActive ?? entry?.checked);
+  }
+
+  return Boolean(entry);
+};
+
 export async function onUpdateResourceValue(event, target) {
   event.preventDefault();
 
@@ -339,6 +348,8 @@ export function prepareBars(bars = {}, codexReference = undefined) {
     if (!resource) continue;
 
     const codexEntry = reference[id] ?? {};
+    const strainDefinition = Array.isArray(codexEntry.strain) ? codexEntry.strain : [];
+    const strainState = (resource.strain && typeof resource.strain === "object") ? resource.strain : {};
     const max = toFiniteNumber(resource.max, 1);
     maxSegments = Math.max(maxSegments, max);
 
@@ -351,6 +362,17 @@ export function prepareBars(bars = {}, codexReference = undefined) {
       return "empty";
     });
 
+    const strainSteps = strainDefinition.length
+      ? strainDefinition.map(step => ({
+        ...step,
+        checked: isStrainActive(strainState[step.id])
+      }))
+      : Object.entries(strainState).map(([strainId, entry]) => ({
+        id: strainId,
+        label: strainId,
+        checked: isStrainActive(entry)
+      }));
+
     collection[id] = {
       ...resource,
       id,
@@ -359,6 +381,7 @@ export function prepareBars(bars = {}, codexReference = undefined) {
       min,
       value,
       max,
+      strainSteps,
       _segments
     };
   }

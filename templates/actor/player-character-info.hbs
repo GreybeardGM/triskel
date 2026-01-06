@@ -1,22 +1,25 @@
-<header class="sheet-header">
+<section class="player-character-info">
   <div class="profile-img">
     <img src="{{actor.img}}" data-action="editImage" data-field="img" alt="{{actor.name}}" />
   </div>
-  <div class="header-fields">
-    <h1 class="charname">
+
+  <div class="info-field charname">
+    <h1>
       <input name="name" type="text" value="{{actor.name}}" />
     </h1>
-    <div class="character-class">
-      <label for="character-class">Class</label>
-      <input
-        id="character-class"
-        name="system.class.label"
-        type="text"
-        value="{{system.class.label}}"
-      />
-    </div>
   </div>
-  <div class="header-fields tier-info">
+
+  <div class="info-field character-class">
+    <label for="character-class">Class</label>
+    <input
+      id="character-class"
+      name="system.class.label"
+      type="text"
+      value="{{system.class.label}}"
+    />
+  </div>
+
+  <div class="info-field tier-info">
     <label for="tier-value">Tier</label>
     <div class="tier-input">
       <input
@@ -30,4 +33,4 @@
       <span class="tier-label">{{tierLabel}}</span>
     </div>
   </div>
-</header>
+</section>
