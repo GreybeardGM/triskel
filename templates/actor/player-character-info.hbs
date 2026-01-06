@@ -1,36 +1,36 @@
 <section class="player-character-info">
-  <div class="profile-img">
-    <img src="{{actor.img}}" data-action="editImage" data-field="img" alt="{{actor.name}}" />
-  </div>
+  <img
+    class="profile-img"
+    src="{{actor.img}}"
+    data-action="editImage"
+    data-field="img"
+    alt="{{actor.name}}"
+  />
 
-  <div class="info-field charname">
-    <h1>
-      <input name="name" type="text" value="{{actor.name}}" />
-    </h1>
-  </div>
+  <h1 class="info-field charname">
+    <input name="name" type="text" value="{{actor.name}}" />
+  </h1>
 
-  <div class="info-field character-class">
-    <label for="character-class">Class</label>
+  <label class="info-field character-class" for="character-class">
+    <span>Class</span>
     <input
       id="character-class"
       name="system.class.label"
       type="text"
       value="{{system.class.label}}"
     />
-  </div>
+  </label>
 
   <div class="info-field tier-info">
     <label for="tier-value">Tier</label>
-    <div class="tier-input">
-      <input
-        id="tier-value"
-        name="system.tier.value"
-        type="number"
-        min="1"
-        max="6"
-        value="{{system.tier.value}}"
-      />
-      <span class="tier-label">{{tierLabel}}</span>
-    </div>
+    <input
+      id="tier-value"
+      name="system.tier.value"
+      type="number"
+      min="1"
+      max="6"
+      value="{{system.tier.value}}"
+    />
+    <span class="tier-label">{{tierLabel}}</span>
   </div>
 </section>

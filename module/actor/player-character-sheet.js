@@ -45,9 +45,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       context.system.tier.label = tierLabel;
     }
 
-    const { skillCategories } = prepareSkillsDisplay(this.document?.system?.skills ?? {});
-    context.skillCategories = skillCategories;
-    context.assets = prepareActorItemsContext(this.document);
     const preparedBundle = this.document?.preparedActions ?? {};
     const preparedForms = preparedBundle.forms ?? {};
     const preparedAttunements = preparedBundle.attunements ?? {};
@@ -100,6 +97,37 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.rollHelperSummary = rollHelperSummary;
 
     return context;
+  }
+
+  async _preparePartContext(partId, context, options) {
+    const basePartContext = await super._preparePartContext(partId, context, options) ?? context ?? {};
+
+    if (partId === "skills") {
+      const { skillCategories } = prepareSkillsDisplay(this.document?.system?.skills ?? {});
+      return {
+        ...basePartContext,
+        skillCategories
+      };
+    }
+
+    if (partId === "notes") {
+      const notes = this.document?.system?.details?.notes ?? "";
+      const notesHTML = await TextEditor?.enrichHTML?.(notes, { async: true }) ?? notes;
+
+      return {
+        ...basePartContext,
+        notesHTML
+      };
+    }
+
+    if (partId === "inventory") {
+      return {
+        ...basePartContext,
+        assets: prepareActorItemsContext(this.document)
+      };
+    }
+
+    return basePartContext;
   }
 
   static DEFAULT_OPTIONS = {
@@ -178,9 +206,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       template: "systems/triskel/templates/actor/player-character-roll-helper.hbs",
       sort: 10
     },
-    core: {
-      id: "core",
-      template: "systems/triskel/templates/actor/player-character-core.hbs",
+    resources: {
+      id: "resources",
+      template: "systems/triskel/templates/actor/player-character-resources.hbs",
       sort: 20
     },
     actions: {
