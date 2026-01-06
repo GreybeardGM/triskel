@@ -1,38 +1,4 @@
 <div class="player-character-core">
-  <header class="sheet-header">
-    <div class="profile-img">
-      <img src="{{actor.img}}" data-action="editImage" data-field="img" alt="{{actor.name}}" />
-    </div>
-    <div class="header-fields">
-      <h1 class="charname">
-        <input name="name" type="text" value="{{actor.name}}" />
-      </h1>
-      <div class="character-class">
-        <label for="character-class">Class</label>
-        <input
-          id="character-class"
-          name="system.class.label"
-          type="text"
-          value="{{system.class.label}}"
-        />
-      </div>
-    </div>
-    <div class="header-fields tier-info">
-      <label for="tier-value">Tier</label>
-      <div class="tier-input">
-        <input
-          id="tier-value"
-          name="system.tier.value"
-          type="number"
-          min="1"
-          max="6"
-          value="{{system.tier.value}}"
-        />
-        <span class="tier-label">{{tierLabel}}</span>
-      </div>
-    </div>
-  </header>
-
   <section class="reserves">
     <h2>{{localize "TRISKEL.Actor.Reserve.Label"}}</h2>
     <div class="reserve-grid">
@@ -65,17 +31,17 @@
                 />
               </div>
               <footer class="reserve-strain">
-                <span>Strains</span>
+                <span>{{localize "TRISKEL.Actor.Reserve.Strain.Label"}}</span>
                 <ul class="strain-track">
-                  {{#each reserve.strain as |ischecked strainKey|}}
+                  {{#each reserve.strainSteps as |strainStep|}}
                     <li>
                       <label class="strain-step">
                         <input
                           type="checkbox"
-                          name="system.reserves.{{key}}.strain.{{strainKey}}"
-                          {{checked ischecked}}
+                          name="system.reserves.{{key}}.strain.{{strainStep.id}}"
+                          {{checked strainStep.checked}}
                         />
-                        <span>{{strainKey}}</span>
+                        <span>{{strainStep.label}}</span>
                       </label>
                     </li>
                   {{/each}}

@@ -15,17 +15,6 @@
   border-radius: 4px;
 }
 
-.triskel .header-fields {
-  flex: 1;
-}
-
-.triskel .header-fields.tier-info {
-  flex: 0 0 130px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 .triskel .tier-input {
   display: flex;
   gap: 0.5rem;
@@ -48,8 +37,19 @@
   font-weight: 700;
 }
 
+.triskel .header-fields {
+  flex: 1;
+}
+
+.triskel .header-fields.tier-info {
+  flex: 0 0 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .triskel .charname {
-  margin-bottom: 0.25rem;
+  margin: 0;
 }
 
 .triskel .charname input {
@@ -61,10 +61,43 @@
   color: var(--color-text-secondary);
 }
 
-.triskel .character-class {
+.triskel .player-character-info {
+  grid-area: sidebar;
+  grid-row: 1;
   display: flex;
-  gap: 8px;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-self: start;
+}
+
+.triskel .player-character-info .profile-img {
+  align-self: center;
+}
+
+.triskel .player-character-info .profile-img img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.triskel .player-character-info .charname h1 {
+  margin: 0;
+}
+
+.triskel .player-character-info .charname input {
+  width: 100%;
+}
+
+.triskel .player-character-info .character-class,
+.triskel .player-character-info .tier-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.triskel .player-character-info .tier-input {
+  justify-content: flex-start;
 }
 
 .triskel .player-character-core,
@@ -416,7 +449,14 @@
 
 .triskel .roll-helper {
   position: sticky;
-  grid-area: sidebar;
+  top: 0;
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+}
+
+.triskel .player-character-info + .roll-helper {
+  margin-top: 0.75rem;
 }
 
 

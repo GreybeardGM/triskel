@@ -185,6 +185,30 @@
         "Will": {
           "Label": "Wille",
           "Description": "Fokus, Absicht, mentaler Druck, Durchsetzung."
+        },
+        "Strain": {
+          "Label": "Strain-Stufen",
+          "Power": {
+            "S1": "Außer Atem",
+            "S2": "Entkräftet",
+            "S3": "Verletzung",
+            "S4": "Verwundung",
+            "S5": "Narbe"
+          },
+          "Grace": {
+            "S1": "Aus dem Takt",
+            "S2": "Unsicher",
+            "S3": "Außer Form",
+            "S4": "Von der Rolle",
+            "S5": "Blockiert"
+          },
+          "Will": {
+            "S1": "Unkonzentriert",
+            "S2": "Instabil",
+            "S3": "Erschüttert",
+            "S4": "Zerrüttet",
+            "S5": "Trauma"
+          }
         }
       },
       "NPC": {

@@ -292,17 +292,38 @@ export const TRISKEL_RESERVES = [
   {
     id: "power",
     label: "TRISKEL.Actor.Reserve.Power.Label",
-    description: "TRISKEL.Actor.Reserve.Power.Description"
+    description: "TRISKEL.Actor.Reserve.Power.Description",
+    strain: [
+      { id: "s1", label: "TRISKEL.Actor.Reserve.Strain.Power.S1" },
+      { id: "s2", label: "TRISKEL.Actor.Reserve.Strain.Power.S2" },
+      { id: "s3", label: "TRISKEL.Actor.Reserve.Strain.Power.S3" },
+      { id: "s4", label: "TRISKEL.Actor.Reserve.Strain.Power.S4" },
+      { id: "s5", label: "TRISKEL.Actor.Reserve.Strain.Power.S5" }
+    ]
   },
   {
     id: "grace",
     label: "TRISKEL.Actor.Reserve.Grace.Label",
-    description: "TRISKEL.Actor.Reserve.Grace.Description"
+    description: "TRISKEL.Actor.Reserve.Grace.Description",
+    strain: [
+      { id: "s1", label: "TRISKEL.Actor.Reserve.Strain.Grace.S1" },
+      { id: "s2", label: "TRISKEL.Actor.Reserve.Strain.Grace.S2" },
+      { id: "s3", label: "TRISKEL.Actor.Reserve.Strain.Grace.S3" },
+      { id: "s4", label: "TRISKEL.Actor.Reserve.Strain.Grace.S4" },
+      { id: "s5", label: "TRISKEL.Actor.Reserve.Strain.Grace.S5" }
+    ]
   },
   {
     id: "will",
     label: "TRISKEL.Actor.Reserve.Will.Label",
-    description: "TRISKEL.Actor.Reserve.Will.Description"
+    description: "TRISKEL.Actor.Reserve.Will.Description",
+    strain: [
+      { id: "s1", label: "TRISKEL.Actor.Reserve.Strain.Will.S1" },
+      { id: "s2", label: "TRISKEL.Actor.Reserve.Strain.Will.S2" },
+      { id: "s3", label: "TRISKEL.Actor.Reserve.Strain.Will.S3" },
+      { id: "s4", label: "TRISKEL.Actor.Reserve.Strain.Will.S4" },
+      { id: "s5", label: "TRISKEL.Actor.Reserve.Strain.Will.S5" }
+    ]
   }
 ];
 
