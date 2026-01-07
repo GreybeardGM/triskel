@@ -1,13 +1,11 @@
 <section class="roll-helper" {{#unless rollHelper.hasSelection}}hidden{{/unless}}>
   <div class="roll-helper__bar">
     <div class="roll-helper__selection-row">
-      <button
-        type="button"
+      <div
         class="roll-helper__entry roll-helper__action is-interactive {{#if rollHelper.hasSelection}}is-selected{{/if}} {{rollHelper.action.reserve}}"
         data-action="selectAction"
         data-action-key="{{rollHelper.action.id}}"
         data-reserve="{{rollHelper.action.reserve}}"
-        {{#unless rollHelper.hasSelection}}disabled{{/unless}}
       >
         {{#if rollHelper.hasSelection}}
           {{#if rollHelper.action.icon}}
@@ -41,13 +39,12 @@
         {{else}}
           <div class="roll-helper__entry-label">{{localize "TRISKEL.Actor.RollHelper.NoActionSelected"}}</div>
         {{/if}}
-      </button>
+      </div>
 
       {{#if rollHelper.hasSelection}}
         {{#if rollHelper.forms.length}}
           {{#each rollHelper.forms as |form|}}
-            <button
-              type="button"
+            <div
               class="roll-helper__entry roll-helper__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
               data-action="toggleForm"
               data-form-key="{{form.id}}"
@@ -80,7 +77,7 @@
               {{#if form.description}}
                 <div class="roll-helper__entry-description">{{form.description}}</div>
               {{/if}}
-            </button>
+            </div>
           {{/each}}
         {{/if}}
 

@@ -8,7 +8,8 @@
       "base": {
         "details": {
           "biography": "",
-          "notes": ""
+          "notes": "",
+          "fullNameAndTitle": ""
         },
         "class": {
           "label": ""

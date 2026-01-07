@@ -1,4 +1,8 @@
 <section class="player-character-info">
+  <h1 class="info-field charname">
+    <input name="name" type="text" value="{{actor.name}}" />
+  </h1>
+
   <img
     class="profile-img"
     src="{{actor.img}}"
@@ -7,9 +11,15 @@
     alt="{{actor.name}}"
   />
 
-  <h1 class="info-field charname">
-    <input name="name" type="text" value="{{actor.name}}" />
-  </h1>
+  <label class="info-field character-full-name" for="character-full-name">
+    <span>Full Name and Title</span>
+    <input
+      id="character-full-name"
+      name="system.details.fullNameAndTitle"
+      type="text"
+      value="{{system.details.fullNameAndTitle}}"
+    />
+  </label>
 
   <label class="info-field character-class" for="character-class">
     <span>Class</span>

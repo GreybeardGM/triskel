@@ -32,19 +32,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.system ??= actor?.system ?? {};
     const selectedActionType = context.system?.actions?.selectedType ?? "impact";
 
-    // Tier-Label aus Codex/Index ermitteln.
-    const tierValue = this.document?.system?.tier?.value;
-    const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
-      ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
-      ?? null;
-    const tierLabel = tierLabelKey ? (game.i18n?.localize?.(tierLabelKey) ?? tierLabelKey) : null;
-
-    context.tierLabel = tierLabel;
-    if (context.system) {
-      context.system.tier ??= {};
-      context.system.tier.label = tierLabel;
-    }
-
     const preparedBundle = this.document?.preparedActions ?? {};
     const preparedForms = preparedBundle.forms ?? {};
     const preparedAttunements = preparedBundle.attunements ?? {};
@@ -107,6 +94,24 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       return {
         ...basePartContext,
         skillCategories
+      };
+    }
+
+    if (partId === "info") {
+      const tierValue = this.document?.system?.tier?.value;
+      const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+        ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+        ?? null;
+      const tierLabel = tierLabelKey ? (game.i18n?.localize?.(tierLabelKey) ?? tierLabelKey) : null;
+
+      if (basePartContext.system) {
+        basePartContext.system.tier ??= {};
+        basePartContext.system.tier.label = tierLabel;
+      }
+
+      return {
+        ...basePartContext,
+        tierLabel
       };
     }
 
