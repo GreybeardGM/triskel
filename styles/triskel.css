@@ -18,6 +18,14 @@
   --triskel-interactive-highlight: #d5e3f4;
 }
 
+.triskel .theme-oldschool {
+  --color-text: #cab891;
+  --color-main: #5f6a54;
+  --color-secondary: #2b2c1e;
+  --color-subtle: #70683b;
+  --color-detail: #81231e;
+}
+
 .triskel .window-content {
   overflow-y: auto;
   scrollbar-gutter: stable;
