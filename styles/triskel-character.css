@@ -2,62 +2,6 @@
 | --     HEADER     -- |
 \*____________________*/
 
-.triskel .sheet-header {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.triskel .profile-img img {
-  width: 96px;
-  height: 96px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.triskel .tier-input {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.triskel .tier-input input[type="number"] {
-  width: 3rem;
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  color: var(--triskel-color-text-strong);
-  background: var(--triskel-color-surface-muted);
-  border: 1px solid var(--triskel-color-border-muted);
-  border-radius: 999px;
-  height: 3rem;
-}
-
-.triskel .tier-label {
-  font-weight: 700;
-}
-
-.triskel .header-fields {
-  flex: 1;
-}
-
-.triskel .header-fields.tier-info {
-  flex: 0 0 130px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.triskel .charname input {
-  height: auto;
-  text-align: center;
-}
-
-.triskel .character-class label {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-}
-
 .triskel .player-character-info {
   grid-area: info;
   display: flex;
@@ -67,18 +11,24 @@
 }
 
 .triskel .profile-img {
-  width: 100%;
-  max-height: 14rem;
+  max-height: 10rem;
   height: auto;
+}
+
+.triskel .charname input {
+  height: auto;
+  text-align: center;
 }
 
 .triskel .charname {
   margin: 0;
 }
 
-.triskel .player-character-resources,
-.triskel .npc-core {
-  grid-area: core;
+.triskel .tier-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .triskel nav.sheet-tabs,
@@ -87,57 +37,31 @@
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
-| --      TABS      -- |
-\*____________________*/
-
-.triskel .sheet-tabs-nav {
-  display: inline-flex;
-  gap: 0.35rem;
-  border-bottom: 1px solid var(--triskel-color-border-muted);
-  margin-bottom: 0.35rem;
-}
-
-.triskel .sheet-tabs-nav .item {
-  border: 1px solid var(--triskel-color-border-muted);
-  border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  background: var(--triskel-color-surface-muted);
-  color: var(--triskel-color-text-strong);
-  padding: 0.35rem 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.triskel .sheet-tabs-nav .item.active,
-.triskel .sheet-tabs-nav .item[aria-selected="true"] {
-  background: var(--color-bg);
-  color: var(--color-text);
-  border-color: var(--color-border-light-tertiary);
-}
-
-/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --    RESERVES    -- |
 \*____________________*/
+.triskel .player-character-resources,
+.triskel .npc-core {
+  grid-area: resources;
+}
 
-.triskel .reserves .reserve-grid,
-.triskel .npc-stats .stat-grid {
+.triskel .reserve-grid,
+.triskel .stat-grid {
   display: grid;
   gap: 1rem;
 }
 
-.triskel .reserves .reserve-grid {
+.triskel .reserve-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-areas: "power grace will";
 }
 
-.triskel .npc-stats .stat-grid {
+.triskel .stat-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-areas: "hp wounds";
 }
 
-.triskel .npc-stats .stat-column,
-.triskel .reserves .reserve {
+.triskel .stat-column,
+.triskel .reserve {
   display: flex;
   gap: 0.75rem;
 }
