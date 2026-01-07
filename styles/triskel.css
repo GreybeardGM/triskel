@@ -29,13 +29,17 @@
 .triskel .window-content {
   overflow-y: auto;
   scrollbar-gutter: stable;
+  padding: 8px 1px 8px 8px;
+}
+
+.triskel.sheet.actor.character .window-content,
+.triskel.sheet.actor.npc .window-content {
   display: grid;
   grid-template-columns: minmax(0, 14rem) 1fr;
   grid-template-areas:
     "info resources      " "roll tabcontent";
   align-items: start;
   gap: 1rem;
-  padding: 8px 1px 8px 8px;
 }
 
 .triskel .window-content h2 {
