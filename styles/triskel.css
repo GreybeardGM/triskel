@@ -24,29 +24,20 @@
   display: grid;
   grid-template-columns: minmax(0, 14rem) 1fr;
   grid-template-areas:
-    "info core      " "roll tabcontent";
+    "info resources      " "roll tabcontent";
   align-items: start;
   gap: 1rem;
   padding: 8px 1px 8px 8px;
-  grid-auto-rows: max-content;
 }
 
 .triskel .window-content h2 {
   font-family: Modesto Condensed;
   text-align: center;
-  margin: 0.25em 0;
-  display: flex;
+  margin: 0.5rem 0;
   color: var(--color-text-secondary);
 
-  &:before,
-  &:after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    margin: auto .5em;
-  }
-  &:before { background: linear-gradient(to right, var(--triskel-color-segment-placeholder), var(--color-form-label)); }
-  &:after  { background: linear-gradient(to left , var(--triskel-color-segment-placeholder), var(--color-form-label)); }
+  background: #5f6a54;
+  font-size: 1.4rem;
 }
 
 .triskel .is-interactive {
