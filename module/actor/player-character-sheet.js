@@ -24,6 +24,19 @@ async function toggleActiveItem(event, target, expectedType) {
 }
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  _configureRenderOptions(options = {}) {
+    const renderOptions = super._configureRenderOptions?.(options) ?? options ?? {};
+    const configuredParts = renderOptions.parts;
+    const partIds = Array.isArray(configuredParts)
+      ? configuredParts
+      : Object.keys(this.constructor.PARTS ?? {});
+    const activeTab = this.tabGroups?.sheet ?? this.constructor.TABS?.sheet?.initial ?? "actions";
+    const tabParts = new Set(["actions", "skills", "inventory", "notes"]);
+
+    renderOptions.parts = partIds.filter(partId => !tabParts.has(partId) || partId === activeTab);
+    return renderOptions;
+  }
+
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const actor = this.document;
