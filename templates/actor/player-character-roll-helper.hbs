@@ -24,8 +24,10 @@
             {{/if}}
           {{/if}}
 
-          <div class="roll-helper__entry-skill">{{rollHelper.action.skillLabel}}</div>
-          <div class="roll-helper__entry-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
+          {{#if rollHelper.action.skillLabel}}
+            <div class="roll-helper__entry-skill">{{rollHelper.action.skillLabel}}</div>
+            <div class="roll-helper__entry-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
+          {{/if}}
 
           {{#if rollHelper.cost}}
             <div class="roll-helper__entry-cost">
@@ -66,9 +68,6 @@
                   <div class="roll-helper__entry-reserve">{{form.reserve}}</div>
                 {{/if}}
               {{/if}}
-
-              <div class="roll-helper__entry-skill">{{form.skillLabel}}</div>
-              <div class="roll-helper__entry-bonus">{{numberFormat form.skillBonus decimals=0 sign=true}}</div>
 
               {{#if form.cost}}
                 <div class="roll-helper__entry-cost">{{numberFormat form.cost decimals=0}}</div>
