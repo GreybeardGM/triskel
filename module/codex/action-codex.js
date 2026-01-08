@@ -253,7 +253,6 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     cost: 0,
     range: "melee_weapon",
     description: "TRISKEL.Action.Base.Strike.Description",
-    icon: "fa-solid fa-swords",
     keywords: ["action", "melee", "offense", "strike"]
   },
   {
@@ -266,7 +265,6 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Guard.Description",
-    icon: "fa-solid fa-user-shield",
     keywords: ["defense", "melee", "guard", "protection"]
   },
   {
