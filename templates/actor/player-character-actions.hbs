@@ -72,15 +72,14 @@
       <span class="actions-phase-filter__label">Phase</span>
       <div class="actions-phase-filter__options">
         {{#each actionTypeFilters as |filter|}}
-          <button
-            type="button"
-            class="actions-phase-filter__option {{#if filter.isSelected}}is-selected{{/if}}"
+          <div
+            class="actions-phase-filter__option Interactive {{#if filter.isSelected}}is-selected{{/if}}"
             data-action="filterActionType"
             data-filter-value="{{filter.id}}"
             data-tooltip="{{localize filter.description}}"
           >
             {{localize filter.label}}
-          </button>
+          </div>
         {{/each}}
       </div>
     </div>
