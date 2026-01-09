@@ -6,7 +6,7 @@
   {{#if assets}}
     {{#each assets as |category|}}
       <div class="inventory-category">
-        <h3 class="inventory-category__title">{{category.labelPlural}}</h3>
+        <h2 class="inventory-category__title">{{category.labelPlural}}</h2>
         <ul class="inventory-list">
           {{#if category.collection.length}}
             {{#each category.collection as |item|}}
