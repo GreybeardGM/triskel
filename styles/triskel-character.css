@@ -633,15 +633,8 @@
   gap: 0.5rem;
 }
 
-.triskel .inventory-category + .inventory-category {
-  margin-top: 1rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--color-border-light-tertiary);
-}
-
-.triskel .inventory-category__title {
-  font-size: 1.05rem;
-  margin: 0;
+.triskel .inventory-list {
+  margin-top: 0;
 }
 
 .triskel .inventory-list__item-actions {
