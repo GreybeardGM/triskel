@@ -52,8 +52,8 @@
   font-size: 1.4rem;
 }
 
-.triskel h1 {
-  font-size: 1.6rem;
+.triskel .window-content h1 {
+  font-size: 2rem;
 }
 
 .triskel .is-interactive {
