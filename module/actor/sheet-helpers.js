@@ -230,24 +230,19 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
   const normalizedForms = Array.isArray(selectedAction?.forms)
     ? selectedAction.forms
     : (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : []);
-  const mappedForms = normalizedForms.map(form => {
-    const skillBonus = toFiniteNumber(form.skillBonus ?? form.modifier?.skill, Number.NaN);
-    const skillLabel = form.skillLabel ?? selectedAction?.skillLabel ?? "";
-
-    return {
-      ...form,
-      skillLabel,
-      skillBonus: Number.isFinite(skillBonus) ? skillBonus : 0
-    };
-  });
+  const mappedForms = normalizedForms.map(form => ({
+    ...form
+  }));
   const preparedAction = selectedAction ? { ...selectedAction, forms: mappedForms } : {};
   const activeForms = mappedForms.filter(form => form.active);
+  const baseCostValue = toFiniteNumber(preparedAction?.cost, Number.NaN);
+  const baseCost = Number.isFinite(baseCostValue) && baseCostValue !== 0 ? baseCostValue : null;
 
   const rollHelper = {
     hasSelection: Boolean(selectedAction),
     action: preparedAction,
     forms: mappedForms,
-    cost: calculateTotalCost(preparedAction, activeForms, commitValue)
+    cost: baseCost
   };
 
   const rollHelperSummary = selectedAction
