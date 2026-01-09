@@ -34,6 +34,8 @@
 .triskel nav.sheet-tabs,
 .triskel .sheet-tabs-nav {
   margin-top: 1rem;
+  border-top: 2px solid #81231e;
+  border-bottom: 2px solid #81231e;
 }
 
 .triskel .tab {
