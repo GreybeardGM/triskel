@@ -73,7 +73,7 @@
       <div class="actions-phase-filter__options">
         {{#each actionTypeFilters as |filter|}}
           <div
-            class="actions-phase-filter__option Interactive {{#if filter.isSelected}}is-selected{{/if}}"
+            class="actions-phase-filter__option is-interactive {{#if filter.isSelected}}is-selected{{/if}}"
             data-action="filterActionType"
             data-filter-value="{{filter.id}}"
             data-tooltip="{{localize filter.description}}"
