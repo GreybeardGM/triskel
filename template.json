@@ -114,9 +114,7 @@
           "min": 0,
           "value": 0
         },
-        "actions": [],
-        "spells": [],
-        "selected": null,
+        "selectedAction": {},
         "selectedForms": []
       },
       "paths": {
