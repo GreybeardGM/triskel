@@ -104,7 +104,7 @@ export function prepareActorItemsContext(actor = null) {
  * @param {string|null} [options.selectedTypeId=null] gewählte Action-Phase
  * @param {string} [options.keywordProperty="forms"] Zielfeld für angehängte Keywords (forms|attunements)
  * @param {string} [options.selectionCollection="selectedForms"] Auswahl-Feld im Actor-Datenmodell
- * @returns {{collection: Array, selectedType: string|null, hasEntries: boolean, hasFilteredEntries: boolean}}
+ * @returns {{collection: Array, hasEntries: boolean}}
  *  vorbereitete Actions/Spells mit angedockten Forms/Attunements
  */
 export function prepareActionLikesWithKeywords({
@@ -180,9 +180,7 @@ export function prepareActionLikesWithKeywords({
 
   return {
     collection,
-    selectedType: selectedTypeId,
-    hasEntries,
-    hasFilteredEntries: hasEntries
+    hasEntries
   };
 }
 
