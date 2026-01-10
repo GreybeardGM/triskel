@@ -468,10 +468,12 @@ function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = 
 
   const addEntryToType = (entry, { source = null, image = null } = {}) => {
     if (!entry) return;
+    const label = entry.label ?? entry.id ?? "";
     const typeId = entry.type ?? "untyped";
     const bucket = ensureType(typeId);
     bucket.push({
       ...entry,
+      label,
       source,
       image: image ?? entry.image ?? entry.img ?? null
     });
