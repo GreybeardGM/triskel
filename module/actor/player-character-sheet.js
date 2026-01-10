@@ -177,6 +177,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       actions.selectedType = actions?.selectedType ?? selectedActionType;
       spells.selectedType = spells?.selectedType ?? selectedActionType;
 
+      console.log("TRISKEL | Actions part context prepared.", {
+        actions,
+        spells,
+        actionTypeFilters
+      });
+
       return {
         ...basePartContext,
         actions,
