@@ -130,11 +130,6 @@ export function prepareActionLikesWithKeywords({
   const rawCollection = toArray(actionLikesByType?.[selectedTypeId]);
   const collection = [];
   for (const entry of rawCollection) {
-    if (!entry || typeof entry !== "object" || !entry.id) {
-      const message = "TRISKEL | Invalid action entry encountered while preparing actions.";
-      console.error(message, { entry, selectedTypeId, rawCollection });
-      throw new Error(message);
-    }
     const keywords = Array.isArray(entry?.availableKeywords)
       ? entry.availableKeywords.map(keyword => normalizeKeyword(keyword))
       : [];
