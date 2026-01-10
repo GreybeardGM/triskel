@@ -57,53 +57,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.actor ??= actor;
     context.system ??= actor?.system ?? {};
-    const selectedActionType = context.system?.actions?.selectedType ?? "impact";
-
-    const preparedBundle = this.document?.preparedActions ?? {};
-    const preparedForms = preparedBundle.forms ?? {};
-    const preparedAttunements = preparedBundle.attunements ?? {};
-    const preparedActions = preparedBundle.actions ?? {};
-    const preparedSpells = preparedBundle.spells ?? {};
-    const selectedActionId = this.document?.system?.actions?.selected?.ref ?? null;
-    const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
-      ? this.document.system.actions.selectedForms
-      : [];
-    context.actions = prepareActionLikesWithKeywords({
-      actionLikes: preparedActions,
-      keywordBuckets: preparedForms,
-      selectedActionId,
-      selectedKeywords: selectedForms,
-      skills: this.document?.system?.skills ?? {},
-      selectedTypeId: selectedActionType,
-      keywordProperty: "forms"
-    });
-    context.spells = prepareActionLikesWithKeywords({
-      actionLikes: preparedSpells,
-      keywordBuckets: preparedAttunements,
-      selectedActionId,
-      selectedKeywords: selectedForms,
-      skills: this.document?.system?.skills ?? {},
-      selectedTypeId: selectedActionType,
-      keywordProperty: "attunements"
-    });
-    const actionTypeOrder = ["position", "setup", "impact", "defense"];
-    const actionTypeFilters = actionTypeOrder.map(typeId => {
-      const type = getTriskellCodex()?.actionTypes?.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
-      return {
-        ...type,
-        isSelected: selectedActionType === typeId
-      };
-    });
-    context.actions.selectedType = context.actions?.selectedType ?? selectedActionType;
-    context.spells.selectedType = context.spells?.selectedType ?? selectedActionType;
-    context.actionTypeFilters = actionTypeFilters;
-    const selectedAction = context.actions?.selectedAction ?? context.spells?.selectedAction ?? null;
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;
     if (commit) context.commit = commit;
+    const storedSelectedAction = context.system?.actions?.selectedAction ?? null;
+    const hasSelectedAction = storedSelectedAction && Object.keys(storedSelectedAction).length > 0;
     const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
-      selectedAction,
+      selectedAction: hasSelectedAction ? storedSelectedAction : null,
       reserves: context.reserves ?? {},
       commit: context.commit ?? null
     });
@@ -156,6 +117,52 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       return {
         ...basePartContext,
         assets: prepareActorItemsContext(this.document)
+      };
+    }
+
+    if (partId === "actions") {
+      const selectedActionType = basePartContext.system?.actions?.selectedType ?? "impact";
+      const preparedBundle = this.document?.preparedActions ?? {};
+      const preparedForms = preparedBundle.forms ?? {};
+      const preparedAttunements = preparedBundle.attunements ?? {};
+      const preparedActions = preparedBundle.actions ?? {};
+      const preparedSpells = preparedBundle.spells ?? {};
+      const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
+        ? this.document.system.actions.selectedForms
+        : [];
+      const actions = prepareActionLikesWithKeywords({
+        actionLikes: preparedActions,
+        keywordBuckets: preparedForms,
+        selectedKeywords: selectedForms,
+        skills: this.document?.system?.skills ?? {},
+        selectedTypeId: selectedActionType,
+        keywordProperty: "forms"
+      });
+      const spells = prepareActionLikesWithKeywords({
+        actionLikes: preparedSpells,
+        keywordBuckets: preparedAttunements,
+        selectedKeywords: selectedForms,
+        skills: this.document?.system?.skills ?? {},
+        selectedTypeId: selectedActionType,
+        keywordProperty: "attunements"
+      });
+      const actionTypeOrder = ["position", "setup", "impact", "defense"];
+      const actionTypeFilters = actionTypeOrder.map(typeId => {
+        const type = getTriskellCodex()?.actionTypes?.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
+        return {
+          ...type,
+          isSelected: selectedActionType === typeId
+        };
+      });
+
+      actions.selectedType = actions?.selectedType ?? selectedActionType;
+      spells.selectedType = spells?.selectedType ?? selectedActionType;
+
+      return {
+        ...basePartContext,
+        actions,
+        spells,
+        actionTypeFilters
       };
     }
 
@@ -296,10 +303,15 @@ async function onSelectAction(event, target) {
   const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
   if (!actionKey) return;
 
-  const currentlySelected = this.document?.system?.actions?.selected?.ref ?? null;
-  const nextSelection = currentlySelected === actionKey ? null : actionKey;
+  const selectedActionType = this.document?.system?.actions?.selectedType ?? "impact";
+  const preparedActions = this.document?.preparedActions?.actions ?? {};
+  const actionBucket = Array.isArray(preparedActions[selectedActionType])
+    ? preparedActions[selectedActionType]
+    : [];
+  const selectedAction = actionBucket.find(action => action?.id === actionKey) ?? null;
+  if (!selectedAction) return;
 
-  await this.document?.update({ "system.actions.selected.ref": nextSelection });
+  await this.document?.update({ "system.actions.selectedAction": { ...selectedAction } });
 }
 
 async function onFilterActionType(event, target) {
