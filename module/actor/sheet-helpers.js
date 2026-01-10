@@ -94,24 +94,22 @@ export function prepareActorItemsContext(actor = null) {
 // (Jetzt in den Actor verschoben.)
 
 /**
- * Actions oder Spells mit Forms oder Attunements zusammenführen und Selektion kennzeichnen.
+ * Actions oder Spells mit Forms oder Attunements zusammenführen.
  *
  * @param {object} [options={}]
  * @param {object|null} [options.actionLikes=null] vorbereitete Actions oder Spells
  * @param {object|null} [options.keywordBuckets=null] vorbereitete Forms oder Attunements
- * @param {string|null} [options.selectedActionId=null] aktuell gewählte Action-/Spell-ID
  * @param {Array<string>} [options.selectedKeywords=[]] aktuell gewählte Form-/Attunement-IDs
  * @param {object} [options.skills={}] vorbereitete Actor-Skills aus prepareDerivedData
  * @param {string|null} [options.selectedTypeId=null] gewählte Action-Phase
  * @param {string} [options.keywordProperty="forms"] Zielfeld für angehängte Keywords (forms|attunements)
  * @param {string} [options.selectionCollection="selectedForms"] Auswahl-Feld im Actor-Datenmodell
- * @returns {{types: Array, filteredTypes: Array, selectedType: string|null, selectedAction?: object}}
+ * @returns {{types: Array, filteredTypes: Array, selectedType: string|null}}
  *  vorbereitete Actions/Spells mit angedockten Forms/Attunements
  */
 export function prepareActionLikesWithKeywords({
   actionLikes = null,
   keywordBuckets = null,
-  selectedActionId = null,
   selectedKeywords = [],
   skills = {},
   selectedTypeId = null,
@@ -124,8 +122,6 @@ export function prepareActionLikesWithKeywords({
   const selectedKeywordIds = new Set(Array.isArray(selectedKeywords) ? selectedKeywords : []);
   const result = { types: [] };
   const reservesIndex = getTriskellIndex().reserves ?? {};
-
-  let resolvedSelectedAction = null;
 
   const actionTypes = getTriskellCodex()?.actionTypes ?? [];
   const actionLikesByType = (actionLikes && typeof actionLikes === "object" && !Array.isArray(actionLikes))
@@ -147,7 +143,6 @@ export function prepareActionLikesWithKeywords({
     const collection = Array.isArray(actionLikesByType?.[type.id]) ? actionLikesByType[type.id] : [];
 
     const preparedCollection = collection.map(entry => {
-      const isActive = entry?.id === selectedActionId;
       const keywords = resolveNormalizedKeywords(entry);
       const attachedKeywords = [];
 
@@ -168,7 +163,6 @@ export function prepareActionLikesWithKeywords({
 
       const preparedAction = {
         ...entry,
-        active: isActive,
         reserveLabel: resolveReserveLabel(entry.reserve),
         selectionCollection,
         [keywordProperty]: attachedKeywords
@@ -190,8 +184,6 @@ export function prepareActionLikesWithKeywords({
         preparedAction.skillTotal = null;
       }
 
-      if (isActive) resolvedSelectedAction = preparedAction;
-
       return preparedAction;
     });
 
@@ -209,10 +201,6 @@ export function prepareActionLikesWithKeywords({
   result.selectedType = selectedTypeId ?? null;
   result.hasEntries = hasEntries;
   result.hasFilteredEntries = hasFilteredEntries;
-
-  if (resolvedSelectedAction) {
-    result.selectedAction = resolvedSelectedAction;
-  }
 
   return result;
 }

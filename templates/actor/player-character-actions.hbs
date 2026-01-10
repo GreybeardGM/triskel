@@ -4,10 +4,10 @@
   data-group="{{tabs.actions.group}}"
 >
   {{#*inline "actionRows"}}
-    <div class="actions-list" role="list">
+    <div class="actions-list" role="list" data-action-kind="{{actionKind}}">
       {{#each this as |action|}}
         <article
-          class="action-row is-interactive {{action.reserve}} {{#if action.active}}is-selected{{/if}}"
+          class="action-row is-interactive {{action.reserve}}"
           role="button"
           tabindex="0"
           data-action="selectAction"
@@ -89,7 +89,7 @@
     <h2 class="actions-subtitle">{{localize "TRISKEL.Actor.Tab.Actions"}}</h2>
     {{#each actions.filteredTypes as |actionType|}}
       {{#if actionType.collection.length}}
-        {{> actionRows actionType.collection}}
+        {{> actionRows actionType.collection actionKind="action"}}
       {{/if}}
     {{/each}}
   {{/if}}
@@ -98,7 +98,7 @@
     <h2 class="actions-subtitle">{{localize "TRISKEL.Item.Type.Spell"}}</h2>
     {{#each spells.filteredTypes as |spellType|}}
       {{#if spellType.collection.length}}
-        {{> actionRows spellType.collection}}
+        {{> actionRows spellType.collection actionKind="spell"}}
       {{/if}}
     {{/each}}
   {{/if}}

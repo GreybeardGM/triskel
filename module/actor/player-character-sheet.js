@@ -9,6 +9,7 @@ import {
   prepareRollHelperContext,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
+import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -57,58 +58,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.actor ??= actor;
     context.system ??= actor?.system ?? {};
-    const selectedActionType = context.system?.actions?.selectedType ?? "impact";
-
-    const preparedBundle = this.document?.preparedActions ?? {};
-    const preparedForms = preparedBundle.forms ?? {};
-    const preparedAttunements = preparedBundle.attunements ?? {};
-    const preparedActions = preparedBundle.actions ?? {};
-    const preparedSpells = preparedBundle.spells ?? {};
-    const selectedActionId = this.document?.system?.actions?.selected?.ref ?? null;
-    const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
-      ? this.document.system.actions.selectedForms
-      : [];
-    context.actions = prepareActionLikesWithKeywords({
-      actionLikes: preparedActions,
-      keywordBuckets: preparedForms,
-      selectedActionId,
-      selectedKeywords: selectedForms,
-      skills: this.document?.system?.skills ?? {},
-      selectedTypeId: selectedActionType,
-      keywordProperty: "forms"
-    });
-    context.spells = prepareActionLikesWithKeywords({
-      actionLikes: preparedSpells,
-      keywordBuckets: preparedAttunements,
-      selectedActionId,
-      selectedKeywords: selectedForms,
-      skills: this.document?.system?.skills ?? {},
-      selectedTypeId: selectedActionType,
-      keywordProperty: "attunements"
-    });
-    const actionTypeOrder = ["position", "setup", "impact", "defense"];
-    const actionTypeFilters = actionTypeOrder.map(typeId => {
-      const type = getTriskellCodex()?.actionTypes?.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
-      return {
-        ...type,
-        isSelected: selectedActionType === typeId
-      };
-    });
-    context.actions.selectedType = context.actions?.selectedType ?? selectedActionType;
-    context.spells.selectedType = context.spells?.selectedType ?? selectedActionType;
-    context.actionTypeFilters = actionTypeFilters;
-    const selectedAction = context.actions?.selectedAction ?? context.spells?.selectedAction ?? null;
     const { reserves, paths, commit } = prepareActorBarsContext(this.document);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;
     if (commit) context.commit = commit;
-    const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
-      selectedAction,
-      reserves: context.reserves ?? {},
-      commit: context.commit ?? null
-    });
-    context.rollHelper = rollHelper;
-    context.rollHelperSummary = rollHelperSummary;
 
     return context;
   }
@@ -156,6 +109,82 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       return {
         ...basePartContext,
         assets: prepareActorItemsContext(this.document)
+      };
+    }
+
+    if (partId === "rollHelper") {
+      const storedSelectedAction = basePartContext.system?.actions?.selectedAction ?? null;
+      let enrichedSelectedAction = null;
+      if (storedSelectedAction?.id) {
+        const selectedForms = Array.isArray(basePartContext.system?.actions?.selectedForms)
+          ? basePartContext.system.actions.selectedForms
+          : [];
+        const preparedForms = this.document?.preparedActions?.forms ?? {};
+        const preparedAttunements = this.document?.preparedActions?.attunements ?? {};
+        enrichedSelectedAction = enrichSelectedAction({
+          action: storedSelectedAction,
+          forms: preparedForms,
+          attunements: preparedAttunements,
+          selectedForms,
+          skills: basePartContext.system?.skills ?? {}
+        });
+      }
+      const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
+        selectedAction: enrichedSelectedAction,
+        reserves: basePartContext.reserves ?? {},
+        commit: basePartContext.commit ?? null
+      });
+
+      return {
+        ...basePartContext,
+        rollHelper,
+        rollHelperSummary
+      };
+    }
+
+    if (partId === "actions") {
+      const selectedActionType = basePartContext.system?.actions?.selectedType ?? "impact";
+      const preparedBundle = this.document?.preparedActions ?? {};
+      const preparedForms = preparedBundle.forms ?? {};
+      const preparedAttunements = preparedBundle.attunements ?? {};
+      const preparedActions = preparedBundle.actions ?? {};
+      const preparedSpells = preparedBundle.spells ?? {};
+      const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
+        ? this.document.system.actions.selectedForms
+        : [];
+      const actions = prepareActionLikesWithKeywords({
+        actionLikes: preparedActions,
+        keywordBuckets: preparedForms,
+        selectedKeywords: selectedForms,
+        skills: this.document?.system?.skills ?? {},
+        selectedTypeId: selectedActionType,
+        keywordProperty: "forms"
+      });
+      const spells = prepareActionLikesWithKeywords({
+        actionLikes: preparedSpells,
+        keywordBuckets: preparedAttunements,
+        selectedKeywords: selectedForms,
+        skills: this.document?.system?.skills ?? {},
+        selectedTypeId: selectedActionType,
+        keywordProperty: "attunements"
+      });
+      const actionTypeOrder = ["position", "setup", "impact", "defense"];
+      const actionTypeFilters = actionTypeOrder.map(typeId => {
+        const type = getTriskellCodex()?.actionTypes?.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
+        return {
+          ...type,
+          isSelected: selectedActionType === typeId
+        };
+      });
+
+      actions.selectedType = actions?.selectedType ?? selectedActionType;
+      spells.selectedType = spells?.selectedType ?? selectedActionType;
+
+      return {
+        ...basePartContext,
+        actions,
+        spells,
+        actionTypeFilters
       };
     }
 
@@ -296,10 +325,26 @@ async function onSelectAction(event, target) {
   const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
   if (!actionKey) return;
 
-  const currentlySelected = this.document?.system?.actions?.selected?.ref ?? null;
-  const nextSelection = currentlySelected === actionKey ? null : actionKey;
+  const selectedActionType = this.document?.system?.actions?.selectedType ?? "impact";
+  const actionKind = target.closest("[data-action-kind]")?.dataset.actionKind ?? "action";
+  const preparedActions = this.document?.preparedActions?.actions ?? {};
+  const preparedSpells = this.document?.preparedActions?.spells ?? {};
+  const actionBucket = Array.isArray(preparedActions[selectedActionType])
+    ? preparedActions[selectedActionType]
+    : [];
+  const spellBucket = Array.isArray(preparedSpells[selectedActionType])
+    ? preparedSpells[selectedActionType]
+    : [];
+  const selectionBucket = actionKind === "spell" ? spellBucket : actionBucket;
+  const selectedAction = selectionBucket.find(action => action?.id === actionKey) ?? null;
+  if (!selectedAction) return;
 
-  await this.document?.update({ "system.actions.selected.ref": nextSelection });
+  await this.document?.update({
+    "system.actions.selectedAction": {
+      ...selectedAction,
+      selectionKind: actionKind
+    }
+  });
 }
 
 async function onFilterActionType(event, target) {
@@ -345,4 +390,60 @@ async function onRollHelper(event) {
 
 async function onToggleActiveItem(event, target) {
   await toggleActiveItem.call(this, event, target);
+}
+
+function enrichSelectedAction({
+  action = null,
+  forms = {},
+  attunements = {},
+  selectedForms = [],
+  skills = {}
+} = {}) {
+  if (!action || typeof action !== "object" || !action.id) return null;
+
+  const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
+  const availableKeywords = Array.isArray(action.availableKeywords) ? action.availableKeywords : [];
+  const reservesIndex = getTriskellIndex().reserves ?? {};
+  const selectionKind = action?.selectionKind === "spell" ? "spell" : "action";
+  const keywordProperty = selectionKind === "spell" ? "attunements" : "forms";
+  const keywordBuckets = selectionKind === "spell" ? attunements : forms;
+  const resolveReserveLabel = (reserveId) => {
+    if (!reserveId) return "";
+    const reserve = reservesIndex[reserveId] ?? {};
+    return reserve.label ?? reserveId;
+  };
+
+  const attachedForms = [];
+  for (const keyword of availableKeywords) {
+    const normalizedKeyword = normalizeKeyword(keyword);
+    const keywordsForBucket = keywordBuckets?.[normalizedKeyword];
+    const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
+    if (!keywordCollection.length) continue;
+
+    for (const formEntry of keywordCollection) {
+      attachedForms.push({
+        ...formEntry,
+        active: selectedFormIds.has(formEntry.id),
+        reserveLabel: resolveReserveLabel(formEntry.reserve)
+      });
+    }
+  }
+
+  const skillId = action?.skill ?? null;
+  let skillLabel = null;
+  let skillTotal = null;
+  if (skillId) {
+    const skillSource = skills?.[skillId] ?? null;
+    skillLabel = skillSource?.label ?? skillId;
+    skillTotal = toFiniteNumber(skillSource?.total, 0);
+  }
+
+  return {
+    ...action,
+    [keywordProperty]: attachedForms,
+    reserveLabel: resolveReserveLabel(action?.reserve),
+    selectionKind,
+    skillLabel,
+    skillTotal
+  };
 }
