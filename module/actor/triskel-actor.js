@@ -467,7 +467,12 @@ function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = 
   };
 
   const addEntryToType = (entry, { source = null, image = null } = {}) => {
-    if (!entry) return;
+    if (!entry?.id) {
+      if (entry) {
+        console.warn("TRISKEL | Action entry is missing an id and was skipped.", entry);
+      }
+      return;
+    }
     const typeId = entry.type ?? "untyped";
     const bucket = ensureType(typeId);
     bucket.push({
