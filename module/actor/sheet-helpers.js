@@ -104,7 +104,7 @@ export function prepareActorItemsContext(actor = null) {
  * @param {string|null} [options.selectedTypeId=null] gewählte Action-Phase
  * @param {string} [options.keywordProperty="forms"] Zielfeld für angehängte Keywords (forms|attunements)
  * @param {string} [options.selectionCollection="selectedForms"] Auswahl-Feld im Actor-Datenmodell
- * @returns {{types: Array, filteredTypes: Array, selectedType: string|null}}
+ * @returns {{collection: Array, selectedType: string|null, hasEntries: boolean, hasFilteredEntries: boolean}}
  *  vorbereitete Actions/Spells mit angedockten Forms/Attunements
  */
 export function prepareActionLikesWithKeywords({
@@ -116,22 +116,10 @@ export function prepareActionLikesWithKeywords({
   keywordProperty = "forms",
   selectionCollection = "selectedForms"
 } = {}) {
-  const bucketsByKeyword = (keywordBuckets && typeof keywordBuckets === "object" && !Array.isArray(keywordBuckets))
-    ? keywordBuckets
-    : {};
+  const bucketsByKeyword = keywordBuckets ?? {};
   const selectedKeywordIds = new Set(Array.isArray(selectedKeywords) ? selectedKeywords : []);
-  const result = { types: [] };
   const reservesIndex = getTriskellIndex().reserves ?? {};
-
-  const actionTypes = getTriskellCodex()?.actionTypes ?? [];
-  const actionLikesByType = (actionLikes && typeof actionLikes === "object" && !Array.isArray(actionLikes))
-    ? actionLikes
-    : {};
-
-  const resolveNormalizedKeywords = (entry) => {
-    const availableKeywords = Array.isArray(entry?.availableKeywords) ? entry.availableKeywords : [];
-    return availableKeywords.map(keyword => normalizeKeyword(keyword));
-  };
+  const actionLikesByType = actionLikes ?? {};
 
   const resolveReserveLabel = (reserveId) => {
     if (!reserveId) return "";
@@ -139,70 +127,62 @@ export function prepareActionLikesWithKeywords({
     return reserve.label ?? reserveId;
   };
 
-  result.types = actionTypes.map(type => {
-    const collection = Array.isArray(actionLikesByType?.[type.id]) ? actionLikesByType[type.id] : [];
+  const rawCollection = actionLikesByType?.[selectedTypeId] ?? [];
+  const collection = rawCollection.map(entry => {
+    const keywords = Array.isArray(entry?.availableKeywords)
+      ? entry.availableKeywords.map(keyword => normalizeKeyword(keyword))
+      : [];
+    const attachedKeywords = [];
 
-    const preparedCollection = collection.map(entry => {
-      const keywords = resolveNormalizedKeywords(entry);
-      const attachedKeywords = [];
+    keywords.forEach(keyword => {
+      const keywordsForBucket = bucketsByKeyword?.[keyword];
+      const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
+      if (!keywordCollection.length) return;
 
-      keywords.forEach(keyword => {
-        const keywordsForBucket = bucketsByKeyword?.[keyword];
-        const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
-        if (!keywordCollection.length) return;
-
-        keywordCollection.forEach(keywordEntry => {
-          const preparedKeywordEntry = {
-            ...keywordEntry,
-            active: selectedKeywordIds.has(keywordEntry.id),
-            reserveLabel: resolveReserveLabel(keywordEntry.reserve)
-          };
-          attachedKeywords.push(preparedKeywordEntry);
-        });
+      keywordCollection.forEach(keywordEntry => {
+        const preparedKeywordEntry = {
+          ...keywordEntry,
+          active: selectedKeywordIds.has(keywordEntry.id),
+          reserveLabel: resolveReserveLabel(keywordEntry.reserve)
+        };
+        attachedKeywords.push(preparedKeywordEntry);
       });
-
-      const preparedAction = {
-        ...entry,
-        reserveLabel: resolveReserveLabel(entry.reserve),
-        selectionCollection,
-        [keywordProperty]: attachedKeywords
-      };
-
-      // Kompatibilität: Forms oder Attunements optional auch im jeweils anderen Feld ablegen.
-      if (keywordProperty !== "forms" && !preparedAction.forms) preparedAction.forms = attachedKeywords;
-      if (keywordProperty !== "attunements" && !preparedAction.attunements) preparedAction.attunements = attachedKeywords;
-
-      const skillId = entry?.skill ?? null;
-      preparedAction.skill = skillId ?? null;
-
-      if (skillId) {
-        const skillSource = skills?.[skillId] ?? null;
-        preparedAction.skillLabel = skillSource?.label ?? skillId;
-        preparedAction.skillTotal = toFiniteNumber(skillSource?.total, 0);
-      } else {
-        preparedAction.skillLabel = null;
-        preparedAction.skillTotal = null;
-      }
-
-      return preparedAction;
     });
 
-    return { ...type, collection: preparedCollection };
+    const preparedAction = {
+      ...entry,
+      reserveLabel: resolveReserveLabel(entry.reserve),
+      selectionCollection,
+      [keywordProperty]: attachedKeywords
+    };
+
+    // Kompatibilität: Forms oder Attunements optional auch im jeweils anderen Feld ablegen.
+    if (keywordProperty !== "forms" && !preparedAction.forms) preparedAction.forms = attachedKeywords;
+    if (keywordProperty !== "attunements" && !preparedAction.attunements) preparedAction.attunements = attachedKeywords;
+
+    const skillId = entry?.skill ?? null;
+    preparedAction.skill = skillId ?? null;
+
+    if (skillId) {
+      const skillSource = skills?.[skillId] ?? null;
+      preparedAction.skillLabel = skillSource?.label ?? skillId;
+      preparedAction.skillTotal = toFiniteNumber(skillSource?.total, 0);
+    } else {
+      preparedAction.skillLabel = null;
+      preparedAction.skillTotal = null;
+    }
+
+    return preparedAction;
   });
 
-  const filteredTypes = selectedTypeId
-    ? result.types.filter(type => type.id === selectedTypeId)
-    : result.types;
+  const hasEntries = collection.length > 0;
 
-  const hasEntries = result.types.some(type => Array.isArray(type.collection) && type.collection.length > 0);
-  const hasFilteredEntries = filteredTypes.some(type => Array.isArray(type.collection) && type.collection.length > 0);
-
-  result.filteredTypes = filteredTypes.length ? filteredTypes : result.types;
-  result.selectedType = selectedTypeId ?? null;
-  result.hasEntries = hasEntries;
-  result.hasFilteredEntries = hasFilteredEntries;
-
-  return result;
+  return {
+    collection,
+    selectedType: selectedTypeId,
+    hasEntries,
+    hasFilteredEntries: hasEntries
+  };
 }
 
 /**
