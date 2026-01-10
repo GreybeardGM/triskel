@@ -1,4 +1,4 @@
-import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
+import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -127,8 +127,14 @@ export function prepareActionLikesWithKeywords({
     return reserve.label ?? reserveId;
   };
 
-  const rawCollection = actionLikesByType?.[selectedTypeId] ?? [];
-  const collection = rawCollection.map(entry => {
+  const rawCollection = toArray(actionLikesByType?.[selectedTypeId]);
+  const collection = [];
+  for (const entry of rawCollection) {
+    if (!entry || typeof entry !== "object" || !entry.id) {
+      const message = "TRISKEL | Invalid action entry encountered while preparing actions.";
+      console.error(message, { entry, selectedTypeId, rawCollection });
+      throw new Error(message);
+    }
     const keywords = Array.isArray(entry?.availableKeywords)
       ? entry.availableKeywords.map(keyword => normalizeKeyword(keyword))
       : [];
@@ -172,8 +178,8 @@ export function prepareActionLikesWithKeywords({
       preparedAction.skillTotal = null;
     }
 
-    return preparedAction;
-  });
+    collection.push(preparedAction);
+  }
 
   const hasEntries = collection.length > 0;
 
