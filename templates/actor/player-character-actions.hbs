@@ -87,19 +87,15 @@
 
   {{#if actions.hasFilteredEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Actor.Tab.Actions"}}</h2>
-    {{#each actions.filteredTypes as |actionType|}}
-      {{#if actionType.collection.length}}
-        {{> actionRows actionType.collection actionKind="action"}}
-      {{/if}}
-    {{/each}}
+    {{#if actions.collection.length}}
+      {{> actionRows actions.collection actionKind="action"}}
+    {{/if}}
   {{/if}}
 
   {{#if spells.hasFilteredEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Item.Type.Spell"}}</h2>
-    {{#each spells.filteredTypes as |spellType|}}
-      {{#if spellType.collection.length}}
-        {{> actionRows spellType.collection actionKind="spell"}}
-      {{/if}}
-    {{/each}}
+    {{#if spells.collection.length}}
+      {{> actionRows spells.collection actionKind="spell"}}
+    {{/if}}
   {{/if}}
 </section>
