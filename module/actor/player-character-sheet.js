@@ -9,7 +9,7 @@ import {
   prepareRollHelperContext,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
-import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
+import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -58,7 +58,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.actor ??= actor;
     context.system ??= actor?.system ?? {};
-    const { reserves, paths, commit } = prepareActorBarsContext(this.document);
+    const { reserves, paths, commit } = prepareActorBarsContext(actor);
     if (reserves) context.reserves = reserves;
     if (paths) context.paths = paths;
     if (commit) context.commit = commit;
@@ -68,9 +68,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   async _preparePartContext(partId, context, options) {
     const basePartContext = await super._preparePartContext(partId, context, options) ?? context ?? {};
+    const actor = this.document;
 
     if (partId === "skills") {
-      const { skillCategories } = prepareSkillsDisplay(this.document?.system?.skills ?? {});
+      const { skillCategories } = prepareSkillsDisplay(actor?.system?.skills ?? {});
       return {
         ...basePartContext,
         skillCategories
@@ -78,7 +79,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     if (partId === "info") {
-      const tierValue = this.document?.system?.tier?.value;
+      const tierValue = actor?.system?.tier?.value;
       const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
         ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
         ?? null;
@@ -96,7 +97,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     if (partId === "notes") {
-      const notes = this.document?.system?.details?.notes ?? "";
+      const notes = actor?.system?.details?.notes ?? "";
       const notesHTML = await TextEditor?.enrichHTML?.(notes, { async: true }) ?? notes;
 
       return {
@@ -108,7 +109,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (partId === "inventory") {
       return {
         ...basePartContext,
-        assets: prepareActorItemsContext(this.document)
+        assets: prepareActorItemsContext(actor)
       };
     }
 
@@ -116,11 +117,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       const storedSelectedAction = basePartContext.system?.actions?.selectedAction ?? null;
       let enrichedSelectedAction = null;
       if (storedSelectedAction?.id) {
-        const selectedForms = Array.isArray(basePartContext.system?.actions?.selectedForms)
-          ? basePartContext.system.actions.selectedForms
-          : [];
-        const preparedForms = this.document?.preparedActions?.forms ?? {};
-        const preparedAttunements = this.document?.preparedActions?.attunements ?? {};
+        const selectedForms = toArray(basePartContext.system?.actions?.selectedForms);
+        const preparedForms = actor?.preparedActions?.forms ?? {};
+        const preparedAttunements = actor?.preparedActions?.attunements ?? {};
         enrichedSelectedAction = enrichSelectedAction({
           action: storedSelectedAction,
           forms: preparedForms,
@@ -144,19 +143,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     if (partId === "actions") {
       const selectedActionType = basePartContext.system?.actions?.selectedType ?? "impact";
-      const preparedBundle = this.document?.preparedActions ?? {};
+      const preparedBundle = actor?.preparedActions ?? {};
       const preparedForms = preparedBundle.forms ?? {};
       const preparedAttunements = preparedBundle.attunements ?? {};
       const preparedActions = preparedBundle.actions ?? {};
       const preparedSpells = preparedBundle.spells ?? {};
-      const selectedForms = Array.isArray(this.document?.system?.actions?.selectedForms)
-        ? this.document.system.actions.selectedForms
-        : [];
+      const selectedForms = toArray(actor?.system?.actions?.selectedForms);
       const actions = prepareActionLikesWithKeywords({
         actionLikes: preparedActions,
         keywordBuckets: preparedForms,
         selectedKeywords: selectedForms,
-        skills: this.document?.system?.skills ?? {},
+        skills: actor?.system?.skills ?? {},
         selectedTypeId: selectedActionType,
         keywordProperty: "forms"
       });
@@ -164,7 +161,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         actionLikes: preparedSpells,
         keywordBuckets: preparedAttunements,
         selectedKeywords: selectedForms,
-        skills: this.document?.system?.skills ?? {},
+        skills: actor?.system?.skills ?? {},
         selectedTypeId: selectedActionType,
         keywordProperty: "attunements"
       });
@@ -325,21 +322,19 @@ async function onSelectAction(event, target) {
   const actionKey = target.closest("[data-action-key]")?.dataset.actionKey;
   if (!actionKey) return;
 
-  const selectedActionType = this.document?.system?.actions?.selectedType ?? "impact";
+  const actor = this.document;
+  const selectedActionType = actor?.system?.actions?.selectedType ?? "impact";
   const actionKind = target.closest("[data-action-kind]")?.dataset.actionKind ?? "action";
-  const preparedActions = this.document?.preparedActions?.actions ?? {};
-  const preparedSpells = this.document?.preparedActions?.spells ?? {};
-  const actionBucket = Array.isArray(preparedActions[selectedActionType])
-    ? preparedActions[selectedActionType]
-    : [];
-  const spellBucket = Array.isArray(preparedSpells[selectedActionType])
-    ? preparedSpells[selectedActionType]
-    : [];
+  const preparedActions = actor?.preparedActions?.actions ?? {};
+  const preparedSpells = actor?.preparedActions?.spells ?? {};
+  const actionBucket = getActionBucket(preparedActions, selectedActionType);
+  const spellBucket = getActionBucket(preparedSpells, selectedActionType);
   const selectionBucket = actionKind === "spell" ? spellBucket : actionBucket;
   const selectedAction = selectionBucket.find(action => action?.id === actionKey) ?? null;
   if (!selectedAction) return;
 
-  await this.document?.update({
+  await actor?.update({ "system.actions.selectedAction": null });
+  await actor?.update({
     "system.actions.selectedAction": {
       ...selectedAction,
       selectionKind: actionKind
@@ -364,9 +359,8 @@ async function onToggleForm(event, target) {
     ?? "selectedForms";
   const selectionPath = `system.actions.${selectionCollection}`;
 
-  const currentSelection = Array.isArray(this.document?.system?.actions?.[selectionCollection])
-    ? [...this.document.system.actions[selectionCollection]]
-    : [];
+  const actor = this.document;
+  const currentSelection = [...toArray(actor?.system?.actions?.[selectionCollection])];
 
   const normalizedSelection = Array.from(new Set(currentSelection));
   const selectedIndex = normalizedSelection.indexOf(formKey);
@@ -374,17 +368,18 @@ async function onToggleForm(event, target) {
   if (selectedIndex >= 0) normalizedSelection.splice(selectedIndex, 1);
   else normalizedSelection.push(formKey);
 
-  await this.document?.update({ [selectionPath]: normalizedSelection });
+  await actor?.update({ [selectionPath]: normalizedSelection });
 }
 
 async function onRollHelper(event) {
   event.preventDefault();
 
-  if (typeof this.document?.rollSelectedAction !== "function") return;
+  const actor = this.document;
+  if (typeof actor?.rollSelectedAction !== "function") return;
 
-  const rollResult = await this.document.rollSelectedAction();
+  const rollResult = await actor.rollSelectedAction();
   if (rollResult) {
-    await this.document.update({ "system.actions.commit.value": 0 });
+    await actor.update({ "system.actions.commit.value": 0 });
   }
 }
 
@@ -446,4 +441,10 @@ function enrichSelectedAction({
     skillLabel,
     skillTotal
   };
+}
+
+function getActionBucket(preparedActions, actionType) {
+  return Array.isArray(preparedActions?.[actionType])
+    ? preparedActions[actionType]
+    : [];
 }
