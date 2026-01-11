@@ -89,15 +89,11 @@
 
   {{#if actions.hasEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Actor.Tab.Actions"}}</h2>
-    {{#if actions.collection.length}}
-      {{> actionRows actions.collection actionKind="action"}}
-    {{/if}}
+    {{> actionRows actions.collection actionKind="action"}}
   {{/if}}
 
   {{#if spells.hasEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Item.Type.Spell"}}</h2>
-    {{#if spells.collection.length}}
-      {{> actionRows spells.collection actionKind="spell"}}
-    {{/if}}
+    {{> actionRows spells.collection actionKind="spell"}}
   {{/if}}
 </section>
