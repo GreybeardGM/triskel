@@ -104,6 +104,24 @@
       {{/if}}
     </div>
 
+    {{#if rollHelper.hasSelection}}
+      {{#if rollHelper.action.roll.active}}
+        <div class="roll-helper__situational">
+          <label class="roll-helper__situational-label" for="roll-helper-situational-modifier">
+            {{localize "TRISKEL.Actor.RollHelper.SituationalModifier"}}
+          </label>
+          <input
+            id="roll-helper-situational-modifier"
+            class="roll-helper__situational-input"
+            type="number"
+            data-dtype="Number"
+            name="system.actions.selectedAction.situationalModifier"
+            value="{{rollHelper.action.situationalModifier}}"
+          />
+        </div>
+      {{/if}}
+    {{/if}}
+
     {{#if rollHelperSummary}}
       <div class="roll-helper__summary-row">
         <div class="roll-helper__summary-entry">

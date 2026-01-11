@@ -380,6 +380,12 @@ export class TriskelActor extends Actor {
     const actionLabel = selectedAction.skillLabel ?? selectedAction.label ?? selectedAction.id ?? "";
 
     const modifiers = Array.isArray(selectedAction.modifiers) ? [...selectedAction.modifiers] : [];
+    const situationalModifier = toFiniteNumber(selectedAction?.situationalModifier, 0);
+    if (Number.isFinite(situationalModifier) && situationalModifier !== 0) {
+      const situationalLabel = game.i18n?.localize?.("TRISKEL.Actor.RollHelper.SituationalModifier")
+        ?? "Situational Modifier";
+      modifiers.push({ label: situationalLabel, value: situationalModifier });
+    }
 
     return this.rollTriskelDice({ modifiers, title: actionLabel });
   }
