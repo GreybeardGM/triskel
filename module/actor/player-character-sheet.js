@@ -174,9 +174,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         };
       });
 
-      actions.selectedType = actions?.selectedType ?? selectedActionType;
-      spells.selectedType = spells?.selectedType ?? selectedActionType;
-
       return {
         ...basePartContext,
         actions,
