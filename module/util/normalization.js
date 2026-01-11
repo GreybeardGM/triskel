@@ -4,7 +4,8 @@ export function toFiniteNumber(value, fallback = 0) {
 }
 
 export function toArray(value) {
-  return Array.isArray(value) ? value : [];
+  if (!Array.isArray(value)) return [];
+  return value.filter((_, index) => index in value);
 }
 
 export function createArrayKey(value) {
