@@ -96,11 +96,11 @@
 
   {{#if actions.hasEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Actor.Tab.Actions"}}</h2>
-    {{> actionRows actions.collection actionKind="action"}}
+    {{> actionRows actions.collection actionKind="action" renderNonce=actions.renderNonce}}
   {{/if}}
 
   {{#if spells.hasEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Item.Type.Spell"}}</h2>
-    {{> actionRows spells.collection actionKind="spell"}}
+    {{> actionRows spells.collection actionKind="spell" renderNonce=spells.renderNonce}}
   {{/if}}
 </section>
