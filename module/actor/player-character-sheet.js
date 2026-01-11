@@ -127,6 +127,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           selectedForms,
           skills: basePartContext.system?.skills ?? {}
         });
+        const rollActive = Boolean(enrichedSelectedAction?.skill);
+        enrichedSelectedAction = {
+          ...enrichedSelectedAction,
+          roll: {
+            ...(enrichedSelectedAction?.roll ?? {}),
+            active: rollActive
+          }
+        };
       }
       const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
         selectedAction: enrichedSelectedAction,
@@ -366,6 +374,8 @@ async function onSelectSkill(event, target) {
     label: skillLabel,
     cost: 0,
     reserve: null,
+    skill: skillId,
+    skillLabel,
     skillTotal,
     description,
     forms: [],
@@ -375,7 +385,7 @@ async function onSelectSkill(event, target) {
         value: skillTotal
       }
     ],
-    roll: { active: true }
+    roll: {}
   };
 
   await actor?.update({ "system.actions.selectedAction": null });
