@@ -384,8 +384,7 @@ async function onSelectSkill(event, target) {
         label: skillLabel,
         value: skillTotal
       }
-    ],
-    roll: {}
+    ]
   };
 
   await actor?.update({ "system.actions.selectedAction": null });
