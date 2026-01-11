@@ -11,7 +11,14 @@
         <ul>
           {{#each category.skills as |skill|}}
             <li class="skill-field" title="{{skill.description}}">
-              <span class="skill-label">{{skill.label}}</span>
+              <button
+                type="button"
+                class="skill-label is-interactive"
+                data-action="selectSkill"
+                data-skill-id="{{skill.id}}"
+              >
+                {{skill.label}}
+              </button>
               {{#if skill.mod}}
                 <span class="skill-mod" title="{{localize "TRISKEL.Actor.Skill.ModLabel"}}">
                   {{numberFormat skill.mod decimals=0 sign=true}}
