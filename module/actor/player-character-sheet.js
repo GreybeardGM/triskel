@@ -174,8 +174,30 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         };
       });
 
-      actions.selectedType = actions?.selectedType ?? selectedActionType;
-      spells.selectedType = spells?.selectedType ?? selectedActionType;
+      const collectSparseIndices = (entries = []) => {
+        if (!Array.isArray(entries)) return [];
+        return Array.from({ length: entries.length }, (_, index) =>
+          (index in entries ? null : index)
+        ).filter(index => index !== null);
+      };
+
+      const actionSparseIndices = collectSparseIndices(actions?.collection);
+      const spellSparseIndices = collectSparseIndices(spells?.collection);
+
+      console.log("TRISKEL | Actions part context prepared.", {
+        ...basePartContext,
+        actions,
+        spells,
+        actionTypeFilters,
+        actionCollectionMeta: {
+          length: actions?.collection?.length ?? 0,
+          sparseIndices: actionSparseIndices
+        },
+        spellCollectionMeta: {
+          length: spells?.collection?.length ?? 0,
+          sparseIndices: spellSparseIndices
+        }
+      });
 
       return {
         ...basePartContext,

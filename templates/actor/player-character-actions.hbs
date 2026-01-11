@@ -12,6 +12,8 @@
           tabindex="0"
           data-action="selectAction"
           data-action-key="{{action.id}}"
+          data-action-index="{{@index}}"
+          data-action-label="{{action.label}}"
           data-reserve="{{action.reserve}}"
           {{#if action.description}}
             title="{{action.description}}"
@@ -85,17 +87,13 @@
     </div>
   {{/if}}
 
-  {{#if actions.hasFilteredEntries}}
+  {{#if actions.hasEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Actor.Tab.Actions"}}</h2>
-    {{#if actions.collection.length}}
-      {{> actionRows actions.collection actionKind="action"}}
-    {{/if}}
+    {{> actionRows actions.collection actionKind="action"}}
   {{/if}}
 
-  {{#if spells.hasFilteredEntries}}
+  {{#if spells.hasEntries}}
     <h2 class="actions-subtitle">{{localize "TRISKEL.Item.Type.Spell"}}</h2>
-    {{#if spells.collection.length}}
-      {{> actionRows spells.collection actionKind="spell"}}
-    {{/if}}
+    {{> actionRows spells.collection actionKind="spell"}}
   {{/if}}
 </section>
