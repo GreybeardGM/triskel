@@ -125,8 +125,16 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           forms: preparedForms,
           attunements: preparedAttunements,
           selectedForms,
-          skills: basePartContext.system?.skills ?? {}
+          skills: actor?.system?.skills ?? {}
         });
+        const rollActive = Boolean(enrichedSelectedAction?.skill);
+        enrichedSelectedAction = {
+          ...enrichedSelectedAction,
+          roll: {
+            ...(enrichedSelectedAction?.roll ?? {}),
+            active: rollActive
+          }
+        };
       }
       const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
         selectedAction: enrichedSelectedAction,
@@ -366,6 +374,8 @@ async function onSelectSkill(event, target) {
     label: skillLabel,
     cost: 0,
     reserve: null,
+    skill: skillId,
+    skillLabel,
     skillTotal,
     description,
     forms: [],
@@ -375,7 +385,7 @@ async function onSelectSkill(event, target) {
         value: skillTotal
       }
     ],
-    roll: { active: true }
+    roll: {}
   };
 
   await actor?.update({ "system.actions.selectedAction": null });
@@ -462,8 +472,11 @@ function enrichSelectedAction({
   let skillTotal = null;
   if (skillId) {
     const skillSource = skills?.[skillId] ?? null;
-    skillLabel = skillSource?.label ?? skillId;
-    skillTotal = toFiniteNumber(skillSource?.total, 0);
+    skillLabel = skillSource?.label ?? action?.skillLabel ?? skillId;
+    const resolvedTotal = toFiniteNumber(skillSource?.total, Number.NaN);
+    skillTotal = Number.isFinite(resolvedTotal)
+      ? resolvedTotal
+      : toFiniteNumber(action?.skillTotal, 0);
   }
 
   return {
