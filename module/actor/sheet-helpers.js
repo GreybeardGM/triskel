@@ -197,6 +197,7 @@ export function prepareActionLikesWithKeywords({
  */
 export function prepareRollHelperContext({ selectedAction = null, reserves = {}, commit = null } = {}) {
   const commitValue = toFiniteNumber(commit?.value, 0);
+  const situationalModifier = toFiniteNumber(selectedAction?.situationalModifier, 0);
   const normalizedForms = Array.isArray(selectedAction?.forms)
     ? selectedAction.forms
     : (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : []);
@@ -209,7 +210,9 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
       skillBonus
     };
   });
-  const preparedAction = selectedAction ? { ...selectedAction, forms: mappedForms } : {};
+  const preparedAction = selectedAction
+    ? { ...selectedAction, forms: mappedForms, situationalModifier }
+    : {};
   const activeForms = mappedForms.filter(form => form.active);
   const baseCostValue = toFiniteNumber(preparedAction?.cost, Number.NaN);
   const baseCost = Number.isFinite(baseCostValue) && baseCostValue !== 0 ? baseCostValue : null;
@@ -269,6 +272,7 @@ function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}
   const canAfford = reserveCosts.every(entry => !Number.isFinite(entry.available) || entry.available >= entry.total);
   const totalSkillBonus = toFiniteNumber(action.skillTotal, 0)
     + activeForms.reduce((sum, form) => sum + toFiniteNumber(form.skillBonus, 0), 0)
+    + toFiniteNumber(action.situationalModifier, 0)
     + commitContribution;
 
   return {
