@@ -180,12 +180,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         actionTypeFilters
       });
 
-      console.log("TRISKEL | Actions part context prepared.", {
-        actions,
-        spells,
-        actionTypeFilters
-      });
-
       return {
         ...basePartContext,
         actions,
