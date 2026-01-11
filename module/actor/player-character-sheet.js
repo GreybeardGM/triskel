@@ -174,38 +174,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         };
       });
 
-      const actionIds = (actions?.collection ?? []).map(action => action?.id ?? null);
-      const spellIds = (spells?.collection ?? []).map(action => action?.id ?? null);
-      const dupes = (ids) => {
-        const seen = new Set();
-        const duplicates = new Set();
-        for (const id of ids) {
-          if (!id) {
-            duplicates.add(id);
-          } else if (seen.has(id)) {
-            duplicates.add(id);
-          } else {
-            seen.add(id);
-          }
-        }
-        return [...duplicates];
-      };
-
-      console.log("TRISKEL | Actions part context prepared.", {
-        ...basePartContext,
-        actions,
-        spells,
-        actionTypeFilters
-      });
-      console.log("TRISKEL | action ids snapshot", {
-        actionLen: actions?.collection?.length ?? 0,
-        spellLen: spells?.collection?.length ?? 0,
-        actionIds: structuredClone(actionIds),
-        spellIds: structuredClone(spellIds),
-        actionDupes: dupes(actionIds),
-        spellDupes: dupes(spellIds)
-      });
-
       return {
         ...basePartContext,
         actions,
