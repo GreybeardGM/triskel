@@ -1,4 +1,4 @@
-import { normalizeKeyword, toFiniteNumber } from "../util/normalization.js";
+import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -104,7 +104,7 @@ export function prepareActorItemsContext(actor = null) {
  * @param {string|null} [options.selectedTypeId=null] gewählte Action-Phase
  * @param {string} [options.keywordProperty="forms"] Zielfeld für angehängte Keywords (forms|attunements)
  * @param {string} [options.selectionCollection="selectedForms"] Auswahl-Feld im Actor-Datenmodell
- * @returns {{collection: Array, selectedType: string|null, hasEntries: boolean, hasFilteredEntries: boolean}}
+ * @returns {{collection: Array, hasEntries: boolean, renderNonce: string|null}}
  *  vorbereitete Actions/Spells mit angedockten Forms/Attunements
  */
 export function prepareActionLikesWithKeywords({
@@ -127,8 +127,9 @@ export function prepareActionLikesWithKeywords({
     return reserve.label ?? reserveId;
   };
 
-  const rawCollection = actionLikesByType?.[selectedTypeId] ?? [];
-  const collection = rawCollection.map(entry => {
+  const rawCollection = toArray(actionLikesByType?.[selectedTypeId]);
+  const collection = [];
+  for (const entry of rawCollection) {
     const keywords = Array.isArray(entry?.availableKeywords)
       ? entry.availableKeywords.map(keyword => normalizeKeyword(keyword))
       : [];
@@ -172,16 +173,17 @@ export function prepareActionLikesWithKeywords({
       preparedAction.skillTotal = null;
     }
 
-    return preparedAction;
-  });
+    collection.push(preparedAction);
+  }
 
   const hasEntries = collection.length > 0;
 
+  const renderNonce = foundry?.utils?.randomID?.() ?? null;
+
   return {
     collection,
-    selectedType: selectedTypeId,
     hasEntries,
-    hasFilteredEntries: hasEntries
+    renderNonce
   };
 }
 
