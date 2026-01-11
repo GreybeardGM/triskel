@@ -91,12 +91,12 @@ export class TriskelActor extends Actor {
     }
 
     if (actionsChanged || formsChanged) {
-      const sharedKeywords = new Set((formKeywords ?? []).map(keyword => normalizeKeyword(keyword)));
+      const sharedKeywords = new Set(formKeywords ?? []);
       preparedActions = this._applyAvailableKeywords(preparedActions, sharedKeywords);
     }
 
     if (spellsChanged || attunementsChanged) {
-      const sharedAttunementKeywords = new Set((attunementKeywords ?? []).map(keyword => normalizeKeyword(keyword)));
+      const sharedAttunementKeywords = new Set(attunementKeywords ?? []);
       preparedSpells = this._applyAvailableKeywords(preparedSpells, sharedAttunementKeywords);
     }
 
@@ -294,15 +294,11 @@ export class TriskelActor extends Actor {
     if (!collectionByType || typeof collectionByType !== "object") return collectionByType;
 
     return Object.entries(collectionByType).reduce((bucket, [typeId, collection]) => {
-      const denseCollection = Array.isArray(collection) ? collection.filter(entry => entry) : [];
-      const mappedCollection = denseCollection.map(entry => {
+      const mappedCollection = Array.isArray(collection) ? collection.map(entry => {
         const keywords = Array.isArray(entry?.keywords) ? entry.keywords : [];
-        const availableKeywords = keywords
-          .map(keyword => ({ original: keyword, normalized: normalizeKeyword(keyword) }))
-          .filter(entry => keywordSet.has(entry.normalized))
-          .map(entry => entry.normalized);
+        const availableKeywords = keywords.filter(keyword => keywordSet.has(keyword));
         return { ...entry, availableKeywords };
-      });
+      }) : [];
       bucket[typeId] = mappedCollection;
       return bucket;
     }, {});

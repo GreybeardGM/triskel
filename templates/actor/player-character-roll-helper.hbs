@@ -69,6 +69,11 @@
                 {{/if}}
               {{/if}}
 
+              {{#if form.skillBonus}}
+                <div class="roll-helper__entry-skill">{{localize "TRISKEL.Actor.RollHelper.SkillBonus"}}</div>
+                <div class="roll-helper__entry-bonus">{{numberFormat form.skillBonus decimals=0 sign=true}}</div>
+              {{/if}}
+
               {{#if form.cost}}
                 <div class="roll-helper__entry-cost">{{numberFormat form.cost decimals=0}}</div>
               {{/if}}
