@@ -17,6 +17,7 @@
         "Title": "Roll-Helfer",
         "Roll": "Würfeln",
         "FormsLabel": "Verfügbare Formen",
+        "SkillBonus": "Fertigkeitsbonus",
         "TotalBonus": "Gesamtbonus",
         "Difficulty": "Schwierigkeit",
         "NoActionSelected": "Keine Aktion ausgewählt"

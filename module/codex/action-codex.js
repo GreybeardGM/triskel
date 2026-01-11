@@ -204,7 +204,7 @@ export const TRISKEL_BASE_ACTIONS = [
   {
     id: "takeCover",
     label: "TRISKEL.Action.Base.TakeCover.Label",
-    type: "position",
+    type: "setup",
     category: "combat",
     skill: null,
     reserve: null,
