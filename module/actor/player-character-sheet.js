@@ -127,6 +127,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           selectedForms,
           skills: basePartContext.system?.skills ?? {}
         });
+        const rollActive = Boolean(enrichedSelectedAction?.skill);
+        enrichedSelectedAction = {
+          ...enrichedSelectedAction,
+          roll: {
+            ...(enrichedSelectedAction?.roll ?? {}),
+            active: rollActive
+          }
+        };
       }
       const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
         selectedAction: enrichedSelectedAction,
@@ -200,7 +208,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       toggleForm: onToggleForm,
       rollHelper: onRollHelper,
       filterActionType: onFilterActionType,
-      toggleActiveItem: onToggleActiveItem
+      toggleActiveItem: onToggleActiveItem,
+      selectSkill: onSelectSkill
     },
     actor: {
       type: 'character'
@@ -344,6 +353,43 @@ async function onFilterActionType(event, target) {
 
   const filterValue = target.closest("[data-filter-value]")?.dataset.filterValue ?? "impact";
   await this.document?.update({ "system.actions.selectedType": filterValue });
+}
+
+async function onSelectSkill(event, target) {
+  event.preventDefault();
+
+  const skillId = target.closest("[data-skill-id]")?.dataset.skillId ?? null;
+  if (!skillId) return;
+
+  const actor = this.document;
+  const skill = actor?.system?.skills?.[skillId] ?? null;
+  if (!skill) return;
+
+  const skillLabel = skill?.label ?? skillId;
+  const skillTotal = toFiniteNumber(skill?.total, 0);
+  const description = skill?.description ?? "";
+
+  const pseudoAction = {
+    id: skillId,
+    label: skillLabel,
+    cost: 0,
+    reserve: null,
+    skill: skillId,
+    skillLabel,
+    skillTotal,
+    description,
+    forms: [],
+    modifiers: [
+      {
+        label: skillLabel,
+        value: skillTotal
+      }
+    ],
+    roll: {}
+  };
+
+  await actor?.update({ "system.actions.selectedAction": null });
+  await actor?.update({ "system.actions.selectedAction": pseudoAction });
 }
 
 async function onToggleForm(event, target) {
