@@ -174,29 +174,36 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         };
       });
 
-      const collectSparseIndices = (entries = []) => {
-        if (!Array.isArray(entries)) return [];
-        return Array.from({ length: entries.length }, (_, index) =>
-          (index in entries ? null : index)
-        ).filter(index => index !== null);
+      const actionIds = (actions?.collection ?? []).map(action => action?.id ?? null);
+      const spellIds = (spells?.collection ?? []).map(action => action?.id ?? null);
+      const dupes = (ids) => {
+        const seen = new Set();
+        const duplicates = new Set();
+        for (const id of ids) {
+          if (!id) {
+            duplicates.add(id);
+          } else if (seen.has(id)) {
+            duplicates.add(id);
+          } else {
+            seen.add(id);
+          }
+        }
+        return [...duplicates];
       };
-
-      const actionSparseIndices = collectSparseIndices(actions?.collection);
-      const spellSparseIndices = collectSparseIndices(spells?.collection);
 
       console.log("TRISKEL | Actions part context prepared.", {
         ...basePartContext,
         actions,
         spells,
-        actionTypeFilters,
-        actionCollectionMeta: {
-          length: actions?.collection?.length ?? 0,
-          sparseIndices: actionSparseIndices
-        },
-        spellCollectionMeta: {
-          length: spells?.collection?.length ?? 0,
-          sparseIndices: spellSparseIndices
-        }
+        actionTypeFilters
+      });
+      console.log("TRISKEL | action ids snapshot", {
+        actionLen: actions?.collection?.length ?? 0,
+        spellLen: spells?.collection?.length ?? 0,
+        actionIds: structuredClone(actionIds),
+        spellIds: structuredClone(spellIds),
+        actionDupes: dupes(actionIds),
+        spellDupes: dupes(spellIds)
       });
 
       return {

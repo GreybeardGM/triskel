@@ -10,10 +10,12 @@
           class="action-row is-interactive {{action.reserve}}"
           role="button"
           tabindex="0"
+          id="action-row-{{actionKind}}-{{action.id}}"
           data-action="selectAction"
           data-action-key="{{action.id}}"
           data-action-index="{{@index}}"
           data-action-label="{{action.label}}"
+          data-action-type="{{actionKind}}"
           data-reserve="{{action.reserve}}"
           {{#if action.description}}
             title="{{action.description}}"
