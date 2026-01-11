@@ -294,14 +294,15 @@ export class TriskelActor extends Actor {
     if (!collectionByType || typeof collectionByType !== "object") return collectionByType;
 
     return Object.entries(collectionByType).reduce((bucket, [typeId, collection]) => {
-      const mappedCollection = Array.isArray(collection) ? collection.map(entry => {
+      const denseCollection = Array.isArray(collection) ? collection.filter(entry => entry) : [];
+      const mappedCollection = denseCollection.map(entry => {
         const keywords = Array.isArray(entry?.keywords) ? entry.keywords : [];
         const availableKeywords = keywords
           .map(keyword => ({ original: keyword, normalized: normalizeKeyword(keyword) }))
           .filter(entry => keywordSet.has(entry.normalized))
           .map(entry => entry.normalized);
         return { ...entry, availableKeywords };
-      }) : [];
+      });
       bucket[typeId] = mappedCollection;
       return bucket;
     }, {});
@@ -468,10 +469,12 @@ function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = 
 
   const addEntryToType = (entry, { source = null, image = null } = {}) => {
     if (!entry) return;
+    const label = entry.label ?? entry.id ?? "";
     const typeId = entry.type ?? "untyped";
     const bucket = ensureType(typeId);
     bucket.push({
       ...entry,
+      label,
       source,
       image: image ?? entry.image ?? entry.img ?? null
     });
