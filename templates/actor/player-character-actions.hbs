@@ -4,7 +4,12 @@
   data-group="{{tabs.actions.group}}"
 >
   {{#*inline "actionRows"}}
-    <div class="actions-list" role="list" data-action-kind="{{actionKind}}">
+    <div
+      class="actions-list"
+      role="list"
+      data-action-kind="{{actionKind}}"
+      id="actions-list-{{renderNonce}}"
+    >
       {{#each this as |action i|}}
         <article
           class="action-row is-interactive {{action.reserve}}"
