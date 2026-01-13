@@ -38,14 +38,9 @@ export const TRISKEL_TIERS = [
 
 export const TRISKEL_ITEM_CATEGORIES = [
   {
-    id: "held",
-    label: "TRISKEL.Item.Type.Held",
-    labelPlural: "TRISKEL.Item.Category.Held"
-  },
-  {
-    id: "worn",
-    label: "TRISKEL.Item.Type.Worn",
-    labelPlural: "TRISKEL.Item.Category.Worn"
+    id: "gear",
+    label: "TRISKEL.Item.Type.Gear",
+    labelPlural: "TRISKEL.Item.Category.Gear"
   },
   {
     id: "ability",
@@ -56,6 +51,51 @@ export const TRISKEL_ITEM_CATEGORIES = [
     id: "spell",
     label: "TRISKEL.Item.Type.Spell",
     labelPlural: "TRISKEL.Item.Category.Spell"
+  }
+];
+
+export const TRISKEL_CARRY_LOCATIONS = [
+  {
+    id: "quick",
+    label: "TRISKEL.Item.CarryLocation.Quick.Label",
+    description: "TRISKEL.Item.CarryLocation.Quick.Description",
+    loadType: "HandsUsed"
+  },
+  {
+    id: "belt",
+    label: "TRISKEL.Item.CarryLocation.Belt.Label",
+    description: "TRISKEL.Item.CarryLocation.Belt.Description",
+    loadType: "HandsUsed"
+  },
+  {
+    id: "back",
+    label: "TRISKEL.Item.CarryLocation.Back.Label",
+    description: "TRISKEL.Item.CarryLocation.Back.Description",
+    loadType: "HandsUsed"
+  },
+  {
+    id: "worn",
+    label: "TRISKEL.Item.CarryLocation.Worn.Label",
+    description: "TRISKEL.Item.CarryLocation.Worn.Description",
+    loadType: "HandsUsed"
+  },
+  {
+    id: "pack",
+    label: "TRISKEL.Item.CarryLocation.Pack.Label",
+    description: "TRISKEL.Item.CarryLocation.Pack.Description",
+    loadType: "PackLoad"
+  },
+  {
+    id: "hand",
+    label: "TRISKEL.Item.CarryLocation.Hand.Label",
+    description: "TRISKEL.Item.CarryLocation.Hand.Description",
+    loadType: "HandsUsed"
+  },
+  {
+    id: "dropped",
+    label: "TRISKEL.Item.CarryLocation.Dropped.Label",
+    description: "TRISKEL.Item.CarryLocation.Dropped.Description",
+    loadType: "None"
   }
 ];
 
@@ -391,6 +431,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   actionTypes: TRISKEL_ACTION_TYPES,
   tiers: TRISKEL_TIERS,
   itemCategories: TRISKEL_ITEM_CATEGORIES,
+  carryLocations: TRISKEL_CARRY_LOCATIONS,
   skillCategories: TRISKEL_SKILL_CATEGORIES,
   skills: TRISKEL_SKILLS,
   baseActions: TRISKEL_BASE_ACTIONS,
@@ -406,6 +447,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
 
 export const TRISKEL_TIERS_BY_ID = TRISKEL_CODEX_INDEX.tiers;
 export const TRISKEL_ITEM_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.itemCategories;
+export const TRISKEL_CARRY_LOCATIONS_BY_ID = TRISKEL_CODEX_INDEX.carryLocations;
 export const TRISKEL_SKILL_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.skillCategories;
 export const TRISKEL_SKILLS_BY_ID = TRISKEL_CODEX_INDEX.skills;
 export const TRISKEL_ACTION_TYPES_BY_ID = TRISKEL_CODEX_INDEX.actionTypes;

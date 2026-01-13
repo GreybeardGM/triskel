@@ -62,11 +62,13 @@ export async function onUpdateResourceValue(event, target) {
  * @param {Actor|null} actor
  * @returns {object} assets nach Item-Kategorien
  */
-export function prepareActorItemsContext(actor = null) {
+export function prepareActorItemsContext(actor = null, types = null) {
   if (actor?.assets) return actor.assets;
 
   const itemCategories = getTriskellIndex().itemCategories ?? {};
+  const typeFilter = Array.isArray(types) ? new Set(types) : null;
   const assets = Object.entries(itemCategories).reduce((collection, [id, category]) => {
+    if (typeFilter && !typeFilter.has(id)) return collection;
     collection[id] = {
       id,
       label: category.label ?? id,
