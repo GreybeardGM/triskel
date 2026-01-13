@@ -296,6 +296,10 @@
           "Label": "Back",
           "Description": "Items strapped to the back for transport."
         },
+        "Sling": {
+          "Label": "Sling",
+          "Description": "Items carried over the shoulder with a sling."
+        },
         "Worn": {
           "Label": "Worn",
           "Description": "Items worn on the body as part of the outfit."
@@ -322,6 +326,26 @@
         "MediumWeapon": {
           "Label": "Medium Weapon",
           "Description": "Single-handed weapons with moderate bulk."
+        },
+        "SmallWeapon": {
+          "Label": "Small Weapon",
+          "Description": "Compact one-handed weapons that are easy to stow."
+        },
+        "Shield": {
+          "Label": "Shield",
+          "Description": "One-handed defensive gear carried by arm."
+        },
+        "Armor": {
+          "Label": "Armor",
+          "Description": "Protective gear worn on the body."
+        },
+        "Trinket": {
+          "Label": "Trinket",
+          "Description": "Small worn items and accessories."
+        },
+        "Bow": {
+          "Label": "Bow",
+          "Description": "Ranged weapons such as bows and crossbows."
         },
         "None": "No archetype",
         "Torch": {

@@ -296,6 +296,10 @@
           "Label": "Rücken",
           "Description": "Am Rücken getragene Gegenstände für den Transport."
         },
+        "Sling": {
+          "Label": "Schlinge",
+          "Description": "Mit einer Schlinge über der Schulter getragen."
+        },
         "Worn": {
           "Label": "Getragen",
           "Description": "Am Körper getragen als Teil der Ausrüstung."
@@ -322,6 +326,26 @@
         "MediumWeapon": {
           "Label": "Mittlere Waffe",
           "Description": "Einhandwaffen mit moderatem Platzbedarf."
+        },
+        "SmallWeapon": {
+          "Label": "Kleine Waffe",
+          "Description": "Kompakte Einhandwaffen, die sich leicht verstauen lassen."
+        },
+        "Shield": {
+          "Label": "Schild",
+          "Description": "Einhändig geführte Schutzausrüstung."
+        },
+        "Armor": {
+          "Label": "Rüstung",
+          "Description": "Am Körper getragene Schutzkleidung."
+        },
+        "Trinket": {
+          "Label": "Schmuckstück",
+          "Description": "Kleine getragene Gegenstände und Accessoires."
+        },
+        "Bow": {
+          "Label": "Bogen",
+          "Description": "Fernkampfwaffen wie Bögen und Armbrüste."
         },
         "None": "Kein Archetyp",
         "Torch": {
