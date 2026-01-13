@@ -21,16 +21,31 @@
       {{#each referenceOptions.attunements as |option|}}
         <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
-    </select>
+      {{#unless references.attunements.length}}
+        <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+      {{/unless}}
+    </ol>
 
-    <button
-      type="button"
-      data-action="addAttunementReference"
-      data-select-field="attunementsRef"
-      data-ref-path="system.attunements.ref"
-    >
-      Hinzufügen
-    </button>
-  </div>
+    <div class="reference-controls__inputs">
+      <select
+        id="attunements-reference-select"
+        name="attunementsRef"
+        data-reference-select="attunements"
+      >
+        {{#each referenceOptions.attunements as |option|}}
+          <option value="{{option.value}}">{{option.label}}</option>
+        {{/each}}
+      </select>
 
-</section>
+      <button
+        type="button"
+        data-action="addAttunementReference"
+        data-select-field="attunementsRef"
+        data-ref-path="system.attunements.ref"
+      >
+        Hinzufügen
+      </button>
+    </div>
+
+  </section>
+{{/unless}}

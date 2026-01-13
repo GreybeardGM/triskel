@@ -21,15 +21,30 @@
       {{#each referenceOptions.forms as |option|}}
         <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
-    </select>
+      {{#unless references.forms.length}}
+        <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+      {{/unless}}
+    </ol>
 
-    <button
-      type="button"
-      data-action="addFormReference"
-      data-select-field="formsRef"
-      data-ref-path="system.forms.ref"
-    >
-      Hinzufügen
-    </button>
-  </div>
-</section>
+    <div class="reference-controls__inputs">
+      <select
+        id="forms-reference-select"
+        name="formsRef"
+        data-reference-select="forms"
+      >
+        {{#each referenceOptions.forms as |option|}}
+          <option value="{{option.value}}">{{option.label}}</option>
+        {{/each}}
+      </select>
+
+      <button
+        type="button"
+        data-action="addFormReference"
+        data-select-field="formsRef"
+        data-ref-path="system.forms.ref"
+      >
+        Hinzufügen
+      </button>
+    </div>
+  </section>
+{{/unless}}
