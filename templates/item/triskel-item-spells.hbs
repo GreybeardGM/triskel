@@ -1,12 +1,25 @@
-{{#if isSpellType}}
-  <section class="item-panel">
-    <h2>Spells</h2>
-    <ol class="reference-entries">
-      {{#each references.spells as |reference|}}
-        <li class="reference-row">
-          <span class="reference-label">{{reference.label}}</span>
-          <button type="button" data-action="removeSpellReference" data-index="{{reference.index}}">Entfernen</button>
-        </li>
+<section class="item-panel {{#unless isSpellType}}is-hidden{{/unless}}">
+  <h2>Spells</h2>
+  <ol class="reference-entries">
+    {{#each references.spells as |reference|}}
+      <li class="reference-row">
+        <span class="reference-label">{{reference.label}}</span>
+        <button type="button" data-action="removeSpellReference" data-index="{{reference.index}}">Entfernen</button>
+      </li>
+    {{/each}}
+    {{#unless references.spells.length}}
+      <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+    {{/unless}}
+  </ol>
+
+  <div class="reference-controls__inputs">
+    <select
+      id="spells-reference-select"
+      name="spellsRef"
+      data-reference-select="spells"
+    >
+      {{#each referenceOptions.spells as |option|}}
+        <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
       {{#unless references.spells.length}}
         <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
@@ -24,15 +37,13 @@
         {{/each}}
       </select>
 
-      <button
-        type="button"
-        data-action="addSpellReference"
-        data-select-field="spellsRef"
-        data-ref-path="system.spells.ref"
-      >
-        Hinzufügen
-      </button>
-    </div>
-
-  </section>
-{{/if}}
+    <button
+      type="button"
+      data-action="addSpellReference"
+      data-select-field="spellsRef"
+      data-ref-path="system.spells.ref"
+    >
+      Hinzufügen
+    </button>
+  </div>
+</section>

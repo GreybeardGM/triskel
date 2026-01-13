@@ -1,13 +1,26 @@
-{{#unless isSpellType}}
-  <section class="item-panel">
-    <h2>Modifiers</h2>
-    <ol class="reference-entries">
-      {{#each modifiers as |modifier|}}
-        <li class="reference-row">
-          <span class="reference-label">{{modifier.label}}</span>
-          <span class="modifier-value">{{modifier.value}}</span>
-          <button type="button" data-action="removeModifier" data-index="{{modifier.index}}">Entfernen</button>
-        </li>
+<section class="item-panel {{#if isSpellType}}is-hidden{{/if}}">
+  <h2>Modifiers</h2>
+  <ol class="reference-entries">
+    {{#each modifiers as |modifier|}}
+      <li class="reference-row">
+        <span class="reference-label">{{modifier.label}}</span>
+        <span class="modifier-value">{{modifier.value}}</span>
+        <button type="button" data-action="removeModifier" data-index="{{modifier.index}}">Entfernen</button>
+      </li>
+    {{/each}}
+    {{#unless modifiers.length}}
+      <li class="reference-row reference-row--empty">Keine Modifiers hinterlegt</li>
+    {{/unless}}
+  </ol>
+
+  <div class="reference-controls__inputs">
+    <select
+      id="modifier-skill"
+      name="modifierSkill"
+      data-modifier-skill
+    >
+      {{#each modifierOptions as |option|}}
+        <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
       {{#unless modifiers.length}}
         <li class="reference-row reference-row--empty">Keine Modifiers hinterlegt</li>

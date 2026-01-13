@@ -63,6 +63,10 @@
   flex-direction: column;
 }
 
+.triskel .item-panel.is-hidden {
+  display: none;
+}
+
 .triskel .item-panels {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

@@ -1,12 +1,25 @@
-{{#unless isSpellType}}
-  <section class="item-panel">
-    <h2>Actions</h2>
-    <ol class="reference-entries">
-      {{#each references.actions as |reference|}}
-        <li class="reference-row">
-          <span class="reference-label">{{reference.label}}</span>
-          <button type="button" data-action="removeActionReference" data-index="{{reference.index}}">Entfernen</button>
-        </li>
+<section class="item-panel {{#if isSpellType}}is-hidden{{/if}}">
+  <h2>Actions</h2>
+  <ol class="reference-entries">
+    {{#each references.actions as |reference|}}
+      <li class="reference-row">
+        <span class="reference-label">{{reference.label}}</span>
+        <button type="button" data-action="removeActionReference" data-index="{{reference.index}}">Entfernen</button>
+      </li>
+    {{/each}}
+    {{#unless references.actions.length}}
+      <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+    {{/unless}}
+  </ol>
+
+  <div class="reference-controls__inputs">
+    <select
+      id="actions-reference-select"
+      name="actionsRef"
+      data-reference-select="actions"
+    >
+      {{#each referenceOptions.actions as |option|}}
+        <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
       {{#unless references.actions.length}}
         <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
@@ -24,15 +37,13 @@
         {{/each}}
       </select>
 
-      <button
-        type="button"
-        data-action="addActionReference"
-        data-select-field="actionsRef"
-        data-ref-path="system.actions.ref"
-      >
-        Hinzufügen
-      </button>
-    </div>
-
-  </section>
-{{/unless}}
+    <button
+      type="button"
+      data-action="addActionReference"
+      data-select-field="actionsRef"
+      data-ref-path="system.actions.ref"
+    >
+      Hinzufügen
+    </button>
+  </div>
+</section>

@@ -1,18 +1,16 @@
-{{#if isGearType}}
-  <section class="item-panel">
-    <h2>{{localize "TRISKEL.Item.Archetype.Label"}}</h2>
-    <div class="form-group">
-      <label for="gear-archetype-select">{{localize "TRISKEL.Item.Archetype.Label"}}</label>
-      <div class="form-fields">
-        <select id="gear-archetype-select" name="system.archetype">
-          <option value="">{{localize "TRISKEL.Item.Archetype.None"}}</option>
-          {{#each gearArchetypeOptions as |option|}}
-            <option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>
-              {{option.label}}
-            </option>
-          {{/each}}
-        </select>
-      </div>
+<section class="item-panel {{#unless isGearType}}is-hidden{{/unless}}">
+  <h2>{{localize "TRISKEL.Item.Archetype.Label"}}</h2>
+  <div class="form-group">
+    <label for="gear-archetype-select">{{localize "TRISKEL.Item.Archetype.Label"}}</label>
+    <div class="form-fields">
+      <select id="gear-archetype-select" name="system.archetype">
+        <option value="">{{localize "TRISKEL.Item.Archetype.None"}}</option>
+        {{#each gearArchetypeOptions as |option|}}
+          <option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>
+            {{option.label}}
+          </option>
+        {{/each}}
+      </select>
     </div>
-  </section>
-{{/if}}
+  </div>
+</section>
