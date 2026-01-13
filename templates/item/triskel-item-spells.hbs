@@ -1,36 +1,38 @@
-<section class="item-panel">
-  <h2>Spells</h2>
-  <ol class="reference-entries">
-    {{#each references.spells as |reference|}}
-      <li class="reference-row">
-        <span class="reference-label">{{reference.label}}</span>
-        <button type="button" data-action="removeSpellReference" data-index="{{reference.index}}">Entfernen</button>
-      </li>
-    {{/each}}
-    {{#unless references.spells.length}}
-      <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
-    {{/unless}}
-  </ol>
-
-  <div class="reference-controls__inputs">
-    <select
-      id="spells-reference-select"
-      name="spellsRef"
-      data-reference-select="spells"
-    >
-      {{#each referenceOptions.spells as |option|}}
-        <option value="{{option.value}}">{{option.label}}</option>
+{{#if isSpellType}}
+  <section class="item-panel">
+    <h2>Spells</h2>
+    <ol class="reference-entries">
+      {{#each references.spells as |reference|}}
+        <li class="reference-row">
+          <span class="reference-label">{{reference.label}}</span>
+          <button type="button" data-action="removeSpellReference" data-index="{{reference.index}}">Entfernen</button>
+        </li>
       {{/each}}
-    </select>
+      {{#unless references.spells.length}}
+        <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+      {{/unless}}
+    </ol>
 
-    <button
-      type="button"
-      data-action="addSpellReference"
-      data-select-field="spellsRef"
-      data-ref-path="system.spells.ref"
-    >
-      Hinzufügen
-    </button>
-  </div>
+    <div class="reference-controls__inputs">
+      <select
+        id="spells-reference-select"
+        name="spellsRef"
+        data-reference-select="spells"
+      >
+        {{#each referenceOptions.spells as |option|}}
+          <option value="{{option.value}}">{{option.label}}</option>
+        {{/each}}
+      </select>
 
-</section>
+      <button
+        type="button"
+        data-action="addSpellReference"
+        data-select-field="spellsRef"
+        data-ref-path="system.spells.ref"
+      >
+        Hinzufügen
+      </button>
+    </div>
+
+  </section>
+{{/if}}

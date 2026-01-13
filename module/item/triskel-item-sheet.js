@@ -32,6 +32,12 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       attunements: this.constructor.prepareOptions(triskellIndex.attunements)
     };
 
+    const gearArchetypeOptions = this.constructor.prepareOptions(triskellIndex.gearArchetypes ?? {})
+      .map(option => ({
+        ...option,
+        selected: option.value === item?.system?.archetype
+      }));
+
     const modifiers = this.constructor.prepareModifiers(this.document.system?.modifiers);
     const modifierOptions = this.constructor.prepareOptions(triskellIndex.skills);
 
@@ -44,9 +50,12 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       system: context.system ?? item?.system ?? {},
       references,
       referenceOptions,
+      gearArchetypeOptions,
       modifiers,
       modifierOptions,
-      itemTypeLabel
+      itemTypeLabel,
+      isSpellType: this.document.type === "spell",
+      isGearType: this.document.type === "gear"
     };
   }
 
@@ -90,6 +99,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     spells: {
       id: "spells",
       template: "systems/triskel/templates/item/triskel-item-spells.hbs"
+    },
+    gearArchetype: {
+      id: "gear-archetype",
+      template: "systems/triskel/templates/item/triskel-item-gear-archetype.hbs"
     },
     attunements: {
       id: "attunements",

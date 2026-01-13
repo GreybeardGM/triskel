@@ -9,6 +9,46 @@
   margin-top: 0.25rem;
 }
 
+.triskel .item-sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--triskel-color-border-muted, rgba(0, 0, 0, 0.2));
+}
+
+.triskel .item-header__image {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.triskel .item-header__image img {
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid var(--triskel-color-border-muted, rgba(0, 0, 0, 0.2));
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.triskel .item-header__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.triskel .item-header__name {
+  margin: 0;
+}
+
+.triskel .item-header__name input {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
 .triskel .item-type-label__title {
   font-size: 0.85rem;
   color: var(--color-text-secondary);
