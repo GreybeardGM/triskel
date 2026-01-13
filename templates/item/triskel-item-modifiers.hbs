@@ -22,41 +22,25 @@
       {{#each modifierOptions as |option|}}
         <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
-      {{#unless modifiers.length}}
-        <li class="reference-row reference-row--empty">Keine Modifiers hinterlegt</li>
-      {{/unless}}
-    </ol>
+    </select>
 
-    <div class="reference-controls__inputs">
-      <select
-        id="modifier-skill"
-        name="modifierSkill"
-        data-modifier-skill
-      >
-        {{#each modifierOptions as |option|}}
-          <option value="{{option.value}}">{{option.label}}</option>
-        {{/each}}
-      </select>
+    <input
+      type="number"
+      step="1"
+      value="0"
+      id="modifier-value"
+      name="modifierValue"
+      data-modifier-value
+    />
 
-      <input
-        type="number"
-        step="1"
-        value="0"
-        id="modifier-value"
-        name="modifierValue"
-        data-modifier-value
-      />
-
-      <button
-        type="button"
-        data-action="addModifier"
-        data-skill-field="modifierSkill"
-        data-value-field="modifierValue"
-        data-ref-path="system.modifiers"
-      >
-        Hinzufügen
-      </button>
-    </div>
-
-  </section>
-{{/unless}}
+    <button
+      type="button"
+      data-action="addModifier"
+      data-skill-field="modifierSkill"
+      data-value-field="modifierValue"
+      data-ref-path="system.modifiers"
+    >
+      Hinzufügen
+    </button>
+  </div>
+</section>
