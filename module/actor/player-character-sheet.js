@@ -34,7 +34,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const activeTab = this.tabGroups?.sheet
       ?? this.constructor.TABS?.sheet?.initial
       ?? "actions";
-    const tabParts = new Set(["actions", "skills", "gear", "abilities", "spells", "notes"]);
+    const tabParts = new Set(["actions", "skills", "gear", "spells", "notes"]);
 
     renderOptions.parts = partIds.filter(partId => !tabParts.has(partId) || partId === activeTab);
     return renderOptions;
@@ -72,9 +72,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     if (partId === "skills") {
       const { skillCategories } = prepareSkillsDisplay(actor?.system?.skills ?? {});
+      const abilitiesToDisplay = prepareAssetContext(actor?.assets, ["ability"]);
       return {
         ...basePartContext,
-        skillCategories
+        skillCategories,
+        abilitiesToDisplay
       };
     }
 
@@ -106,10 +108,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       };
     }
 
-    if (["gear", "abilities", "spells"].includes(partId)) {
+    if (["gear", "spells"].includes(partId)) {
       const selectedTypesByPart = {
         gear: ["gear"],
-        abilities: ["ability"],
         spells: ["spell"]
       };
       const selectedTypes = selectedTypesByPart[partId] ?? [];
@@ -256,13 +257,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           tooltip: "TRISKEL.Actor.Tab.Tooltip.Gear"
         },
         {
-          id: "abilities",
-          group: "sheet",
-          icon: "fa-solid fa-wand-magic-sparkles",
-          label: "TRISKEL.Actor.Tab.Abilities",
-          tooltip: "TRISKEL.Actor.Tab.Tooltip.Abilities"
-        },
-        {
           id: "spells",
           group: "sheet",
           icon: "fa-solid fa-book-sparkles",
@@ -316,11 +310,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: "gear",
       template: "systems/triskel/templates/actor/player-character-inventory.hbs",
       sort: 240
-    },
-    abilities: {
-      id: "abilities",
-      template: "systems/triskel/templates/actor/player-character-inventory.hbs",
-      sort: 245
     },
     spells: {
       id: "spells",
