@@ -57,37 +57,24 @@ export async function onUpdateResourceValue(event, target) {
 }
 
 /**
- * Items für Actor-Sheets vorbereiten und nach Kategorien bündeln.
+ * Assets für Actor-Sheets vorbereiten und nach Kategorien filtern.
  *
- * @param {Actor|null} actor
- * @returns {object} assets nach Item-Kategorien
+ * @param {object|null} assets vorbereitete Asset-Buckets aus dem Actor
+ * @param {Array<string>|string|null} types optionale Filterliste für Item-Kategorien
+ * @returns {object|Array<object>|null} Assets oder gefilterte Buckets
  */
-export function prepareActorItemsContext(actor = null, types = null) {
-  if (actor?.assets) return actor.assets;
+export function prepareAssetContext(assets = null, types = null) {
+  if (!types) return assets;
 
-  const itemCategories = getTriskellIndex().itemCategories ?? {};
-  const typeFilter = Array.isArray(types) ? new Set(types) : null;
-  const assets = Object.entries(itemCategories).reduce((collection, [id, category]) => {
-    if (typeFilter && !typeFilter.has(id)) return collection;
-    collection[id] = {
-      id,
-      label: category.label ?? id,
-      labelPlural: category.labelPlural ?? category.label ?? id,
-      collection: []
-    };
+  const typeFilter = Array.isArray(types) ? types : [types];
+  const itemsToDisplay = typeFilter.reduce((collection, type) => {
+    const bucket = assets?.[type] ?? null;
+    if (!bucket) return collection;
+    collection.push(bucket);
     return collection;
-  }, {});
+  }, []);
 
-  if (!actor?.items) return assets;
-
-  for (const item of actor.items) {
-    const type = item?.type ?? "";
-    if (!type || !assets[type]) continue;
-
-    assets[type].collection.push(item);
-  }
-
-  return assets;
+  return itemsToDisplay;
 }
 
 /**
