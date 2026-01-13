@@ -4,12 +4,16 @@
       "Tab": {
         "Actions": "Action Cards",
         "Skills": "Skills",
-        "Inventory": "Equipment",
-      "Notes": "Notes",
+        "Gear": "Gear",
+        "Abilities": "Abilities",
+        "Spells": "Spells",
+        "Notes": "Notes",
       "Tooltip": {
         "Actions": "Show and select your action cards",
         "Skills": "Edit skills and resistances",
-        "Inventory": "Review your carried items",
+        "Gear": "Review your gear",
+        "Abilities": "Review your abilities",
+        "Spells": "Review your spells",
         "Notes": "Review character notes"
       }
       },
@@ -270,16 +274,44 @@
     },
     "Item": {
       "Type": {
-        "Held": "Held",
-        "Worn": "Worn",
+        "Gear": "Gear",
         "Ability": "Ability",
         "Spell": "Spells"
       },
       "Category": {
-        "Held": "Held items",
-        "Worn": "Worn gear",
+        "Gear": "Gear",
         "Ability": "Abilities",
         "Spell": "Spells"
+      },
+      "CarryLocation": {
+        "Quick": {
+          "Label": "Quick",
+          "Description": "Items kept close for immediate access."
+        },
+        "Belt": {
+          "Label": "Belt",
+          "Description": "Items secured on a belt for ready use."
+        },
+        "Back": {
+          "Label": "Back",
+          "Description": "Items strapped to the back for transport."
+        },
+        "Worn": {
+          "Label": "Worn",
+          "Description": "Items worn on the body as part of the outfit."
+        },
+        "Pack": {
+          "Label": "Pack",
+          "Description": "Items stored in a pack and harder to access."
+        },
+        "Hand": {
+          "Label": "Hand",
+          "Description": "Items held in hand and immediately available."
+        },
+        "Dropped": {
+          "Label": "Dropped",
+          "Description": "Items on the ground and not currently usable."
+        }
       },
       "Inventory": {
         "Empty": "You are not carrying any items.",

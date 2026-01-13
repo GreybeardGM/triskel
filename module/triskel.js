@@ -10,6 +10,10 @@ import {
 import { localizeCodexCollections } from "./codex/codex-localization.js";
 
 const itemTypes = TRISKEL_ITEM_CATEGORIES.map(category => category.id);
+const itemTypeLabelMap = TRISKEL_ITEM_CATEGORIES.reduce((labels, category) => {
+  labels[category.id] = category.label;
+  return labels;
+}, {});
 
 const registerSheets = localize => {
   foundry.documents.collections.Actors.registerSheet("triskel", PlayerCharacterSheet, {
@@ -38,14 +42,14 @@ const setTypeLabels = localize => {
     npc: localize("TRISKEL.Actor.Type.NPC")
   };
 
-  CONFIG.Item.typeLabels = itemTypes.reduce((labels, type) => {
-    const labelKey = TRISKEL_ITEM_CATEGORIES.find(category => category.id === type)?.label ?? "";
+  const itemLabels = { ...(CONFIG.Item.typeLabels ?? {}) };
 
-    return {
-      ...labels,
-      [type]: labelKey ? localize(labelKey) : type
-    };
-  }, CONFIG.Item.typeLabels ?? {});
+  for (const type of itemTypes) {
+    const labelKey = itemTypeLabelMap[type] ?? "";
+    itemLabels[type] = labelKey ? localize(labelKey) : type;
+  }
+
+  CONFIG.Item.typeLabels = itemLabels;
 };
 
 Hooks.once("init", function() {
@@ -72,4 +76,3 @@ Hooks.once("init", function() {
   });
 
 });
-

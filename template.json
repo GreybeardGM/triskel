@@ -195,8 +195,7 @@
   },
   "Item": {
     "types": [
-      "held",
-      "worn",
+      "gear",
       "ability",
       "spell"
     ],
@@ -222,15 +221,17 @@
         },
         "modifiers": []
       },
-      "held": {
+      "gear": {
         "templates": [
           "base"
-        ]
-      },
-      "worn": {
-        "templates": [
-          "base"
-        ]
+        ],
+        "archetype": "",
+        "overwrite": {
+          "validLocations": null,
+          "handUsed": null,
+          "packLoad": null
+        },
+        "carryLocation": ""
       },
       "ability": {
         "templates": [

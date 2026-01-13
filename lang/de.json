@@ -4,12 +4,16 @@
       "Tab": {
         "Actions": "Aktionskarten",
         "Skills": "Fertigkeiten",
-        "Inventory": "Ausrüstung",
+        "Gear": "Ausrüstung",
+        "Abilities": "Fähigkeiten",
+        "Spells": "Zauber",
         "Notes": "Notizen",
         "Tooltip": {
           "Actions": "Aktionskarten anzeigen und auswählen",
           "Skills": "Fertigkeiten und Resistenzen bearbeiten",
-          "Inventory": "Alle getragenen Gegenstände ansehen",
+          "Gear": "Ausrüstung anzeigen",
+          "Abilities": "Fähigkeiten anzeigen",
+          "Spells": "Zauber anzeigen",
           "Notes": "Charakternotizen ansehen"
         }
       },
@@ -270,16 +274,44 @@
     },
     "Item": {
       "Type": {
-        "Held": "Geführt",
-        "Worn": "Getragen",
+        "Gear": "Ausrüstung",
         "Ability": "Fähigkeit",
         "Spell": "Zauber"
       },
       "Category": {
-        "Held": "Geführte Gegenstände",
-        "Worn": "Getragene Ausrüstung",
+        "Gear": "Ausrüstung",
         "Ability": "Fähigkeiten",
         "Spell": "Zauber"
+      },
+      "CarryLocation": {
+        "Quick": {
+          "Label": "Schnell",
+          "Description": "Gegenstände in Griffnähe für sofortigen Zugriff."
+        },
+        "Belt": {
+          "Label": "Gürtel",
+          "Description": "Am Gürtel befestigte Gegenstände für schnellen Zugriff."
+        },
+        "Back": {
+          "Label": "Rücken",
+          "Description": "Am Rücken getragene Gegenstände für den Transport."
+        },
+        "Worn": {
+          "Label": "Getragen",
+          "Description": "Am Körper getragen als Teil der Ausrüstung."
+        },
+        "Pack": {
+          "Label": "Rucksack",
+          "Description": "Im Pack verstaut und schwerer zugänglich."
+        },
+        "Hand": {
+          "Label": "Hand",
+          "Description": "In der Hand gehalten und sofort verfügbar."
+        },
+        "Dropped": {
+          "Label": "Fallen gelassen",
+          "Description": "Gegenstände am Boden, derzeit nicht nutzbar."
+        }
       },
       "Inventory": {
         "Empty": "Du trägst momentan keine Gegenstände.",

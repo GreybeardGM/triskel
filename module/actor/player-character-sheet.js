@@ -34,7 +34,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const activeTab = this.tabGroups?.sheet
       ?? this.constructor.TABS?.sheet?.initial
       ?? "actions";
-    const tabParts = new Set(["actions", "skills", "inventory", "notes"]);
+    const tabParts = new Set(["actions", "skills", "gear", "abilities", "spells", "notes"]);
 
     renderOptions.parts = partIds.filter(partId => !tabParts.has(partId) || partId === activeTab);
     return renderOptions;
@@ -106,10 +106,18 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       };
     }
 
-    if (partId === "inventory") {
+    if (["gear", "abilities", "spells"].includes(partId)) {
+      const selectedTypesByPart = {
+        gear: ["gear"],
+        abilities: ["ability"],
+        spells: ["spell"]
+      };
+      const selectedTypes = selectedTypesByPart[partId] ?? [];
+      const assets = prepareActorItemsContext(actor, selectedTypes);
       return {
         ...basePartContext,
-        assets: prepareActorItemsContext(actor)
+        assets,
+        tab: basePartContext.tabs?.[partId]
       };
     }
 
@@ -241,11 +249,25 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           tooltip: "TRISKEL.Actor.Tab.Tooltip.Skills"
         },
         {
-          id: "inventory",
+          id: "gear",
           group: "sheet",
           icon: "fa-solid fa-suitcase",
-          label: "TRISKEL.Actor.Tab.Inventory",
-          tooltip: "TRISKEL.Actor.Tab.Tooltip.Inventory"
+          label: "TRISKEL.Actor.Tab.Gear",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Gear"
+        },
+        {
+          id: "abilities",
+          group: "sheet",
+          icon: "fa-solid fa-wand-magic-sparkles",
+          label: "TRISKEL.Actor.Tab.Abilities",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Abilities"
+        },
+        {
+          id: "spells",
+          group: "sheet",
+          icon: "fa-solid fa-book-sparkles",
+          label: "TRISKEL.Actor.Tab.Spells",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Spells"
         },
         {
           id: "notes",
@@ -290,8 +312,18 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       template: "systems/triskel/templates/actor/player-character-notes.hbs",
       sort: 300
     },
-    inventory: {
-      id: "inventory",
+    gear: {
+      id: "gear",
+      template: "systems/triskel/templates/actor/player-character-inventory.hbs",
+      sort: 240
+    },
+    abilities: {
+      id: "abilities",
+      template: "systems/triskel/templates/actor/player-character-inventory.hbs",
+      sort: 245
+    },
+    spells: {
+      id: "spells",
       template: "systems/triskel/templates/actor/player-character-inventory.hbs",
       sort: 250
     }
