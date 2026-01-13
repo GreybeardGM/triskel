@@ -335,6 +335,14 @@
           "Label": "Shield",
           "Description": "One-handed defensive gear carried by arm."
         },
+        "Armor": {
+          "Label": "Armor",
+          "Description": "Protective gear worn on the body."
+        },
+        "Trinket": {
+          "Label": "Trinket",
+          "Description": "Small worn items and accessories."
+        },
         "Bow": {
           "Label": "Bow",
           "Description": "Ranged weapons such as bows and crossbows."

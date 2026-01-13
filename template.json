@@ -228,8 +228,9 @@
         "archetype": "",
         "overwrite": {
           "validLocations": null,
-          "handUsed": null,
-          "packLoad": null
+          "handsUsed": null,
+          "packLoad": null,
+          "armorBulk": null
         },
         "carryLocation": ""
       },

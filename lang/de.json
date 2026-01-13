@@ -335,6 +335,14 @@
           "Label": "Schild",
           "Description": "Einhändig geführte Schutzausrüstung."
         },
+        "Armor": {
+          "Label": "Rüstung",
+          "Description": "Am Körper getragene Schutzkleidung."
+        },
+        "Trinket": {
+          "Label": "Schmuckstück",
+          "Description": "Kleine getragene Gegenstände und Accessoires."
+        },
         "Bow": {
           "Label": "Bogen",
           "Description": "Fernkampfwaffen wie Bögen und Armbrüste."
