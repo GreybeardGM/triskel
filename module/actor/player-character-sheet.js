@@ -3,7 +3,7 @@ import {
   getTriskellIndex,
   onEditImage,
   onUpdateResourceValue,
-  prepareActorItemsContext,
+  prepareAssetContext,
   prepareActionLikesWithKeywords,
   prepareActorBarsContext,
   prepareRollHelperContext,
@@ -113,10 +113,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         spells: ["spell"]
       };
       const selectedTypes = selectedTypesByPart[partId] ?? [];
-      const assets = prepareActorItemsContext(actor, selectedTypes);
+      const itemsToDisplay = prepareAssetContext(actor?.assets, selectedTypes);
       return {
         ...basePartContext,
-        assets,
+        itemsToDisplay,
         tab: basePartContext.tabs?.[partId]
       };
     }

@@ -1,7 +1,7 @@
 import {
   onEditImage,
   onUpdateResourceValue,
-  prepareActorItemsContext,
+  prepareAssetContext,
   prepareActorBarsContext,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
@@ -18,7 +18,7 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.system ??= actor?.system ?? {};
     const { skillCategories } = prepareSkillsDisplay(this.document?.system?.skills ?? {});
     context.skillCategories = skillCategories;
-    context.assets = prepareActorItemsContext(this.document);
+    context.assets = prepareAssetContext(this.document?.assets);
     const preparedBundle = this.document?.preparedActions ?? {};
     context.actions = preparedBundle.actions ?? {};
     const { npcStats } = prepareActorBarsContext(this.document);
