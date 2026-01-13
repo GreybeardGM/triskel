@@ -11,14 +11,13 @@
         <ul>
           {{#each category.skills as |skill|}}
             <li class="skill-field" title="{{skill.description}}">
-              <button
-                type="button"
+              <div
                 class="skill-label is-interactive"
                 data-action="selectSkill"
                 data-skill-id="{{skill.id}}"
               >
                 {{skill.label}}
-              </button>
+              </div>
               {{#if skill.mod}}
                 <span class="skill-mod" title="{{localize "TRISKEL.Actor.Skill.ModLabel"}}">
                   {{numberFormat skill.mod decimals=0 sign=true}}
@@ -36,4 +35,65 @@
       </div>
     {{/each}}
   </div>
+  {{#if abilitiesToDisplay.length}}
+    {{#each abilitiesToDisplay as |category|}}
+      <div class="inventory-category">
+        <h2 class="inventory-category__title">{{category.labelPlural}}</h2>
+        <ul class="inventory-list">
+          {{#if category.collection.length}}
+            {{#each category.collection as |item|}}
+              <li
+                class="inventory-list__item"
+                data-item-id="{{item.id}}"
+              >
+                <button
+                  type="button"
+                  class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
+                  data-action="toggleActiveItem"
+                  data-item-type="{{item.type}}"
+                >
+                  {{#if item.system.active}}
+                    <i class="fa-solid fa-check"></i>
+                  {{/if}}
+                </button>
+                {{#if item.img}}
+                  <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
+                {{else}}
+                  <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+                {{/if}}
+                <span class="inventory-list__item-name">{{item.name}}</span>
+                <div class="inventory-list__item-actions">
+                  <button
+                    type="button"
+                    class="inventory-list__item-action"
+                    data-action="editItem"
+                    title="{{localize 'TRISKEL.Item.Inventory.Edit'}}"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="inventory-list__item-action"
+                    data-action="deleteItem"
+                    title="{{localize 'TRISKEL.Item.Inventory.Delete'}}"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </li>
+            {{/each}}
+          {{else}}
+            <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
+          {{/if}}
+        </ul>
+      </div>
+    {{/each}}
+  {{else}}
+    <div class="inventory-category">
+      <h2 class="inventory-category__title">{{localize "TRISKEL.Actor.Tab.Abilities"}}</h2>
+      <ul class="inventory-list">
+        <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
+      </ul>
+    </div>
+  {{/if}}
 </section>
