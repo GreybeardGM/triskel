@@ -21,21 +21,7 @@
       {{#each referenceOptions.spells as |option|}}
         <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
-      {{#unless references.spells.length}}
-        <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
-      {{/unless}}
-    </ol>
-
-    <div class="reference-controls__inputs">
-      <select
-        id="spells-reference-select"
-        name="spellsRef"
-        data-reference-select="spells"
-      >
-        {{#each referenceOptions.spells as |option|}}
-          <option value="{{option.value}}">{{option.label}}</option>
-        {{/each}}
-      </select>
+    </select>
 
     <button
       type="button"
