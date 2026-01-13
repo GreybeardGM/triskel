@@ -313,6 +313,26 @@
           "Description": "Gegenstände am Boden, derzeit nicht nutzbar."
         }
       },
+      "Archetype": {
+        "Label": "Ausrüstungsarchetyp",
+        "LargeWeapon": {
+          "Label": "Große Waffe",
+          "Description": "Sperrige Zweihandwaffen."
+        },
+        "MediumWeapon": {
+          "Label": "Mittlere Waffe",
+          "Description": "Einhandwaffen mit moderatem Platzbedarf."
+        },
+        "None": "Kein Archetyp",
+        "Torch": {
+          "Label": "Fackel",
+          "Description": "Tragbare Lichtquelle für Hand oder Pack."
+        },
+        "Tool": {
+          "Label": "Werkzeug",
+          "Description": "Kompakte Ausrüstung für schnellen Zugriff."
+        }
+      },
       "Inventory": {
         "Empty": "Du trägst momentan keine Gegenstände.",
         "Edit": "Gegenstand bearbeiten",

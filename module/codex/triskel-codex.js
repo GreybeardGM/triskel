@@ -99,6 +99,40 @@ export const TRISKEL_CARRY_LOCATIONS = [
   }
 ];
 
+export const TRISKEL_GEAR_ARCHETYPES = [
+  {
+    id: "largeWeapon",
+    label: "TRISKEL.Item.Archetype.LargeWeapon.Label",
+    description: "TRISKEL.Item.Archetype.LargeWeapon.Description",
+    validLocations: ["hand", "back"],
+    handUsed: 2
+  },
+  {
+    id: "mediumWeapon",
+    label: "TRISKEL.Item.Archetype.MediumWeapon.Label",
+    description: "TRISKEL.Item.Archetype.MediumWeapon.Description",
+    validLocations: ["hand", "back", "belt", "pack"],
+    handUsed: 1,
+    packLoad: 3
+  },
+  {
+    id: "torch",
+    label: "TRISKEL.Item.Archetype.Torch.Label",
+    description: "TRISKEL.Item.Archetype.Torch.Description",
+    validLocations: ["hand", "pack"],
+    handUsed: 1,
+    packLoad: 2
+  },
+  {
+    id: "tool",
+    label: "TRISKEL.Item.Archetype.Tool.Label",
+    description: "TRISKEL.Item.Archetype.Tool.Description",
+    validLocations: ["hand", "quick", "pack"],
+    handUsed: 1,
+    packLoad: 1
+  }
+];
+
 export const TRISKEL_SKILL_CATEGORIES = [
   {
     id: "resistances",
@@ -432,6 +466,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   tiers: TRISKEL_TIERS,
   itemCategories: TRISKEL_ITEM_CATEGORIES,
   carryLocations: TRISKEL_CARRY_LOCATIONS,
+  gearArchetypes: TRISKEL_GEAR_ARCHETYPES,
   skillCategories: TRISKEL_SKILL_CATEGORIES,
   skills: TRISKEL_SKILLS,
   baseActions: TRISKEL_BASE_ACTIONS,
@@ -448,6 +483,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
 export const TRISKEL_TIERS_BY_ID = TRISKEL_CODEX_INDEX.tiers;
 export const TRISKEL_ITEM_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.itemCategories;
 export const TRISKEL_CARRY_LOCATIONS_BY_ID = TRISKEL_CODEX_INDEX.carryLocations;
+export const TRISKEL_GEAR_ARCHETYPES_BY_ID = TRISKEL_CODEX_INDEX.gearArchetypes;
 export const TRISKEL_SKILL_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.skillCategories;
 export const TRISKEL_SKILLS_BY_ID = TRISKEL_CODEX_INDEX.skills;
 export const TRISKEL_ACTION_TYPES_BY_ID = TRISKEL_CODEX_INDEX.actionTypes;

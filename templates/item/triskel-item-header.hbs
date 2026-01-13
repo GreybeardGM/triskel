@@ -1,14 +1,14 @@
-<header class="sheet-header">
-  <div class="profile-img">
+<header class="sheet-header item-sheet-header">
+  <div class="item-header__image">
     <img src="{{item.img}}" data-action="editImage" data-field="img" alt="{{item.name}}" />
   </div>
-  <div class="header-fields">
-    <h1 class="charname">
+  <div class="item-header__fields">
+    <h1 class="item-header__name">
       <input name="name" type="text" value="{{item.name}}" placeholder="Item Name" />
     </h1>
-  <div class="item-type-label">
-    <span class="item-type-label__title">{{localize "TRISKEL.Item.Inventory.TypeLabel"}}</span>
-    <span class="item-type-label__value">{{itemTypeLabel}}</span>
-  </div>
+    <div class="item-type-label">
+      <span class="item-type-label__title">{{localize "TRISKEL.Item.Inventory.TypeLabel"}}</span>
+      <span class="item-type-label__value">{{itemTypeLabel}}</span>
+    </div>
   </div>
 </header>
