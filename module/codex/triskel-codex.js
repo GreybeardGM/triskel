@@ -59,43 +59,57 @@ export const TRISKEL_CARRY_LOCATIONS = [
     id: "quick",
     label: "TRISKEL.Item.CarryLocation.Quick.Label",
     description: "TRISKEL.Item.CarryLocation.Quick.Description",
-    loadType: "HandsUsed"
+    loadType: "singleslot",
+    icon: "fa-solid fa-bolt"
   },
   {
     id: "belt",
     label: "TRISKEL.Item.CarryLocation.Belt.Label",
     description: "TRISKEL.Item.CarryLocation.Belt.Description",
-    loadType: "HandsUsed"
+    loadType: "singleslot",
+    icon: "fa-solid fa-belt"
   },
   {
     id: "back",
     label: "TRISKEL.Item.CarryLocation.Back.Label",
     description: "TRISKEL.Item.CarryLocation.Back.Description",
-    loadType: "HandsUsed"
+    loadType: "singleslot",
+    icon: "fa-solid fa-backpack"
+  },
+  {
+    id: "sling",
+    label: "TRISKEL.Item.CarryLocation.Sling.Label",
+    description: "TRISKEL.Item.CarryLocation.Sling.Description",
+    loadType: "singleslot",
+    icon: "fa-solid fa-person-walking"
   },
   {
     id: "worn",
     label: "TRISKEL.Item.CarryLocation.Worn.Label",
     description: "TRISKEL.Item.CarryLocation.Worn.Description",
-    loadType: "HandsUsed"
+    loadType: "singleslot",
+    icon: "fa-solid fa-shirt"
   },
   {
     id: "pack",
     label: "TRISKEL.Item.CarryLocation.Pack.Label",
     description: "TRISKEL.Item.CarryLocation.Pack.Description",
-    loadType: "PackLoad"
+    loadType: "PackLoad",
+    icon: "fa-solid fa-suitcase"
   },
   {
     id: "hand",
     label: "TRISKEL.Item.CarryLocation.Hand.Label",
     description: "TRISKEL.Item.CarryLocation.Hand.Description",
-    loadType: "HandsUsed"
+    loadType: "HandsUsed",
+    icon: "fa-solid fa-hand"
   },
   {
     id: "dropped",
     label: "TRISKEL.Item.CarryLocation.Dropped.Label",
     description: "TRISKEL.Item.CarryLocation.Dropped.Description",
-    loadType: "None"
+    loadType: "singleslot",
+    icon: "fa-solid fa-arrow-down"
   }
 ];
 
@@ -104,22 +118,44 @@ export const TRISKEL_GEAR_ARCHETYPES = [
     id: "largeWeapon",
     label: "TRISKEL.Item.Archetype.LargeWeapon.Label",
     description: "TRISKEL.Item.Archetype.LargeWeapon.Description",
-    validLocations: ["hand", "back"],
+    validLocations: ["hand"],
     handUsed: 2
   },
   {
     id: "mediumWeapon",
     label: "TRISKEL.Item.Archetype.MediumWeapon.Label",
     description: "TRISKEL.Item.Archetype.MediumWeapon.Description",
-    validLocations: ["hand", "back", "belt", "pack"],
+    validLocations: ["hand", "belt"],
     handUsed: 1,
     packLoad: 3
+  },
+  {
+    id: "smallWeapon",
+    label: "TRISKEL.Item.Archetype.SmallWeapon.Label",
+    description: "TRISKEL.Item.Archetype.SmallWeapon.Description",
+    validLocations: ["hand", "belt", "quick", "pack"],
+    handUsed: 1,
+    packLoad: 2
+  },
+  {
+    id: "shield",
+    label: "TRISKEL.Item.Archetype.Shield.Label",
+    description: "TRISKEL.Item.Archetype.Shield.Description",
+    validLocations: ["hand", "sling"],
+    handUsed: 1
+  },
+  {
+    id: "bow",
+    label: "TRISKEL.Item.Archetype.Bow.Label",
+    description: "TRISKEL.Item.Archetype.Bow.Description",
+    validLocations: ["hand", "sling"],
+    handUsed: 2
   },
   {
     id: "torch",
     label: "TRISKEL.Item.Archetype.Torch.Label",
     description: "TRISKEL.Item.Archetype.Torch.Description",
-    validLocations: ["hand", "pack"],
+    validLocations: ["hand", "belt", "pack"],
     handUsed: 1,
     packLoad: 2
   },
@@ -127,7 +163,7 @@ export const TRISKEL_GEAR_ARCHETYPES = [
     id: "tool",
     label: "TRISKEL.Item.Archetype.Tool.Label",
     description: "TRISKEL.Item.Archetype.Tool.Description",
-    validLocations: ["hand", "quick", "pack"],
+    validLocations: ["hand", "quick", "belt", "pack"],
     handUsed: 1,
     packLoad: 1
   }
