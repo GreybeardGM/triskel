@@ -1,4 +1,4 @@
-<section class="item-panel">
+<section class="item-panel {{#if isSpellType}}is-hidden{{/if}}">
   <h2>Actions</h2>
   <ol class="reference-entries">
     {{#each references.actions as |reference|}}
@@ -32,5 +32,4 @@
       Hinzufügen
     </button>
   </div>
-
 </section>
