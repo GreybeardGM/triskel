@@ -1,36 +1,38 @@
-<section class="item-panel">
-  <h2>Attunements</h2>
-  <ol class="reference-entries">
-    {{#each references.attunements as |reference|}}
-      <li class="reference-row">
-        <span class="reference-label">{{reference.label}}</span>
-        <button type="button" data-action="removeAttunementReference" data-index="{{reference.index}}">Entfernen</button>
-      </li>
-    {{/each}}
-    {{#unless references.attunements.length}}
-      <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
-    {{/unless}}
-  </ol>
-
-  <div class="reference-controls__inputs">
-    <select
-      id="attunements-reference-select"
-      name="attunementsRef"
-      data-reference-select="attunements"
-    >
-      {{#each referenceOptions.attunements as |option|}}
-        <option value="{{option.value}}">{{option.label}}</option>
+{{#unless isSpellType}}
+  <section class="item-panel">
+    <h2>Attunements</h2>
+    <ol class="reference-entries">
+      {{#each references.attunements as |reference|}}
+        <li class="reference-row">
+          <span class="reference-label">{{reference.label}}</span>
+          <button type="button" data-action="removeAttunementReference" data-index="{{reference.index}}">Entfernen</button>
+        </li>
       {{/each}}
-    </select>
+      {{#unless references.attunements.length}}
+        <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
+      {{/unless}}
+    </ol>
 
-    <button
-      type="button"
-      data-action="addAttunementReference"
-      data-select-field="attunementsRef"
-      data-ref-path="system.attunements.ref"
-    >
-      Hinzufügen
-    </button>
-  </div>
+    <div class="reference-controls__inputs">
+      <select
+        id="attunements-reference-select"
+        name="attunementsRef"
+        data-reference-select="attunements"
+      >
+        {{#each referenceOptions.attunements as |option|}}
+          <option value="{{option.value}}">{{option.label}}</option>
+        {{/each}}
+      </select>
 
-</section>
+      <button
+        type="button"
+        data-action="addAttunementReference"
+        data-select-field="attunementsRef"
+        data-ref-path="system.attunements.ref"
+      >
+        Hinzufügen
+      </button>
+    </div>
+
+  </section>
+{{/unless}}
