@@ -313,6 +313,26 @@
           "Description": "Items on the ground and not currently usable."
         }
       },
+      "Archetype": {
+        "Label": "Gear archetype",
+        "LargeWeapon": {
+          "Label": "Large Weapon",
+          "Description": "Bulky two-handed weapons."
+        },
+        "MediumWeapon": {
+          "Label": "Medium Weapon",
+          "Description": "Single-handed weapons with moderate bulk."
+        },
+        "None": "No archetype",
+        "Torch": {
+          "Label": "Torch",
+          "Description": "Portable light sources carried in hand or pack."
+        },
+        "Tool": {
+          "Label": "Tool",
+          "Description": "Compact gear suited for quick access."
+        }
+      },
       "Inventory": {
         "Empty": "You are not carrying any items.",
         "Edit": "Edit item",
