@@ -131,23 +131,25 @@ export function prepareGearLocationBuckets(gearBucket = null) {
  * @returns {Array<object>} Liste mit gültigen Trageorten
  */
 export function getGearCarryLocationOptions(item = null) {
+  if (item?.type && item.type !== "gear") return [];
+
   const carryLocations = toArray(getTriskellCodex().carryLocations);
   if (!carryLocations.length) return [];
 
-  const archetypeId = normalizeKeyword(item?.system?.archetype ?? "", "");
+  const archetypeId = normalizeKeyword(item?.system?.archetype ?? "");
   const archetype = archetypeId ? getTriskellIndex().gearArchetypes?.[archetypeId] ?? null : null;
-  const overrideLocations = normalizeIdList(item?.system?.overwrite?.validLocations);
   const archetypeLocations = normalizeIdList(archetype?.validLocations);
-  const validLocationIds = overrideLocations.length ? overrideLocations : archetypeLocations;
-  const validLocationSet = validLocationIds.length ? new Set(validLocationIds) : null;
-  const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "", "");
+  if (!archetypeLocations.length) return [];
+  const validLocationIds = archetypeLocations.map(locationId => normalizeKeyword(locationId));
+  const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "");
 
   return carryLocations
-    .filter(location => !validLocationSet || validLocationSet.has(location?.id))
     .map(location => ({
       ...location,
-      isActive: location?.id === currentLocation
-    }));
+      id: normalizeKeyword(location?.id ?? "")
+    }))
+    .filter(location => validLocationIds.includes(location?.id))
+    .filter(location => location.id !== currentLocation);
 }
 
 /**
