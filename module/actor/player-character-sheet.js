@@ -40,32 +40,6 @@ async function toggleActiveItem(event, target, expectedType) {
 }
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
-  activateListeners(html) {
-    super.activateListeners?.(html);
-    this._ensureCarryLocationMenu(html);
-  }
-
-  _ensureCarryLocationMenu(html) {
-    const ContextMenuClass = getContextMenuClass();
-    if (!ContextMenuClass) return;
-
-    const container = asHTMLElement(html) ?? asHTMLElement(this.element) ?? document.body;
-    if (this._carryLocationMenu && this._carryLocationMenu._container === container) return;
-
-    closeCarryLocationMenu(this);
-
-    const selector = "[data-action=\"openCarryLocationMenu\"]";
-    const menu = new ContextMenuClass(
-      container,
-      selector,
-      (element) => buildCarryLocationMenuItems(this, element),
-      { eventName: "click", jQuery: false }
-    );
-    // eigene Referenz, unabhängig davon wie ContextMenu intern benennt
-    menu._container = container;
-    this._carryLocationMenu = menu;
-  }
-
   async close(options = {}) {
     closeCarryLocationMenu(this);
     return super.close(options);
@@ -389,16 +363,14 @@ async function onEditItem(event, target) {
 }
 
 function closeCarryLocationMenu(sheet) {
-  if (sheet._carryLocationMenu) {
-    if (sheet._carryLocationMenu.element) {
-      sheet._carryLocationMenu.close?.();
-    } else {
-      sheet._carryLocationMenu.remove?.();
-    }
-    sheet._carryLocationMenu.destroy?.();
-    sheet._carryLocationMenu.remove?.();
-    sheet._carryLocationMenu = null;
-  }
+  const menu = sheet._carryLocationMenu;
+  if (!menu) return;
+
+  menu.close?.();      // falls vorhanden
+  menu.destroy?.();    // falls vorhanden
+  menu.remove?.();     // falls vorhanden
+
+  sheet._carryLocationMenu = null;
 }
 
 function buildCarryLocationMenuItems(sheet, element) {
@@ -441,11 +413,53 @@ async function onOpenCarryLocationMenu(event, target) {
   const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
   if (!anchorElement) return;
 
-  sheet._ensureCarryLocationMenu?.();
-  const menu = sheet._carryLocationMenu;
-  if (!menu) return;
-
-  menu.open?.(event, anchorElement);
+  // 1) Item bestimmen
+  const item = getItemFromTarget(sheet, anchorElement);
+  if (!item) return;
+ 
+  // 2) Alte Instanz schließen (falls offen)
+  closeCarryLocationMenu(sheet);
+  
+  // 3) Menüeinträge (Array) bauen
+  const locationOptions = getGearCarryLocationOptions(item) ?? [];
+  if (!locationOptions.length) return;
+  
+  const menuItems = locationOptions.map(option => {
+   const locationId = option.id ?? option.value ?? "";
+   if (!locationId) return null;
+   const label = option.label ?? locationId;
+   const iconClass = option.icon ?? "fa-solid fa-location-dot";
+   const active = Boolean(option.defaultActive ?? option.active ?? option.isActive ?? option.activate);
+  
+   return {
+     name: label,
+     icon: `<i class="${iconClass}"></i>`,
+     classes: option.isActive ? "context-item--active" : "",
+     callback: async () => {
+       await item.update({
+         "system.carryLocation": locationId,
+         "system.active": active
+       });
+       closeCarryLocationMenu(sheet);
+     }
+   };
+  }).filter(Boolean);
+  
+  // 4) ContextMenu erzeugen
+  const ContextMenuClass = getContextMenuClass();
+  if (!ContextMenuClass) return;
+  
+  const container = asHTMLElement(sheet.element) ?? document.body;
+  const selector = "[data-action=\"openCarryLocationMenu\"]";
+  sheet._carryLocationMenu = new ContextMenuClass(
+   container,
+   selector,
+   menuItems,
+   { eventName: "click", jQuery: false }
+  );
+  
+  // 5) Öffnen im nächsten Microtask (verhindert “erst zweiter Klick” Timing)
+  queueMicrotask(() => sheet._carryLocationMenu?.open?.(event, anchorElement));
 }
 
 async function onDeleteItem(event, target) {
