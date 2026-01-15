@@ -44,6 +44,22 @@ async function toggleActiveItem(event, target, expectedType) {
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   activateListeners(html) {
     super.activateListeners?.(html);
+
+    const root = asHTMLElement(html) ?? asHTMLElement(this.element);
+    if (!root) return;
+
+    if (this._carryLocationMouseDownHandler) {
+      root.removeEventListener("mousedown", this._carryLocationMouseDownHandler, true);
+    }
+
+    this._carryLocationMouseDownHandler = (event) => {
+      if (event.button !== 2) return;
+      const target = event.target?.closest?.("[data-action=\"openCarryLocationMenu\"]");
+      if (!target) return;
+      onOpenCarryLocationMenu.call(this, event, target);
+    };
+
+    root.addEventListener("mousedown", this._carryLocationMouseDownHandler, true);
   }
 
   _ensureCarryLocationMenu() {
@@ -65,6 +81,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   async close(options = {}) {
+    const root = asHTMLElement(this.element);
+    if (root && this._carryLocationMouseDownHandler) {
+      root.removeEventListener("mousedown", this._carryLocationMouseDownHandler, true);
+    }
     closeCarryLocationMenu(this);
     return super.close(options);
   }
