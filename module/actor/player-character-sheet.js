@@ -42,25 +42,28 @@ async function toggleActiveItem(event, target, expectedType) {
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   activateListeners(html) {
     super.activateListeners?.(html);
-    this._ensureCarryLocationMenu();
+    this._ensureCarryLocationMenu(html);
   }
 
-  _ensureCarryLocationMenu() {
+  _ensureCarryLocationMenu(html) {
     const ContextMenuClass = getContextMenuClass();
     if (!ContextMenuClass) return;
 
-    const container = asHTMLElement(this.element) ?? document.body;
-    if (this._carryLocationMenu && this._carryLocationMenu.element === container) return;
+    const container = asHTMLElement(html) ?? asHTMLElement(this.element) ?? document.body;
+    if (this._carryLocationMenu && this._carryLocationMenu._container === container) return;
 
     closeCarryLocationMenu(this);
 
     const selector = "[data-action=\"openCarryLocationMenu\"]";
-    this._carryLocationMenu = new ContextMenuClass(
+    const menu = new ContextMenuClass(
       container,
       selector,
       (element) => buildCarryLocationMenuItems(this, element),
-      { eventName: "contextmenu", jQuery: false }
+      { eventName: "contextmenu" }
     );
+    // eigene Referenz, unabhängig davon wie ContextMenu intern benennt
+    menu._container = container;
+    this._carryLocationMenu = menu;
   }
 
   async close(options = {}) {
@@ -423,6 +426,7 @@ function buildCarryLocationMenuItems(sheet, element) {
           "system.carryLocation": locationId,
           "system.active": active
         });
+        closeCarryLocationMenu(sheet);
       }
     };
   });
