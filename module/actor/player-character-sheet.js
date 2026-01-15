@@ -391,23 +391,30 @@ async function onOpenCarryLocationMenu(event, target) {
     };
   });
 
-  const ContextMenuClass = foundry.applications?.elements?.ContextMenu
-    ?? foundry.applications?.ui?.ContextMenu
-    ?? globalThis.ContextMenu;
+  const ContextMenuClass = foundry.applications?.ux?.ContextMenu?.implementation
+    ?? foundry.applications?.ux?.ContextMenu;
   if (!ContextMenuClass) return;
 
   const anchor = actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget;
-  if (!anchor) return;
+  const anchorElement = anchor instanceof HTMLElement ? anchor : anchor?.[0];
+  if (!anchorElement) return;
+  const sheetElement = sheet.element;
+  const containerElement = (sheetElement instanceof HTMLElement ? sheetElement : sheetElement?.[0])
+    ?? anchorElement.closest(".application")
+    ?? document.body;
+  if (!containerElement) return;
 
   let menu = null;
   if (typeof ContextMenuClass.create === "function") {
     menu = ContextMenuClass.create({
-      target: anchor,
+      container: containerElement,
+      target: anchorElement,
       event,
-      items: menuItems
+      items: menuItems,
+      jQuery: false
     });
   } else {
-    menu = new ContextMenuClass(anchor, menuItems, { eventName: "click" });
+    menu = new ContextMenuClass(anchorElement, menuItems, { eventName: "click", jQuery: false });
     menu.open?.(event);
   }
 
