@@ -131,23 +131,44 @@ export function prepareGearLocationBuckets(gearBucket = null) {
  * @returns {Array<object>} Liste mit gültigen Trageorten
  */
 export function getGearCarryLocationOptions(item = null) {
+  if (item?.type && item.type !== "gear") return [];
+
   const carryLocations = toArray(getTriskellCodex().carryLocations);
   if (!carryLocations.length) return [];
 
-  const archetypeId = normalizeKeyword(item?.system?.archetype ?? "", "");
+  const archetypeId = normalizeKeyword(item?.system?.archetype ?? "");
   const archetype = archetypeId ? getTriskellIndex().gearArchetypes?.[archetypeId] ?? null : null;
-  const overrideLocations = normalizeIdList(item?.system?.overwrite?.validLocations);
   const archetypeLocations = normalizeIdList(archetype?.validLocations);
-  const validLocationIds = overrideLocations.length ? overrideLocations : archetypeLocations;
-  const validLocationSet = validLocationIds.length ? new Set(validLocationIds) : null;
-  const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "", "");
+  if (!archetypeLocations.length) return [];
+  const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "");
+  const carryLocationsById = getTriskellIndex().carryLocations ?? {};
+  const validLocationIds = archetypeLocations
+    .map(locationId => normalizeKeyword(locationId))
+    .filter(Boolean);
 
-  return carryLocations
-    .filter(location => !validLocationSet || validLocationSet.has(location?.id))
-    .map(location => ({
-      ...location,
-      isActive: location?.id === currentLocation
-    }));
+  const options = validLocationIds
+    .filter(locationId => locationId !== currentLocation)
+    .map(locationId => {
+      const location = carryLocationsById[locationId];
+      if (!location) return null;
+      return {
+        ...location,
+        id: normalizeKeyword(location?.id ?? locationId)
+      };
+    })
+    .filter(Boolean);
+
+  console.info("Triskel | Carry location options", {
+    itemId: item?.id ?? null,
+    itemName: item?.name ?? null,
+    itemType: item?.type ?? null,
+    archetypeId,
+    archetypeLocations,
+    currentLocation,
+    options
+  });
+
+  return options;
 }
 
 /**
