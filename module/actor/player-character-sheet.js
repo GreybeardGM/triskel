@@ -462,15 +462,23 @@ async function onOpenCarryLocationMenu(event, target) {
   const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
   if (!anchorElement) return;
 
-  sheet._ensureCarryLocationMenu?.();
-  const menu = sheet._carryLocationMenu;
-  if (!menu) return;
-
   const menuItems = buildCarryLocationMenuItems(sheet, anchorElement);
   if (!menuItems.length) return;
 
-  menu.menuItems = menuItems;
-  menu.open?.(event, anchorElement);
+  const ContextMenuClass = getContextMenuClass();
+  if (!ContextMenuClass) return;
+
+  const container = asHTMLElement(sheet.element) ?? document.body;
+  closeCarryLocationMenu(sheet);
+  const selector = "[data-action=\"openCarryLocationMenu\"]";
+  sheet._carryLocationMenu = new ContextMenuClass(
+    container,
+    selector,
+    menuItems,
+    { eventName: "click", jQuery: false }
+  );
+
+  sheet._carryLocationMenu.open?.(event, anchorElement);
 }
 
 async function onDeleteItem(event, target) {
