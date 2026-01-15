@@ -6,12 +6,11 @@
   {{#if itemsToDisplay.length}}
     {{#each itemsToDisplay as |category|}}
       <div class="inventory-category">
-        <h2 class="inventory-category__title">{{category.labelPlural}}</h2>
         {{#if category.locationBuckets.length}}
           {{#each category.locationBuckets as |location|}}
             <div class="inventory-location">
-              <h3 class="inventory-location__title">{{localize location.label}}</h3>
-              <ul class="inventory-list">
+              <h2 class="inventory-location__title">{{localize location.label}}</h2>
+              <ul class="inventory-list inventory-list--gear">
                 {{#if location.collection.length}}
                   {{#each location.collection as |item|}}
                     <li
@@ -70,7 +69,7 @@
             </div>
           {{/each}}
         {{else}}
-          <ul class="inventory-list">
+          <ul class="inventory-list inventory-list--gear">
             {{#if category.collection.length}}
               {{#each category.collection as |item|}}
                 <li
