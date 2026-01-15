@@ -58,8 +58,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     this._carryLocationMenu = new ContextMenuClass(
       container,
       selector,
-      (element) => buildCarryLocationMenuItems(this, element),
-      { eventName: "contextmenu", jQuery: false }
+      [],
+      { eventName: "click", jQuery: false }
     );
   }
 
@@ -408,7 +408,7 @@ function buildCarryLocationMenuItems(sheet, element) {
   if (!locationOptions.length) return [];
 
   return locationOptions.map(option => {
-    const locationId = option.id ?? "";
+    const locationId = normalizeKeyword(option.id ?? "", "");
     const label = option.label ?? locationId ?? "";
     const iconClass = option.icon ?? "fa-solid fa-location-dot";
 
@@ -419,10 +419,20 @@ function buildCarryLocationMenuItems(sheet, element) {
       callback: async () => {
         if (!locationId) return;
         const active = Boolean(option.defaultActive);
-        await item.update({
-          "system.carryLocation": locationId,
-          "system.active": active
-        });
+        const actor = sheet.document;
+        if (actor?.updateEmbeddedDocuments) {
+          await actor.updateEmbeddedDocuments("Item", [{
+            _id: item.id,
+            "system.carryLocation": locationId,
+            "system.active": active
+          }]);
+        } else {
+          await item.update({
+            "system.carryLocation": locationId,
+            "system.active": active
+          });
+        }
+        await sheet.render({ parts: ["gear"] });
       }
     };
   });
@@ -441,6 +451,10 @@ async function onOpenCarryLocationMenu(event, target) {
   const menu = sheet._carryLocationMenu;
   if (!menu) return;
 
+  const menuItems = buildCarryLocationMenuItems(sheet, anchorElement);
+  if (!menuItems.length) return;
+
+  menu.menuItems = menuItems;
   menu.open?.(event, anchorElement);
 }
 
