@@ -350,12 +350,13 @@ async function onEditItem(event, target) {
 }
 
 function closeCarryLocationMenu(sheet) {
-  if (sheet._carryLocationMenuCleanup) {
-    sheet._carryLocationMenuCleanup();
-    sheet._carryLocationMenuCleanup = null;
-  }
   if (sheet._carryLocationMenu) {
-    sheet._carryLocationMenu.remove();
+    if (sheet._carryLocationMenu.element) {
+      sheet._carryLocationMenu.close?.();
+    } else {
+      sheet._carryLocationMenu.remove?.();
+    }
+    sheet._carryLocationMenu.remove?.();
     sheet._carryLocationMenu = null;
   }
 }
@@ -374,72 +375,48 @@ async function onOpenCarryLocationMenu(event, target) {
   const locationOptions = getGearCarryLocationOptions(item);
   if (!locationOptions.length) return;
 
-  const menu = document.createElement("nav");
-  menu.classList.add("context-menu");
-  const list = document.createElement("ol");
-  list.classList.add("context-items");
-  const listFragment = document.createDocumentFragment();
-
-  locationOptions.forEach(option => {
-    const entry = document.createElement("li");
-    entry.classList.add("context-item");
-    if (option.isActive) entry.classList.add("context-item--active");
-
-    const icon = document.createElement("i");
-    if (option.icon) {
-      option.icon.split(" ").forEach(token => icon.classList.add(token));
-    } else {
-      icon.classList.add("fa-solid", "fa-location-dot");
-    }
-    const label = document.createElement("span");
-    label.textContent = game.i18n?.localize?.(option.label) ?? option.label ?? option.id ?? "";
-
-    entry.append(icon, label);
-    entry.addEventListener("click", async (menuEvent) => {
-      menuEvent.preventDefault();
-      menuEvent.stopPropagation();
-      const locationId = option.id ?? "";
-      if (!locationId) return;
-      await item.update({ "system.carryLocation": locationId });
-      closeCarryLocationMenu(sheet);
-    });
-
-    listFragment.append(entry);
+  const menuItems = locationOptions.map(option => {
+    const label = option.label ?? option.id ?? "";
+    const iconClass = option.icon ?? "fa-solid fa-location-dot";
+    return {
+      name: label,
+      icon: `<i class=\"${iconClass}\"></i>`,
+      class: option.isActive ? "context-item--active" : "",
+      callback: async () => {
+        const locationId = option.id ?? "";
+        if (!locationId) return;
+        const active = Boolean(option.defaultActive);
+        await item.update({
+          "system.carryLocation": locationId,
+          "system.active": active
+        });
+        closeCarryLocationMenu(sheet);
+      }
+    };
   });
 
-  list.append(listFragment);
-  menu.append(list);
-  document.body.append(menu);
+  const ContextMenuClass = foundry.applications?.ux?.ContextMenu?.implementation;
+  if (!ContextMenuClass) return;
 
   const anchor = actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget;
-  if (!anchor?.getBoundingClientRect) return;
-  const { bottom, left } = anchor.getBoundingClientRect();
-  const pageLeft = window.scrollX + left;
-  const pageTop = window.scrollY + bottom;
-  menu.style.left = `${pageLeft}px`;
-  menu.style.top = `${pageTop}px`;
-  menu.style.position = "absolute";
+  const anchorElement = anchor instanceof HTMLElement ? anchor : anchor?.[0];
+  if (!anchorElement) return;
+  const sheetElement = sheet.element;
+  const containerElement = (sheetElement instanceof HTMLElement ? sheetElement : sheetElement?.[0])
+    ?? anchorElement.closest(".application")
+    ?? document.body;
+  if (!containerElement) return;
 
-  const cleanup = () => {
-    document.removeEventListener("click", onClickOutside, true);
-    document.removeEventListener("keydown", onEscape, true);
-  };
-
-  const onClickOutside = (menuEvent) => {
-    if (menu.contains(menuEvent.target) || target.contains(menuEvent.target)) return;
-    closeCarryLocationMenu(sheet);
-  };
-
-  const onEscape = (menuEvent) => {
-    if (menuEvent.key !== "Escape") return;
-    closeCarryLocationMenu(sheet);
-  };
-
-  document.addEventListener("click", onClickOutside, true);
-  document.addEventListener("keydown", onEscape, true);
+  const selector = "[data-action=\"openCarryLocationMenu\"]";
+  const menu = new ContextMenuClass(
+    containerElement,
+    selector,
+    () => menuItems,
+    { eventName: "click", jQuery: false }
+  );
+  menu.open?.(event, anchorElement);
 
   sheet._carryLocationMenu = menu;
-  sheet._carryLocationMenuCleanup = cleanup;
 }
 
 async function onDeleteItem(event, target) {
