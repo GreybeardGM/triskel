@@ -2,14 +2,14 @@
   "TRISKEL": {
     "Actor": {
       "Tab": {
-        "Actions": "Aktionskarten",
+        "Actions": "Aktionen",
         "Skills": "Fertigkeiten",
         "Gear": "Ausrüstung",
         "Abilities": "Fähigkeiten",
         "Spells": "Zauber",
         "Notes": "Notizen",
         "Tooltip": {
-          "Actions": "Aktionskarten anzeigen und auswählen",
+          "Actions": "Aktionen anzeigen und auswählen",
           "Skills": "Fertigkeiten und Resistenzen bearbeiten",
           "Gear": "Ausrüstung anzeigen",
           "Abilities": "Fähigkeiten anzeigen",
@@ -284,6 +284,7 @@
         "Spell": "Zauber"
       },
       "CarryLocation": {
+        "Label": "Trageort",
         "Ready": {
           "Label": "Bereit",
           "Description": "Freie Gegenstände, die der Charakter griff- bzw. einsatzbereit am Körper trägt."
