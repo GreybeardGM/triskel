@@ -15,6 +15,19 @@ import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
+function getContextMenuClass() {
+  const contextMenu = foundry.applications?.ux?.ContextMenu;
+  return typeof contextMenu === "function" ? contextMenu : contextMenu?.implementation;
+}
+
+function asHTMLElement(element) {
+  if (!element) return null;
+  if (element instanceof HTMLElement) return element;
+  if (Array.isArray(element) && element[0] instanceof HTMLElement) return element[0];
+  if (element[0] instanceof HTMLElement) return element[0];
+  return null;
+}
+
 async function toggleActiveItem(event, target, expectedType) {
   event.preventDefault();
 
@@ -27,6 +40,29 @@ async function toggleActiveItem(event, target, expectedType) {
 }
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  activateListeners(html) {
+    super.activateListeners?.(html);
+    this._ensureCarryLocationMenu();
+  }
+
+  _ensureCarryLocationMenu() {
+    const ContextMenuClass = getContextMenuClass();
+    if (!ContextMenuClass) return;
+
+    const container = asHTMLElement(this.element) ?? document.body;
+    if (this._carryLocationMenu && this._carryLocationMenu.element === container) return;
+
+    closeCarryLocationMenu(this);
+
+    const selector = "[data-action=\"openCarryLocationMenu\"]";
+    this._carryLocationMenu = new ContextMenuClass(
+      container,
+      selector,
+      (element) => buildCarryLocationMenuItems(this, element),
+      { eventName: "contextmenu", jQuery: false }
+    );
+  }
+
   async close(options = {}) {
     closeCarryLocationMenu(this);
     return super.close(options);
@@ -356,9 +392,40 @@ function closeCarryLocationMenu(sheet) {
     } else {
       sheet._carryLocationMenu.remove?.();
     }
+    sheet._carryLocationMenu.destroy?.();
     sheet._carryLocationMenu.remove?.();
     sheet._carryLocationMenu = null;
   }
+}
+
+function buildCarryLocationMenuItems(sheet, element) {
+  const anchor = asHTMLElement(element);
+  if (!anchor) return [];
+  const item = getItemFromTarget(sheet, anchor);
+  if (!item) return [];
+
+  const locationOptions = getGearCarryLocationOptions(item) ?? [];
+  if (!locationOptions.length) return [];
+
+  return locationOptions.map(option => {
+    const locationId = option.id ?? "";
+    const label = option.label ?? locationId ?? "";
+    const iconClass = option.icon ?? "fa-solid fa-location-dot";
+
+    return {
+      name: label,
+      icon: `<i class="${iconClass}"></i>`,
+      class: option.isActive ? "context-item--active" : "",
+      callback: async () => {
+        if (!locationId) return;
+        const active = Boolean(option.defaultActive);
+        await item.update({
+          "system.carryLocation": locationId,
+          "system.active": active
+        });
+      }
+    };
+  });
 }
 
 async function onOpenCarryLocationMenu(event, target) {
@@ -367,56 +434,14 @@ async function onOpenCarryLocationMenu(event, target) {
 
   const sheet = this;
   const actionTarget = target ?? event.currentTarget ?? event.target;
-  const item = getItemFromTarget(sheet, actionTarget);
-  if (!item) return;
-
-  closeCarryLocationMenu(sheet);
-
-  const locationOptions = getGearCarryLocationOptions(item);
-  if (!locationOptions.length) return;
-
-  const menuItems = locationOptions.map(option => {
-    const label = option.label ?? option.id ?? "";
-    const iconClass = option.icon ?? "fa-solid fa-location-dot";
-    return {
-      name: label,
-      icon: `<i class=\"${iconClass}\"></i>`,
-      class: option.isActive ? "context-item--active" : "",
-      callback: async () => {
-        const locationId = option.id ?? "";
-        if (!locationId) return;
-        const active = Boolean(option.defaultActive);
-        await item.update({
-          "system.carryLocation": locationId,
-          "system.active": active
-        });
-        closeCarryLocationMenu(sheet);
-      }
-    };
-  });
-
-  const ContextMenuClass = foundry.applications?.ux?.ContextMenu?.implementation;
-  if (!ContextMenuClass) return;
-
-  const anchor = actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget;
-  const anchorElement = anchor instanceof HTMLElement ? anchor : anchor?.[0];
+  const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
   if (!anchorElement) return;
-  const sheetElement = sheet.element;
-  const containerElement = (sheetElement instanceof HTMLElement ? sheetElement : sheetElement?.[0])
-    ?? anchorElement.closest(".application")
-    ?? document.body;
-  if (!containerElement) return;
 
-  const selector = "[data-action=\"openCarryLocationMenu\"]";
-  const menu = new ContextMenuClass(
-    containerElement,
-    selector,
-    menuItems,
-    { eventName: "click", jQuery: false }
-  );
+  sheet._ensureCarryLocationMenu?.();
+  const menu = sheet._carryLocationMenu;
+  if (!menu) return;
+
   menu.open?.(event, anchorElement);
-
-  sheet._carryLocationMenu = menu;
 }
 
 async function onDeleteItem(event, target) {
