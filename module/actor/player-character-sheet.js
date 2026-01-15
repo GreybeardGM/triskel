@@ -411,7 +411,7 @@ async function onOpenCarryLocationMenu(event, target) {
   const menu = new ContextMenuClass(
     containerElement,
     selector,
-    () => menuItems,
+    menuItems,
     { eventName: "click", jQuery: false }
   );
   menu.open?.(event, anchorElement);
