@@ -474,7 +474,7 @@ function buildCarryLocationMenuItems(sheet, element) {
 
 async function onOpenCarryLocationMenu(event, target) {
   const sheet = this;
-  const actionTarget = target ?? event.currentTarget ?? event.target;
+  const actionTarget = target ?? event.target;
   const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
   if (!anchorElement) return;
 
