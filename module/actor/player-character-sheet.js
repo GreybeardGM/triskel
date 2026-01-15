@@ -58,8 +58,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     this._carryLocationMenu = new ContextMenuClass(
       container,
       selector,
-      (element) => buildCarryLocationMenuItems(this, element),
-      { eventName: "contextmenu", jQuery: false }
+      [],
+      { eventName: "click", jQuery: false }
     );
   }
 
@@ -402,13 +402,28 @@ function buildCarryLocationMenuItems(sheet, element) {
   const anchor = asHTMLElement(element);
   if (!anchor) return [];
   const item = getItemFromTarget(sheet, anchor);
-  if (!item) return [];
+  if (!item) {
+    console.warn("Triskel | Carry location menu: item not found", {
+      anchor,
+      sheetId: sheet?.document?.id ?? null
+    });
+    return [];
+  }
+
+  console.info("Triskel | Carry location menu: item lookup", {
+    itemId: item.id,
+    itemName: item.name,
+    itemType: item.type,
+    carryLocation: item?.system?.carryLocation ?? null,
+    archetype: item?.system?.archetype ?? null,
+    overwriteValidLocations: item?.system?.overwrite?.validLocations ?? null
+  });
 
   const locationOptions = getGearCarryLocationOptions(item) ?? [];
   if (!locationOptions.length) return [];
 
   return locationOptions.map(option => {
-    const locationId = option.id ?? "";
+    const locationId = normalizeKeyword(option.id ?? "", "");
     const label = option.label ?? locationId ?? "";
     const iconClass = option.icon ?? "fa-solid fa-location-dot";
 
@@ -419,10 +434,20 @@ function buildCarryLocationMenuItems(sheet, element) {
       callback: async () => {
         if (!locationId) return;
         const active = Boolean(option.defaultActive);
-        await item.update({
-          "system.carryLocation": locationId,
-          "system.active": active
-        });
+        const actor = sheet.document;
+        if (actor?.updateEmbeddedDocuments) {
+          await actor.updateEmbeddedDocuments("Item", [{
+            _id: item.id,
+            "system.carryLocation": locationId,
+            "system.active": active
+          }]);
+        } else {
+          await item.update({
+            "system.carryLocation": locationId,
+            "system.active": active
+          });
+        }
+        await sheet.render({ parts: ["gear"] });
       }
     };
   });
@@ -437,11 +462,23 @@ async function onOpenCarryLocationMenu(event, target) {
   const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
   if (!anchorElement) return;
 
-  sheet._ensureCarryLocationMenu?.();
-  const menu = sheet._carryLocationMenu;
-  if (!menu) return;
+  const menuItems = buildCarryLocationMenuItems(sheet, anchorElement);
+  if (!menuItems.length) return;
 
-  menu.open?.(event, anchorElement);
+  const ContextMenuClass = getContextMenuClass();
+  if (!ContextMenuClass) return;
+
+  const container = asHTMLElement(sheet.element) ?? document.body;
+  closeCarryLocationMenu(sheet);
+  const selector = "[data-action=\"openCarryLocationMenu\"]";
+  sheet._carryLocationMenu = new ContextMenuClass(
+    container,
+    selector,
+    menuItems,
+    { eventName: "click", jQuery: false }
+  );
+
+  sheet._carryLocationMenu.open?.(event, anchorElement);
 }
 
 async function onDeleteItem(event, target) {
