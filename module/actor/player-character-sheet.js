@@ -58,7 +58,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     this._carryLocationMenu = new ContextMenuClass(
       container,
       selector,
-      (element) => buildCarryLocationMenuItems(this, element),
+      [],
       { eventName: "contextmenu", jQuery: false }
     );
   }
@@ -441,6 +441,10 @@ async function onOpenCarryLocationMenu(event, target) {
   const menu = sheet._carryLocationMenu;
   if (!menu) return;
 
+  const menuItems = buildCarryLocationMenuItems(sheet, anchorElement);
+  if (!menuItems.length) return;
+
+  menu.menuItems = menuItems;
   menu.open?.(event, anchorElement);
 }
 
