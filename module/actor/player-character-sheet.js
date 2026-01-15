@@ -42,7 +42,6 @@ async function toggleActiveItem(event, target, expectedType) {
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   activateListeners(html) {
     super.activateListeners?.(html);
-    this._ensureCarryLocationMenu();
   }
 
   _ensureCarryLocationMenu() {
@@ -59,7 +58,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       container,
       selector,
       [],
-      { eventName: "click", jQuery: false }
+      { eventName: "contextmenu", jQuery: false }
     );
   }
 
@@ -475,7 +474,7 @@ async function onOpenCarryLocationMenu(event, target) {
     container,
     selector,
     menuItems,
-    { eventName: "click", jQuery: false }
+    { eventName: "contextmenu", jQuery: false }
   );
 
   sheet._carryLocationMenu.open?.(event, anchorElement);
