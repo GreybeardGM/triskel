@@ -59,7 +59,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       container,
       selector,
       (element) => buildCarryLocationMenuItems(this, element),
-      { eventName: "contextmenu" }
+      { eventName: "click", jQuery: false }
     );
     // eigene Referenz, unabhängig davon wie ContextMenu intern benennt
     menu._container = container;
