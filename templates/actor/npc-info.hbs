@@ -1,19 +1,23 @@
-<header class="sheet-header">
-  <div class="profile-img">
-    <img src="{{actor.img}}" data-action="editImage" data-field="img" alt="{{actor.name}}" />
+<section class="player-character-info">
+  <h1 class="info-field charname">
+    <input name="name" type="text" value="{{actor.name}}" />
+  </h1>
+
+  <img
+    class="profile-img"
+    src="{{actor.img}}"
+    data-action="editImage"
+    data-field="img"
+    alt="{{actor.name}}"
+  />
+
+  <div class="info-field character-full-name">
+    <input
+      id="npc-full-name"
+      name="system.details.fullNameAndTitle"
+      type="text"
+      value="{{system.details.fullNameAndTitle}}"
+      placeholder="Full Name and Title"
+    />
   </div>
-  <div class="header-fields">
-    <h1 class="charname">
-      <input name="name" type="text" value="{{actor.name}}" />
-    </h1>
-    <div class="character-class">
-      <label for="npc-class">Class</label>
-      <input
-        id="npc-class"
-        name="system.class.label"
-        type="text"
-        value="{{system.class.label}}"
-      />
-    </div>
-  </div>
-</header>
+</section>

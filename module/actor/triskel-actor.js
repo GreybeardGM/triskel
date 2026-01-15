@@ -312,7 +312,7 @@ export class TriskelActor extends Actor {
    * @param {object} [options.modifiers={}] Aggregierte Modifikatoren (skill -> value).
    * @returns {object} Zusammengeführte Skills.
    */
-  _prepareCharacterSkills({ skills = {}, modifiers = [] } = {}) {
+  _prepareCharacterSkills({ skills = {}, modifiers = {} } = {}) {
     const codexSkills = Array.isArray(getTriskellCodex().skills) ? getTriskellCodex().skills : [];
 
     const modifierBySkill = modifiers && typeof modifiers === "object" ? modifiers : {};
