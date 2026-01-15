@@ -419,10 +419,19 @@ function buildCarryLocationMenuItems(sheet, element) {
       callback: async () => {
         if (!locationId) return;
         const active = Boolean(option.defaultActive);
-        await item.update({
-          "system.carryLocation": locationId,
-          "system.active": active
-        });
+        const actor = sheet.document;
+        if (actor?.updateEmbeddedDocuments) {
+          await actor.updateEmbeddedDocuments("Item", [{
+            _id: item.id,
+            "system.carryLocation": locationId,
+            "system.active": active
+          }]);
+        } else {
+          await item.update({
+            "system.carryLocation": locationId,
+            "system.active": active
+          });
+        }
         await sheet.render({ parts: ["gear"] });
       }
     };
