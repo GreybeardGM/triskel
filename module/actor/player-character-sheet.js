@@ -351,7 +351,11 @@ async function onEditItem(event, target) {
 
 function closeCarryLocationMenu(sheet) {
   if (sheet._carryLocationMenu) {
-    sheet._carryLocationMenu.close?.();
+    if (sheet._carryLocationMenu.element) {
+      sheet._carryLocationMenu.close?.();
+    } else {
+      sheet._carryLocationMenu.remove?.();
+    }
     sheet._carryLocationMenu.remove?.();
     sheet._carryLocationMenu = null;
   }
