@@ -140,16 +140,23 @@ export function getGearCarryLocationOptions(item = null) {
   const archetype = archetypeId ? getTriskellIndex().gearArchetypes?.[archetypeId] ?? null : null;
   const archetypeLocations = normalizeIdList(archetype?.validLocations);
   if (!archetypeLocations.length) return [];
-  const validLocationIds = archetypeLocations.map(locationId => normalizeKeyword(locationId));
   const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "");
+  const carryLocationsById = getTriskellIndex().carryLocations ?? {};
+  const validLocationIds = archetypeLocations
+    .map(locationId => normalizeKeyword(locationId))
+    .filter(Boolean);
 
-  return carryLocations
-    .map(location => ({
-      ...location,
-      id: normalizeKeyword(location?.id ?? "")
-    }))
-    .filter(location => validLocationIds.includes(location?.id))
-    .filter(location => location.id !== currentLocation);
+  return validLocationIds
+    .filter(locationId => locationId !== currentLocation)
+    .map(locationId => {
+      const location = carryLocationsById[locationId];
+      if (!location) return null;
+      return {
+        ...location,
+        id: normalizeKeyword(location?.id ?? locationId)
+      };
+    })
+    .filter(Boolean);
 }
 
 /**
