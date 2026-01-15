@@ -15,13 +15,6 @@ import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-function getContextMenuClass() {
-  const contextMenu = foundry.applications?.ux?.ContextMenu;
-  return typeof contextMenu === "function" ? contextMenu : contextMenu?.implementation;
-}
-
-const CARRY_LOCATION_MENU_EVENT = "triskel-carry-location";
-
 function asHTMLElement(element) {
   if (!element) return null;
   if (element instanceof HTMLElement) return element;
@@ -48,44 +41,24 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const root = asHTMLElement(html) ?? asHTMLElement(this.element);
     if (!root) return;
 
-    if (this._carryLocationMouseDownHandler) {
-      root.removeEventListener("mousedown", this._carryLocationMouseDownHandler, true);
+    if (this._carryLocationChangeHandler) {
+      root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
 
-    this._carryLocationMouseDownHandler = (event) => {
-      if (event.button !== 2) return;
-      const target = event.target?.closest?.("[data-action=\"openCarryLocationMenu\"]");
+    this._carryLocationChangeHandler = (event) => {
+      const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
       if (!target) return;
-      onOpenCarryLocationMenu.call(this, event, target);
+      onChangeCarryLocation.call(this, event, target);
     };
 
-    root.addEventListener("mousedown", this._carryLocationMouseDownHandler, true);
-  }
-
-  _ensureCarryLocationMenu() {
-    const ContextMenuClass = getContextMenuClass();
-    if (!ContextMenuClass) return;
-
-    const container = asHTMLElement(this.element) ?? document.body;
-    if (this._carryLocationMenu && this._carryLocationMenu.element === container) return;
-
-    closeCarryLocationMenu(this);
-
-    const selector = "[data-action=\"openCarryLocationMenu\"]";
-    this._carryLocationMenu = new ContextMenuClass(
-      container,
-      selector,
-      [],
-      { eventName: CARRY_LOCATION_MENU_EVENT, jQuery: false }
-    );
+    root.addEventListener("change", this._carryLocationChangeHandler, true);
   }
 
   async close(options = {}) {
     const root = asHTMLElement(this.element);
-    if (root && this._carryLocationMouseDownHandler) {
-      root.removeEventListener("mousedown", this._carryLocationMouseDownHandler, true);
+    if (root && this._carryLocationChangeHandler) {
+      root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
-    closeCarryLocationMenu(this);
     return super.close(options);
   }
 
@@ -112,7 +85,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       : tab?.id ?? tabs?.active ?? this.tabGroups?.sheet ?? null;
 
     if (activeTab) {
-      closeCarryLocationMenu(this);
       await this.render({ parts: [activeTab] });
     }
   }
@@ -186,9 +158,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
           return prepareGearLocationBuckets(category);
         });
       }
+      const carryLocationSelections = partId === "gear"
+        ? buildGearCarryLocationSelections(itemsToDisplay)
+        : {};
       return {
         ...basePartContext,
         itemsToDisplay,
+        carryLocationSelections,
         tab: basePartContext.tabs?.[partId]
       };
     }
@@ -290,7 +266,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       filterActionType: onFilterActionType,
       toggleActiveItem: onToggleActiveItem,
       selectSkill: onSelectSkill,
-      openCarryLocationMenu: onOpenCarryLocationMenu
+      changeCarryLocation: onChangeCarryLocation
     },
     actor: {
       type: 'character'
@@ -406,97 +382,66 @@ async function onEditItem(event, target) {
   await item?.sheet?.render(true);
 }
 
-function closeCarryLocationMenu(sheet) {
-  if (sheet._carryLocationMenu) {
-    if (sheet._carryLocationMenu.element) {
-      sheet._carryLocationMenu.close?.();
-    } else {
-      sheet._carryLocationMenu.remove?.();
+function buildGearCarryLocationSelections(itemsToDisplay = []) {
+  const selections = {};
+  if (!Array.isArray(itemsToDisplay)) return selections;
+
+  const collectItems = (collection) => {
+    for (const item of toArray(collection)) {
+      if (!item?.id) continue;
+      const options = getGearCarryLocationOptions(item);
+      if (!options.length) continue;
+      const selectedOption = options.find(option => option.isSelected) ?? options[0] ?? null;
+      selections[item.id] = {
+        options,
+        currentIcon: selectedOption?.icon ?? "fa-solid fa-location-dot"
+      };
     }
-    sheet._carryLocationMenu.destroy?.();
-    sheet._carryLocationMenu.remove?.();
-    sheet._carryLocationMenu = null;
-  }
-}
+  };
 
-function buildCarryLocationMenuItems(sheet, element) {
-  const anchor = asHTMLElement(element);
-  if (!anchor) return [];
-  const item = getItemFromTarget(sheet, anchor);
-  if (!item) {
-    console.warn("Triskel | Carry location menu: item not found", {
-      anchor,
-      sheetId: sheet?.document?.id ?? null
-    });
-    return [];
-  }
-
-  console.info("Triskel | Carry location menu: item lookup", {
-    itemId: item.id,
-    itemName: item.name,
-    itemType: item.type,
-    carryLocation: item?.system?.carryLocation ?? null,
-    archetype: item?.system?.archetype ?? null,
-    overwriteValidLocations: item?.system?.overwrite?.validLocations ?? null
-  });
-
-  const locationOptions = getGearCarryLocationOptions(item) ?? [];
-  if (!locationOptions.length) return [];
-
-  return locationOptions.map(option => {
-    const locationId = normalizeKeyword(option.id ?? "", "");
-    const label = option.label ?? locationId ?? "";
-    const iconClass = option.icon ?? "fa-solid fa-location-dot";
-
-    return {
-      name: label,
-      icon: `<i class="${iconClass}"></i>`,
-      class: option.isActive ? "context-item--active" : "",
-      callback: async () => {
-        if (!locationId) return;
-        const active = Boolean(option.defaultActive);
-        const actor = sheet.document;
-        if (actor?.updateEmbeddedDocuments) {
-          await actor.updateEmbeddedDocuments("Item", [{
-            _id: item.id,
-            "system.carryLocation": locationId,
-            "system.active": active
-          }]);
-        } else {
-          await item.update({
-            "system.carryLocation": locationId,
-            "system.active": active
-          });
-        }
-        await sheet.render({ parts: ["gear"] });
+  for (const category of itemsToDisplay) {
+    if (!category) continue;
+    if (Array.isArray(category.locationBuckets) && category.locationBuckets.length) {
+      for (const bucket of category.locationBuckets) {
+        collectItems(bucket?.collection);
       }
-    };
-  });
+    } else {
+      collectItems(category.collection);
+    }
+  }
+
+  return selections;
 }
 
-async function onOpenCarryLocationMenu(event, target) {
+async function onChangeCarryLocation(event, target) {
+  event.preventDefault();
+
   const sheet = this;
-  const actionTarget = target ?? event.target;
-  const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
-  if (!anchorElement) return;
+  const selectElement = asHTMLElement(target);
+  if (!selectElement) return;
+  const item = getItemFromTarget(sheet, selectElement);
+  if (!item) return;
 
-  const menuItems = buildCarryLocationMenuItems(sheet, anchorElement);
-  if (!menuItems.length) return;
+  const locationId = normalizeKeyword(selectElement.value ?? "", "");
+  if (!locationId) return;
+  const locationOptions = getGearCarryLocationOptions(item);
+  const selectedLocation = locationOptions.find(option => option.id === locationId) ?? null;
+  const active = Boolean(selectedLocation?.defaultActive);
 
-  const ContextMenuClass = getContextMenuClass();
-  if (!ContextMenuClass) return;
-
-  const container = asHTMLElement(sheet.element) ?? document.body;
-  closeCarryLocationMenu(sheet);
-  const selector = "[data-action=\"openCarryLocationMenu\"]";
-  sheet._carryLocationMenu = new ContextMenuClass(
-    container,
-    selector,
-    menuItems,
-    { eventName: CARRY_LOCATION_MENU_EVENT, jQuery: false }
-  );
-
-  sheet._carryLocationMenu.open?.(event, anchorElement);
+  const actor = sheet.document;
+  if (actor?.updateEmbeddedDocuments) {
+    await actor.updateEmbeddedDocuments("Item", [{
+      _id: item.id,
+      "system.carryLocation": locationId,
+      "system.active": active
+    }]);
+  } else {
+    await item.update({
+      "system.carryLocation": locationId,
+      "system.active": active
+    });
+  }
+  await sheet.render({ parts: ["gear"] });
 }
 
 async function onDeleteItem(event, target) {

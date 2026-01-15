@@ -147,26 +147,27 @@ export function getGearCarryLocationOptions(item = null) {
     .filter(Boolean);
 
   const options = validLocationIds
-    .filter(locationId => locationId !== currentLocation)
     .map(locationId => {
       const location = carryLocationsById[locationId];
       if (!location) return null;
       return {
         ...location,
-        id: normalizeKeyword(location?.id ?? locationId)
+        id: normalizeKeyword(location?.id ?? locationId),
+        isSelected: locationId === currentLocation
       };
     })
     .filter(Boolean);
 
-  console.info("Triskel | Carry location options", {
-    itemId: item?.id ?? null,
-    itemName: item?.name ?? null,
-    itemType: item?.type ?? null,
-    archetypeId,
-    archetypeLocations,
-    currentLocation,
-    options
-  });
+  if (currentLocation && !options.some(option => option.id === currentLocation)) {
+    const location = carryLocationsById[currentLocation];
+    if (location) {
+      options.push({
+        ...location,
+        id: normalizeKeyword(location?.id ?? currentLocation),
+        isSelected: true
+      });
+    }
+  }
 
   return options;
 }
