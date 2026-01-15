@@ -42,6 +42,22 @@ async function toggleActiveItem(event, target, expectedType) {
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   activateListeners(html) {
     super.activateListeners?.(html);
+
+    const root = asHTMLElement(html) ?? asHTMLElement(this.element);
+    if (!root) return;
+
+    if (this._carryLocationMouseDownHandler) {
+      root.removeEventListener("mousedown", this._carryLocationMouseDownHandler, true);
+    }
+
+    this._carryLocationMouseDownHandler = (event) => {
+      if (event.button !== 2) return;
+      const target = event.target?.closest?.("[data-action=\"openCarryLocationMenu\"]");
+      if (!target) return;
+      onOpenCarryLocationMenu.call(this, event, target);
+    };
+
+    root.addEventListener("mousedown", this._carryLocationMouseDownHandler, true);
   }
 
   _ensureCarryLocationMenu() {
@@ -58,11 +74,15 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       container,
       selector,
       [],
-      { eventName: "contextmenu", jQuery: false }
+      { eventName: "click", jQuery: false }
     );
   }
 
   async close(options = {}) {
+    const root = asHTMLElement(this.element);
+    if (root && this._carryLocationMouseDownHandler) {
+      root.removeEventListener("mousedown", this._carryLocationMouseDownHandler, true);
+    }
     closeCarryLocationMenu(this);
     return super.close(options);
   }
@@ -453,9 +473,6 @@ function buildCarryLocationMenuItems(sheet, element) {
 }
 
 async function onOpenCarryLocationMenu(event, target) {
-  event.preventDefault();
-  event.stopPropagation();
-
   const sheet = this;
   const actionTarget = target ?? event.currentTarget ?? event.target;
   const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
@@ -474,7 +491,7 @@ async function onOpenCarryLocationMenu(event, target) {
     container,
     selector,
     menuItems,
-    { eventName: "contextmenu", jQuery: false }
+    { eventName: "click", jQuery: false }
   );
 
   sheet._carryLocationMenu.open?.(event, anchorElement);
