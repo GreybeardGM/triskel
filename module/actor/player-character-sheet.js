@@ -59,7 +59,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       container,
       selector,
       [],
-      { eventName: "contextmenu", jQuery: false }
+      { eventName: "click", jQuery: false }
     );
   }
 
@@ -408,7 +408,7 @@ function buildCarryLocationMenuItems(sheet, element) {
   if (!locationOptions.length) return [];
 
   return locationOptions.map(option => {
-    const locationId = option.id ?? "";
+    const locationId = normalizeKeyword(option.id ?? "", "");
     const label = option.label ?? locationId ?? "";
     const iconClass = option.icon ?? "fa-solid fa-location-dot";
 
@@ -423,6 +423,7 @@ function buildCarryLocationMenuItems(sheet, element) {
           "system.carryLocation": locationId,
           "system.active": active
         });
+        await sheet.render({ parts: ["gear"] });
       }
     };
   });
