@@ -20,6 +20,8 @@ function getContextMenuClass() {
   return typeof contextMenu === "function" ? contextMenu : contextMenu?.implementation;
 }
 
+const CARRY_LOCATION_MENU_EVENT = "triskel-carry-location";
+
 function asHTMLElement(element) {
   if (!element) return null;
   if (element instanceof HTMLElement) return element;
@@ -58,7 +60,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       container,
       selector,
       [],
-      { eventName: "contextmenu", jQuery: false }
+      { eventName: CARRY_LOCATION_MENU_EVENT, jQuery: false }
     );
   }
 
@@ -453,11 +455,8 @@ function buildCarryLocationMenuItems(sheet, element) {
 }
 
 async function onOpenCarryLocationMenu(event, target) {
-  event.preventDefault();
-  event.stopPropagation();
-
   const sheet = this;
-  const actionTarget = target ?? event.currentTarget ?? event.target;
+  const actionTarget = target ?? event.target;
   const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
   if (!anchorElement) return;
 
@@ -474,7 +473,7 @@ async function onOpenCarryLocationMenu(event, target) {
     container,
     selector,
     menuItems,
-    { eventName: "contextmenu", jQuery: false }
+    { eventName: CARRY_LOCATION_MENU_EVENT, jQuery: false }
   );
 
   sheet._carryLocationMenu.open?.(event, anchorElement);
