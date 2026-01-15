@@ -394,8 +394,7 @@ function buildGearCarryLocationSelections(itemsToDisplay = []) {
       const selectedOption = options.find(option => option.isSelected) ?? options[0] ?? null;
       selections[item.id] = {
         options,
-        currentIcon: selectedOption?.icon ?? "fa-solid fa-location-dot",
-        currentLabel: selectedOption?.label ?? ""
+        currentIcon: selectedOption?.icon ?? "fa-solid fa-location-dot"
       };
     }
   };
