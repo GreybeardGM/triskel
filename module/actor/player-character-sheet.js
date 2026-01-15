@@ -58,7 +58,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       container,
       selector,
       [],
-      { eventName: "contextmenu", jQuery: false }
+      { eventName: "click", jQuery: false }
     );
   }
 
@@ -453,11 +453,8 @@ function buildCarryLocationMenuItems(sheet, element) {
 }
 
 async function onOpenCarryLocationMenu(event, target) {
-  event.preventDefault();
-  event.stopPropagation();
-
   const sheet = this;
-  const actionTarget = target ?? event.currentTarget ?? event.target;
+  const actionTarget = target ?? event.target;
   const anchorElement = asHTMLElement(actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget);
   if (!anchorElement) return;
 
@@ -474,7 +471,7 @@ async function onOpenCarryLocationMenu(event, target) {
     container,
     selector,
     menuItems,
-    { eventName: "contextmenu", jQuery: false }
+    { eventName: "click", jQuery: false }
   );
 
   sheet._carryLocationMenu.open?.(event, anchorElement);
