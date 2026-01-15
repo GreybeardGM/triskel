@@ -685,34 +685,23 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  height: 2rem;
 }
 
 .triskel .inventory-list__location-icon {
   position: absolute;
   left: 0.55rem;
   pointer-events: none;
-  font-size: 0.85rem;
 }
 
 .triskel .inventory-list__location-select-input {
   height: 2rem;
-  width: 2.3rem;
-  padding: 0 1.5rem 0 2rem;
-  border-radius: 0.35rem;
-  border: 1px solid var(--triskel-color-border-muted);
-  background: var(--triskel-color-surface);
+  width: 2rem;
   color: transparent;
   cursor: pointer;
-  appearance: none;
 }
 
 .triskel .inventory-list__location-select-input:focus {
   width: 10rem;
-  color: var(--color-text-dark-primary);
-}
-
-.triskel .inventory-list__location-select-input option {
   color: var(--color-text-dark-primary);
 }
 
