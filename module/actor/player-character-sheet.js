@@ -391,8 +391,7 @@ async function onOpenCarryLocationMenu(event, target) {
     };
   });
 
-  const ContextMenuClass = foundry.applications?.ux?.ContextMenu?.implementation
-    ?? foundry.applications?.ux?.ContextMenu;
+  const ContextMenuClass = foundry.applications?.ux?.ContextMenu?.implementation;
   if (!ContextMenuClass) return;
 
   const anchor = actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget;
@@ -411,7 +410,8 @@ async function onOpenCarryLocationMenu(event, target) {
       target: anchorElement,
       event,
       items: menuItems,
-      jQuery: false
+      jQuery: false,
+      options: { jQuery: false }
     });
   } else {
     menu = new ContextMenuClass(anchorElement, menuItems, { eventName: "click", jQuery: false });
