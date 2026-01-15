@@ -2,27 +2,25 @@ import {
   getTriskellCodex,
   getTriskellIndex,
   getGearCarryLocationOptions,
+  getActionBucket,
+  asHTMLElement,
+  getItemFromTarget,
   onEditImage,
   onUpdateResourceValue,
-  prepareAssetContext,
-  prepareActionLikesWithKeywords,
   prepareActorBarsContext,
-  prepareGearLocationBuckets,
-  prepareRollHelperContext,
-  prepareSkillsDisplay
+  prepareActionsTabContext,
+  prepareGearTabContext,
+  prepareNotesTabContext,
+  prepareRollHelperTabContext,
+  prepareSkillsTabContext
 } from "./sheet-helpers.js";
 import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-function asHTMLElement(element) {
-  if (!element) return null;
-  if (element instanceof HTMLElement) return element;
-  if (Array.isArray(element) && element[0] instanceof HTMLElement) return element[0];
-  if (element[0] instanceof HTMLElement) return element[0];
-  return null;
-}
-
+// ---------------------------------------------------------------------------
+// Action handlers
+// ---------------------------------------------------------------------------
 async function toggleActiveItem(event, target, expectedType) {
   event.preventDefault();
 
@@ -34,347 +32,6 @@ async function toggleActiveItem(event, target, expectedType) {
   await item.update({ "system.active": !isActive });
 }
 
-export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
-  activateListeners(html) {
-    super.activateListeners?.(html);
-
-    const root = asHTMLElement(html) ?? asHTMLElement(this.element);
-    if (!root) return;
-
-    if (this._carryLocationChangeHandler) {
-      root.removeEventListener("change", this._carryLocationChangeHandler, true);
-    }
-
-    this._carryLocationChangeHandler = (event) => {
-      const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
-      if (!target) return;
-      onChangeCarryLocation.call(this, event, target);
-    };
-
-    root.addEventListener("change", this._carryLocationChangeHandler, true);
-  }
-
-  async close(options = {}) {
-    const root = asHTMLElement(this.element);
-    if (root && this._carryLocationChangeHandler) {
-      root.removeEventListener("change", this._carryLocationChangeHandler, true);
-    }
-    return super.close(options);
-  }
-
-  _configureRenderOptions(options = {}) {
-    const renderOptions = super._configureRenderOptions?.(options) ?? options ?? {};
-    const configuredParts = renderOptions.parts;
-    const partIds = Array.isArray(configuredParts)
-      ? configuredParts
-      : Object.keys(this.constructor.PARTS ?? {});
-    const activeTab = this.tabGroups?.sheet
-      ?? this.constructor.TABS?.sheet?.initial
-      ?? "actions";
-    const tabParts = new Set(["actions", "skills", "gear", "spells", "notes"]);
-
-    renderOptions.parts = partIds.filter(partId => !tabParts.has(partId) || partId === activeTab);
-    return renderOptions;
-  }
-
-  async _onClickTab(event, tabs, tab) {
-    await super._onClickTab?.(event, tabs, tab);
-
-    const activeTab = typeof tab === "string"
-      ? tab
-      : tab?.id ?? tabs?.active ?? this.tabGroups?.sheet ?? null;
-
-    if (activeTab) {
-      await this.render({ parts: [activeTab] });
-    }
-  }
-
-  async _prepareContext(options) {
-    const context = await super._prepareContext(options);
-    const actor = this.document;
-
-    context.actor ??= actor;
-    context.system ??= actor?.system ?? {};
-    const { reserves, paths, commit } = prepareActorBarsContext(actor);
-    if (reserves) context.reserves = reserves;
-    if (paths) context.paths = paths;
-    if (commit) context.commit = commit;
-
-    return context;
-  }
-
-  async _preparePartContext(partId, context, options) {
-    const basePartContext = await super._preparePartContext(partId, context, options) ?? context ?? {};
-    const actor = this.document;
-
-    if (partId === "skills") {
-      const { skillCategories } = prepareSkillsDisplay(actor?.system?.skills ?? {});
-      const abilitiesToDisplay = prepareAssetContext(actor?.assets, ["ability"]);
-      return {
-        ...basePartContext,
-        skillCategories,
-        abilitiesToDisplay
-      };
-    }
-
-    if (partId === "info") {
-      const tierValue = actor?.system?.tier?.value;
-      const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
-        ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
-        ?? null;
-      const tierLabel = tierLabelKey ? (game.i18n?.localize?.(tierLabelKey) ?? tierLabelKey) : null;
-
-      if (basePartContext.system) {
-        basePartContext.system.tier ??= {};
-        basePartContext.system.tier.label = tierLabel;
-      }
-
-      return {
-        ...basePartContext,
-        tierLabel
-      };
-    }
-
-    if (partId === "notes") {
-      const notes = actor?.system?.details?.notes ?? "";
-      const notesHTML = await TextEditor?.enrichHTML?.(notes, { async: true }) ?? notes;
-
-      return {
-        ...basePartContext,
-        notesHTML
-      };
-    }
-
-    if (["gear", "spells"].includes(partId)) {
-      const selectedTypesByPart = {
-        gear: ["gear"],
-        spells: ["spell"]
-      };
-      const selectedTypes = selectedTypesByPart[partId] ?? [];
-      let itemsToDisplay = prepareAssetContext(actor?.assets, selectedTypes);
-      if (partId === "gear" && Array.isArray(itemsToDisplay)) {
-        itemsToDisplay = itemsToDisplay.map(category => {
-          if (category?.id !== "gear") return category;
-          return prepareGearLocationBuckets(category);
-        });
-      }
-      const carryLocationSelections = partId === "gear"
-        ? buildGearCarryLocationSelections(itemsToDisplay)
-        : {};
-      return {
-        ...basePartContext,
-        itemsToDisplay,
-        carryLocationSelections,
-        tab: basePartContext.tabs?.[partId]
-      };
-    }
-
-    if (partId === "rollHelper") {
-      const storedSelectedAction = basePartContext.system?.actions?.selectedAction ?? null;
-      let enrichedSelectedAction = null;
-      if (storedSelectedAction?.id) {
-        const selectedForms = toArray(basePartContext.system?.actions?.selectedForms);
-        const preparedForms = actor?.preparedActions?.forms ?? {};
-        const preparedAttunements = actor?.preparedActions?.attunements ?? {};
-        enrichedSelectedAction = enrichSelectedAction({
-          action: storedSelectedAction,
-          forms: preparedForms,
-          attunements: preparedAttunements,
-          selectedForms,
-          skills: actor?.system?.skills ?? {}
-        });
-        const rollActive = Boolean(enrichedSelectedAction?.skill);
-        enrichedSelectedAction = {
-          ...enrichedSelectedAction,
-          roll: {
-            ...(enrichedSelectedAction?.roll ?? {}),
-            active: rollActive
-          }
-        };
-      }
-      const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
-        selectedAction: enrichedSelectedAction,
-        reserves: basePartContext.reserves ?? {},
-        commit: basePartContext.commit ?? null
-      });
-
-      return {
-        ...basePartContext,
-        rollHelper,
-        rollHelperSummary
-      };
-    }
-
-    if (partId === "actions") {
-      const selectedActionType = basePartContext.system?.actions?.selectedType ?? "impact";
-      const preparedBundle = actor?.preparedActions ?? {};
-      const preparedForms = preparedBundle.forms ?? {};
-      const preparedAttunements = preparedBundle.attunements ?? {};
-      const preparedActions = preparedBundle.actions ?? {};
-      const preparedSpells = preparedBundle.spells ?? {};
-      const selectedForms = toArray(actor?.system?.actions?.selectedForms);
-      const actions = prepareActionLikesWithKeywords({
-        actionLikes: preparedActions,
-        keywordBuckets: preparedForms,
-        selectedKeywords: selectedForms,
-        skills: actor?.system?.skills ?? {},
-        selectedTypeId: selectedActionType,
-        keywordProperty: "forms"
-      });
-      const spells = prepareActionLikesWithKeywords({
-        actionLikes: preparedSpells,
-        keywordBuckets: preparedAttunements,
-        selectedKeywords: selectedForms,
-        skills: actor?.system?.skills ?? {},
-        selectedTypeId: selectedActionType,
-        keywordProperty: "attunements"
-      });
-      const actionTypeOrder = ["position", "setup", "impact", "defense"];
-      const actionTypeFilters = actionTypeOrder.map(typeId => {
-        const type = getTriskellCodex()?.actionTypes?.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
-        return {
-          ...type,
-          isSelected: selectedActionType === typeId
-        };
-      });
-
-      return {
-        ...basePartContext,
-        actions,
-        spells,
-        actionTypeFilters
-      };
-    }
-
-    return basePartContext;
-  }
-
-  static DEFAULT_OPTIONS = {
-    classes: ["triskel", "sheet", "actor", "character"],
-    template: "systems/triskel/templates/actor/player-character-sheet.hbs",
-    form: {
-      submitOnChange: true
-    },
-    actions: {
-      editImage: onEditImage,
-      updateResourceValue: onUpdateResourceValue,
-      editItem: onEditItem,
-      deleteItem: onDeleteItem,
-      selectAction: onSelectAction,
-      toggleForm: onToggleForm,
-      rollHelper: onRollHelper,
-      filterActionType: onFilterActionType,
-      toggleActiveItem: onToggleActiveItem,
-      selectSkill: onSelectSkill,
-      changeCarryLocation: onChangeCarryLocation
-    },
-    actor: {
-      type: 'character'
-    },
-    window: {
-      resizable: true
-    },
-    position: {
-      height: "auto",
-      width: 720
-    }
-  };
-
-  static TABS = {
-    sheet: {
-      tabs: [
-        {
-          id: "actions",
-          group: "sheet",
-          icon: "fa-solid fa-bolt",
-          label: "TRISKEL.Actor.Tab.Actions",
-          tooltip: "TRISKEL.Actor.Tab.Tooltip.Actions"
-        },
-        {
-          id: "skills",
-          group: "sheet",
-          icon: "fa-solid fa-shield-halved",
-          label: "TRISKEL.Actor.Tab.Skills",
-          tooltip: "TRISKEL.Actor.Tab.Tooltip.Skills"
-        },
-        {
-          id: "gear",
-          group: "sheet",
-          icon: "fa-solid fa-suitcase",
-          label: "TRISKEL.Actor.Tab.Gear",
-          tooltip: "TRISKEL.Actor.Tab.Tooltip.Gear"
-        },
-        {
-          id: "spells",
-          group: "sheet",
-          icon: "fa-solid fa-book-sparkles",
-          label: "TRISKEL.Actor.Tab.Spells",
-          tooltip: "TRISKEL.Actor.Tab.Tooltip.Spells"
-        },
-        {
-          id: "notes",
-          group: "sheet",
-          icon: "fa-solid fa-pen-to-square",
-          label: "TRISKEL.Actor.Tab.Notes",
-          tooltip: "TRISKEL.Actor.Tab.Tooltip.Notes"
-        }
-      ],
-      initial: "actions"
-    }
-  };
-
-  static PARTS = {
-    info: {
-      id: "info",
-      template: "systems/triskel/templates/actor/player-character-info.hbs",
-      sort: 5
-    },
-    rollHelper: {
-      id: "rollHelper",
-      template: "systems/triskel/templates/actor/player-character-roll-helper.hbs",
-      sort: 10
-    },
-    resources: {
-      id: "resources",
-      template: "systems/triskel/templates/actor/player-character-resources.hbs",
-      sort: 20
-    },
-    actions: {
-      id: "actions",
-      template: "systems/triskel/templates/actor/player-character-actions.hbs",
-      sort: 100
-    },
-    skills: {
-      id: "skills",
-      template: "systems/triskel/templates/actor/skills.hbs",
-      sort: 200
-    },
-    notes: {
-      id: "notes",
-      template: "systems/triskel/templates/actor/player-character-notes.hbs",
-      sort: 300
-    },
-    gear: {
-      id: "gear",
-      template: "systems/triskel/templates/actor/player-character-gear.hbs",
-      sort: 240
-    },
-    spells: {
-      id: "spells",
-      template: "systems/triskel/templates/actor/player-character-spells.hbs",
-      sort: 250
-    }
-  };
-
-}
-
-function getItemFromTarget(sheet, target) {
-  const itemId = target.closest("[data-item-id]")?.dataset.itemId ?? target.dataset.itemId;
-  if (!itemId) return null;
-
-  return sheet.document?.items?.get(itemId) ?? null;
-}
-
 async function onEditItem(event, target) {
   event.preventDefault();
 
@@ -382,35 +39,13 @@ async function onEditItem(event, target) {
   await item?.sheet?.render(true);
 }
 
-function buildGearCarryLocationSelections(itemsToDisplay = []) {
-  const selections = {};
-  if (!Array.isArray(itemsToDisplay)) return selections;
+async function onDeleteItem(event, target) {
+  event.preventDefault();
 
-  const collectItems = (collection) => {
-    for (const item of toArray(collection)) {
-      if (!item?.id) continue;
-      const options = getGearCarryLocationOptions(item);
-      if (!options.length) continue;
-      const selectedOption = options.find(option => option.isSelected) ?? options[0] ?? null;
-      selections[item.id] = {
-        options,
-        currentIcon: selectedOption?.icon ?? "fa-solid fa-location-dot"
-      };
-    }
-  };
+  const item = getItemFromTarget(this, target);
+  if (!item) return;
 
-  for (const category of itemsToDisplay) {
-    if (!category) continue;
-    if (Array.isArray(category.locationBuckets) && category.locationBuckets.length) {
-      for (const bucket of category.locationBuckets) {
-        collectItems(bucket?.collection);
-      }
-    } else {
-      collectItems(category.collection);
-    }
-  }
-
-  return selections;
+  await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
 }
 
 async function onChangeCarryLocation(event, target) {
@@ -442,15 +77,6 @@ async function onChangeCarryLocation(event, target) {
     });
   }
   await sheet.render({ parts: ["gear"] });
-}
-
-async function onDeleteItem(event, target) {
-  event.preventDefault();
-
-  const item = getItemFromTarget(this, target);
-  if (!item) return;
-
-  await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
 }
 
 async function onSelectAction(event, target) {
@@ -560,67 +186,263 @@ async function onToggleActiveItem(event, target) {
   await toggleActiveItem.call(this, event, target);
 }
 
-function enrichSelectedAction({
-  action = null,
-  forms = {},
-  attunements = {},
-  selectedForms = [],
-  skills = {}
-} = {}) {
-  if (!action || typeof action !== "object" || !action.id) return null;
+// ---------------------------------------------------------------------------
+// Sheet implementation
+// ---------------------------------------------------------------------------
+export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  // -- Lifecycle ------------------------------------------------------------
+  activateListeners(html) {
+    super.activateListeners?.(html);
 
-  const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
-  const availableKeywords = Array.isArray(action.availableKeywords) ? action.availableKeywords : [];
-  const reservesIndex = getTriskellIndex().reserves ?? {};
-  const selectionKind = action?.selectionKind === "spell" ? "spell" : "action";
-  const keywordProperty = selectionKind === "spell" ? "attunements" : "forms";
-  const keywordBuckets = selectionKind === "spell" ? attunements : forms;
-  const resolveReserveLabel = (reserveId) => {
-    if (!reserveId) return "";
-    const reserve = reservesIndex[reserveId] ?? {};
-    return reserve.label ?? reserveId;
-  };
+    const root = asHTMLElement(html) ?? asHTMLElement(this.element);
+    if (!root) return;
 
-  const attachedForms = [];
-  for (const keyword of availableKeywords) {
-    const normalizedKeyword = normalizeKeyword(keyword);
-    const keywordsForBucket = keywordBuckets?.[normalizedKeyword];
-    const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
-    if (!keywordCollection.length) continue;
+    if (this._carryLocationChangeHandler) {
+      root.removeEventListener("change", this._carryLocationChangeHandler, true);
+    }
 
-    for (const formEntry of keywordCollection) {
-      attachedForms.push({
-        ...formEntry,
-        active: selectedFormIds.has(formEntry.id),
-        reserveLabel: resolveReserveLabel(formEntry.reserve)
-      });
+    this._carryLocationChangeHandler = (event) => {
+      const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
+      if (!target) return;
+      onChangeCarryLocation.call(this, event, target);
+    };
+
+    root.addEventListener("change", this._carryLocationChangeHandler, true);
+  }
+
+  async close(options = {}) {
+    const root = asHTMLElement(this.element);
+    if (root && this._carryLocationChangeHandler) {
+      root.removeEventListener("change", this._carryLocationChangeHandler, true);
+    }
+    return super.close(options);
+  }
+
+  // -- Rendering ------------------------------------------------------------
+  _configureRenderOptions(options = {}) {
+    const renderOptions = super._configureRenderOptions?.(options) ?? options ?? {};
+    const configuredParts = renderOptions.parts;
+    const partIds = Array.isArray(configuredParts)
+      ? configuredParts
+      : Object.keys(this.constructor.PARTS ?? {});
+    const activeTab = this.tabGroups?.sheet
+      ?? this.constructor.TABS?.sheet?.initial
+      ?? "actions";
+    const tabParts = new Set(["actions", "skills", "gear", "spells", "notes"]);
+
+    renderOptions.parts = partIds.filter(partId => !tabParts.has(partId) || partId === activeTab);
+    return renderOptions;
+  }
+
+  async _onClickTab(event, tabs, tab) {
+    await super._onClickTab?.(event, tabs, tab);
+
+    const activeTab = typeof tab === "string"
+      ? tab
+      : tab?.id ?? tabs?.active ?? this.tabGroups?.sheet ?? null;
+
+    if (activeTab) {
+      await this.render({ parts: [activeTab] });
     }
   }
 
-  const skillId = action?.skill ?? null;
-  let skillLabel = null;
-  let skillTotal = null;
-  if (skillId) {
-    const skillSource = skills?.[skillId] ?? null;
-    skillLabel = skillSource?.label ?? action?.skillLabel ?? skillId;
-    const resolvedTotal = toFiniteNumber(skillSource?.total, Number.NaN);
-    skillTotal = Number.isFinite(resolvedTotal)
-      ? resolvedTotal
-      : toFiniteNumber(action?.skillTotal, 0);
+  // -- Context preparation --------------------------------------------------
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const actor = this.document;
+
+    context.actor ??= actor;
+    context.system ??= actor?.system ?? {};
+    const { reserves, paths, commit } = prepareActorBarsContext(actor);
+    if (reserves) context.reserves = reserves;
+    if (paths) context.paths = paths;
+    if (commit) context.commit = commit;
+
+    return context;
   }
 
-  return {
-    ...action,
-    [keywordProperty]: attachedForms,
-    reserveLabel: resolveReserveLabel(action?.reserve),
-    selectionKind,
-    skillLabel,
-    skillTotal
-  };
-}
+  async _preparePartContext(partId, context, options) {
+    const basePartContext = await super._preparePartContext(partId, context, options) ?? context ?? {};
+    const actor = this.document;
 
-function getActionBucket(preparedActions, actionType) {
-  return Array.isArray(preparedActions?.[actionType])
-    ? preparedActions[actionType]
-    : [];
+    if (partId === "skills") {
+      return {
+        ...basePartContext,
+        ...prepareSkillsTabContext(actor)
+      };
+    }
+
+    if (partId === "player-info") {
+      const tierValue = actor?.system?.tier?.value;
+      const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+        ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+        ?? null;
+      const tierLabel = tierLabelKey ? (game.i18n?.localize?.(tierLabelKey) ?? tierLabelKey) : null;
+
+      if (basePartContext.system) {
+        basePartContext.system.tier ??= {};
+        basePartContext.system.tier.label = tierLabel;
+      }
+
+      return {
+        ...basePartContext,
+        tierLabel
+      };
+    }
+
+    if (partId === "notes") {
+      return {
+        ...basePartContext,
+        ...(await prepareNotesTabContext(actor))
+      };
+    }
+
+    if (["gear", "spells"].includes(partId)) {
+      return {
+        ...basePartContext,
+        ...prepareGearTabContext(actor, partId),
+        tab: basePartContext.tabs?.[partId]
+      };
+    }
+
+    if (partId === "rollHelper") {
+      return {
+        ...basePartContext,
+        ...prepareRollHelperTabContext({
+          actor,
+          system: basePartContext.system,
+          reserves: basePartContext.reserves ?? {},
+          commit: basePartContext.commit ?? null
+        })
+      };
+    }
+
+    if (partId === "actions") {
+      const selectedActionType = basePartContext.system?.actions?.selectedType ?? "impact";
+      return {
+        ...basePartContext,
+        ...prepareActionsTabContext(actor, selectedActionType)
+      };
+    }
+
+    return basePartContext;
+  }
+
+  // -- Sheet configuration --------------------------------------------------
+  static DEFAULT_OPTIONS = {
+    classes: ["triskel", "sheet", "actor", "character"],
+    template: "systems/triskel/templates/actor/player-character-sheet.hbs",
+    form: {
+      submitOnChange: true
+    },
+    actions: {
+      editImage: onEditImage,
+      updateResourceValue: onUpdateResourceValue,
+      editItem: onEditItem,
+      deleteItem: onDeleteItem,
+      selectAction: onSelectAction,
+      toggleForm: onToggleForm,
+      rollHelper: onRollHelper,
+      filterActionType: onFilterActionType,
+      toggleActiveItem: onToggleActiveItem,
+      selectSkill: onSelectSkill,
+      changeCarryLocation: onChangeCarryLocation
+    },
+    actor: {
+      type: "character"
+    },
+    window: {
+      resizable: true
+    },
+    position: {
+      height: "auto",
+      width: 720
+    }
+  };
+
+  static TABS = {
+    sheet: {
+      tabs: [
+        {
+          id: "actions",
+          group: "sheet",
+          icon: "fa-solid fa-bolt",
+          label: "TRISKEL.Actor.Tab.Actions",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Actions"
+        },
+        {
+          id: "skills",
+          group: "sheet",
+          icon: "fa-solid fa-shield-halved",
+          label: "TRISKEL.Actor.Tab.Skills",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Skills"
+        },
+        {
+          id: "gear",
+          group: "sheet",
+          icon: "fa-solid fa-suitcase",
+          label: "TRISKEL.Actor.Tab.Gear",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Gear"
+        },
+        {
+          id: "spells",
+          group: "sheet",
+          icon: "fa-solid fa-book-sparkles",
+          label: "TRISKEL.Actor.Tab.Spells",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Spells"
+        },
+        {
+          id: "notes",
+          group: "sheet",
+          icon: "fa-solid fa-pen-to-square",
+          label: "TRISKEL.Actor.Tab.Notes",
+          tooltip: "TRISKEL.Actor.Tab.Tooltip.Notes"
+        }
+      ],
+      initial: "actions"
+    }
+  };
+
+  static PARTS = {
+    info: {
+      id: "player-info",
+      template: "systems/triskel/templates/actor/player-character-info.hbs",
+      sort: 5
+    },
+    rollHelper: {
+      id: "rollHelper",
+      template: "systems/triskel/templates/actor/player-character-roll-helper.hbs",
+      sort: 10
+    },
+    resources: {
+      id: "player-resources",
+      template: "systems/triskel/templates/actor/player-character-resources.hbs",
+      sort: 20
+    },
+    actions: {
+      id: "actions",
+      template: "systems/triskel/templates/actor/player-character-actions.hbs",
+      sort: 100
+    },
+    skills: {
+      id: "skills",
+      template: "systems/triskel/templates/actor/skills.hbs",
+      sort: 200
+    },
+    notes: {
+      id: "notes",
+      template: "systems/triskel/templates/actor/player-character-notes.hbs",
+      sort: 300
+    },
+    gear: {
+      id: "gear",
+      template: "systems/triskel/templates/actor/player-character-gear.hbs",
+      sort: 240
+    },
+    spells: {
+      id: "spells",
+      template: "systems/triskel/templates/actor/player-character-spells.hbs",
+      sort: 250
+    }
+  };
 }

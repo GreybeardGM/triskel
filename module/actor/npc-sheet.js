@@ -50,17 +50,25 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   static PARTS = {
-    core: {
-      id: "core",
-      template: "systems/triskel/templates/actor/npc-core.hbs"
+    info: {
+      id: "npc-info",
+      template: "systems/triskel/templates/actor/npc-info.hbs",
+      sort: 5
+    },
+    resources: {
+      id: "npc-resources",
+      template: "systems/triskel/templates/actor/npc-core.hbs",
+      sort: 20
     },
     skills: {
       id: "skills",
-      template: "systems/triskel/templates/actor/skills.hbs"
+      template: "systems/triskel/templates/actor/skills.hbs",
+      sort: 200
     },
     notes: {
       id: "notes",
-      template: "systems/triskel/templates/actor/player-character-notes.hbs"
+      template: "systems/triskel/templates/actor/player-character-notes.hbs",
+      sort: 300
     }
   };
 

@@ -5,9 +5,33 @@ import {
   toFiniteNumber
 } from "../util/normalization.js";
 
+// ---------------------------------------------------------------------------
+// DOM helpers
+// ---------------------------------------------------------------------------
+export function asHTMLElement(element) {
+  if (!element) return null;
+  if (element instanceof HTMLElement) return element;
+  if (Array.isArray(element) && element[0] instanceof HTMLElement) return element[0];
+  if (element[0] instanceof HTMLElement) return element[0];
+  return null;
+}
+
+export function getItemFromTarget(sheet, target) {
+  const itemId = target.closest("[data-item-id]")?.dataset.itemId ?? target.dataset.itemId;
+  if (!itemId) return null;
+
+  return sheet.document?.items?.get(itemId) ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Config accessors
+// ---------------------------------------------------------------------------
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 
+// ---------------------------------------------------------------------------
+// Shared UI handlers
+// ---------------------------------------------------------------------------
 export async function onEditImage(event, target) {
   const field = target.dataset.field || "img";
   const current = foundry.utils.getProperty(this.document, field);
@@ -20,29 +44,6 @@ export async function onEditImage(event, target) {
 
   picker.render(true);
 }
-
-const createSegments = (maxSegments, stateResolver) =>
-  Array.from({ length: maxSegments }, (_, index) => {
-    const value = index + 1;
-    const state = stateResolver(value);
-    const interactive = state === "filled" || state === "empty";
-
-    return {
-      index: value,
-      value,
-      state,
-      interactive
-    };
-  });
-
-const isStrainActive = (entry) => {
-  if (!entry) return false;
-  if (typeof entry === "object") {
-    return Boolean(entry?.active ?? entry?.isActive ?? entry?.checked);
-  }
-
-  return Boolean(entry);
-};
 
 export async function onUpdateResourceValue(event, target) {
   event.preventDefault();
@@ -61,6 +62,9 @@ export async function onUpdateResourceValue(event, target) {
   await this.document.update({ [property]: newValue });
 }
 
+// ---------------------------------------------------------------------------
+// Asset preparation (gear, items, categories)
+// ---------------------------------------------------------------------------
 /**
  * Assets für Actor-Sheets vorbereiten und nach Kategorien filtern.
  *
@@ -172,6 +176,9 @@ export function getGearCarryLocationOptions(item = null) {
   return options;
 }
 
+// ---------------------------------------------------------------------------
+// Action/keyword preparation
+// ---------------------------------------------------------------------------
 /**
  * Forms aus den FormRefs vorbereiten und nach Keywords bündeln.
  */
@@ -246,16 +253,10 @@ export function prepareActionLikesWithKeywords({
     if (keywordProperty !== "attunements" && !preparedAction.attunements) preparedAction.attunements = attachedKeywords;
 
     const skillId = entry?.skill ?? null;
-    preparedAction.skill = skillId ?? null;
-
-    if (skillId) {
-      const skillSource = skills?.[skillId] ?? null;
-      preparedAction.skillLabel = skillSource?.label ?? skillId;
-      preparedAction.skillTotal = toFiniteNumber(skillSource?.total, 0);
-    } else {
-      preparedAction.skillLabel = null;
-      preparedAction.skillTotal = null;
-    }
+    const skillSource = skillId ? skills?.[skillId] ?? null : null;
+    preparedAction.skill = skillId;
+    preparedAction.skillLabel = skillSource?.label ?? (skillId ? skillId : null);
+    preparedAction.skillTotal = skillId ? toFiniteNumber(skillSource?.total, 0) : null;
 
     collection.push(preparedAction);
   }
@@ -271,6 +272,224 @@ export function prepareActionLikesWithKeywords({
   };
 }
 
+// ---------------------------------------------------------------------------
+// Sheet tab preparation (items, actions, roll helper, notes, skills)
+// ---------------------------------------------------------------------------
+function buildGearCarryLocationSelections(itemsToDisplay = []) {
+  const selections = {};
+  if (!Array.isArray(itemsToDisplay)) return selections;
+
+  const collectItems = (collection) => {
+    for (const item of toArray(collection)) {
+      if (!item?.id) continue;
+      const options = getGearCarryLocationOptions(item);
+      if (!options.length) continue;
+      const selectedOption = options.find(option => option.isSelected) ?? options[0] ?? null;
+      selections[item.id] = {
+        options,
+        currentIcon: selectedOption?.icon ?? "fa-solid fa-location-dot"
+      };
+    }
+  };
+
+  for (const category of itemsToDisplay) {
+    if (!category) continue;
+    if (Array.isArray(category.locationBuckets) && category.locationBuckets.length) {
+      for (const bucket of category.locationBuckets) {
+        collectItems(bucket?.collection);
+      }
+    } else {
+      collectItems(category.collection);
+    }
+  }
+
+  return selections;
+}
+
+function enrichSelectedAction({
+  action = null,
+  forms = {},
+  attunements = {},
+  selectedForms = [],
+  skills = {}
+} = {}) {
+  if (!action || typeof action !== "object" || !action.id) return null;
+
+  const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
+  const availableKeywords = Array.isArray(action.availableKeywords) ? action.availableKeywords : [];
+  const reservesIndex = getTriskellIndex().reserves ?? {};
+  const selectionKind = action?.selectionKind === "spell" ? "spell" : "action";
+  const keywordProperty = selectionKind === "spell" ? "attunements" : "forms";
+  const keywordBuckets = selectionKind === "spell" ? attunements : forms;
+  const resolveReserveLabel = (reserveId) => {
+    if (!reserveId) return "";
+    const reserve = reservesIndex[reserveId] ?? {};
+    return reserve.label ?? reserveId;
+  };
+
+  const attachedForms = [];
+  for (const keyword of availableKeywords) {
+    const normalizedKeyword = normalizeKeyword(keyword);
+    const keywordsForBucket = keywordBuckets?.[normalizedKeyword];
+    const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
+    if (!keywordCollection.length) continue;
+
+    for (const formEntry of keywordCollection) {
+      attachedForms.push({
+        ...formEntry,
+        active: selectedFormIds.has(formEntry.id),
+        reserveLabel: resolveReserveLabel(formEntry.reserve)
+      });
+    }
+  }
+
+  const skillId = action?.skill ?? null;
+  let skillLabel = null;
+  let skillTotal = null;
+  if (skillId) {
+    const skillSource = skills?.[skillId] ?? null;
+    skillLabel = skillSource?.label ?? action?.skillLabel ?? skillId;
+    const resolvedTotal = toFiniteNumber(skillSource?.total, Number.NaN);
+    skillTotal = Number.isFinite(resolvedTotal)
+      ? resolvedTotal
+      : toFiniteNumber(action?.skillTotal, 0);
+  }
+
+  return {
+    ...action,
+    [keywordProperty]: attachedForms,
+    reserveLabel: resolveReserveLabel(action?.reserve),
+    selectionKind,
+    skillLabel,
+    skillTotal
+  };
+}
+
+export function getActionBucket(preparedActions, actionType) {
+  return Array.isArray(preparedActions?.[actionType])
+    ? preparedActions[actionType]
+    : [];
+}
+
+export function prepareGearTabContext(actor = null, partId = null) {
+  if (!["gear", "spells"].includes(partId)) return {};
+
+  const selectedTypesByPart = {
+    gear: ["gear"],
+    spells: ["spell"]
+  };
+  const selectedTypes = selectedTypesByPart[partId] ?? [];
+  let itemsToDisplay = prepareAssetContext(actor?.assets, selectedTypes);
+  if (partId === "gear" && Array.isArray(itemsToDisplay)) {
+    itemsToDisplay = itemsToDisplay.map(category => {
+      if (category?.id !== "gear") return category;
+      return prepareGearLocationBuckets(category);
+    });
+  }
+  const carryLocationSelections = partId === "gear"
+    ? buildGearCarryLocationSelections(itemsToDisplay)
+    : {};
+
+  return {
+    itemsToDisplay,
+    carryLocationSelections
+  };
+}
+
+export function prepareActionsTabContext(actor = null, selectedActionType = "impact") {
+  const preparedBundle = actor?.preparedActions ?? {};
+  const preparedForms = preparedBundle.forms ?? {};
+  const preparedAttunements = preparedBundle.attunements ?? {};
+  const preparedActions = preparedBundle.actions ?? {};
+  const preparedSpells = preparedBundle.spells ?? {};
+  const selectedForms = toArray(actor?.system?.actions?.selectedForms);
+  const actions = prepareActionLikesWithKeywords({
+    actionLikes: preparedActions,
+    keywordBuckets: preparedForms,
+    selectedKeywords: selectedForms,
+    skills: actor?.system?.skills ?? {},
+    selectedTypeId: selectedActionType,
+    keywordProperty: "forms"
+  });
+  const spells = prepareActionLikesWithKeywords({
+    actionLikes: preparedSpells,
+    keywordBuckets: preparedAttunements,
+    selectedKeywords: selectedForms,
+    skills: actor?.system?.skills ?? {},
+    selectedTypeId: selectedActionType,
+    keywordProperty: "attunements"
+  });
+  const actionTypeOrder = ["position", "setup", "impact", "defense"];
+  const actionTypeFilters = actionTypeOrder.map(typeId => {
+    const type = getTriskellCodex()?.actionTypes?.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
+    return {
+      ...type,
+      isSelected: selectedActionType === typeId
+    };
+  });
+
+  return {
+    actions,
+    spells,
+    actionTypeFilters
+  };
+}
+
+export function prepareRollHelperTabContext({ actor = null, system = {}, reserves = {}, commit = null } = {}) {
+  const storedSelectedAction = system?.actions?.selectedAction ?? null;
+  let enrichedSelectedAction = null;
+  if (storedSelectedAction?.id) {
+    const selectedForms = toArray(system?.actions?.selectedForms);
+    const preparedForms = actor?.preparedActions?.forms ?? {};
+    const preparedAttunements = actor?.preparedActions?.attunements ?? {};
+    enrichedSelectedAction = enrichSelectedAction({
+      action: storedSelectedAction,
+      forms: preparedForms,
+      attunements: preparedAttunements,
+      selectedForms,
+      skills: actor?.system?.skills ?? {}
+    });
+    const rollActive = Boolean(enrichedSelectedAction?.skill);
+    enrichedSelectedAction = {
+      ...enrichedSelectedAction,
+      roll: {
+        ...(enrichedSelectedAction?.roll ?? {}),
+        active: rollActive
+      }
+    };
+  }
+  const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
+    selectedAction: enrichedSelectedAction,
+    reserves,
+    commit
+  });
+
+  return {
+    rollHelper,
+    rollHelperSummary
+  };
+}
+
+export function prepareSkillsTabContext(actor = null) {
+  const { skillCategories } = prepareSkillsDisplay(actor?.system?.skills ?? {});
+  const abilitiesToDisplay = prepareAssetContext(actor?.assets, ["ability"]);
+
+  return {
+    skillCategories,
+    abilitiesToDisplay
+  };
+}
+
+export async function prepareNotesTabContext(actor = null) {
+  const notes = actor?.system?.details?.notes ?? "";
+  const notesHTML = await TextEditor?.enrichHTML?.(notes, { async: true }) ?? notes;
+
+  return { notesHTML };
+}
+
+// ---------------------------------------------------------------------------
+// Roll helper preparation
+// ---------------------------------------------------------------------------
 /**
  * Roll Helper Kontext aus ausgewählter Action und Ressourcen vorbereiten.
  *
@@ -341,19 +560,21 @@ function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}
   const reserveIndex = getTriskellIndex().reserves ?? {};
   const normalizedReserves = reserves && typeof reserves === "object" ? reserves : {};
 
-  const reserveCosts = Object.entries(reserveTotals).map(([reserveId, total]) => {
+  const reserveCosts = [];
+  let canAfford = true;
+  for (const [reserveId, total] of Object.entries(reserveTotals)) {
     const reserveSource = normalizedReserves[reserveId] ?? reserveIndex[reserveId] ?? {};
     const available = toFiniteNumber(reserveSource.value, Number.NaN);
+    if (Number.isFinite(available) && available < total) {
+      canAfford = false;
+    }
 
-    return {
+    reserveCosts.push({
       id: reserveId,
       label: reserveSource.label ?? reserveId,
-      total,
-      available
-    };
-  });
-
-  const canAfford = reserveCosts.every(entry => !Number.isFinite(entry.available) || entry.available >= entry.total);
+      total
+    });
+  }
   const totalSkillBonus = toFiniteNumber(action.skillTotal, 0)
     + activeForms.reduce((sum, form) => sum + toFiniteNumber(form.skillBonus, 0), 0)
     + toFiniteNumber(action.situationalModifier, 0)
@@ -361,10 +582,36 @@ function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}
 
   return {
     totalSkillBonus,
-    reserveCosts: reserveCosts.map(({ available, ...rest }) => rest),
+    reserveCosts,
     canAfford
   };
 }
+
+// ---------------------------------------------------------------------------
+// Bars and resource preparation
+// ---------------------------------------------------------------------------
+const createSegments = (maxSegments, stateResolver) =>
+  Array.from({ length: maxSegments }, (_, index) => {
+    const value = index + 1;
+    const state = stateResolver(value);
+    const interactive = state === "filled" || state === "empty";
+
+    return {
+      index: value,
+      value,
+      state,
+      interactive
+    };
+  });
+
+const isStrainActive = (entry) => {
+  if (!entry) return false;
+  if (typeof entry === "object") {
+    return Boolean(entry?.active ?? entry?.isActive ?? entry?.checked);
+  }
+
+  return Boolean(entry);
+};
 
 /**
  * Bars (Reserven/Wege/Commit/NPC-Stats) für das Sheet vorbereiten.
@@ -454,6 +701,9 @@ export function prepareBars(bars = {}, codexReference = undefined) {
   return collection;
 }
 
+// ---------------------------------------------------------------------------
+// Skill display preparation
+// ---------------------------------------------------------------------------
 export function prepareSkillsDisplay(skills = {}) {
   const preparedSkills = Object.values(skills ?? {});
 
