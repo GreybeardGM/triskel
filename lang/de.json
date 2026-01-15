@@ -284,21 +284,9 @@
         "Spell": "Zauber"
       },
       "CarryLocation": {
-        "Quick": {
-          "Label": "Schnell",
-          "Description": "Gegenstände in Griffnähe für sofortigen Zugriff."
-        },
-        "Belt": {
-          "Label": "Gürtel",
-          "Description": "Am Gürtel befestigte Gegenstände für schnellen Zugriff."
-        },
-        "Back": {
-          "Label": "Rücken",
-          "Description": "Am Rücken getragene Gegenstände für den Transport."
-        },
-        "Sling": {
-          "Label": "Schlinge",
-          "Description": "Mit einer Schlinge über der Schulter getragen."
+        "Ready": {
+          "Label": "Bereit",
+          "Description": "Freie Gegenstände, die der Charakter griff- bzw. einsatzbereit am Körper trägt."
         },
         "Worn": {
           "Label": "Getragen",
@@ -307,6 +295,10 @@
         "Pack": {
           "Label": "Rucksack",
           "Description": "Im Pack verstaut und schwerer zugänglich."
+        },
+        "Camp": {
+          "Label": "Lager",
+          "Description": "Gegenstände, die im Lager verstaut sind und nicht getragen werden."
         },
         "Hand": {
           "Label": "Hand",
@@ -319,43 +311,23 @@
       },
       "Archetype": {
         "Label": "Ausrüstungsarchetyp",
-        "LargeWeapon": {
-          "Label": "Große Waffe",
-          "Description": "Sperrige Zweihandwaffen."
+        "Held": {
+          "Label": "Gehalten",
+          "Description": "Gegenstände, die in der Hand gehalten werden müssen, um zu funktionieren."
         },
-        "MediumWeapon": {
-          "Label": "Mittlere Waffe",
-          "Description": "Einhandwaffen mit moderatem Platzbedarf."
+        "Worn": {
+          "Label": "Getragen",
+          "Description": "Gegenstände, die am Körper getragen werden."
         },
-        "SmallWeapon": {
-          "Label": "Kleine Waffe",
-          "Description": "Kompakte Einhandwaffen, die sich leicht verstauen lassen."
+        "Carried": {
+          "Label": "Mitgeführt",
+          "Description": "Alles andere, was du mit dir führst."
         },
-        "Shield": {
-          "Label": "Schild",
-          "Description": "Einhändig geführte Schutzausrüstung."
-        },
-        "Armor": {
-          "Label": "Rüstung",
-          "Description": "Am Körper getragene Schutzkleidung."
-        },
-        "Trinket": {
-          "Label": "Schmuckstück",
-          "Description": "Kleine getragene Gegenstände und Accessoires."
-        },
-        "Bow": {
-          "Label": "Bogen",
-          "Description": "Fernkampfwaffen wie Bögen und Armbrüste."
-        },
-        "None": "Kein Archetyp",
-        "Torch": {
-          "Label": "Fackel",
-          "Description": "Tragbare Lichtquelle für Hand oder Pack."
-        },
-        "Tool": {
-          "Label": "Werkzeug",
-          "Description": "Kompakte Ausrüstung für schnellen Zugriff."
-        }
+        "None": "Kein Archetyp"
+      },
+      "Field": {
+        "PackLoad": "Packlast",
+        "TwoHanded": "Zweihändig"
       },
       "Inventory": {
         "Empty": "Du trägst momentan keine Gegenstände.",

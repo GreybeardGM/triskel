@@ -88,6 +88,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       id: "header",
       template: "systems/triskel/templates/item/triskel-item-header.hbs"
     },
+    gearArchetype: {
+      id: "gear-archetype",
+      template: "systems/triskel/templates/item/triskel-item-gear-archetype.hbs"
+    },
     actions: {
       id: "actions",
       template: "systems/triskel/templates/item/triskel-item-actions.hbs"
@@ -99,10 +103,6 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     spells: {
       id: "spells",
       template: "systems/triskel/templates/item/triskel-item-spells.hbs"
-    },
-    gearArchetype: {
-      id: "gear-archetype",
-      template: "systems/triskel/templates/item/triskel-item-gear-archetype.hbs"
     },
     attunements: {
       id: "attunements",
