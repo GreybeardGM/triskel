@@ -403,20 +403,14 @@ async function onOpenCarryLocationMenu(event, target) {
     ?? document.body;
   if (!containerElement) return;
 
-  let menu = null;
-  if (typeof ContextMenuClass.create === "function") {
-    menu = ContextMenuClass.create({
-      container: containerElement,
-      target: anchorElement,
-      event,
-      items: menuItems,
-      jQuery: false,
-      options: { jQuery: false }
-    });
-  } else {
-    menu = new ContextMenuClass(anchorElement, menuItems, { eventName: "click", jQuery: false });
-    menu.open?.(event);
-  }
+  const selector = "[data-action=\"openCarryLocationMenu\"]";
+  const menu = new ContextMenuClass(
+    containerElement,
+    selector,
+    () => menuItems,
+    { eventName: "click", jQuery: false }
+  );
+  menu.open?.(event, anchorElement);
 
   sheet._carryLocationMenu = menu;
 }
