@@ -169,16 +169,6 @@ export function getGearCarryLocationOptions(item = null) {
     }
   }
 
-  console.info("Triskel | Carry location options", {
-    itemId: item?.id ?? null,
-    itemName: item?.name ?? null,
-    itemType: item?.type ?? null,
-    archetypeId,
-    archetypeLocations,
-    currentLocation,
-    options
-  });
-
   return options;
 }
 

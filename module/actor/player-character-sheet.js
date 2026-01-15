@@ -424,16 +424,21 @@ async function onChangeCarryLocation(event, target) {
 
   const locationId = normalizeKeyword(selectElement.value ?? "", "");
   if (!locationId) return;
+  const locationOptions = getGearCarryLocationOptions(item);
+  const selectedLocation = locationOptions.find(option => option.id === locationId) ?? null;
+  const active = Boolean(selectedLocation?.defaultActive);
 
   const actor = sheet.document;
   if (actor?.updateEmbeddedDocuments) {
     await actor.updateEmbeddedDocuments("Item", [{
       _id: item.id,
-      "system.carryLocation": locationId
+      "system.carryLocation": locationId,
+      "system.active": active
     }]);
   } else {
     await item.update({
-      "system.carryLocation": locationId
+      "system.carryLocation": locationId,
+      "system.active": active
     });
   }
   await sheet.render({ parts: ["gear"] });
