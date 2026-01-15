@@ -365,7 +365,8 @@ async function onOpenCarryLocationMenu(event, target) {
   event.stopPropagation();
 
   const sheet = this;
-  const item = getItemFromTarget(sheet, target);
+  const actionTarget = target ?? event.currentTarget ?? event.target;
+  const item = getItemFromTarget(sheet, actionTarget);
   if (!item) return;
 
   closeCarryLocationMenu(sheet);
@@ -410,7 +411,9 @@ async function onOpenCarryLocationMenu(event, target) {
   menu.append(list);
   document.body.append(menu);
 
-  const { bottom, left } = target.getBoundingClientRect();
+  const anchor = actionTarget?.closest?.("[data-action=\"openCarryLocationMenu\"]") ?? actionTarget;
+  if (!anchor?.getBoundingClientRect) return;
+  const { bottom, left } = anchor.getBoundingClientRect();
   const pageLeft = window.scrollX + left;
   const pageTop = window.scrollY + bottom;
   menu.style.left = `${pageLeft}px`;

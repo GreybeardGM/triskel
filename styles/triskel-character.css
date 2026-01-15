@@ -651,6 +651,10 @@
   gap: 0.5rem;
 }
 
+.triskel .inventory-list--gear .inventory-list__item {
+  grid-template-columns: auto auto auto 1fr auto;
+}
+
 .triskel .inventory-category {
   display: flex;
   flex-direction: column;
