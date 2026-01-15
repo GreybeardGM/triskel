@@ -226,11 +226,10 @@
           "base"
         ],
         "archetype": "",
+        "twoHanded": false,
+        "packLoad": null,
         "overwrite": {
-          "validLocations": null,
-          "handsUsed": null,
-          "packLoad": null,
-          "armorBulk": null
+          "validLocations": null
         },
         "carryLocation": ""
       },

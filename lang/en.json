@@ -284,21 +284,9 @@
         "Spell": "Spells"
       },
       "CarryLocation": {
-        "Quick": {
-          "Label": "Quick",
-          "Description": "Items kept close for immediate access."
-        },
-        "Belt": {
-          "Label": "Belt",
-          "Description": "Items secured on a belt for ready use."
-        },
-        "Back": {
-          "Label": "Back",
-          "Description": "Items strapped to the back for transport."
-        },
-        "Sling": {
-          "Label": "Sling",
-          "Description": "Items carried over the shoulder with a sling."
+        "Ready": {
+          "Label": "Ready",
+          "Description": "Loose items carried on the body, ready to grab or use."
         },
         "Worn": {
           "Label": "Worn",
@@ -307,6 +295,10 @@
         "Pack": {
           "Label": "Pack",
           "Description": "Items stored in a pack and harder to access."
+        },
+        "Camp": {
+          "Label": "Camp",
+          "Description": "Items stored at camp and not carried."
         },
         "Hand": {
           "Label": "Hand",
@@ -319,43 +311,23 @@
       },
       "Archetype": {
         "Label": "Gear archetype",
-        "LargeWeapon": {
-          "Label": "Large Weapon",
-          "Description": "Bulky two-handed weapons."
+        "Held": {
+          "Label": "Held",
+          "Description": "Items that must be held in hand to function."
         },
-        "MediumWeapon": {
-          "Label": "Medium Weapon",
-          "Description": "Single-handed weapons with moderate bulk."
+        "Worn": {
+          "Label": "Worn",
+          "Description": "Items that are worn on the body."
         },
-        "SmallWeapon": {
-          "Label": "Small Weapon",
-          "Description": "Compact one-handed weapons that are easy to stow."
+        "Carried": {
+          "Label": "Carried",
+          "Description": "Everything else you bring along."
         },
-        "Shield": {
-          "Label": "Shield",
-          "Description": "One-handed defensive gear carried by arm."
-        },
-        "Armor": {
-          "Label": "Armor",
-          "Description": "Protective gear worn on the body."
-        },
-        "Trinket": {
-          "Label": "Trinket",
-          "Description": "Small worn items and accessories."
-        },
-        "Bow": {
-          "Label": "Bow",
-          "Description": "Ranged weapons such as bows and crossbows."
-        },
-        "None": "No archetype",
-        "Torch": {
-          "Label": "Torch",
-          "Description": "Portable light sources carried in hand or pack."
-        },
-        "Tool": {
-          "Label": "Tool",
-          "Description": "Compact gear suited for quick access."
-        }
+        "None": "No archetype"
+      },
+      "Field": {
+        "PackLoad": "Pack load",
+        "TwoHanded": "Two-handed"
       },
       "Inventory": {
         "Empty": "You are not carrying any items.",
