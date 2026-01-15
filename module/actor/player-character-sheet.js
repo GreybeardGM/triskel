@@ -1,11 +1,13 @@
 import {
   getTriskellCodex,
   getTriskellIndex,
+  getGearCarryLocationOptions,
   onEditImage,
   onUpdateResourceValue,
   prepareAssetContext,
   prepareActionLikesWithKeywords,
   prepareActorBarsContext,
+  prepareGearLocationBuckets,
   prepareRollHelperContext,
   prepareSkillsDisplay
 } from "./sheet-helpers.js";
@@ -25,6 +27,11 @@ async function toggleActiveItem(event, target, expectedType) {
 }
 
 export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  async close(options = {}) {
+    closeCarryLocationMenu(this);
+    return super.close(options);
+  }
+
   _configureRenderOptions(options = {}) {
     const renderOptions = super._configureRenderOptions?.(options) ?? options ?? {};
     const configuredParts = renderOptions.parts;
@@ -48,6 +55,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       : tab?.id ?? tabs?.active ?? this.tabGroups?.sheet ?? null;
 
     if (activeTab) {
+      closeCarryLocationMenu(this);
       await this.render({ parts: [activeTab] });
     }
   }
@@ -114,7 +122,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         spells: ["spell"]
       };
       const selectedTypes = selectedTypesByPart[partId] ?? [];
-      const itemsToDisplay = prepareAssetContext(actor?.assets, selectedTypes);
+      let itemsToDisplay = prepareAssetContext(actor?.assets, selectedTypes);
+      if (partId === "gear" && Array.isArray(itemsToDisplay)) {
+        itemsToDisplay = itemsToDisplay.map(category => {
+          if (category?.id !== "gear") return category;
+          return prepareGearLocationBuckets(category);
+        });
+      }
       return {
         ...basePartContext,
         itemsToDisplay,
@@ -218,7 +232,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollHelper: onRollHelper,
       filterActionType: onFilterActionType,
       toggleActiveItem: onToggleActiveItem,
-      selectSkill: onSelectSkill
+      selectSkill: onSelectSkill,
+      openCarryLocationMenu: onOpenCarryLocationMenu
     },
     actor: {
       type: 'character'
@@ -308,12 +323,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     },
     gear: {
       id: "gear",
-      template: "systems/triskel/templates/actor/player-character-inventory.hbs",
+      template: "systems/triskel/templates/actor/player-character-gear.hbs",
       sort: 240
     },
     spells: {
       id: "spells",
-      template: "systems/triskel/templates/actor/player-character-inventory.hbs",
+      template: "systems/triskel/templates/actor/player-character-spells.hbs",
       sort: 250
     }
   };
@@ -332,6 +347,96 @@ async function onEditItem(event, target) {
 
   const item = getItemFromTarget(this, target);
   await item?.sheet?.render(true);
+}
+
+function closeCarryLocationMenu(sheet) {
+  if (sheet._carryLocationMenuCleanup) {
+    sheet._carryLocationMenuCleanup();
+    sheet._carryLocationMenuCleanup = null;
+  }
+  if (sheet._carryLocationMenu) {
+    sheet._carryLocationMenu.remove();
+    sheet._carryLocationMenu = null;
+  }
+}
+
+async function onOpenCarryLocationMenu(event, target) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const sheet = this;
+  const item = getItemFromTarget(sheet, target);
+  if (!item) return;
+
+  closeCarryLocationMenu(sheet);
+
+  const locationOptions = getGearCarryLocationOptions(item);
+  if (!locationOptions.length) return;
+
+  const menu = document.createElement("nav");
+  menu.classList.add("context-menu");
+  const list = document.createElement("ol");
+  list.classList.add("context-items");
+  const listFragment = document.createDocumentFragment();
+
+  locationOptions.forEach(option => {
+    const entry = document.createElement("li");
+    entry.classList.add("context-item");
+    if (option.isActive) entry.classList.add("context-item--active");
+
+    const icon = document.createElement("i");
+    if (option.icon) {
+      option.icon.split(" ").forEach(token => icon.classList.add(token));
+    } else {
+      icon.classList.add("fa-solid", "fa-location-dot");
+    }
+    const label = document.createElement("span");
+    label.textContent = game.i18n?.localize?.(option.label) ?? option.label ?? option.id ?? "";
+
+    entry.append(icon, label);
+    entry.addEventListener("click", async (menuEvent) => {
+      menuEvent.preventDefault();
+      menuEvent.stopPropagation();
+      const locationId = option.id ?? "";
+      if (!locationId) return;
+      await item.update({ "system.carryLocation": locationId });
+      closeCarryLocationMenu(sheet);
+    });
+
+    listFragment.append(entry);
+  });
+
+  list.append(listFragment);
+  menu.append(list);
+  document.body.append(menu);
+
+  const { bottom, left } = target.getBoundingClientRect();
+  const pageLeft = window.scrollX + left;
+  const pageTop = window.scrollY + bottom;
+  menu.style.left = `${pageLeft}px`;
+  menu.style.top = `${pageTop}px`;
+  menu.style.position = "absolute";
+
+  const cleanup = () => {
+    document.removeEventListener("click", onClickOutside, true);
+    document.removeEventListener("keydown", onEscape, true);
+  };
+
+  const onClickOutside = (menuEvent) => {
+    if (menu.contains(menuEvent.target) || target.contains(menuEvent.target)) return;
+    closeCarryLocationMenu(sheet);
+  };
+
+  const onEscape = (menuEvent) => {
+    if (menuEvent.key !== "Escape") return;
+    closeCarryLocationMenu(sheet);
+  };
+
+  document.addEventListener("click", onClickOutside, true);
+  document.addEventListener("keydown", onEscape, true);
+
+  sheet._carryLocationMenu = menu;
+  sheet._carryLocationMenuCleanup = cleanup;
 }
 
 async function onDeleteItem(event, target) {

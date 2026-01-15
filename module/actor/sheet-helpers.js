@@ -1,4 +1,9 @@
-import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
+import {
+  normalizeIdList,
+  normalizeKeyword,
+  toArray,
+  toFiniteNumber
+} from "../util/normalization.js";
 
 export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
@@ -75,6 +80,74 @@ export function prepareAssetContext(assets = null, types = null) {
   }, []);
 
   return itemsToDisplay;
+}
+
+/**
+ * Gear-Items nach Trageorten (Codex) bündeln.
+ *
+ * @param {object|null} gearBucket vorbereiteter Gear-Bucket
+ * @returns {object|null} Gear-Bucket mit locationBuckets
+ */
+export function prepareGearLocationBuckets(gearBucket = null) {
+  if (!gearBucket || typeof gearBucket !== "object") return gearBucket;
+
+  const carryLocations = toArray(getTriskellCodex().carryLocations);
+  if (!carryLocations.length) {
+    return { ...gearBucket, locationBuckets: [] };
+  }
+
+  const locationBuckets = [];
+  const locationBucketsById = {};
+  for (const location of carryLocations) {
+    if (!location?.id) continue;
+    const bucket = { ...location, collection: [] };
+    locationBuckets.push(bucket);
+    locationBucketsById[location.id] = bucket;
+  }
+
+  const fallbackLocationId = locationBucketsById.dropped
+    ? "dropped"
+    : (locationBuckets[0]?.id ?? null);
+  const gearItems = toArray(gearBucket.collection);
+
+  for (const item of gearItems) {
+    const requestedLocation = normalizeKeyword(item?.system?.carryLocation ?? "", "");
+    const targetLocation = requestedLocation && locationBucketsById[requestedLocation]
+      ? requestedLocation
+      : fallbackLocationId;
+    if (!targetLocation) continue;
+    const bucket = locationBucketsById[targetLocation];
+    if (!bucket) continue;
+    bucket.collection.push(item);
+  }
+
+  return { ...gearBucket, locationBuckets };
+}
+
+/**
+ * Verfügbare Trageorte für ein Gear-Item bestimmen.
+ *
+ * @param {object|null} item Gear-Item
+ * @returns {Array<object>} Liste mit gültigen Trageorten
+ */
+export function getGearCarryLocationOptions(item = null) {
+  const carryLocations = toArray(getTriskellCodex().carryLocations);
+  if (!carryLocations.length) return [];
+
+  const archetypeId = normalizeKeyword(item?.system?.archetype ?? "", "");
+  const archetype = archetypeId ? getTriskellIndex().gearArchetypes?.[archetypeId] ?? null : null;
+  const overrideLocations = normalizeIdList(item?.system?.overwrite?.validLocations);
+  const archetypeLocations = normalizeIdList(archetype?.validLocations);
+  const validLocationIds = overrideLocations.length ? overrideLocations : archetypeLocations;
+  const validLocationSet = validLocationIds.length ? new Set(validLocationIds) : null;
+  const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "", "");
+
+  return carryLocations
+    .filter(location => !validLocationSet || validLocationSet.has(location?.id))
+    .map(location => ({
+      ...location,
+      isActive: location?.id === currentLocation
+    }));
 }
 
 /**

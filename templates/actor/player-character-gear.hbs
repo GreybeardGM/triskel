@@ -1,0 +1,137 @@
+<section
+  class="tab {{tab.id}} {{tab.cssClass}}"
+  data-tab="{{tab.id}}"
+  data-group="{{tab.group}}"
+>
+  {{#if itemsToDisplay.length}}
+    {{#each itemsToDisplay as |category|}}
+      <div class="inventory-category">
+        <h2 class="inventory-category__title">{{category.labelPlural}}</h2>
+        {{#if category.locationBuckets.length}}
+          {{#each category.locationBuckets as |location|}}
+            <div class="inventory-location">
+              <h3 class="inventory-location__title">{{localize location.label}}</h3>
+              <ul class="inventory-list">
+                {{#if location.collection.length}}
+                  {{#each location.collection as |item|}}
+                    <li
+                      class="inventory-list__item"
+                      data-item-id="{{item.id}}"
+                    >
+                      <button
+                        type="button"
+                        class="inventory-list__location is-interactive"
+                        data-action="openCarryLocationMenu"
+                        data-item-type="{{item.type}}"
+                        title="{{localize 'TRISKEL.Item.CarryLocation.Label'}}"
+                      >
+                        <i class="fa-solid fa-up-down"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
+                        data-action="toggleActiveItem"
+                        data-item-type="{{item.type}}"
+                      >
+                        {{#if item.system.active}}
+                          <i class="fa-solid fa-check"></i>
+                        {{/if}}
+                      </button>
+                      {{#if item.img}}
+                        <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
+                      {{else}}
+                        <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+                      {{/if}}
+                      <span class="inventory-list__item-name">{{item.name}}</span>
+                      <div class="inventory-list__item-actions">
+                        <button
+                          type="button"
+                          class="inventory-list__item-action"
+                          data-action="editItem"
+                          title="{{localize 'TRISKEL.Item.Inventory.Edit'}}"
+                        >
+                          <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="inventory-list__item-action"
+                          data-action="deleteItem"
+                          title="{{localize 'TRISKEL.Item.Inventory.Delete'}}"
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </li>
+                  {{/each}}
+                {{else}}
+                  <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
+                {{/if}}
+              </ul>
+            </div>
+          {{/each}}
+        {{else}}
+          <ul class="inventory-list">
+            {{#if category.collection.length}}
+              {{#each category.collection as |item|}}
+                <li
+                  class="inventory-list__item"
+                  data-item-id="{{item.id}}"
+                >
+                  <button
+                    type="button"
+                    class="inventory-list__location is-interactive"
+                    data-action="openCarryLocationMenu"
+                    data-item-type="{{item.type}}"
+                    title="{{localize 'TRISKEL.Item.CarryLocation.Label'}}"
+                  >
+                    <i class="fa-solid fa-up-down"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
+                    data-action="toggleActiveItem"
+                    data-item-type="{{item.type}}"
+                  >
+                    {{#if item.system.active}}
+                      <i class="fa-solid fa-check"></i>
+                    {{/if}}
+                  </button>
+                  {{#if item.img}}
+                    <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
+                  {{else}}
+                    <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+                  {{/if}}
+                  <span class="inventory-list__item-name">{{item.name}}</span>
+                  <div class="inventory-list__item-actions">
+                    <button
+                      type="button"
+                      class="inventory-list__item-action"
+                      data-action="editItem"
+                      title="{{localize 'TRISKEL.Item.Inventory.Edit'}}"
+                    >
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="inventory-list__item-action"
+                      data-action="deleteItem"
+                      title="{{localize 'TRISKEL.Item.Inventory.Delete'}}"
+                    >
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </li>
+              {{/each}}
+            {{else}}
+              <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
+            {{/if}}
+          </ul>
+        {{/if}}
+      </div>
+    {{/each}}
+  {{else}}
+    <ul class="inventory-list">
+      <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
+    </ul>
+  {{/if}}
+</section>

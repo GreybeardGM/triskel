@@ -2,14 +2,14 @@
   "TRISKEL": {
     "Actor": {
       "Tab": {
-        "Actions": "Action Cards",
+        "Actions": "Actions",
         "Skills": "Skills",
         "Gear": "Gear",
         "Abilities": "Abilities",
         "Spells": "Spells",
         "Notes": "Notes",
       "Tooltip": {
-        "Actions": "Show and select your action cards",
+        "Actions": "Show and select your actions",
         "Skills": "Edit skills and resistances",
         "Gear": "Review your gear",
         "Abilities": "Review your abilities",
@@ -284,6 +284,7 @@
         "Spell": "Spells"
       },
       "CarryLocation": {
+        "Label": "Carry location",
         "Ready": {
           "Label": "Ready",
           "Description": "Loose items carried on the body, ready to grab or use."
