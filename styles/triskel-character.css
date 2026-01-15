@@ -696,6 +696,7 @@
 .triskel .inventory-list__location-select-input {
   height: 2rem;
   width: 2rem;
+  padding: 0 0 0 2rem;
   color: transparent;
   cursor: pointer;
 }
