@@ -146,7 +146,7 @@ export function getGearCarryLocationOptions(item = null) {
     .map(locationId => normalizeKeyword(locationId))
     .filter(Boolean);
 
-  return validLocationIds
+  const options = validLocationIds
     .filter(locationId => locationId !== currentLocation)
     .map(locationId => {
       const location = carryLocationsById[locationId];
@@ -157,6 +157,18 @@ export function getGearCarryLocationOptions(item = null) {
       };
     })
     .filter(Boolean);
+
+  console.info("Triskel | Carry location options", {
+    itemId: item?.id ?? null,
+    itemName: item?.name ?? null,
+    itemType: item?.type ?? null,
+    archetypeId,
+    archetypeLocations,
+    currentLocation,
+    options
+  });
+
+  return options;
 }
 
 /**

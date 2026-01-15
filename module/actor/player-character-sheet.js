@@ -402,7 +402,22 @@ function buildCarryLocationMenuItems(sheet, element) {
   const anchor = asHTMLElement(element);
   if (!anchor) return [];
   const item = getItemFromTarget(sheet, anchor);
-  if (!item) return [];
+  if (!item) {
+    console.warn("Triskel | Carry location menu: item not found", {
+      anchor,
+      sheetId: sheet?.document?.id ?? null
+    });
+    return [];
+  }
+
+  console.info("Triskel | Carry location menu: item lookup", {
+    itemId: item.id,
+    itemName: item.name,
+    itemType: item.type,
+    carryLocation: item?.system?.carryLocation ?? null,
+    archetype: item?.system?.archetype ?? null,
+    overwriteValidLocations: item?.system?.overwrite?.validLocations ?? null
+  });
 
   const locationOptions = getGearCarryLocationOptions(item) ?? [];
   if (!locationOptions.length) return [];
