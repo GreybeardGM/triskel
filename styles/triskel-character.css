@@ -685,12 +685,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  padding: 0 0.25em;
 }
 
 .triskel .inventory-location__load {
-  font-size: 0.85rem;
-  color: var(--triskel-color-text-muted, var(--color-text-light-primary));
+  font-size: 0.75em;
+  background: black;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+}
+
+.triskel .inventory-location__label {
+  align-self: center;
 }
 
 .triskel .inventory-location__label.has-conflict {
