@@ -11,8 +11,10 @@
             <div class="inventory-location" style="grid-area: {{location.id}};">
               <h2 class="inventory-location__title">
                 <span class="inventory-location__label">{{localize location.label}}</span>
-                {{#if (ne location.locationLoad null)}}
+                {{#if (eq location.loadType "packLoad")}}
                   <span class="inventory-location__load">{{location.locationLoad}}</span>
+                {{else if (eq location.loadType "hands")}}
+                  <span class="inventory-location__load">{{location.handsUsed}}</span>
                 {{/if}}
               </h2>
               <ul class="inventory-list inventory-list--gear">
