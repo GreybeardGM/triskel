@@ -10,7 +10,9 @@
           {{#each category.locationBuckets as |location|}}
             <div class="inventory-location" style="grid-area: {{location.id}};">
               <h2 class="inventory-location__title">
-                <span class="inventory-location__label">{{localize location.label}}</span>
+                <span class="inventory-location__label {{#if location.overburdened}}has-conflict{{/if}}">
+                  {{localize location.label}}
+                </span>
                 {{#if (eq location.loadType "packLoad")}}
                   {{#if (ne location.loadLimit null)}}
                     <span class="inventory-location__load">{{location.locationLoad}} / {{location.loadLimit}}</span>

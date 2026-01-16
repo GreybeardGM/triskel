@@ -693,6 +693,10 @@
   color: var(--triskel-color-text-muted, var(--color-text-light-primary));
 }
 
+.triskel .inventory-location__label.has-conflict {
+  background: #81231e;
+}
+
 .triskel .inventory-list {
   margin: 0;
 }
