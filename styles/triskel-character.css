@@ -661,7 +661,7 @@
 }
 
 .triskel .inventory-list--gear .inventory-list__item {
-  grid-template-columns: auto auto auto 1fr auto;
+  grid-template-columns: auto auto auto auto 1fr auto auto;
 }
 
 .triskel .inventory-category {
@@ -687,6 +687,14 @@
 
 .triskel .inventory-list__item-actions {
   display: flex;
+}
+
+.triskel .inventory-list__item-quantity,
+.triskel .inventory-list__item-packload {
+  min-width: 2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--triskel-color-text-muted, var(--color-text-light-primary));
 }
 
 .triskel .inventory-list__item-image {

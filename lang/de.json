@@ -511,6 +511,7 @@
       },
       "Field": {
         "PackLoad": "Packlast",
+        "Quantity": "Anzahl",
         "TwoHanded": "Zweihändig"
       },
       "Inventory": {

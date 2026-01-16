@@ -27,6 +27,19 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="gear-quantity">{{localize "TRISKEL.Item.Field.Quantity"}}</label>
+    <div class="form-fields">
+      <input
+        id="gear-quantity"
+        type="number"
+        name="system.quantity"
+        value="{{system.quantity}}"
+        min="1"
+        step="1"
+      />
+    </div>
+  </div>
+  <div class="form-group">
     <label for="gear-two-handed">{{localize "TRISKEL.Item.Field.TwoHanded"}}</label>
     <div class="form-fields">
       <input

@@ -511,6 +511,7 @@
       },
       "Field": {
         "PackLoad": "Pack load",
+        "Quantity": "Quantity",
         "TwoHanded": "Two-handed"
       },
       "Inventory": {
