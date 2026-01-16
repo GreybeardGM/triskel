@@ -174,9 +174,10 @@ async function onRollHelper(event) {
   event.preventDefault();
 
   const actor = this.document;
-  if (typeof actor?.rollSelectedAction !== "function") return;
+  const rollData = this._rollHelperRollData;
+  if (!rollData || typeof actor?.rollTriskelDice !== "function") return;
 
-  const rollResult = await actor.rollSelectedAction();
+  const rollResult = await actor.rollTriskelDice(rollData);
   if (rollResult) {
     await actor.update({ "system.actions.commit.value": 0 });
   }
@@ -306,14 +307,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     if (partId === "rollHelper") {
+      const rollHelperContext = prepareRollHelperTabContext({
+        actor,
+        system: basePartContext.system,
+        reserves: basePartContext.reserves ?? {},
+        commit: basePartContext.commit ?? null
+      });
+      this._rollHelperRollData = rollHelperContext.rollHelperRollData ?? null;
+
       return {
         ...basePartContext,
-        ...prepareRollHelperTabContext({
-          actor,
-          system: basePartContext.system,
-          reserves: basePartContext.reserves ?? {},
-          commit: basePartContext.commit ?? null
-        })
+        ...rollHelperContext
       };
     }
 

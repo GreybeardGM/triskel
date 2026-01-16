@@ -306,7 +306,7 @@ function buildGearCarryLocationSelections(itemsToDisplay = []) {
   return selections;
 }
 
-function enrichSelectedAction({
+export function enrichSelectedAction({
   action = null,
   forms = {},
   attunements = {},
@@ -463,10 +463,18 @@ export function prepareRollHelperTabContext({ actor = null, system = {}, reserve
     reserves,
     commit
   });
+  const rollHelperRollData = rollHelper?.hasSelection && rollHelper?.action?.roll?.active
+    ? prepareRollHelperRollData({
+      action: rollHelper.action,
+      forms: rollHelper.forms,
+      commitValue: toFiniteNumber(commit?.value, 0)
+    })
+    : null;
 
   return {
     rollHelper,
-    rollHelperSummary
+    rollHelperSummary,
+    rollHelperRollData
   };
 }
 
@@ -532,6 +540,47 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
     : null;
 
   return { rollHelper, rollHelperSummary };
+}
+
+export function prepareRollHelperRollData({ action = null, forms = [], commitValue = 0 } = {}) {
+  if (!action?.id || action?.roll?.active === false) return null;
+
+  const actionLabel = action.skillLabel ?? action.label ?? action.id ?? "";
+  const modifiers = Array.isArray(action.modifiers) ? [...action.modifiers] : [];
+  const skillLabel = action.skillLabel ?? "";
+  const skillTotal = toFiniteNumber(action.skillTotal, Number.NaN);
+  const hasSkillModifier = skillLabel
+    ? modifiers.some(modifier => (modifier?.label ?? "") === skillLabel)
+    : false;
+  if (!hasSkillModifier && Number.isFinite(skillTotal) && skillTotal !== 0) {
+    modifiers.push({ label: skillLabel || actionLabel, value: skillTotal });
+  }
+
+  const normalizedForms = Array.isArray(forms) ? forms : [];
+  normalizedForms
+    .filter(form => form.active)
+    .forEach(form => {
+      const formBonus = toFiniteNumber(form?.modifier?.skill ?? form?.skillBonus, Number.NaN);
+      if (!Number.isFinite(formBonus) || formBonus === 0) return;
+      modifiers.push({ label: form?.label ?? form?.id ?? "Form", value: formBonus });
+    });
+
+  const normalizedCommitValue = action.reserve ? toFiniteNumber(commitValue, 0) : 0;
+  if (Number.isFinite(normalizedCommitValue) && normalizedCommitValue !== 0) {
+    modifiers.push({ label: "Commit", value: normalizedCommitValue });
+  }
+
+  const situationalModifier = toFiniteNumber(action?.situationalModifier, 0);
+  if (Number.isFinite(situationalModifier) && situationalModifier !== 0) {
+    const situationalLabel = game.i18n?.localize?.("TRISKEL.Actor.RollHelper.SituationalModifier")
+      ?? "Situational Modifier";
+    modifiers.push({ label: situationalLabel, value: situationalModifier });
+  }
+
+  return {
+    title: actionLabel,
+    modifiers
+  };
 }
 
 function calculateTotalCost(action, activeForms, commitValue = 0) {

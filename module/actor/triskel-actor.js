@@ -367,29 +367,6 @@ export class TriskelActor extends Actor {
     }
   }
 
-  async rollSelectedAction() {
-    const actionsData = this.system?.actions ?? {};
-    const selectedRef = actionsData.selected?.ref ?? null;
-
-    if (!selectedRef) return null;
-
-    const selectedAction = actionsData.selected?.action ?? null;
-
-    if (!selectedAction || selectedAction?.roll?.active === false) return null;
-
-    const actionLabel = selectedAction.skillLabel ?? selectedAction.label ?? selectedAction.id ?? "";
-
-    const modifiers = Array.isArray(selectedAction.modifiers) ? [...selectedAction.modifiers] : [];
-    const situationalModifier = toFiniteNumber(selectedAction?.situationalModifier, 0);
-    if (Number.isFinite(situationalModifier) && situationalModifier !== 0) {
-      const situationalLabel = game.i18n?.localize?.("TRISKEL.Actor.RollHelper.SituationalModifier")
-        ?? "Situational Modifier";
-      modifiers.push({ label: situationalLabel, value: situationalModifier });
-    }
-
-    return this.rollTriskelDice({ modifiers, title: actionLabel });
-  }
-
   /**
    * Roll a simple 2d10 test with optional modifiers.
    *
