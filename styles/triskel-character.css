@@ -695,6 +695,8 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  height: 2rem;
+  width: 2rem;
 }
 
 .triskel .inventory-list__location-icon {
@@ -704,8 +706,6 @@
 }
 
 .triskel .inventory-list__location-select-input {
-  height: 2rem;
-  width: 2rem;
   padding: 0 0 0 2rem;
   color: transparent;
   cursor: pointer;
@@ -717,7 +717,6 @@
 }
 
 .triskel .inventory-list__toggle.is-selected {
-  color: #0f0;
 }
 
 .triskel .inventory-list__item-image--placeholder {
