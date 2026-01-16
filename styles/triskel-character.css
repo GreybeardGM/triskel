@@ -10,9 +10,14 @@
   align-items: center;
 }
 
+.triskel .info-field{
+  width:100%
+}
+
 .triskel .profile-img {
   max-height: 10rem;
   height: auto;
+  border-radius: 0.5rem;
 }
 
 .triskel .charname {
@@ -21,7 +26,6 @@
 
 .triskel .charname input {
   height: auto;
-  text-align: center;
 }
 
 .triskel .tier-info {
@@ -335,7 +339,6 @@
 
 .triskel .skill-field input[type="number"] {
   width: 2rem;
-  text-align: center;
 }
 
 .triskel .skill-label {
