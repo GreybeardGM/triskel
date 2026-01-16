@@ -718,7 +718,7 @@
   min-width: 2rem;
   text-align: center;
   font-size: 0.75rem;
-  color: var(--triskel-color-text-muted, var(--color-text-light-primary));
+  color: var(--color-text-secondary);
 }
 
 .triskel .inventory-list__item-image {
