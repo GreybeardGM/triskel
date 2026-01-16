@@ -123,10 +123,8 @@ export function prepareGearLocationBuckets(gearBucket = null) {
     const bucket = locationBucketsById[targetLocation];
     if (!bucket) continue;
     bucket.collection.push(item);
-    const rawPackLoad = toFiniteNumber(item?.system?.packLoad, Number.NaN);
-    const rawQuantity = toFiniteNumber(item?.system?.quantity, Number.NaN);
-    const packLoad = Number.isFinite(rawPackLoad) ? rawPackLoad : 1;
-    const quantity = Number.isFinite(rawQuantity) ? rawQuantity : 1;
+    const packLoad = toFiniteNumber(item?.system?.packLoad, 1);
+    const quantity = toFiniteNumber(item?.system?.quantity, 1);
     bucket.locationLoad += packLoad * quantity;
   }
 
