@@ -57,6 +57,10 @@
   font-size: 2rem;
 }
 
+.triskel input {
+  text-align: center;
+}
+
 .triskel .is-interactive {
   cursor: pointer;
 }
