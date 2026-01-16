@@ -15,13 +15,13 @@
   height: auto;
 }
 
+.triskel .charname {
+  margin: 0;
+}
+
 .triskel .charname input {
   height: auto;
   text-align: center;
-}
-
-.triskel .charname {
-  margin: 0;
 }
 
 .triskel .tier-info {
@@ -149,9 +149,9 @@
   --triskel-interactive-highlight: var(--triskel-color-resource-wounds);
 }
 
-.triskel .virtue ,
-.triskel .vice ,
-.triskel .ward ,
+.triskel .virtue,
+.triskel .vice,
+.triskel .ward,
 .triskel .ruin {
   --triskel-interactive-highlight: var(--triskel-color-resource-tension);
 }
@@ -200,16 +200,6 @@
 | --     PATHS      -- |
 \*____________________*/
 
-.triskel .paths .path-bar.virtue,
-.triskel .paths .path-bar.vice {
-  flex-direction: row;
-}
-
-.triskel .paths .path-bar.ward,
-.triskel .paths .path-bar.ruin {
-  flex-direction: row-reverse;
-}
-
 .triskel .paths {
   display: flex;
   flex-direction: column;
@@ -228,6 +218,16 @@
   align-items: center;
   gap: 0.35rem;
   justify-content: flex-end;
+}
+
+.triskel .paths .path-bar.virtue,
+.triskel .paths .path-bar.vice {
+  flex-direction: row;
+}
+
+.triskel .paths .path-bar.ward,
+.triskel .paths .path-bar.ruin {
+  flex-direction: row-reverse;
 }
 
 .triskel .path-label {
@@ -479,7 +479,6 @@
   border-radius: 999px;
   color: white;
 }
-
 
 .triskel .roll-helper__entry-scale {
   font-weight: 700;

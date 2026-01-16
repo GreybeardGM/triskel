@@ -272,7 +272,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       };
     }
 
-    if (partId === "player-info") {
+    if (partId === "info") {
       const tierValue = actor?.system?.tier?.value;
       const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
         ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
@@ -405,23 +405,23 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   static PARTS = {
     info: {
-      id: "player-info",
-      template: "systems/triskel/templates/actor/player-character-info.hbs",
+      id: "info",
+      template: "systems/triskel/templates/actor/player-info.hbs",
       sort: 5
     },
     rollHelper: {
       id: "rollHelper",
-      template: "systems/triskel/templates/actor/player-character-roll-helper.hbs",
+      template: "systems/triskel/templates/actor/roll-helper.hbs",
       sort: 10
     },
     resources: {
-      id: "player-resources",
-      template: "systems/triskel/templates/actor/player-character-resources.hbs",
+      id: "ressourcen",
+      template: "systems/triskel/templates/actor/player-resources.hbs",
       sort: 20
     },
     actions: {
       id: "actions",
-      template: "systems/triskel/templates/actor/player-character-actions.hbs",
+      template: "systems/triskel/templates/actor/actions.hbs",
       sort: 100
     },
     skills: {
@@ -431,17 +431,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     },
     notes: {
       id: "notes",
-      template: "systems/triskel/templates/actor/player-character-notes.hbs",
+      template: "systems/triskel/templates/actor/notes.hbs",
       sort: 300
     },
     gear: {
       id: "gear",
-      template: "systems/triskel/templates/actor/player-character-gear.hbs",
+      template: "systems/triskel/templates/actor/gear.hbs",
       sort: 240
     },
     spells: {
       id: "spells",
-      template: "systems/triskel/templates/actor/player-character-spells.hbs",
+      template: "systems/triskel/templates/actor/spells.hbs",
       sort: 250
     }
   };

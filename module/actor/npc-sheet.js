@@ -51,13 +51,13 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static PARTS = {
     info: {
-      id: "npc-info",
+      id: "info",
       template: "systems/triskel/templates/actor/npc-info.hbs",
       sort: 5
     },
     resources: {
-      id: "npc-resources",
-      template: "systems/triskel/templates/actor/npc-core.hbs",
+      id: "ressourcen",
+      template: "systems/triskel/templates/actor/npc-resources.hbs",
       sort: 20
     },
     skills: {
@@ -67,7 +67,7 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     },
     notes: {
       id: "notes",
-      template: "systems/triskel/templates/actor/player-character-notes.hbs",
+      template: "systems/triskel/templates/actor/notes.hbs",
       sort: 300
     }
   };
