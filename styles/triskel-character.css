@@ -31,8 +31,18 @@
 .triskel .tier-info {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
+}
+
+.triskel .tier-info input {
+  font-size: 2rem;
+  height: 1.3em;
+  width: 1.3em;
+  color: black;
+  background: white;
+  border-radius: 999px;
+  font-weight: 700;
 }
 
 .triskel nav.sheet-tabs,
