@@ -13,14 +13,8 @@
                 <span class="inventory-location__label {{#if location.overburdened}}has-conflict{{/if}}">
                   {{localize location.label}}
                 </span>
-                {{#if (eq location.loadType "packLoad")}}
-                  {{#if (ne location.loadLimit null)}}
-                    <span class="inventory-location__load">{{location.locationLoad}} / {{location.loadLimit}}</span>
-                  {{/if}}
-                {{else if (eq location.loadType "hands")}}
-                  {{#if (ne location.loadLimit null)}}
-                    <span class="inventory-location__load">{{location.handsUsed}} / {{location.loadLimit}}</span>
-                  {{/if}}
+                {{#if (and (ne location.loadLimit null) (or (eq location.loadType "packLoad") (eq location.loadType "hands")))}}
+                  <span class="inventory-location__load">{{location.locationLoad}} / {{location.loadLimit}}</span>
                 {{/if}}
               </h2>
               <ul class="inventory-list inventory-list--gear">
