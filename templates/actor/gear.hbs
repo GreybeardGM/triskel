@@ -10,11 +10,13 @@
           {{#each category.locationBuckets as |location|}}
             <div class="inventory-location" style="grid-area: {{location.id}};">
               <h2 class="inventory-location__title">
-                <span class="inventory-location__label {{#if location.overburdened}}has-conflict{{/if}}">
+                <span class="inventory-location__label">
                   {{localize location.label}}
                 </span>
                 {{#if (and (ne location.loadLimit null) (or (eq location.loadType "packLoad") (eq location.loadType "hands")))}}
-                  <span class="inventory-location__load">{{location.locationLoad}} / {{location.loadLimit}}</span>
+                  <span class="inventory-location__load {{#if location.overburdened}}has-conflict{{/if}}">
+                    {{location.locationLoad}} / {{location.loadLimit}}
+                  </span>
                 {{/if}}
               </h2>
               <ul class="inventory-list inventory-list--gear">
@@ -24,34 +26,6 @@
                       class="inventory-list__item"
                       data-item-id="{{item.id}}"
                     >
-                      <button
-                        type="button"
-                        class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
-                        data-action="toggleActiveItem"
-                        data-item-type="{{item.type}}"
-                      >
-                        {{#if item.system.active}}
-                          <i class="fa-solid fa-check"></i>
-                        {{/if}}
-                      </button>
-                      {{#if item.img}}
-                        <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
-                      {{else}}
-                        <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
-                      {{/if}}
-                      <span
-                        class="inventory-list__item-quantity"
-                        title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
-                      >
-                        {{#if (gt item.system.quantity 1)}}&times;{{item.system.quantity}}{{/if}}
-                      </span>
-                      <span
-                        class="inventory-list__item-packload"
-                        title="{{localize 'TRISKEL.Item.Field.PackLoad'}}"
-                      >
-                        {{#if (gt item.system.packLoad 0)}}{{item.system.packLoad}}{{/if}}
-                      </span>
-                      <span class="inventory-list__item-name">{{item.name}}</span>
                       {{#with (lookup ../../../carryLocationSelections item.id) as |carrySelection|}}
                         <div class="inventory-list__location-select">
                           <span class="inventory-list__location-icon" aria-hidden="true">
@@ -72,6 +46,26 @@
                           </select>
                         </div>
                       {{/with}}
+                      <span
+                        class="inventory-list__item-quantity"
+                        title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
+                      >
+                        {{#if (gt item.system.quantity 1)}}&times;{{item.system.quantity}}{{/if}}
+                      </span>
+                      <span class="inventory-list__item-label">
+                        {{#if item.img}}
+                          <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
+                        {{else}}
+                          <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+                        {{/if}}
+                        <span class="inventory-list__item-name">{{item.name}}</span>
+                      </span>
+                      <span
+                        class="inventory-list__item-packload"
+                        title="{{localize 'TRISKEL.Item.Field.PackLoad'}}"
+                      >
+                        {{#if (gt item.system.packLoad 0)}}{{item.system.packLoad}}{{/if}}
+                      </span>
                       <div class="inventory-list__item-actions">
                         <button
                           type="button"
@@ -106,34 +100,6 @@
                   class="inventory-list__item"
                   data-item-id="{{item.id}}"
                 >
-                  <button
-                    type="button"
-                    class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
-                    data-action="toggleActiveItem"
-                    data-item-type="{{item.type}}"
-                  >
-                    {{#if item.system.active}}
-                      <i class="fa-solid fa-check"></i>
-                    {{/if}}
-                  </button>
-                  {{#if item.img}}
-                    <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
-                  {{else}}
-                    <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
-                  {{/if}}
-                  <span
-                    class="inventory-list__item-quantity"
-                    title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
-                  >
-                    {{#if (gt item.system.quantity 1)}}&times;{{item.system.quantity}}{{/if}}
-                  </span>
-                  <span
-                    class="inventory-list__item-packload"
-                    title="{{localize 'TRISKEL.Item.Field.PackLoad'}}"
-                  >
-                    {{#if (gt item.system.packLoad 0)}}{{item.system.packLoad}}{{/if}}
-                  </span>
-                  <span class="inventory-list__item-name">{{item.name}}</span>
                   {{#with (lookup ../../carryLocationSelections item.id) as |carrySelection|}}
                     <div class="inventory-list__location-select">
                       <span class="inventory-list__location-icon" aria-hidden="true">
@@ -154,6 +120,26 @@
                       </select>
                     </div>
                   {{/with}}
+                  <span
+                    class="inventory-list__item-quantity"
+                    title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
+                  >
+                    {{#if (gt item.system.quantity 1)}}&times;{{item.system.quantity}}{{/if}}
+                  </span>
+                  <span class="inventory-list__item-label">
+                    {{#if item.img}}
+                      <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
+                    {{else}}
+                      <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+                    {{/if}}
+                    <span class="inventory-list__item-name">{{item.name}}</span>
+                  </span>
+                  <span
+                    class="inventory-list__item-packload"
+                    title="{{localize 'TRISKEL.Item.Field.PackLoad'}}"
+                  >
+                    {{#if (gt item.system.packLoad 0)}}{{item.system.packLoad}}{{/if}}
+                  </span>
                   <div class="inventory-list__item-actions">
                     <button
                       type="button"

@@ -72,3 +72,7 @@
 .triskel .is-selected {
   outline: 2px solid var(--triskel-interactive-highlight);
 }
+
+.has-conflict {
+  background: #81231e;
+}
