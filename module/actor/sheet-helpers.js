@@ -104,7 +104,11 @@ export function prepareGearLocationBuckets(gearBucket = null) {
   const locationBucketsById = {};
   for (const location of carryLocations) {
     if (!location?.id) continue;
-    const bucket = { ...location, collection: [], locationLoad: 0 };
+    const bucket = {
+      ...location,
+      collection: [],
+      locationLoad: location.loadType === "packLoad" ? 0 : null
+    };
     locationBuckets.push(bucket);
     locationBucketsById[location.id] = bucket;
   }
@@ -123,9 +127,11 @@ export function prepareGearLocationBuckets(gearBucket = null) {
     const bucket = locationBucketsById[targetLocation];
     if (!bucket) continue;
     bucket.collection.push(item);
-    const packLoad = toFiniteNumber(item?.system?.packLoad, 1);
-    const quantity = toFiniteNumber(item?.system?.quantity, 1);
-    bucket.locationLoad += packLoad * quantity;
+    if (bucket.locationLoad !== null) {
+      const packLoad = toFiniteNumber(item?.system?.packLoad, 1);
+      const quantity = toFiniteNumber(item?.system?.quantity, 1);
+      bucket.locationLoad += packLoad * quantity;
+    }
   }
 
   return { ...gearBucket, locationBuckets };
