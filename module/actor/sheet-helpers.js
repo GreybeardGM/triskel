@@ -112,11 +112,11 @@ export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null 
     if (typeof loadLimit === "number" && !Number.isFinite(loadLimit)) {
       loadLimit = null;
     }
+    const usesLocationLoad = ["packLoad", "hands"].includes(location.loadType);
     const bucket = {
       ...location,
       collection: [],
-      locationLoad: location.loadType === "packLoad" ? 0 : null,
-      handsUsed: location.loadType === "hands" ? 0 : null,
+      locationLoad: usesLocationLoad ? 0 : null,
       loadLimit,
       overburdened: false
     };
@@ -139,18 +139,19 @@ export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null 
     if (!bucket) continue;
     bucket.collection.push(item);
     if (bucket.locationLoad !== null) {
-      const packLoad = toFiniteNumber(item?.system?.packLoad, 1);
       const quantity = toFiniteNumber(item?.system?.quantity, 1);
-      bucket.locationLoad += packLoad * quantity;
-    }
-    if (bucket.handsUsed !== null) {
-      const quantity = toFiniteNumber(item?.system?.quantity, 1);
-      const handCount = item?.system?.twoHanded ? 2 : 1;
-      bucket.handsUsed += handCount * quantity;
+      let loadPerItem = null;
+      if (bucket.loadType === "hands") {
+        loadPerItem = item?.system?.twoHanded ? 2 : 1;
+      } else if (bucket.loadType === "packLoad") {
+        loadPerItem = toFiniteNumber(item?.system?.packLoad, 1);
+      }
+      if (loadPerItem !== null) {
+        bucket.locationLoad += loadPerItem * quantity;
+      }
     }
     if (bucket.loadLimit !== null) {
-      const currentLoad = bucket.locationLoad ?? bucket.handsUsed ?? 0;
-      bucket.overburdened = currentLoad > bucket.loadLimit;
+      bucket.overburdened = (bucket.locationLoad ?? 0) > bucket.loadLimit;
     }
   }
 
