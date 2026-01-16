@@ -82,18 +82,9 @@
                 </div>
               </li>
             {{/each}}
-          {{else}}
-            <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
           {{/if}}
         </ul>
       </div>
     {{/each}}
-  {{else}}
-    <div class="inventory-category">
-      <h2 class="inventory-category__title">{{localize "TRISKEL.Actor.Tab.Abilities"}}</h2>
-      <ul class="inventory-list">
-        <li class="inventory-list__empty">{{localize "TRISKEL.Item.Inventory.Empty"}}</li>
-      </ul>
-    </div>
   {{/if}}
 </section>
