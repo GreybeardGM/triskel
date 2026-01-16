@@ -61,12 +61,13 @@
   text-align: center;
 }
 
-.triskel.sheet.actor.character input[type="number"] {
+.triskel.sheet input[type="number"] {
   color: var(--triskel-color-text-strong);
   background: var(--triskel-color-surface-muted);
   border: 1px solid var(--triskel-color-border-muted);
   border-radius: 999px;
   font-weight: 700;
+  height: 1.3em;
 }
 
 .triskel .is-interactive {
