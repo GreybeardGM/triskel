@@ -39,8 +39,9 @@
   font-size: 2rem;
   height: 1.3em;
   width: 1.3em;
-  color: black;
-  background: white;
+  color: var(--triskel-color-text-strong);
+  background: var(--triskel-color-surface-muted);
+  border: 1px solid var(--triskel-color-border-muted);
   border-radius: 999px;
   font-weight: 700;
 }
