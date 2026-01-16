@@ -660,6 +660,18 @@
   gap: 0.5rem;
 }
 
+.triskel .inventory-category--gear-locations {
+  display: grid;
+  grid-template-areas:
+    "hand"
+    "ready"
+    "worn"
+    "pack"
+    "dropped"
+    "camp";
+  gap: 0.5rem;
+}
+
 .triskel .inventory-list {
   margin-top: 0;
 }

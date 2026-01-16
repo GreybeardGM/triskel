@@ -5,10 +5,10 @@
 >
   {{#if itemsToDisplay.length}}
     {{#each itemsToDisplay as |category|}}
-      <div class="inventory-category">
+      <div class="inventory-category {{#if category.locationBuckets.length}}inventory-category--gear-locations{{/if}}">
         {{#if category.locationBuckets.length}}
           {{#each category.locationBuckets as |location|}}
-            <div class="inventory-location">
+            <div class="inventory-location" style="grid-area: {{location.id}};">
               <h2 class="inventory-location__title">{{localize location.label}}</h2>
               <ul class="inventory-list inventory-list--gear">
                 {{#if location.collection.length}}
