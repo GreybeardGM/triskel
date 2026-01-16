@@ -60,42 +60,54 @@ export const TRISKEL_CARRY_LOCATIONS = [
     label: "TRISKEL.Item.CarryLocation.Ready.Label",
     description: "TRISKEL.Item.CarryLocation.Ready.Description",
     defaultActive: false,
-    icon: "fa-solid fa-bolt"
+    icon: "fa-solid fa-bolt",
+    loadType: "packLoad",
+    loadLimit: 10
   },
   {
     id: "worn",
     label: "TRISKEL.Item.CarryLocation.Worn.Label",
     description: "TRISKEL.Item.CarryLocation.Worn.Description",
     defaultActive: true,
-    icon: "fa-solid fa-shirt"
+    icon: "fa-solid fa-shirt",
+    loadType: "packLoad",
+    loadLimit: "power"
   },
   {
     id: "pack",
     label: "TRISKEL.Item.CarryLocation.Pack.Label",
     description: "TRISKEL.Item.CarryLocation.Pack.Description",
     defaultActive: false,
-    icon: "fa-solid fa-suitcase"
+    icon: "fa-solid fa-suitcase",
+    loadType: "packLoad",
+    loadLimit: "power"
   },
   {
     id: "camp",
     label: "TRISKEL.Item.CarryLocation.Camp.Label",
     description: "TRISKEL.Item.CarryLocation.Camp.Description",
     defaultActive: false,
-    icon: "fa-solid fa-campground"
+    icon: "fa-solid fa-campground",
+    loadType: "none",
+    loadLimit: null
   },
   {
     id: "hand",
     label: "TRISKEL.Item.CarryLocation.Hand.Label",
     description: "TRISKEL.Item.CarryLocation.Hand.Description",
     defaultActive: true,
-    icon: "fa-solid fa-hand"
+    icon: "fa-solid fa-hand",
+    loadType: "hands",
+    loadLimit: 2
   },
   {
     id: "dropped",
     label: "TRISKEL.Item.CarryLocation.Dropped.Label",
     description: "TRISKEL.Item.CarryLocation.Dropped.Description",
     defaultActive: false,
-    icon: "fa-solid fa-arrow-down"
+    icon: "fa-solid fa-arrow-down",
+    loadType: "none",
+    loadLimit: null
   }
 ];
 

@@ -661,7 +661,7 @@
 }
 
 .triskel .inventory-list--gear .inventory-list__item {
-  grid-template-columns: auto auto auto 1fr auto;
+  grid-template-columns: auto auto auto auto 1fr auto auto;
 }
 
 .triskel .inventory-category {
@@ -681,12 +681,36 @@
     "camp";
 }
 
+.triskel .inventory-location__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.triskel .inventory-location__load {
+  font-size: 0.85rem;
+  color: var(--triskel-color-text-muted, var(--color-text-light-primary));
+}
+
+.triskel .inventory-location__label.has-conflict {
+  background: #81231e;
+}
+
 .triskel .inventory-list {
   margin: 0;
 }
 
 .triskel .inventory-list__item-actions {
   display: flex;
+}
+
+.triskel .inventory-list__item-quantity,
+.triskel .inventory-list__item-packload {
+  min-width: 2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--triskel-color-text-muted, var(--color-text-light-primary));
 }
 
 .triskel .inventory-list__item-image {

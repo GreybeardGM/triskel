@@ -227,6 +227,7 @@
         ],
         "archetype": "",
         "twoHanded": false,
+        "quantity": 1,
         "packLoad": null,
         "overwrite": {
           "validLocations": null

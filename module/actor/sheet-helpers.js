@@ -92,7 +92,7 @@ export function prepareAssetContext(assets = null, types = null) {
  * @param {object|null} gearBucket vorbereiteter Gear-Bucket
  * @returns {object|null} Gear-Bucket mit locationBuckets
  */
-export function prepareGearLocationBuckets(gearBucket = null) {
+export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null } = {}) {
   if (!gearBucket || typeof gearBucket !== "object") return gearBucket;
 
   const carryLocations = toArray(getTriskellCodex().carryLocations);
@@ -104,7 +104,22 @@ export function prepareGearLocationBuckets(gearBucket = null) {
   const locationBucketsById = {};
   for (const location of carryLocations) {
     if (!location?.id) continue;
-    const bucket = { ...location, collection: [] };
+    let loadLimit = location.loadLimit ?? null;
+    if (loadLimit === "power") {
+      const resolvedPowerMax = toFiniteNumber(powerMax, Number.NaN);
+      loadLimit = Number.isFinite(resolvedPowerMax) ? resolvedPowerMax : null;
+    }
+    if (typeof loadLimit === "number" && !Number.isFinite(loadLimit)) {
+      loadLimit = null;
+    }
+    const bucket = {
+      ...location,
+      collection: [],
+      locationLoad: location.loadType === "packLoad" ? 0 : null,
+      handsUsed: location.loadType === "hands" ? 0 : null,
+      loadLimit,
+      overburdened: false
+    };
     locationBuckets.push(bucket);
     locationBucketsById[location.id] = bucket;
   }
@@ -123,6 +138,20 @@ export function prepareGearLocationBuckets(gearBucket = null) {
     const bucket = locationBucketsById[targetLocation];
     if (!bucket) continue;
     bucket.collection.push(item);
+    if (bucket.locationLoad !== null) {
+      const packLoad = toFiniteNumber(item?.system?.packLoad, 1);
+      const quantity = toFiniteNumber(item?.system?.quantity, 1);
+      bucket.locationLoad += packLoad * quantity;
+    }
+    if (bucket.handsUsed !== null) {
+      const quantity = toFiniteNumber(item?.system?.quantity, 1);
+      const handCount = item?.system?.twoHanded ? 2 : 1;
+      bucket.handsUsed += handCount * quantity;
+    }
+    if (bucket.loadLimit !== null) {
+      const currentLoad = bucket.locationLoad ?? bucket.handsUsed ?? 0;
+      bucket.overburdened = currentLoad > bucket.loadLimit;
+    }
   }
 
   return { ...gearBucket, locationBuckets };
@@ -374,6 +403,7 @@ export function getActionBucket(preparedActions, actionType) {
 export function prepareGearTabContext(actor = null, partId = null) {
   if (!["gear", "spells"].includes(partId)) return {};
 
+  const powerMax = toFiniteNumber(actor?.system?.reserves?.power?.max, Number.NaN);
   const selectedTypesByPart = {
     gear: ["gear"],
     spells: ["spell"]
@@ -383,7 +413,7 @@ export function prepareGearTabContext(actor = null, partId = null) {
   if (partId === "gear" && Array.isArray(itemsToDisplay)) {
     itemsToDisplay = itemsToDisplay.map(category => {
       if (category?.id !== "gear") return category;
-      return prepareGearLocationBuckets(category);
+      return prepareGearLocationBuckets(category, { powerMax });
     });
   }
   const carryLocationSelections = partId === "gear"
