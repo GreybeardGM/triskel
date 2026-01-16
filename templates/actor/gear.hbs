@@ -12,9 +12,13 @@
               <h2 class="inventory-location__title">
                 <span class="inventory-location__label">{{localize location.label}}</span>
                 {{#if (eq location.loadType "packLoad")}}
-                  <span class="inventory-location__load">{{location.locationLoad}}</span>
+                  {{#if (ne location.loadLimit null)}}
+                    <span class="inventory-location__load">{{location.locationLoad}} / {{location.loadLimit}}</span>
+                  {{/if}}
                 {{else if (eq location.loadType "hands")}}
-                  <span class="inventory-location__load">{{location.handsUsed}}</span>
+                  {{#if (ne location.loadLimit null)}}
+                    <span class="inventory-location__load">{{location.handsUsed}} / {{location.loadLimit}}</span>
+                  {{/if}}
                 {{/if}}
               </h2>
               <ul class="inventory-list inventory-list--gear">

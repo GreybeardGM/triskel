@@ -92,7 +92,7 @@ export function prepareAssetContext(assets = null, types = null) {
  * @param {object|null} gearBucket vorbereiteter Gear-Bucket
  * @returns {object|null} Gear-Bucket mit locationBuckets
  */
-export function prepareGearLocationBuckets(gearBucket = null) {
+export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null } = {}) {
   if (!gearBucket || typeof gearBucket !== "object") return gearBucket;
 
   const carryLocations = toArray(getTriskellCodex().carryLocations);
@@ -104,11 +104,20 @@ export function prepareGearLocationBuckets(gearBucket = null) {
   const locationBucketsById = {};
   for (const location of carryLocations) {
     if (!location?.id) continue;
+    let loadLimit = location.loadLimit ?? null;
+    if (loadLimit === "power") {
+      const resolvedPowerMax = toFiniteNumber(powerMax, Number.NaN);
+      loadLimit = Number.isFinite(resolvedPowerMax) ? resolvedPowerMax : null;
+    }
+    if (typeof loadLimit === "number" && !Number.isFinite(loadLimit)) {
+      loadLimit = null;
+    }
     const bucket = {
       ...location,
       collection: [],
       locationLoad: location.loadType === "packLoad" ? 0 : null,
-      handsUsed: location.loadType === "hands" ? 0 : null
+      handsUsed: location.loadType === "hands" ? 0 : null,
+      loadLimit
     };
     locationBuckets.push(bucket);
     locationBucketsById[location.id] = bucket;
@@ -389,6 +398,7 @@ export function getActionBucket(preparedActions, actionType) {
 export function prepareGearTabContext(actor = null, partId = null) {
   if (!["gear", "spells"].includes(partId)) return {};
 
+  const powerMax = toFiniteNumber(actor?.system?.reserves?.power?.max, Number.NaN);
   const selectedTypesByPart = {
     gear: ["gear"],
     spells: ["spell"]
@@ -398,7 +408,7 @@ export function prepareGearTabContext(actor = null, partId = null) {
   if (partId === "gear" && Array.isArray(itemsToDisplay)) {
     itemsToDisplay = itemsToDisplay.map(category => {
       if (category?.id !== "gear") return category;
-      return prepareGearLocationBuckets(category);
+      return prepareGearLocationBuckets(category, { powerMax });
     });
   }
   const carryLocationSelections = partId === "gear"
