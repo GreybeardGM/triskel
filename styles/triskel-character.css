@@ -701,7 +701,9 @@
 
 .triskel .inventory-list {
   margin: 0;
+  padding: 0;
 }
+
 
 .triskel .inventory-list__item-label {
   display: inline-flex;
