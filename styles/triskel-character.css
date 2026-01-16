@@ -669,11 +669,10 @@
     "pack"
     "dropped"
     "camp";
-  gap: 0.5rem;
 }
 
 .triskel .inventory-list {
-  margin-top: 0;
+  margin: 0;
 }
 
 .triskel .inventory-list__item-actions {
