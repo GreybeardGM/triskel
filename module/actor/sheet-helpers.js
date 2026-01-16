@@ -104,7 +104,7 @@ export function prepareGearLocationBuckets(gearBucket = null) {
   const locationBucketsById = {};
   for (const location of carryLocations) {
     if (!location?.id) continue;
-    const bucket = { ...location, collection: [] };
+    const bucket = { ...location, collection: [], locationLoad: 0 };
     locationBuckets.push(bucket);
     locationBucketsById[location.id] = bucket;
   }
@@ -123,6 +123,11 @@ export function prepareGearLocationBuckets(gearBucket = null) {
     const bucket = locationBucketsById[targetLocation];
     if (!bucket) continue;
     bucket.collection.push(item);
+    const rawPackLoad = toFiniteNumber(item?.system?.packLoad, Number.NaN);
+    const rawQuantity = toFiniteNumber(item?.system?.quantity, Number.NaN);
+    const packLoad = Number.isFinite(rawPackLoad) ? rawPackLoad : 1;
+    const quantity = Number.isFinite(rawQuantity) ? rawQuantity : 1;
+    bucket.locationLoad += packLoad * quantity;
   }
 
   return { ...gearBucket, locationBuckets };

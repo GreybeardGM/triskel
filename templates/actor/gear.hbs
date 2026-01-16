@@ -9,7 +9,10 @@
         {{#if category.locationBuckets.length}}
           {{#each category.locationBuckets as |location|}}
             <div class="inventory-location" style="grid-area: {{location.id}};">
-              <h2 class="inventory-location__title">{{localize location.label}}</h2>
+              <h2 class="inventory-location__title">
+                <span class="inventory-location__label">{{localize location.label}}</span>
+                <span class="inventory-location__load">{{location.locationLoad}}</span>
+              </h2>
               <ul class="inventory-list inventory-list--gear">
                 {{#if location.collection.length}}
                   {{#each location.collection as |item|}}

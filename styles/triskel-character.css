@@ -681,6 +681,18 @@
     "camp";
 }
 
+.triskel .inventory-location__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.triskel .inventory-location__load {
+  font-size: 0.85rem;
+  color: var(--triskel-color-text-muted, var(--color-text-light-primary));
+}
+
 .triskel .inventory-list {
   margin: 0;
 }
