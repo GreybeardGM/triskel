@@ -89,16 +89,18 @@
       {{/each}}
 
       <div class="tension-card">
-        <label class="path-label" for="tension-value">{{localize "TRISKEL.Actor.Tension.Label"}}</label>
-        <input
-          id="tension-value"
-          class="tension-input"
-          type="number"
-          min="{{system.tension.min}}"
-          data-dtype="Number"
-          name="system.tension.value"
-          value="{{system.tension.value}}"
-        />
+        <div
+          class="resource-box is-interactive segment-{{#if (gt system.tension.value 0)}}filled{{else}}empty{{/if}}"
+          data-action="updateResourceValue"
+          data-resource="tension"
+          data-resource-field="value"
+          data-resource-value="1"
+          title="{{localize "TRISKEL.Action.Base.Invocation.Label"}}"
+          aria-label="{{localize "TRISKEL.Action.Base.Invocation.Label"}}"
+          role="button"
+        >
+          <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+        </div>
       </div>
     </div>
   </section>

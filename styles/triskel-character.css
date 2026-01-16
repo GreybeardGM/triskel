@@ -266,12 +266,14 @@
 .triskel .tension-card {
   grid-area: tension;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-.triskel .tension-input {
-  width: 3em;
+.triskel .tension-card .resource-box {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
