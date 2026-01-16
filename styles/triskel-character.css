@@ -39,11 +39,6 @@
   font-size: 2rem;
   height: 1.3em;
   width: 1.3em;
-  color: var(--triskel-color-text-strong);
-  background: var(--triskel-color-surface-muted);
-  border: 1px solid var(--triskel-color-border-muted);
-  border-radius: 999px;
-  font-weight: 700;
 }
 
 .triskel nav.sheet-tabs,
@@ -113,11 +108,6 @@
 .triskel .resource-max-input {
   width: 3.25rem;
   font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--triskel-color-text-strong);
-  background: var(--triskel-color-surface-muted);
-  border: 1px solid var(--triskel-color-border-muted);
-  border-radius: 999px;
   margin-right: -2rem;
 }
 
@@ -256,11 +246,6 @@
   width: 2.25em;
   height: 1.2em;
   font-size: 1rem;
-  font-weight: 700;
-  color: var(--triskel-color-text-strong);
-  background: var(--triskel-color-surface-muted);
-  border: 1px solid var(--triskel-color-border-muted);
-  border-radius: 999px;
 }
 
 .triskel .path-segments {
