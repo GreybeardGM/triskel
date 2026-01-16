@@ -46,16 +46,6 @@
                           </select>
                         </div>
                       {{/with}}
-                      <button
-                        type="button"
-                        class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
-                        data-action="toggleActiveItem"
-                        data-item-type="{{item.type}}"
-                      >
-                        {{#if item.system.active}}
-                          <i class="fa-solid fa-check"></i>
-                        {{/if}}
-                      </button>
                       <span
                         class="inventory-list__item-quantity"
                         title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
@@ -130,16 +120,6 @@
                       </select>
                     </div>
                   {{/with}}
-                  <button
-                    type="button"
-                    class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
-                    data-action="toggleActiveItem"
-                    data-item-type="{{item.type}}"
-                  >
-                    {{#if item.system.active}}
-                      <i class="fa-solid fa-check"></i>
-                    {{/if}}
-                  </button>
                   <span
                     class="inventory-list__item-quantity"
                     title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
