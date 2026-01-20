@@ -399,7 +399,6 @@ export class TriskelActor extends Actor {
 
     const roll = Roll.fromTerms(terms);
     await roll.evaluate();
-    convertD10TensToZero(roll);
 
     const modifierTotal = normalizedModifiers.reduce((total, modifier) => total + modifier.value, 0);
     const escape = foundry.utils?.escapeHTML ?? (value => value);
