@@ -1,4 +1,8 @@
-<section class="item-panel {{#if isSpellType}}is-hidden{{/if}}">
+<section
+  class="tab item-panel {{tabs.actions.id}} {{tabs.actions.cssClass}} {{#if isSpellType}}is-hidden{{/if}}"
+  data-tab="{{tabs.actions.id}}"
+  data-group="{{tabs.actions.group}}"
+>
   <h2>Forms</h2>
   <ol class="reference-entries">
     {{#if references.forms.length}}

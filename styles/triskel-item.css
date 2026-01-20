@@ -63,6 +63,14 @@
   flex-direction: column;
 }
 
+.triskel.sheet.item .tab {
+  display: none;
+}
+
+.triskel.sheet.item .tab.active {
+  display: flex;
+}
+
 .triskel .item-panel.is-hidden {
   display: none;
 }

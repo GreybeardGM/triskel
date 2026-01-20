@@ -33,19 +33,6 @@ export const TRISKEL_ACTION_TYPES = [
 
 export const TRISKEL_BASE_ACTIONS = [
   {
-    id: "bind",
-    label: "TRISKEL.Action.Base.Bind.Label",
-    type: "impact",
-    category: "combat",
-    skill: "control",
-    reserve: "grace",
-    cost: 0,
-    range: "melee_weapon",
-    description: "TRISKEL.Action.Base.Bind.Description",
-    icon: "fa-solid fa-link",
-    keywords: ["action", "melee", "offense", "control", "bind"]
-  },
-  {
     id: "expose",
     label: "TRISKEL.Action.Base.Expose.Label",
     type: "impact",
