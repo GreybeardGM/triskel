@@ -25,4 +25,9 @@
   margin: 0 0 0.5rem;
   width: 100%;
   justify-content: center;
+  background: var(--color-cool-5-25);
+}
+
+.triskel-complication-roll--right:hover {
+  background: var(--color-cool-5-75);
 }
