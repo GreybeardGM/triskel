@@ -16,18 +16,17 @@ export class TriskelDieTerm extends foundry.dice.terms.Die {
   }
 
   getResultCSS(result) {
+    const css = super.getResultCSS(result);
     const value = TriskelDieTerm.map10to09(result.result);
-    if (value === 0) return "min";
-    if (value === 9) return "max";
-    return "";
-  }
+    const classList = new Set(css.split(/\s+/).filter(Boolean));
 
-  get values() {
-    return this.results.map(result => TriskelDieTerm.map10to09(result.result));
-  }
+    classList.delete("min");
+    classList.delete("max");
 
-  get total() {
-    return this.values.reduce((total, value) => total + value, 0);
+    if (value === 0) classList.add("min");
+    if (value === 9) classList.add("max");
+
+    return Array.from(classList).join(" ");
   }
 }
 
