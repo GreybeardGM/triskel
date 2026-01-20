@@ -6,7 +6,7 @@ import {
   toFiniteNumber
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
-import { convertD10TensToZero } from "../util/roll.js";
+import { TriskelDieTerm } from "../dice/triskel-die-term.js";
 import { getCachedCollator } from "../util/collator.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
@@ -386,7 +386,7 @@ export class TriskelActor extends Actor {
       }))
       .filter(modifier => Number.isFinite(modifier.value) && modifier.value !== 0);
 
-    const terms = [new foundry.dice.terms.Die({ number: 2, faces: 10 })];
+    const terms = [new TriskelDieTerm({ number: 2 })];
 
     normalizedModifiers.forEach(modifier => {
       terms.push(new foundry.dice.terms.OperatorTerm({ operator: modifier.value >= 0 ? "+" : "-" }));
@@ -398,7 +398,6 @@ export class TriskelActor extends Actor {
 
     const roll = Roll.fromTerms(terms);
     await roll.evaluate();
-    convertD10TensToZero(roll);
 
     const modifierTotal = normalizedModifiers.reduce((total, modifier) => total + modifier.value, 0);
     const escape = foundry.utils?.escapeHTML ?? (value => value);
@@ -408,7 +407,7 @@ export class TriskelActor extends Actor {
         .join("")}</ul>`
       : `<p>${game.i18n.localize("TRISKEL.Actor.RollHelper.TotalBonus")}: +0</p>`;
 
-    const subtitleParts = ["2d10 (10→0)"];
+    const subtitleParts = ["2dt (10→0)"];
     if (normalizedModifiers.length) subtitleParts.push(`${game.i18n.localize("TRISKEL.Actor.RollHelper.TotalBonus")}: ${modifierTotal >= 0 ? "+" : ""}${modifierTotal}`);
     if (Number.isFinite(difficulty)) subtitleParts.push(`${game.i18n.localize("TRISKEL.Actor.RollHelper.Difficulty") ?? "Difficulty"}: ${difficulty}`);
 
