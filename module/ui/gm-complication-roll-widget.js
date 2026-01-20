@@ -36,18 +36,20 @@ async function performComplicationRoll(localize) {
   });
 }
 
-function addButtonToTopBar(html) {
+function addButtonToRightColumn(app, html) {
   if (!game.user?.isGM) return;
 
-  const root = html?.[0] ?? html;
-  if (!root) return;
+  const root = app?.element?.[0] ?? document;
 
-  const navBar = root.querySelector("#nav-bar") ?? root.querySelector("#navigation") ?? root;
-  if (!navBar) return;
-  if (navBar.querySelector(`.${WIDGET_CLASS}`)) return;
+  const column = root.querySelector("#ui-right-column-1");
+  if (!column) return;
+  if (column.querySelector(`.${WIDGET_CLASS}`)) return;
+
+  const notifications = column.querySelector("#chat-notifications");
+  if (!notifications) return;
 
   const localize = game.i18n.localize.bind(game.i18n);
-  const button = createButton(localize, { showLabel: false, extraClass: "triskel-complication-roll--top" });
+  const button = createButton(localize, { showLabel: true, extraClass: "triskel-complication-roll--right" });
 
   button.addEventListener("click", async () => {
     button.disabled = true;
@@ -58,11 +60,15 @@ function addButtonToTopBar(html) {
     }
   });
 
-  navBar.appendChild(button);
+  column.insertBefore(button, notifications);
 }
 
 export function registerComplicationRollWidget() {
-  Hooks.on("renderSceneNavigation", (app, html) => {
-    addButtonToTopBar(html);
+  Hooks.on("renderChatLog", (app, html) => {
+    addButtonToRightColumn(app, html);
+  });
+
+  Hooks.on("renderChatSidebar", (app, html) => {
+    addButtonToRightColumn(app, html);
   });
 }
