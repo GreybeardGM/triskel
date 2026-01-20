@@ -52,6 +52,31 @@ export function registerTriskelDiceSoNice(dice3d) {
   if (!dice3d?.addSystem || !dice3d?.addDicePreset) return;
 
   dice3d.addSystem({ id: "triskel", name: "Triskel" }, "preferred");
+  if (dice3d.addColorset) {
+    dice3d.addColorset({
+      name: "Thread",
+      description: "Triskel Thread",
+      category: "Triskel",
+      foreground: "#fdf7f2",
+      background: "#a0191d",
+      outline: "#4f0c0e",
+      edge: "#4f0c0e",
+      texture: "none",
+      material: "plastic"
+    }, "default");
+
+    dice3d.addColorset({
+      name: "Obstacle",
+      description: "Triskel Obstacle",
+      category: "Triskel",
+      foreground: "#1f1400",
+      background: "#f2a11b",
+      outline: "#b36a10",
+      edge: "#b36a10",
+      texture: "none",
+      material: "plastic"
+    }, "default");
+  }
   dice3d.addDicePreset({
     type: "dt",
     system: "triskel",
