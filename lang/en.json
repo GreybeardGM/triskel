@@ -6,7 +6,8 @@
         "Title": "Complication Roll",
         "Subtitle": "1dt Threat - 1dt Obstacle",
         "Tooltip": "Roll 1dt[Threat] - 1dt[Obstacle] (GM only)",
-        "PublicMessage": "A Complication Roll was made."
+        "PublicMessage": "A Complication Roll was made.",
+        "ResultFallback": "Complication result"
       }
     },
     "Action": {
@@ -143,6 +144,24 @@
         "Setup": {
           "Description": "Prepares for upcoming impact or reactive options.",
           "Label": "Setup"
+        }
+      }
+    },
+    "Codex": {
+      "ComplicationTable": {
+        "Label": "Complication Table",
+        "Entry": {
+          "Neg5": "-5 Extreme Obstacle",
+          "Neg4": "-4 Major Obstacle",
+          "Neg3": "-3 Moderate Obstacle",
+          "Neg2": "-2 Minor Obstacle",
+          "Neg1": "-1 Foreshadowing Obstacle",
+          "Zero": "0 Nothing",
+          "Pos1": "+1 Foreshadowing Threat",
+          "Pos2": "+2 Minor Threat",
+          "Pos3": "+3 Moderate Threat",
+          "Pos4": "+4 Major Threat",
+          "Pos5": "+5 Extreme Threat"
         }
       }
     },

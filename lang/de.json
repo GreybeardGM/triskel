@@ -6,7 +6,8 @@
         "Title": "Komplikationswurf",
         "Subtitle": "1dt Threat - 1dt Hindernis",
         "Tooltip": "Würfelt 1dt[Threat] - 1dt[Hindernis] (nur SL)",
-        "PublicMessage": "Ein Komplikationswurf wurde ausgeführt."
+        "PublicMessage": "Ein Komplikationswurf wurde ausgeführt.",
+        "ResultFallback": "Komplikationsergebnis"
       }
     },
     "Action": {
@@ -143,6 +144,24 @@
         "Setup": {
           "Description": "Eine Vorbereitung auf die kommende Wirkung oder auf kommende Reaktionen.",
           "Label": "Ansatz"
+        }
+      }
+    },
+    "Codex": {
+      "ComplicationTable": {
+        "Label": "Komplikationstabelle",
+        "Entry": {
+          "Neg5": "-5 Extreme Hindernis",
+          "Neg4": "-4 Großes Hindernis",
+          "Neg3": "-3 Mittleres Hindernis",
+          "Neg2": "-2 Kleines Hindernis",
+          "Neg1": "-1 Hindernis andeuten",
+          "Zero": "0 Nichts",
+          "Pos1": "+1 Bedrohung andeuten",
+          "Pos2": "+2 Kleine Bedrohung",
+          "Pos3": "+3 Mittlere Bedrohung",
+          "Pos4": "+4 Große Bedrohung",
+          "Pos5": "+5 Extreme Bedrohung"
         }
       }
     },

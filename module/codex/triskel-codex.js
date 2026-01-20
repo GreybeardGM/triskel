@@ -460,6 +460,24 @@ export const TRISKEL_PATHS = [
   }
 ];
 
+export const TRISKEL_COMPLICATION_TABLE = {
+  id: "complicationTable",
+  label: "TRISKEL.Codex.ComplicationTable.Label",
+  entries: [
+    { id: "neg5", range: { min: -9, max: -9 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Neg5" },
+    { id: "neg4", range: { min: -8, max: -7 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Neg4" },
+    { id: "neg3", range: { min: -6, max: -5 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Neg3" },
+    { id: "neg2", range: { min: -4, max: -3 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Neg2" },
+    { id: "neg1", range: { min: -2, max: -1 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Neg1" },
+    { id: "zero", range: { min: 0, max: 0 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Zero" },
+    { id: "pos1", range: { min: 1, max: 2 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Pos1" },
+    { id: "pos2", range: { min: 3, max: 4 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Pos2" },
+    { id: "pos3", range: { min: 5, max: 6 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Pos3" },
+    { id: "pos4", range: { min: 7, max: 8 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Pos4" },
+    { id: "pos5", range: { min: 9, max: 9 }, label: "TRISKEL.Codex.ComplicationTable.Entry.Pos5" }
+  ]
+};
+
 export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexCollections({
   actionTypes: TRISKEL_ACTION_TYPES,
   tiers: TRISKEL_TIERS,
@@ -476,7 +494,8 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   forms: TRISKEL_FORMS,
   reserves: TRISKEL_RESERVES,
   npcStats: TRISKEL_NPC_STATS,
-  paths: TRISKEL_PATHS
+  paths: TRISKEL_PATHS,
+  complicationTable: TRISKEL_COMPLICATION_TABLE
 });
 
 export const TRISKEL_TIERS_BY_ID = TRISKEL_CODEX_INDEX.tiers;
