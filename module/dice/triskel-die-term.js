@@ -15,6 +15,13 @@ export class TriskelDieTerm extends foundry.dice.terms.Die {
     return String(TriskelDieTerm.map10to09(result.result));
   }
 
+  getResultCSS(result) {
+    const value = TriskelDieTerm.map10to09(result.result);
+    if (value === 0) return "min";
+    if (value === 9) return "max";
+    return "";
+  }
+
   get values() {
     return this.results.map(result => TriskelDieTerm.map10to09(result.result));
   }
