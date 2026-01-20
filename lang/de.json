@@ -1,11 +1,11 @@
 {
   "TRISKEL": {
     "Widget": {
-      "ThreadObstacleRoll": {
+      "ComplicationRoll": {
         "Label": "Komplikationswurf",
         "Title": "Komplikationswurf",
-        "Subtitle": "1dt Faden - 1dt Hindernis",
-        "Tooltip": "Würfelt 1dt[Faden] - 1dt[Hindernis] (nur SL)",
+        "Subtitle": "1dt Threat - 1dt Hindernis",
+        "Tooltip": "Würfelt 1dt[Threat] - 1dt[Hindernis] (nur SL)",
         "PublicMessage": "Ein Komplikationswurf wurde ausgeführt."
       }
     },

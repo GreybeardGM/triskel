@@ -3,7 +3,7 @@ import { PlayerCharacterSheet } from "./actor/player-character-sheet.js";
 import { NpcSheet } from "./actor/npc-sheet.js";
 import { TriskelItemSheet } from "./item/triskel-item-sheet.js";
 import { registerTriskelDiceSoNice, registerTriskelDiceTerm } from "./dice/triskel-die-term.js";
-import { registerThreadObstacleRollWidget } from "./ui/gm-thread-roll-widget.js";
+import { registerComplicationRollWidget } from "./ui/gm-complication-roll-widget.js";
 import {
   TRISKEL_CODEX,
   TRISKEL_CODEX_INDEX,
@@ -69,7 +69,7 @@ Hooks.once("init", function() {
   };
 
   registerTriskelDiceTerm();
-  registerThreadObstacleRollWidget();
+  registerComplicationRollWidget();
 
   Hooks.once("i18nInit", () => {
     const localize = game.i18n.localize.bind(game.i18n);

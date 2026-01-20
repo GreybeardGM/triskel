@@ -1,4 +1,4 @@
-.triskel-gm-thread-roll {
+.triskel-complication-roll {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -12,11 +12,11 @@
   line-height: 1.4;
 }
 
-.triskel-gm-thread-roll i {
+.triskel-complication-roll i {
   font-size: 0.85rem;
 }
 
-.triskel-gm-thread-roll:disabled {
+.triskel-complication-roll:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

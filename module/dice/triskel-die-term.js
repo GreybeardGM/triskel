@@ -54,8 +54,8 @@ export function registerTriskelDiceSoNice(dice3d) {
   dice3d.addSystem({ id: "triskel", name: "Triskel" }, "preferred");
   if (dice3d.addColorset) {
     dice3d.addColorset({
-      name: "Thread",
-      description: "Triskel Thread",
+      name: "Threat",
+      description: "Triskel Threat",
       category: "Triskel",
       foreground: "#fdf7f2",
       background: "#a0191d",
