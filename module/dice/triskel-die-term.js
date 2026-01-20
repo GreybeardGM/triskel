@@ -31,7 +31,7 @@ export class TriskelDieTerm extends foundry.dice.terms.Die {
     if (value === 0) classList.add("min");
     if (value === 9) classList.add("max");
 
-    return Array.from(classList).join(" ");
+    return Array.from(classList);
   }
 }
 
