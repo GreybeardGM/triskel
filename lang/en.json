@@ -431,9 +431,13 @@
         "Description": "Use the weapon’s hook to yank a target toward you instead of shoving them away.",
         "Label": "Drag"
       },
-      "LockingBind": {
-        "Description": "Deepen a bind so that the target’s weapon stays locked more firmly in place.",
-        "Label": "Locking Bind"
+      "Fix": {
+        "Description": "On a successful guard, the first success grants the target Bind 1.",
+        "Label": "Fix"
+      },
+      "Intercept": {
+        "Description": "On a successful guard, the first success grants the target Bind 1.",
+        "Label": "Intercept"
       },
       "PowerStrike": {
         "Description": "Spend power to make a strike hit much harder than usual.",

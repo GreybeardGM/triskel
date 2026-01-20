@@ -431,9 +431,13 @@
         "Description": "Die Waffe verfügt über einen Haken, mit dem du einen Gegner heranziehen kannst, anstatt ihn wegzudrücken.",
         "Label": "Heranziehen"
       },
-      "LockingBind": {
-        "Description": "Vertieft ein Binden, sodass die Waffe des Ziels fester blockiert bleibt.",
-        "Label": "Fesselnder Block"
+      "Fix": {
+        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Bind 1.",
+        "Label": "Festsetzen"
+      },
+      "Intercept": {
+        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Bind 1.",
+        "Label": "Abfangen"
       },
       "PowerStrike": {
         "Description": "Gibt Kraft aus, um einen Schlag wesentlich härter treffen zu lassen als gewöhnlich.",
