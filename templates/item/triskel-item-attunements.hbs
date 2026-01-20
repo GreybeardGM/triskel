@@ -1,4 +1,8 @@
-<section class="item-panel {{#if isSpellType}}is-hidden{{/if}}">
+<section
+  class="tab item-panel {{tabs.spells.id}} {{tabs.spells.cssClass}} {{#if isSpellType}}is-hidden{{/if}}"
+  data-tab="{{tabs.spells.id}}"
+  data-group="{{tabs.spells.group}}"
+>
   <h2>Attunements</h2>
   <ol class="reference-entries">
     {{#each references.attunements as |reference|}}
