@@ -22,13 +22,20 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.TrippingHook.Description"
   },
   {
-    id: "locking_bind",
-    label: "TRISKEL.Form.LockingBind.Label",
+    id: "fix",
+    label: "TRISKEL.Form.Fix.Label",
     cost: 1,
     reserve: "grace",
-    keyword: "bind",
-    modifier: { skill: 2 },
-    description: "TRISKEL.Form.LockingBind.Description"
+    keyword: "guard",
+    description: "TRISKEL.Form.Fix.Description"
+  },
+  {
+    id: "intercept",
+    label: "TRISKEL.Form.Intercept.Label",
+    cost: 2,
+    reserve: "grace",
+    keyword: "guard",
+    description: "TRISKEL.Form.Intercept.Description"
   },
   {
     id: "precision_thrust",
