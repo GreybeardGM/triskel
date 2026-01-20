@@ -61,7 +61,8 @@ export function registerTriskelDiceSoNice(dice3d) {
       background: "#a0191d",
       outline: "#4f0c0e",
       edge: "#4f0c0e",
-      texture: "none",
+      texture: "bronze-3b",
+      font: "Arial",
       material: "plastic"
     }, "default");
 
@@ -73,7 +74,8 @@ export function registerTriskelDiceSoNice(dice3d) {
       background: "#f2a11b",
       outline: "#b36a10",
       edge: "#b36a10",
-      texture: "none",
+      texture: "bronze-3b",
+      font: "Arial",
       material: "plastic"
     }, "default");
   }
