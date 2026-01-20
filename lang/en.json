@@ -1,5 +1,14 @@
 {
   "TRISKEL": {
+    "Widget": {
+      "ComplicationRoll": {
+        "Label": "Complication Roll",
+        "Title": "Complication Roll",
+        "Subtitle": "1dt Threat - 1dt Obstacle",
+        "Tooltip": "Roll 1dt[Threat] - 1dt[Obstacle] (GM only)",
+        "PublicMessage": "A Complication Roll was made."
+      }
+    },
     "Action": {
       "Advanced": {
         "LoadArrow": {
