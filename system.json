@@ -18,6 +18,7 @@
   ],
   "styles": [
     "styles/triskel.css",
+    "styles/triskel-ui.css",
     "styles/triskel-character.css",
     "styles/triskel-item.css",
     "styles/triskel-chat-output.css"
