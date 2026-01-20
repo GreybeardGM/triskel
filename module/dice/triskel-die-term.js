@@ -33,6 +33,14 @@ export class TriskelDieTerm extends foundry.dice.terms.Die {
 
     return Array.from(classList);
   }
+
+  get values() {
+    return this.results.map(result => TriskelDieTerm.map10to09(result.result));
+  }
+
+  get total() {
+    return this.values.reduce((total, value) => total + value, 0);
+  }
 }
 
 export function registerTriskelDiceTerm() {
@@ -47,6 +55,6 @@ export function registerTriskelDiceSoNice(dice3d) {
   dice3d.addDicePreset({
     type: "dt",
     system: "triskel",
-    labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
   }, "d10");
 }
