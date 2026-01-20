@@ -7,7 +7,6 @@ import {
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
 import { TriskelDieTerm } from "../dice/triskel-die-term.js";
-import { convertD10TensToZero } from "../util/roll.js";
 import { getCachedCollator } from "../util/collator.js";
 
 const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
