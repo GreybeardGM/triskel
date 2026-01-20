@@ -20,3 +20,11 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.triskel-complication-roll--top {
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  border-radius: 4px;
+}

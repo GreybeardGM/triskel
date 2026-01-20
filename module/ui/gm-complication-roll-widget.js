@@ -4,14 +4,15 @@ const WIDGET_CLASS = "triskel-complication-roll";
 const ROLL_FORMULA = "1dt[Threat]-1dt[Obstacle]";
 const I18N_ROOT = "TRISKEL.Widget.ComplicationRoll";
 
-function createButton(localize) {
+function createButton(localize, { showLabel = true, extraClass = "" } = {}) {
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `chat-control-icon ${WIDGET_CLASS}`;
+  button.className = `ui-control icon ${WIDGET_CLASS} ${extraClass}`.trim();
   button.title = localize(`${I18N_ROOT}.Tooltip`);
+  button.setAttribute("aria-label", localize(`${I18N_ROOT}.Label`));
   button.innerHTML = `
     <i class="fa-solid fa-dice-d10" aria-hidden="true"></i>
-    <span>${localize(`${I18N_ROOT}.Label`)}</span>
+    ${showLabel ? `<span>${localize(`${I18N_ROOT}.Label`)}</span>` : ""}
   `;
   return button;
 }
@@ -35,18 +36,18 @@ async function performComplicationRoll(localize) {
   });
 }
 
-function addButtonToChatControls(html) {
+function addButtonToTopBar(html) {
   if (!game.user?.isGM) return;
 
   const root = html?.[0] ?? html;
   if (!root) return;
 
-  const controls = root.querySelector(".chat-controls") ?? root.querySelector("#chat-controls");
-  if (!controls) return;
-  if (controls.querySelector(`.${WIDGET_CLASS}`)) return;
+  const navBar = root.querySelector("#nav-bar") ?? root.querySelector("#navigation") ?? root;
+  if (!navBar) return;
+  if (navBar.querySelector(`.${WIDGET_CLASS}`)) return;
 
   const localize = game.i18n.localize.bind(game.i18n);
-  const button = createButton(localize);
+  const button = createButton(localize, { showLabel: false, extraClass: "triskel-complication-roll--top" });
 
   button.addEventListener("click", async () => {
     button.disabled = true;
@@ -57,15 +58,11 @@ function addButtonToChatControls(html) {
     }
   });
 
-  controls.appendChild(button);
+  navBar.appendChild(button);
 }
 
 export function registerComplicationRollWidget() {
-  Hooks.on("renderChatLog", (app, html) => {
-    addButtonToChatControls(html);
-  });
-
-  Hooks.on("renderChatSidebar", (app, html) => {
-    addButtonToChatControls(html);
+  Hooks.on("renderSceneNavigation", (app, html) => {
+    addButtonToTopBar(html);
   });
 }
