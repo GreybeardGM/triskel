@@ -88,6 +88,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       id: "header",
       template: "systems/triskel/templates/item/triskel-item-header.hbs"
     },
+    tabs: {
+      id: "tabs",
+      template: "systems/triskel/templates/item/triskel-item-tabs.hbs"
+    },
     gearArchetype: {
       id: "gear-archetype",
       template: "systems/triskel/templates/item/triskel-item-gear-archetype.hbs"
@@ -111,6 +115,29 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     modifiers: {
       id: "modifiers",
       template: "systems/triskel/templates/item/triskel-item-modifiers.hbs"
+    }
+  };
+
+  static TABS = {
+    sheet: {
+      tabs: [
+        {
+          id: "base",
+          group: "sheet",
+          label: "TRISKEL.Item.Tab.Base"
+        },
+        {
+          id: "actions",
+          group: "sheet",
+          label: "TRISKEL.Item.Tab.Actions"
+        },
+        {
+          id: "spells",
+          group: "sheet",
+          label: "TRISKEL.Item.Tab.Spells"
+        }
+      ],
+      initial: "base"
     }
   };
 

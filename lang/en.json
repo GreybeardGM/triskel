@@ -24,10 +24,6 @@
         }
       },
       "Base": {
-        "Bind": {
-          "Description": "Locks the opponent’s weapon line and imposes bound(X).",
-          "Label": "Bind"
-        },
         "Brace": {
           "Description": "Sets a firm stance; reduces incoming control effects.",
           "Label": "Brace"
@@ -431,9 +427,9 @@
         "Description": "Use the weapon’s hook to yank a target toward you instead of shoving them away.",
         "Label": "Drag"
       },
-      "Fix": {
+      "Deny": {
         "Description": "On a successful guard, the first success grants the target Bind 1.",
-        "Label": "Fix"
+        "Label": "Deny"
       },
       "Intercept": {
         "Description": "On a successful guard, the first success grants the target Bind 1.",
@@ -447,6 +443,10 @@
         "Description": "Turn a strike into a precise thrust that gains extra accuracy for a brief moment.",
         "Label": "Precision Thrust"
       },
+      "SureStrike": {
+        "Description": "Deliver controlled, deliberate strikes with careful aim.",
+        "Label": "Sure Strike"
+      },
       "PushThrough": {
         "Description": "Drive a push harder, forcing the target back farther than a normal control move would.",
         "Label": "Push Through"
@@ -454,6 +454,10 @@
       "ShieldCover": {
         "Description": "Duck behind the shield to cover yourself from harm.",
         "Label": "Shield Cover"
+      },
+      "ShieldBrace": {
+        "Description": "Brace behind the shield to block even heavy strikes.",
+        "Label": "Shield Brace"
       },
       "ShieldPull": {
         "Description": "Rip open and bind an opponent’s shield with the weapon’s leverage.",
@@ -528,6 +532,11 @@
         "Ability": "Ability",
         "Gear": "Gear",
         "Spell": "Spells"
+      },
+      "Tab": {
+        "Actions": "Actions",
+        "Base": "Base",
+        "Spells": "Spells"
       }
     },
     "Misc": {

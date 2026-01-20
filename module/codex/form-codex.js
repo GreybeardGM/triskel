@@ -22,12 +22,12 @@ export const TRISKEL_FORMS = [
     description: "TRISKEL.Form.TrippingHook.Description"
   },
   {
-    id: "fix",
-    label: "TRISKEL.Form.Fix.Label",
+    id: "deny",
+    label: "TRISKEL.Form.Deny.Label",
     cost: 1,
     reserve: "grace",
     keyword: "guard",
-    description: "TRISKEL.Form.Fix.Description"
+    description: "TRISKEL.Form.Deny.Description"
   },
   {
     id: "intercept",
@@ -45,6 +45,15 @@ export const TRISKEL_FORMS = [
     keyword: "strike",
     modifier: { skill: 2 },
     description: "TRISKEL.Form.PrecisionThrust.Description"
+  },
+  {
+    id: "sure_strike",
+    label: "TRISKEL.Form.SureStrike.Label",
+    cost: 1,
+    reserve: "grace",
+    keyword: "strike",
+    modifier: { skill: 1 },
+    description: "TRISKEL.Form.SureStrike.Description"
   },
   {
     id: "push_through",
@@ -98,5 +107,13 @@ export const TRISKEL_FORMS = [
     keyword: "evasion",
     modifier: { skill: 2 },
     description: "TRISKEL.Form.ShieldCover.Description"
+  },
+  {
+    id: "shield_brace",
+    label: "TRISKEL.Form.ShieldBrace.Label",
+    cost: 2,
+    reserve: "power",
+    keyword: "guard",
+    description: "TRISKEL.Form.ShieldBrace.Description"
   }
 ];
