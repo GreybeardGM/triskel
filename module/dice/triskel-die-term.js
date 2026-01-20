@@ -17,8 +17,13 @@ export class TriskelDieTerm extends foundry.dice.terms.Die {
 
   getResultCSS(result) {
     const css = super.getResultCSS(result);
+    const classNames = Array.isArray(css)
+      ? css.join(" ")
+      : typeof css === "string"
+        ? css
+        : "";
     const value = TriskelDieTerm.map10to09(result.result);
-    const classList = new Set(css.split(/\s+/).filter(Boolean));
+    const classList = new Set(classNames.split(/\s+/).filter(Boolean));
 
     classList.delete("min");
     classList.delete("max");
