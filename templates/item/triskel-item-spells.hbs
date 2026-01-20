@@ -1,4 +1,8 @@
-<section class="item-panel">
+<section
+  class="tab item-panel {{tabs.spells.id}} {{tabs.spells.cssClass}}"
+  data-tab="{{tabs.spells.id}}"
+  data-group="{{tabs.spells.group}}"
+>
   <h2>Spells</h2>
   <ol class="reference-entries">
     {{#each references.spells as |reference|}}

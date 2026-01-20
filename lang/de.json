@@ -24,10 +24,6 @@
         }
       },
       "Base": {
-        "Bind": {
-          "Description": "Blockiert die Waffenlinie des Gegners und verhängt gebunden(X).",
-          "Label": "Binden"
-        },
         "Brace": {
           "Description": "Nimmt eine feste Haltung ein; verringert eingehende Kontrolleffekte.",
           "Label": "Standhalten"
@@ -431,9 +427,13 @@
         "Description": "Die Waffe verfügt über einen Haken, mit dem du einen Gegner heranziehen kannst, anstatt ihn wegzudrücken.",
         "Label": "Heranziehen"
       },
-      "LockingBind": {
-        "Description": "Vertieft ein Binden, sodass die Waffe des Ziels fester blockiert bleibt.",
-        "Label": "Fesselnder Block"
+      "Deny": {
+        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Bind 1.",
+        "Label": "Festsetzen"
+      },
+      "Intercept": {
+        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Bind 1.",
+        "Label": "Abfangen"
       },
       "PowerStrike": {
         "Description": "Gibt Kraft aus, um einen Schlag wesentlich härter treffen zu lassen als gewöhnlich.",
@@ -443,6 +443,10 @@
         "Description": "Wandelt einen Schlag in einen genauen Stoß, der kurzzeitig zusätzliche Treffgenauigkeit gewinnt.",
         "Label": "Präzisionsstoß"
       },
+      "SureStrike": {
+        "Description": "Führt kontrollierte, gezielte Hiebe aus.",
+        "Label": "Sicherer Schlag"
+      },
       "PushThrough": {
         "Description": "Treibt ein Stoßen stärker voran und zwingt das Ziel weiter zurück als eine normale Kontrollaktion.",
         "Label": "Durchdrücken"
@@ -450,6 +454,10 @@
       "ShieldCover": {
         "Description": "Du duckst dich hinter das Schild weg, um dich zu schützen.",
         "Label": "Schilddeckung"
+      },
+      "ShieldBrace": {
+        "Description": "Stemme dich hinter das Schild, um selbst schwere Angriffe zu blocken.",
+        "Label": "Schildstemmen"
       },
       "ShieldPull": {
         "Description": "Mit der Waffe lässt sich ein Schild aufreißen und sogleich binden.",
@@ -524,6 +532,11 @@
         "Ability": "Fähigkeit",
         "Gear": "Ausrüstung",
         "Spell": "Zauber"
+      },
+      "Tab": {
+        "Actions": "Aktionen",
+        "Base": "Basis",
+        "Spells": "Zauber"
       }
     },
     "Misc": {
