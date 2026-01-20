@@ -1,0 +1,28 @@
+.triskel-complication-roll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.35rem;
+  padding: 0 0.35rem;
+  border: 1px solid var(--triskel-interactive-border);
+  border-radius: 4px;
+  background: var(--triskel-interactive-background);
+  color: var(--triskel-color-text-inverse);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.triskel-complication-roll i {
+  font-size: 0.85rem;
+}
+
+.triskel-complication-roll:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.triskel-complication-roll--right {
+  margin: 0 0 0.5rem;
+  width: 100%;
+  justify-content: center;
+}
