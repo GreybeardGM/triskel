@@ -1,4 +1,8 @@
-<section class="item-panel {{#unless isGearType}}is-hidden{{/unless}}">
+<section
+  class="tab item-panel {{tabs.base.id}} {{tabs.base.cssClass}} {{#unless isGearType}}is-hidden{{/unless}}"
+  data-tab="{{tabs.base.id}}"
+  data-group="{{tabs.base.group}}"
+>
   <h2>{{localize "TRISKEL.Item.Archetype.Label"}}</h2>
   <div class="form-group">
     <label for="gear-archetype-select">{{localize "TRISKEL.Item.Archetype.Label"}}</label>

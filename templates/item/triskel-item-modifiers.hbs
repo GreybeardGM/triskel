@@ -1,4 +1,8 @@
-<section class="item-panel {{#if isSpellType}}is-hidden{{/if}}">
+<section
+  class="tab item-panel {{tabs.base.id}} {{tabs.base.cssClass}} {{#if isSpellType}}is-hidden{{/if}}"
+  data-tab="{{tabs.base.id}}"
+  data-group="{{tabs.base.group}}"
+>
   <h2>Modifiers</h2>
   <ol class="reference-entries">
     {{#each modifiers as |modifier|}}

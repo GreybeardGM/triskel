@@ -2,6 +2,7 @@ import { TriskelActor } from "./actor/triskel-actor.js";
 import { PlayerCharacterSheet } from "./actor/player-character-sheet.js";
 import { NpcSheet } from "./actor/npc-sheet.js";
 import { TriskelItemSheet } from "./item/triskel-item-sheet.js";
+import { registerTriskelDiceSoNice, registerTriskelDiceTerm } from "./dice/triskel-die-term.js";
 import {
   TRISKEL_CODEX,
   TRISKEL_CODEX_INDEX,
@@ -66,6 +67,8 @@ Hooks.once("init", function() {
     index: TRISKEL_CODEX_INDEX
   };
 
+  registerTriskelDiceTerm();
+
   Hooks.once("i18nInit", () => {
     const localize = game.i18n.localize.bind(game.i18n);
 
@@ -76,3 +79,5 @@ Hooks.once("init", function() {
   });
 
 });
+
+Hooks.once("diceSoNiceReady", registerTriskelDiceSoNice);
