@@ -7,7 +7,10 @@
         "Subtitle": "1dt Threat - 1dt Hindernis",
         "Tooltip": "Würfelt 1dt[Threat] - 1dt[Hindernis] (nur SL)",
         "PublicMessage": "Ein Komplikationswurf wurde ausgeführt.",
-        "ResultFallback": "Komplikationsergebnis"
+        "ResultFallback": "Komplikationsergebnis",
+        "DropLabel": "Drop",
+        "DropTooltip": "Wendet die gespeicherte Komplikation an und leert sie.",
+        "StoredEmpty": "Keine gespeicherte Komplikation"
       }
     },
     "Action": {
