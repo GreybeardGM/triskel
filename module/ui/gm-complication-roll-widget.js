@@ -1,14 +1,33 @@
 import { chatOutput } from "../util/chat-output.js";
 
 const WIDGET_CLASS = "triskel-complication-roll";
+const WIDGET_CONTAINER_CLASS = "triskel-complication-roll-widget";
+const STORED_ROW_CLASS = "triskel-complication-roll__stored";
+const STORED_CARD_CLASS = "triskel-complication-roll__card";
+const STORED_DROP_CLASS = "triskel-complication-roll__drop";
 const ROLL_FORMULA = "1dt[Threat]-1dt[Obstacle]";
 const I18N_ROOT = "TRISKEL.Widget.ComplicationRoll";
+const STORED_SETTING_KEY = "storedComplicationRoll";
 
-function getComplicationEntryLabel(total) {
+function getComplicationEntry(total) {
   const entries = CONFIG.triskell?.codex?.complicationTable?.entries ?? [];
-  const entry = entries.find(item => item?.range && total >= item.range.min && total <= item.range.max);
+  return entries.find(item => item?.range && total >= item.range.min && total <= item.range.max) ?? null;
+}
+
+function getComplicationEntryLabel(entry, localize) {
   if (!entry?.label) return null;
-  return entry.label.startsWith?.("TRISKEL.") ? game.i18n.localize(entry.label) : entry.label;
+  return entry.label.startsWith?.("TRISKEL.") ? localize(entry.label) : entry.label;
+}
+
+function formatComplicationLabel(localize, entryLabel, total) {
+  const baseLabel = entryLabel ?? localize(`${I18N_ROOT}.ResultFallback`);
+  return `${baseLabel} (${total})`;
+}
+
+function getComplicationTone(total) {
+  if (total < 0) return "obstacle";
+  if (total > 0) return "threat";
+  return null;
 }
 
 function createButton(localize, { showLabel = true, extraClass = "" } = {}) {
@@ -24,11 +43,58 @@ function createButton(localize, { showLabel = true, extraClass = "" } = {}) {
   return button;
 }
 
+function createDropButton(localize) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `ui-control icon ${WIDGET_CLASS} ${STORED_DROP_CLASS}`.trim();
+  button.title = localize(`${I18N_ROOT}.DropTooltip`);
+  button.setAttribute("aria-label", localize(`${I18N_ROOT}.DropLabel`));
+  button.innerHTML = `
+    <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
+    <span>${localize(`${I18N_ROOT}.DropLabel`)}</span>
+  `;
+  return button;
+}
+
+function createStoredCard() {
+  const card = document.createElement("div");
+  card.className = STORED_CARD_CLASS;
+  return card;
+}
+
+function getStoredComplication() {
+  return game.settings.get("triskel", STORED_SETTING_KEY);
+}
+
+async function setStoredComplication(value) {
+  await game.settings.set("triskel", STORED_SETTING_KEY, value);
+}
+
+function updateStoredComplicationDisplay(root, localize, stored = getStoredComplication()) {
+  const widgets = root.querySelectorAll(`.${WIDGET_CONTAINER_CLASS}`);
+  widgets.forEach(widget => {
+    const card = widget.querySelector(`.${STORED_CARD_CLASS}`);
+    const dropButton = widget.querySelector(`.${STORED_DROP_CLASS}`);
+    if (!card || !dropButton) return;
+
+    const label = stored?.label ?? localize(`${I18N_ROOT}.StoredEmpty`);
+    const tone = stored ? getComplicationTone(stored.total ?? 0) : null;
+
+    card.textContent = label;
+    card.classList.remove("obstacle", "threat");
+    if (tone) card.classList.add(tone);
+
+    dropButton.disabled = !stored;
+    dropButton.setAttribute("aria-disabled", String(!stored));
+  });
+}
+
 async function performComplicationRoll(localize) {
   const roll = new Roll(ROLL_FORMULA);
   await roll.evaluate();
   const total = roll.total ?? 0;
-  const entryLabel = getComplicationEntryLabel(total);
+  const entry = getComplicationEntry(total);
+  const entryLabel = getComplicationEntryLabel(entry, localize);
   const gmContent = entryLabel
     ? `<p><strong>${entryLabel}</strong> (${total})</p>`
     : `<p>${localize(`${I18N_ROOT}.ResultFallback`)} (${total})</p>`;
@@ -40,6 +106,13 @@ async function performComplicationRoll(localize) {
     roll,
     rollMode: "blindroll"
   });
+
+  const storedComplication = {
+    total,
+    label: formatComplicationLabel(localize, entryLabel, total)
+  };
+  await setStoredComplication(storedComplication);
+  updateStoredComplicationDisplay(document, localize, storedComplication);
 
   await chatOutput({
     title: localize(`${I18N_ROOT}.Title`),
@@ -56,13 +129,31 @@ function addButtonToRightColumn(app, html) {
 
   const column = root.querySelector("#ui-right-column-1");
   if (!column) return;
-  if (column.querySelector(`.${WIDGET_CLASS}`)) return;
+  if (column.querySelector(`.${WIDGET_CONTAINER_CLASS}`)) return;
 
   const notifications = column.querySelector("#chat-notifications");
   if (!notifications) return;
 
   const localize = game.i18n.localize.bind(game.i18n);
+  const storedRow = document.createElement("div");
+  storedRow.className = STORED_ROW_CLASS;
+
+  const dropButton = createDropButton(localize);
+  const storedCard = createStoredCard();
+
+  storedRow.append(dropButton, storedCard);
+
   const button = createButton(localize, { showLabel: true, extraClass: "triskel-complication-roll--right" });
+
+  dropButton.addEventListener("click", async () => {
+    dropButton.disabled = true;
+    try {
+      await setStoredComplication(null);
+      updateStoredComplicationDisplay(document, localize, null);
+    } finally {
+      dropButton.disabled = false;
+    }
+  });
 
   button.addEventListener("click", async () => {
     button.disabled = true;
@@ -73,7 +164,26 @@ function addButtonToRightColumn(app, html) {
     }
   });
 
-  column.insertBefore(button, notifications);
+  const container = document.createElement("div");
+  container.className = WIDGET_CONTAINER_CLASS;
+  container.append(storedRow, button);
+
+  column.insertBefore(container, notifications);
+  updateStoredComplicationDisplay(container, localize);
+}
+
+export function registerComplicationRollSettings() {
+  game.settings.register("triskel", STORED_SETTING_KEY, {
+    name: "Stored complication roll",
+    scope: "world",
+    config: false,
+    type: Object,
+    default: null,
+    onChange: value => {
+      const localize = game.i18n?.localize?.bind(game.i18n) ?? (key => key);
+      updateStoredComplicationDisplay(document, localize, value);
+    }
+  });
 }
 
 export function registerComplicationRollWidget() {

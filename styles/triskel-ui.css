@@ -22,7 +22,7 @@
 }
 
 .triskel-complication-roll--right {
-  margin: 0 0 0.5rem;
+  margin: 0;
   width: 100%;
   justify-content: center;
   background: var(--color-cool-5-25);
@@ -30,4 +30,43 @@
 
 .triskel-complication-roll--right:hover {
   background: var(--color-cool-5-75);
+}
+
+.triskel-complication-roll-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 0.5rem;
+}
+
+.triskel-complication-roll__stored {
+  display: flex;
+  gap: 0.35rem;
+  align-items: stretch;
+}
+
+.triskel-complication-roll__drop {
+  margin-left: 0;
+  flex: 0 0 auto;
+}
+
+.triskel-complication-roll__card {
+  flex: 1 1 auto;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--triskel-color-border-muted, #C9B68F);
+  border-radius: 4px;
+  background: var(--triskel-color-surface-muted, #EAE3D4);
+  color: var(--triskel-color-text-strong, #111111);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+}
+
+.triskel-complication-roll__card.obstacle {
+  border-color: #f2a11b;
+}
+
+.triskel-complication-roll__card.threat {
+  border-color: #a0191d;
 }
