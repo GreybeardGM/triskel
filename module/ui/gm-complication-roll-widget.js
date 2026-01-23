@@ -60,7 +60,7 @@ function createRollButton(localize) {
 
 function createStoredCard() {
   const card = document.createElement("div");
-  card.className = STORED_CARD_CLASS;
+  card.className = `${STORED_CARD_CLASS} complication-tone`;
   return card;
 }
 
@@ -97,14 +97,13 @@ async function performComplicationRoll(localize) {
   const total = roll.total ?? 0;
   const entry = getComplicationEntry(total);
   const entryLabel = getComplicationEntryLabel(entry, localize);
-  const gmContent = entryLabel
-    ? `<p><strong>${entryLabel}</strong> (${total})</p>`
-    : `<p>${localize(`${I18N_ROOT}.ResultFallback`)} (${total})</p>`;
+  const complicationLabel = formatComplicationLabel(localize, entryLabel, total);
 
   await chatOutput({
     title: localize(`${I18N_ROOT}.Title`),
     subtitle: localize(`${I18N_ROOT}.Subtitle`),
-    content: gmContent,
+    complication: complicationLabel,
+    complicationTone: getComplicationTone(total),
     roll,
     rollMode: "blindroll"
   });
