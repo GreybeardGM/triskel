@@ -1,10 +1,10 @@
 import { chatOutput } from "../util/chat-output.js";
 
-const WIDGET_CLASS = "triskel-complication-roll";
-const WIDGET_CONTAINER_CLASS = "triskel-complication-roll-widget";
-const STORED_ROW_CLASS = "triskel-complication-roll__stored";
-const STORED_CARD_CLASS = "triskel-complication-roll__card";
-const STORED_DROP_CLASS = "triskel-complication-roll__drop";
+const WIDGET_CLASS = "complication-roll";
+const WIDGET_CONTAINER_CLASS = "complication-roll-widget";
+const STORED_ROW_CLASS = "complication-roll__stored";
+const STORED_CARD_CLASS = "complication-roll__card";
+const STORED_DROP_CLASS = "complication-roll__drop";
 const ROLL_FORMULA = "1dt[Threat]-1dt[Obstacle]";
 const I18N_ROOT = "TRISKEL.Widget.ComplicationRoll";
 const STORED_SETTING_KEY = "storedComplicationRoll";
@@ -33,9 +33,8 @@ function getComplicationTone(total) {
 function createButton(localize, { showLabel = true, extraClass = "" } = {}) {
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `ui-control icon ${WIDGET_CLASS} ${extraClass}`.trim();
+  button.className = `ui-control ${extraClass}`.trim();
   button.title = localize(`${I18N_ROOT}.Tooltip`);
-  button.setAttribute("aria-label", localize(`${I18N_ROOT}.Label`));
   button.innerHTML = `
     <i class="fa-solid fa-dice-d10" aria-hidden="true"></i>
     ${showLabel ? `<span>${localize(`${I18N_ROOT}.Label`)}</span>` : ""}
@@ -46,12 +45,10 @@ function createButton(localize, { showLabel = true, extraClass = "" } = {}) {
 function createDropButton(localize) {
   const button = document.createElement("button");
   button.type = "button";
-  button.className = `ui-control icon ${WIDGET_CLASS} ${STORED_DROP_CLASS}`.trim();
+  button.className = `ui-control ${STORED_DROP_CLASS}`.trim();
   button.title = localize(`${I18N_ROOT}.DropTooltip`);
-  button.setAttribute("aria-label", localize(`${I18N_ROOT}.DropLabel`));
   button.innerHTML = `
     <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
-    <span>${localize(`${I18N_ROOT}.DropLabel`)}</span>
   `;
   return button;
 }
@@ -143,7 +140,7 @@ function addButtonToRightColumn(app, html) {
 
   storedRow.append(dropButton, storedCard);
 
-  const button = createButton(localize, { showLabel: true, extraClass: "triskel-complication-roll--right" });
+  const button = createButton(localize, { showLabel: true, extraClass: "complication-roll-button" });
 
   dropButton.addEventListener("click", async () => {
     dropButton.disabled = true;
