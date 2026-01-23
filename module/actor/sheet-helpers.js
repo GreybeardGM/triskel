@@ -556,14 +556,10 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
     ? { ...selectedAction, forms: mappedForms, situationalModifier }
     : {};
   const activeForms = mappedForms.filter(form => form.active);
-  const baseCostValue = toFiniteNumber(preparedAction?.cost, Number.NaN);
-  const baseCost = Number.isFinite(baseCostValue) && baseCostValue !== 0 ? baseCostValue : null;
-
   const rollHelper = {
     hasSelection: Boolean(selectedAction),
     action: preparedAction,
-    forms: mappedForms,
-    cost: baseCost
+    forms: mappedForms
   };
 
   const rollHelperSummary = selectedAction
@@ -645,7 +641,8 @@ function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}
   for (const [reserveId, total] of Object.entries(reserveTotals)) {
     const reserveSource = normalizedReserves[reserveId] ?? reserveIndex[reserveId] ?? {};
     const available = toFiniteNumber(reserveSource.value, Number.NaN);
-    if (Number.isFinite(available) && available < total) {
+    const minimum = toFiniteNumber(reserveSource.min, 0);
+    if (Number.isFinite(available) && available - total < minimum) {
       canAfford = false;
     }
 

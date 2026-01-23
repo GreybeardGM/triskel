@@ -14,6 +14,7 @@ import {
   prepareRollHelperTabContext,
   prepareSkillsTabContext
 } from "./sheet-helpers.js";
+import { chatOutput } from "../util/chat-output.js";
 import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -174,13 +175,65 @@ async function onRollHelper(event) {
   event.preventDefault();
 
   const actor = this.document;
-  const rollData = this._rollHelperRollData;
-  if (!rollData || typeof actor?.rollTriskelDice !== "function") return;
+  const rollHelper = this._rollHelper ?? {};
+  const rollData = rollHelper.rollData;
+  const rollHelperSummary = rollHelper.summary;
+  const rollHelperAction = rollHelper.action;
+  const rollHelperForms = rollHelper.forms;
+  const rollHelperCost = toFiniteNumber(rollHelperAction?.cost, Number.NaN);
+  if (!rollHelperSummary) return;
+  if (rollHelperSummary.canAfford === false) return;
 
-  const rollResult = await actor.rollTriskelDice(rollData);
-  if (rollResult) {
-    await actor.update({ "system.actions.commit.value": 0 });
-  }
+  const shouldRoll = Boolean(rollData);
+  if (shouldRoll && typeof actor?.rollTriskelDice !== "function") return;
+  const rollResult = shouldRoll
+    ? await actor.rollTriskelDice({
+      ...rollData,
+      options: {
+        ...rollData?.options,
+        chatOutput: false
+      }
+    })
+    : null;
+  if (shouldRoll && !rollResult) return;
+
+  const reserveUpdates = {};
+  const reserveCosts = Array.isArray(rollHelperSummary?.reserveCosts)
+    ? rollHelperSummary.reserveCosts
+    : [];
+  const activeForms = Array.isArray(rollHelperForms)
+    ? rollHelperForms.filter(form => form?.active)
+    : [];
+
+  reserveCosts.forEach(reserve => {
+    if (!reserve?.id) return;
+    const reservePath = `system.reserves.${reserve.id}`;
+    const currentReserve = actor?.system?.reserves?.[reserve.id] ?? {};
+    const currentValue = toFiniteNumber(currentReserve?.value, Number.NaN);
+    if (!Number.isFinite(currentValue)) return;
+    const minimum = toFiniteNumber(currentReserve?.min, 0);
+    const totalCost = toFiniteNumber(reserve.total, 0);
+    const updatedValue = Math.max(minimum, currentValue - totalCost);
+    reserveUpdates[`${reservePath}.value`] = updatedValue;
+  });
+
+  await actor.update({
+    ...reserveUpdates,
+    "system.actions.commit.value": 0
+  });
+
+  await chatOutput({
+    roll: rollResult?.roll ?? null,
+    actionTemplate: rollHelperAction ? "systems/triskel/templates/chat/roll-helper-action.hbs" : "",
+    actionContext: {
+      action: rollHelperAction,
+      forms: activeForms,
+      actionCost: Number.isFinite(rollHelperCost) && rollHelperCost !== 0 ? rollHelperCost : null,
+      reserveCosts
+    },
+    speaker: ChatMessage.getSpeaker({ actor }),
+    rollMode: rollData?.options?.rollMode ?? null
+  });
 }
 
 async function onToggleActiveItem(event, target) {
@@ -313,7 +366,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
         reserves: basePartContext.reserves ?? {},
         commit: basePartContext.commit ?? null
       });
-      this._rollHelperRollData = rollHelperContext.rollHelperRollData ?? null;
+      this._rollHelper = {
+        rollData: rollHelperContext.rollHelperRollData ?? null,
+        summary: rollHelperContext.rollHelperSummary ?? null,
+        action: rollHelperContext.rollHelper?.action ?? null,
+        forms: rollHelperContext.rollHelper?.forms ?? []
+      };
 
       return {
         ...basePartContext,

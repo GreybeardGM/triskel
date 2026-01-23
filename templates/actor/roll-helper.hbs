@@ -29,9 +29,9 @@
             <div class="roll-helper__entry-bonus">{{numberFormat rollHelper.action.skillTotal decimals=0 sign=true}}</div>
           {{/if}}
 
-          {{#if rollHelper.cost}}
+          {{#if rollHelper.action.cost}}
             <div class="roll-helper__entry-cost">
-              {{numberFormat rollHelper.cost decimals=0}}
+              {{numberFormat rollHelper.action.cost decimals=0}}
             </div>
           {{/if}}
 
@@ -127,17 +127,15 @@
         <div class="roll-helper__summary-entry">
           <div class="roll-helper__summary-label">{{localize "TRISKEL.Actor.RollHelper.TotalBonus"}}</div>
           <div class="roll-helper__summary-value">{{numberFormat rollHelperSummary.totalSkillBonus decimals=0 sign=true}}</div>
-          {{#if rollHelper.action.roll.active}}
-            <button
-              type="button"
-              class="roll-helper__summary-roll is-interactive"
-              data-action="rollHelper"
-              {{#unless rollHelperSummary.canAfford}}disabled{{/unless}}
-            >
-              <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
-              <span>{{localize "TRISKEL.Actor.RollHelper.Roll"}}</span>
-            </button>
-          {{/if}}
+          <button
+            type="button"
+            class="roll-helper__summary-roll is-interactive"
+            data-action="rollHelper"
+            {{#unless rollHelperSummary.canAfford}}disabled{{/unless}}
+          >
+            <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
+            <span>{{localize "TRISKEL.Actor.RollHelper.Roll"}}</span>
+          </button>
         </div>
 
         {{#if rollHelperSummary.reserveCosts.length}}
