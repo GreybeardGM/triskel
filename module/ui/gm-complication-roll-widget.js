@@ -1,6 +1,6 @@
 import { chatOutput } from "../util/chat-output.js";
 
-const WIDGET_CLASS = "complication-roll";
+const WIDGET_CLASS = "complication-roll-widget";
 const WIDGET_CONTAINER_CLASS = "complication-roll-widget";
 const STORED_ROW_CLASS = "complication-roll__stored";
 const STORED_CARD_CLASS = "complication-roll__card";
