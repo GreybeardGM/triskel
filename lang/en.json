@@ -3,7 +3,6 @@
     "Widget": {
       "ComplicationRoll": {
         "Label": "Complication Roll",
-        "Title": "Complication Roll",
         "Subtitle": "1dt Threat - 1dt Obstacle",
         "Tooltip": "Roll 1dt[Threat] - 1dt[Obstacle] (GM only)",
         "PublicMessage": "A Complication Roll was made.",
@@ -396,7 +395,6 @@
         }
       },
       "Tab": {
-        "Abilities": "Abilities",
         "Actions": "Actions",
         "Gear": "Gear",
         "Notes": "Notes",
@@ -409,9 +407,6 @@
           "Skills": "Edit skills and resistances",
           "Spells": "Review your spells"
         }
-      },
-      "Tension": {
-        "Label": "Tension"
       },
       "Tier": {
         "Adept": {
@@ -556,7 +551,6 @@
       "Inventory": {
         "Delete": "Delete item",
         "Edit": "Edit item",
-        "Empty": "You are not carrying any items.",
         "TypeLabel": "Type"
       },
       "Type": {
