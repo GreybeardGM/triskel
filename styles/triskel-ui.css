@@ -24,10 +24,10 @@
   text-align: center;
 }
 
-.triskel .complication-roll__card.obstacle {
+.triskel .complication-tone.obstacle {
   border-color: #f2a11b;
 }
 
-.triskel .complication-roll__card.threat {
+.triskel .complication-tone.threat {
   border-color: #a0191d;
 }

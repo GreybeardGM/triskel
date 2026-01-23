@@ -6,6 +6,8 @@
  * @param {string} [options.subtitle=""]     - Optional header subtitle text.
  * @param {string} [options.image=""]        - Optional header image URL.
  * @param {string} [options.content=""]      - HTML content to render inside the body.
+ * @param {string} [options.complication=""] - Optional complication line to render.
+ * @param {string} [options.complicationTone=""] - Optional complication tone class.
  * @param {string} [options.action=""]       - HTML content for the action row.
  * @param {string} [options.actionTemplate=""] - Handlebars template path for action row.
  * @param {object} [options.actionContext={}]  - Template context for action row.
@@ -23,6 +25,8 @@ export async function chatOutput({
   subtitle = "",
   image = "",
   content = "",
+  complication = "",
+  complicationTone = "",
   action = "",
   actionTemplate = "",
   actionContext = {},
@@ -81,6 +85,8 @@ export async function chatOutput({
     roll: rollHTML,
     hasHeader: Boolean(title || subtitle || image),
     hasRoll: Boolean(roll),
+    complication,
+    complicationTone: complicationTone || "",
     action: resolvedAction,
     footer: resolvedFooter
   };

@@ -1,33 +1,37 @@
-<section class="triskel triskel-chat-output">
-  <div class="triskel-chat-output__grid">
-    {{#if hasHeader}}
-      <div class="triskel-chat-output__row triskel-chat-output__header">
-        {{#if image}}
-          <div class="triskel-chat-output__image">
-            <img src="{{image}}" alt="{{title}}">
-          </div>
-        {{/if}}
-        <div class="triskel-chat-output__titles">
-          {{#if title}}
-            <h2 class="triskel-chat-output__title">{{title}}</h2>
-          {{/if}}
-          {{#if subtitle}}
-            <p class="triskel-chat-output__subtitle">{{subtitle}}</p>
-          {{/if}}
+<section class="triskel chat-output">
+  {{#if hasHeader}}
+    <div class="chat-output__row chat-output__header">
+      {{#if image}}
+        <div class="chat-output__image">
+          <img src="{{image}}" alt="{{title}}">
         </div>
+      {{/if}}
+      <div class="chat-output__titles">
+        {{#if title}}
+          <h2 class="chat-output__title">{{title}}</h2>
+        {{/if}}
+        {{#if subtitle}}
+          <p class="chat-output__subtitle">{{subtitle}}</p>
+        {{/if}}
       </div>
-    {{/if}}
+    </div>
+  {{/if}}
 
-    {{#if action}}
-      <div class="triskel-chat-output__row triskel-chat-output__action">{{{action}}}</div>
-    {{/if}}
+  {{#if complication}}
+    <div class="chat-output__row chat-output__complication complication-roll__card complication-tone {{complicationTone}}">
+      {{complication}}
+    </div>
+  {{/if}}
 
-    {{#if hasRoll}}
-      <div class="triskel-chat-output__row triskel-chat-output__roll">{{{roll}}}</div>
-    {{/if}}
+  {{#if action}}
+    <div class="chat-output__row chat-output__action">{{{action}}}</div>
+  {{/if}}
 
-    {{#if footer}}
-      <div class="triskel-chat-output__row triskel-chat-output__footer">{{{footer}}}</div>
-    {{/if}}
-  </div>
+  {{#if hasRoll}}
+    <div class="chat-output__row chat-output__roll">{{{roll}}}</div>
+  {{/if}}
+
+  {{#if footer}}
+    <div class="chat-output__row chat-output__footer">{{{footer}}}</div>
+  {{/if}}
 </section>
