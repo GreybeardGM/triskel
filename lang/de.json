@@ -3,9 +3,8 @@
     "Widget": {
       "ComplicationRoll": {
         "Label": "Komplikationswurf",
-        "Title": "Komplikationswurf",
-        "Subtitle": "1dt Threat - 1dt Hindernis",
-        "Tooltip": "Würfelt 1dt[Threat] - 1dt[Hindernis] (nur SL)",
+        "Subtitle": "1dt Bedrohung - 1dt Hindernis",
+        "Tooltip": "Würfelt 1dt[Bedrohung] - 1dt[Hindernis] (nur SL)",
         "PublicMessage": "Ein Komplikationswurf wurde ausgeführt.",
         "ResultFallback": "Komplikationsergebnis",
         "DropLabel": "Drop",
@@ -396,7 +395,6 @@
         }
       },
       "Tab": {
-        "Abilities": "Fähigkeiten",
         "Actions": "Aktionen",
         "Gear": "Ausrüstung",
         "Notes": "Notizen",
@@ -409,9 +407,6 @@
           "Skills": "Fertigkeiten und Resistenzen bearbeiten",
           "Spells": "Zauber anzeigen"
         }
-      },
-      "Tension": {
-        "Label": "Spannung"
       },
       "Tier": {
         "Adept": {
@@ -556,7 +551,6 @@
       "Inventory": {
         "Delete": "Gegenstand löschen",
         "Edit": "Gegenstand bearbeiten",
-        "Empty": "Du trägst momentan keine Gegenstände.",
         "TypeLabel": "Typ"
       },
       "Type": {
