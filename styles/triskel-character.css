@@ -753,9 +753,6 @@
   color: var(--color-text-dark-primary);
 }
 
-.triskel .inventory-list__toggle.is-selected {
-}
-
 .triskel .inventory-list__item-image--placeholder {
   background: var(--color-border-light-tertiary);
 }
