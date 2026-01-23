@@ -1,4 +1,4 @@
-.triskel-complication-roll {
+.triskel .hud-button {
   gap: 0.35rem;
   border: unset;
   border-radius: 4px;
@@ -7,20 +7,20 @@
   font-size: 0.8rem;
 }
 
-.triskel-complication-roll:hover {
+.triskel .hud-button:hover {
   background: var(--color-cool-5-75);
 }
 
-.triskel-complication-roll i {
+.triskel .hud-button i {
   font-size: 0.85rem;
 }
 
-.triskel-complication-roll:disabled {
+.triskel .hud-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.triskel-complication-roll--right {
+.triskel-complication-roll__button {
   width: 100%;
 }
 
@@ -31,12 +31,12 @@
   margin: 0 0 0.5rem;
 }
 
-.triskel-complication-roll__stored {
+.triskel .complication-roll__stored {
   display: flex;
   gap: 0.35rem;
 }
 
-.triskel-complication-roll__card {
+.triskel .complication-roll__card {
   flex: 1 1 auto;
   padding: 0.25rem 0.5rem;
   border: 3px solid var(--triskel-color-border-muted, #C9B68F);
@@ -46,10 +46,10 @@
   text-align: center;
 }
 
-.triskel-complication-roll__card.obstacle {
+.triskel .complication-roll__card.obstacle {
   border-color: #f2a11b;
 }
 
-.triskel-complication-roll__card.threat {
+.triskel .complication-roll__card.threat {
   border-color: #a0191d;
 }
