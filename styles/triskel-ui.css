@@ -20,11 +20,11 @@
   cursor: not-allowed;
 }
 
-.triskel-complication-roll__button {
+.triskel .complication-roll__button {
   width: 100%;
 }
 
-.triskel-complication-roll-widget {
+.triskel .complication-roll-widget {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;

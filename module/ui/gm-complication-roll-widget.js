@@ -1,6 +1,5 @@
 import { chatOutput } from "../util/chat-output.js";
 
-const WIDGET_CLASS = "complication-roll-widget";
 const WIDGET_CONTAINER_CLASS = "complication-roll-widget";
 const STORED_ROW_CLASS = "complication-roll__stored";
 const STORED_CARD_CLASS = "complication-roll__card";
@@ -30,27 +29,33 @@ function getComplicationTone(total) {
   return null;
 }
 
-function createButton(localize, { showLabel = true, extraClass = "" } = {}) {
+function createIconButton(localize, { icon, title, label, extraClass = "" } = {}) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = `ui-control ${extraClass}`.trim();
-  button.title = localize(`${I18N_ROOT}.Tooltip`);
+  if (title) button.title = title;
   button.innerHTML = `
-    <i class="fa-solid fa-dice-d10" aria-hidden="true"></i>
-    ${showLabel ? `<span>${localize(`${I18N_ROOT}.Label`)}</span>` : ""}
+    <i class="${icon}" aria-hidden="true"></i>
+    ${label ? `<span>${label}</span>` : ""}
   `;
   return button;
 }
 
 function createDropButton(localize) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = `ui-control ${STORED_DROP_CLASS}`.trim();
-  button.title = localize(`${I18N_ROOT}.DropTooltip`);
-  button.innerHTML = `
-    <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
-  `;
-  return button;
+  return createIconButton(localize, {
+    icon: "fa-solid fa-hand-pointer",
+    title: localize(`${I18N_ROOT}.DropTooltip`),
+    extraClass: STORED_DROP_CLASS
+  });
+}
+
+function createRollButton(localize) {
+  return createIconButton(localize, {
+    icon: "fa-solid fa-dice-d10",
+    title: localize(`${I18N_ROOT}.Tooltip`),
+    label: localize(`${I18N_ROOT}.Label`),
+    extraClass: "complication-roll__button"
+  });
 }
 
 function createStoredCard() {
@@ -69,17 +74,17 @@ async function setStoredComplication(value) {
 
 function updateStoredComplicationDisplay(root, localize, stored = getStoredComplication()) {
   const widgets = root.querySelectorAll(`.${WIDGET_CONTAINER_CLASS}`);
+  const label = stored?.label ?? localize(`${I18N_ROOT}.StoredEmpty`);
+  const tone = stored ? getComplicationTone(stored.total ?? 0) : null;
+
   widgets.forEach(widget => {
     const card = widget.querySelector(`.${STORED_CARD_CLASS}`);
     const dropButton = widget.querySelector(`.${STORED_DROP_CLASS}`);
     if (!card || !dropButton) return;
 
-    const label = stored?.label ?? localize(`${I18N_ROOT}.StoredEmpty`);
-    const tone = stored ? getComplicationTone(stored.total ?? 0) : null;
-
     card.textContent = label;
-    card.classList.remove("obstacle", "threat");
-    if (tone) card.classList.add(tone);
+    card.classList.toggle("obstacle", tone === "obstacle");
+    card.classList.toggle("threat", tone === "threat");
 
     dropButton.disabled = !stored;
     dropButton.setAttribute("aria-disabled", String(!stored));
@@ -119,7 +124,7 @@ async function performComplicationRoll(localize) {
   });
 }
 
-function addButtonToRightColumn(app, html) {
+function addWidgetToRightColumn(app, html) {
   if (!game.user?.isGM) return;
 
   const root = app?.element?.[0] ?? document;
@@ -140,7 +145,7 @@ function addButtonToRightColumn(app, html) {
 
   storedRow.append(dropButton, storedCard);
 
-  const button = createButton(localize, { showLabel: true, extraClass: "complication-roll-button" });
+  const button = createRollButton(localize);
 
   dropButton.addEventListener("click", async () => {
     dropButton.disabled = true;
@@ -162,7 +167,7 @@ function addButtonToRightColumn(app, html) {
   });
 
   const container = document.createElement("div");
-  container.className = WIDGET_CONTAINER_CLASS;
+  container.className = `triskel ${WIDGET_CONTAINER_CLASS}`;
   container.append(storedRow, button);
 
   column.insertBefore(container, notifications);
@@ -185,10 +190,10 @@ export function registerComplicationRollSettings() {
 
 export function registerComplicationRollWidget() {
   Hooks.on("renderChatLog", (app, html) => {
-    addButtonToRightColumn(app, html);
+    addWidgetToRightColumn(app, html);
   });
 
   Hooks.on("renderChatSidebar", (app, html) => {
-    addButtonToRightColumn(app, html);
+    addWidgetToRightColumn(app, html);
   });
 }
