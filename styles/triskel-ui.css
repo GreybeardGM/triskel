@@ -1,34 +1,12 @@
-.triskel .hud-button {
-  gap: 0.35rem;
-  border: unset;
-  border-radius: 4px;
-  background: var(--color-cool-5-25);
-  color: var(--color-text-secondary);
-  font-size: 0.8rem;
-}
-
-.triskel .hud-button:hover {
-  background: var(--color-cool-5-75);
-}
-
-.triskel .hud-button i {
-  font-size: 0.85rem;
-}
-
-.triskel .hud-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.triskel .complication-roll__button {
-  width: 100%;
-}
-
-.triskel .complication-roll-widget {
+.triskel.complication-roll-widget {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   margin: 0 0 0.5rem;
+}
+
+.triskel .complication-roll__button {
+  width: 100%;
 }
 
 .triskel .complication-roll__stored {
