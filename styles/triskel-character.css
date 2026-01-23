@@ -402,11 +402,12 @@
   background: var(--triskel-color-segment-placeholder);
   justify-content: space-between;
   width: 100%;
+  color: var(--color-light-2);
 }
 
 .triskel .roll-helper__summary-reserves {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.35rem;
 }
 
