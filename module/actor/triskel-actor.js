@@ -413,14 +413,16 @@ export class TriskelActor extends Actor {
 
     const subtitle = subtitleParts.join(" | ");
 
-    await chatOutput({
-      title: title || game.i18n.localize("TRISKEL.Actor.RollHelper.Title"),
-      subtitle,
-      roll,
-      speaker: ChatMessage.getSpeaker({ actor: this }),
-      content: modifiersContent,
-      rollMode: options.rollMode ?? null
-    });
+    if (options.chatOutput !== false) {
+      await chatOutput({
+        title: title || game.i18n.localize("TRISKEL.Actor.RollHelper.Title"),
+        subtitle,
+        roll,
+        speaker: ChatMessage.getSpeaker({ actor: this }),
+        content: modifiersContent,
+        rollMode: options.rollMode ?? null
+      });
+    }
 
     return {
       roll,

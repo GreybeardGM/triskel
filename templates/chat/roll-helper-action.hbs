@@ -1,0 +1,78 @@
+<div class="roll-helper__selection-row">
+  <div class="roll-helper__entry roll-helper__action is-selected {{action.reserve}}">
+    {{#if action.icon}}
+      <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{action.icon}}" aria-hidden="true"></i>
+    {{else if action.image}}
+      <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{action.image}}" alt="" />
+    {{/if}}
+
+    <div class="roll-helper__entry-label">{{action.label}}</div>
+
+    {{#if action.reserveLabel}}
+      <div class="roll-helper__entry-reserve">{{action.reserveLabel}}</div>
+    {{else}}
+      {{#if action.reserve}}
+        <div class="roll-helper__entry-reserve">{{action.reserve}}</div>
+      {{/if}}
+    {{/if}}
+
+    {{#if action.skillLabel}}
+      <div class="roll-helper__entry-skill">{{action.skillLabel}}</div>
+      <div class="roll-helper__entry-bonus">{{numberFormat action.skillTotal decimals=0 sign=true}}</div>
+    {{/if}}
+
+    {{#if actionCost}}
+      <div class="roll-helper__entry-cost">{{numberFormat actionCost decimals=0}}</div>
+    {{/if}}
+
+    {{#if action.description}}
+      <div class="roll-helper__entry-description">{{action.description}}</div>
+    {{/if}}
+  </div>
+
+  {{#if forms.length}}
+    {{#each forms as |form|}}
+      <div class="roll-helper__entry roll-helper__form is-selected {{form.reserve}}">
+        {{#if form.icon}}
+          <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{form.icon}}" aria-hidden="true"></i>
+        {{else if form.image}}
+          <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{form.image}}" alt="" />
+        {{/if}}
+
+        <div class="roll-helper__entry-label">{{form.label}}</div>
+
+        {{#if form.reserveLabel}}
+          <div class="roll-helper__entry-reserve">{{form.reserveLabel}}</div>
+        {{else}}
+          {{#if form.reserve}}
+            <div class="roll-helper__entry-reserve">{{form.reserve}}</div>
+          {{/if}}
+        {{/if}}
+
+        {{#if form.skillBonus}}
+          <div class="roll-helper__entry-skill">{{localize "TRISKEL.Actor.RollHelper.SkillBonus"}}</div>
+          <div class="roll-helper__entry-bonus">{{numberFormat form.skillBonus decimals=0 sign=true}}</div>
+        {{/if}}
+
+        {{#if form.cost}}
+          <div class="roll-helper__entry-cost">{{numberFormat form.cost decimals=0}}</div>
+        {{/if}}
+
+        {{#if form.description}}
+          <div class="roll-helper__entry-description">{{form.description}}</div>
+        {{/if}}
+      </div>
+    {{/each}}
+  {{/if}}
+</div>
+
+{{#if reserveCosts.length}}
+  <div class="roll-helper__summary-reserves">
+    {{#each reserveCosts as |reserve|}}
+      <div class="roll-helper__summary-entry {{reserve.id}}">
+        <div class="roll-helper__summary-label">{{reserve.label}}</div>
+        <div class="roll-helper__summary-value">{{numberFormat reserve.total decimals=0}}</div>
+      </div>
+    {{/each}}
+  </div>
+{{/if}}

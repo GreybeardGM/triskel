@@ -6,6 +6,10 @@
  * @param {string} [options.subtitle=""]     - Optional header subtitle text.
  * @param {string} [options.image=""]        - Optional header image URL.
  * @param {string} [options.content=""]      - HTML content to render inside the body.
+ * @param {string} [options.action=""]       - HTML content for the action row.
+ * @param {string} [options.actionTemplate=""] - Handlebars template path for action row.
+ * @param {object} [options.actionContext={}]  - Template context for action row.
+ * @param {string} [options.footer=""]       - HTML content for the footer row.
  * @param {Roll|null} [options.roll=null]      - Optional Foundry Roll instance to display.
  * @param {object|null} [options.speaker=null] - Optional speaker override for the chat message.
  * @param {string} [options.flavor=""]       - Optional flavor text for the chat message.
@@ -19,6 +23,10 @@ export async function chatOutput({
   subtitle = "",
   image = "",
   content = "",
+  action = "",
+  actionTemplate = "",
+  actionContext = {},
+  footer = "",
   roll = null,
   speaker = null,
   flavor = "",
@@ -61,6 +69,11 @@ export async function chatOutput({
     rollHTML = await roll.render();
   }
 
+  const resolvedAction = actionTemplate
+    ? await foundry.applications.handlebars.renderTemplate(actionTemplate, actionContext)
+    : action;
+  const resolvedFooter = footer || content;
+
   const templateData = {
     title,
     subtitle,
@@ -68,7 +81,8 @@ export async function chatOutput({
     roll: rollHTML,
     hasHeader: Boolean(title || subtitle || image),
     hasRoll: Boolean(roll),
-    content
+    action: resolvedAction,
+    footer: resolvedFooter
   };
 
   const html = await foundry.applications.handlebars.renderTemplate(
