@@ -18,20 +18,11 @@ export const TRISKEL_ATTUNEMENTS = [
     description: "TRISKEL.Attunement.Stormcaller.Description"
   },
   {
-    id: "wardingrunes",
-    label: "TRISKEL.Attunement.WardingRunes.Label",
-    cost: 1,
-    reserve: "will",
-    keyword: "resistance",
-    modifier: { skill: 1 },
-    description: "TRISKEL.Attunement.WardingRunes.Description"
-  },
-  {
     id: "emanation",
     label: "TRISKEL.Attunement.Emanation.Label",
     cost: 1,
     reserve: "will",
-    keyword: "manifest",
+    keyword: "manifestation",
     modifier: { skill: 0 },
     description: "TRISKEL.Attunement.Emanation.Description"
   }

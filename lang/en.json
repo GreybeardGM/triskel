@@ -443,10 +443,6 @@
         "Description": "The caster binds storm energy to their will, sharpening lightning spells.",
         "Label": "Stormcaller"
       },
-      "WardingRunes": {
-        "Description": "Protective runes channel willpower into resistance.",
-        "Label": "Warding Runes"
-      },
       "Emanation": {
         "Description": "The caster spreads a spell to all valid targets in a zone, allies and enemies alike, limiting the effect to a single degree of success.",
         "Label": "Emanation"
@@ -496,6 +492,10 @@
       "ShieldBrace": {
         "Description": "Brace behind the shield to block even heavy strikes.",
         "Label": "Shield Brace"
+      },
+      "WardingRunes": {
+        "Description": "Protective runes channel willpower into resistance.",
+        "Label": "Warding Runes"
       },
       "ShieldPull": {
         "Description": "Rip open and bind an opponent’s shield with the weapon’s leverage.",
