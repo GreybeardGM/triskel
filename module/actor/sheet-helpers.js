@@ -139,7 +139,8 @@ export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null 
     if (!bucket) continue;
     bucket.collection.push(item);
     if (bucket.locationLoad !== null) {
-      const quantity = toFiniteNumber(item?.system?.quantity, 1);
+      const useStack = item?.system?.quantity?.stack ?? false;
+      const quantity = useStack ? toFiniteNumber(item?.system?.quantity?.value, 1) : 1;
       let loadPerItem = null;
       if (bucket.loadType === "hands") {
         loadPerItem = item?.system?.twoHanded ? 2 : 1;

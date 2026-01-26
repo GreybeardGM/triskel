@@ -496,9 +496,17 @@
     },
     "Item": {
       "Archetype": {
+        "Ammunition": {
+          "Description": "Munition und andere Verbrauchsmaterialien.",
+          "Label": "Munition"
+        },
         "Carried": {
           "Description": "Alles andere, was du mit dir führst.",
           "Label": "Mitgeführt"
+        },
+        "Consumable": {
+          "Description": "Verbrauchsgegenstände, die beim Einsatz aufgebraucht werden.",
+          "Label": "Verbrauchbar"
         },
         "Held": {
           "Description": "Gegenstände, die in der Hand gehalten werden müssen, um zu funktionieren.",
@@ -546,7 +554,10 @@
       "Field": {
         "PackLoad": "Packlast",
         "Quantity": "Anzahl",
-        "TwoHanded": "Zweihändig"
+        "QuantityStack": "Stapelbar",
+        "TwoHanded": "Zweihändig",
+        "Uses": "Verwendungen",
+        "LimitedUse": "Begrenzte Nutzung"
       },
       "Inventory": {
         "Delete": "Gegenstand löschen",

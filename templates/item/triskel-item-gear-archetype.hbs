@@ -33,12 +33,50 @@
   <div class="form-group">
     <label for="gear-quantity">{{localize "TRISKEL.Item.Field.Quantity"}}</label>
     <div class="form-fields">
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          name="system.quantity.stack"
+          {{checked system.quantity.stack}}
+        />
+        {{localize "TRISKEL.Item.Field.QuantityStack"}}
+      </label>
       <input
         id="gear-quantity"
         type="number"
-        name="system.quantity"
-        value="{{system.quantity}}"
+        name="system.quantity.value"
+        value="{{system.quantity.value}}"
         min="1"
+        step="1"
+      />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="gear-uses-value">{{localize "TRISKEL.Item.Field.Uses"}}</label>
+    <div class="form-fields">
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          name="system.uses.limitedUse"
+          {{checked system.uses.limitedUse}}
+        />
+        {{localize "TRISKEL.Item.Field.LimitedUse"}}
+      </label>
+      <input
+        id="gear-uses-value"
+        type="number"
+        name="system.uses.value"
+        value="{{system.uses.value}}"
+        min="0"
+        step="1"
+      />
+      <span class="separator">/</span>
+      <input
+        id="gear-uses-max"
+        type="number"
+        name="system.uses.max"
+        value="{{system.uses.max}}"
+        min="0"
         step="1"
       />
     </div>
