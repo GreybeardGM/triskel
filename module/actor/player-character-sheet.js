@@ -290,6 +290,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     if (this._gearValueAdjustHandler) {
+      root.removeEventListener("auxclick", this._gearValueAdjustHandler, true);
       root.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
     }
 
@@ -306,6 +307,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     };
 
     root.addEventListener("change", this._carryLocationChangeHandler, true);
+    root.addEventListener("auxclick", this._gearValueAdjustHandler, true);
     root.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
   }
 
@@ -315,6 +317,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
     if (root && this._gearValueAdjustHandler) {
+      root.removeEventListener("auxclick", this._gearValueAdjustHandler, true);
       root.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
     }
     return super.close(options);
