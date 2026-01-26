@@ -282,15 +282,27 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   activateListeners(html) {
     super.activateListeners?.(html);
 
-    const root = asHTMLElement(html) ?? asHTMLElement(this.element);
+    const root = html?.[0]
+      ?? this.element?.[0]
+      ?? this.element
+      ?? asHTMLElement(html)
+      ?? asHTMLElement(this.element);
+    console.log("TRISKEL gear adjust root", { root, html, element: this.element });
     if (!root) return;
 
     if (this._carryLocationChangeHandler) {
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
 
+    if (this._gearValueAdjustHandler && this._gearRoot) {
+      this._gearRoot.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
+      this._gearRoot.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
+    }
+
+    this._gearRoot = root;
+
     if (this._gearValueAdjustHandler) {
-      root.removeEventListener("auxclick", this._gearValueAdjustHandler, true);
+      root.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
       root.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
     }
 
@@ -307,19 +319,28 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     };
 
     root.addEventListener("change", this._carryLocationChangeHandler, true);
-    root.addEventListener("auxclick", this._gearValueAdjustHandler, true);
+    root.addEventListener("mousedown", this._gearValueAdjustHandler, true);
     root.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
+    console.log("TRISKEL gear adjust listeners bound", {
+      root,
+      hasCarryHandler: Boolean(this._carryLocationChangeHandler),
+      hasGearHandler: Boolean(this._gearValueAdjustHandler)
+    });
   }
 
   async close(options = {}) {
-    const root = asHTMLElement(this.element);
+    const root = this._gearRoot
+      ?? this.element?.[0]
+      ?? this.element
+      ?? asHTMLElement(this.element);
     if (root && this._carryLocationChangeHandler) {
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
     if (root && this._gearValueAdjustHandler) {
-      root.removeEventListener("auxclick", this._gearValueAdjustHandler, true);
+      root.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
       root.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
     }
+    this._gearRoot = null;
     return super.close(options);
   }
 
