@@ -438,6 +438,14 @@
       "Blackmagic": {
         "Description": "The caster folds a sliver of their life force into the spell.",
         "Label": "Blackmagic"
+      },
+      "Stormcaller": {
+        "Description": "The caster binds storm energy to their will, sharpening lightning spells.",
+        "Label": "Stormcaller"
+      },
+      "Emanation": {
+        "Description": "The caster spreads a spell to all valid targets in a zone, allies and enemies alike, limiting the effect to a single degree of success.",
+        "Label": "Emanation"
       }
     },
     "Form": {
@@ -484,6 +492,10 @@
       "ShieldBrace": {
         "Description": "Brace behind the shield to block even heavy strikes.",
         "Label": "Shield Brace"
+      },
+      "WardingRunes": {
+        "Description": "Protective runes channel willpower into resistance.",
+        "Label": "Warding Runes"
       },
       "ShieldPull": {
         "Description": "Rip open and bind an opponent’s shield with the weapon’s leverage.",

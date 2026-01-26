@@ -115,5 +115,14 @@ export const TRISKEL_FORMS = [
     reserve: "power",
     keyword: "guard",
     description: "TRISKEL.Form.ShieldBrace.Description"
+  },
+  {
+    id: "warding_runes",
+    label: "TRISKEL.Form.WardingRunes.Label",
+    cost: 1,
+    reserve: "will",
+    keyword: "resistance",
+    modifier: { skill: 1 },
+    description: "TRISKEL.Form.WardingRunes.Description"
   }
 ];
