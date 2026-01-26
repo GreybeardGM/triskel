@@ -69,7 +69,7 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Brace.Description",
     icon: "fa-solid fa-hand-fist",
-    keywords: ["defense", "melee", "brace", "resilience"]
+    keywords: ["defense", "melee", "brace", "resilience", "avoidance"]
   },
   {
     id: "evade",
@@ -82,7 +82,7 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Evade.Description",
     icon: "fa-solid fa-person-running",
-    keywords: ["defense", "evasion"]
+    keywords: ["defense", "evasion", "avoidance"]
   },
   {
     id: "grapple",
@@ -121,7 +121,7 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Grit.Description",
     icon: "fa-solid fa-shield-heart",
-    keywords: ["defense", "resilience", "grit"]
+    keywords: ["defense", "resilience", "grit", "resistance"]
   },
   {
     id: "snap",
@@ -134,7 +134,7 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Snap.Description",
     icon: "fa-solid fa-bolt",
-    keywords: ["defense", "reflex", "snap"]
+    keywords: ["defense", "reflex", "snap", "resistance"]
   },
   {
     id: "resolve",
@@ -147,7 +147,7 @@ export const TRISKEL_BASE_ACTIONS = [
     range: "self",
     description: "TRISKEL.Action.Base.Resolve.Description",
     icon: "fa-solid fa-brain",
-    keywords: ["defense", "will", "resolve"]
+    keywords: ["defense", "will", "resolve", "resistance"]
   },
   {
     id: "invocation",
@@ -252,7 +252,7 @@ export const TRISKEL_ADVANCED_ACTIONS = [
     cost: 0,
     range: "self",
     description: "TRISKEL.Action.Base.Guard.Description",
-    keywords: ["defense", "melee", "guard", "protection"]
+    keywords: ["defense", "melee", "guard", "protection", "avoidance"]
   },
   {
     id: "shoot",
