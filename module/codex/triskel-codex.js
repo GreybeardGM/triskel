@@ -129,6 +129,18 @@ export const TRISKEL_GEAR_ARCHETYPES = [
     label: "TRISKEL.Item.Archetype.Carried.Label",
     description: "TRISKEL.Item.Archetype.Carried.Description",
     validLocations: ["hand", "pack", "dropped", "camp"]
+  },
+  {
+    id: "consumable",
+    label: "TRISKEL.Item.Archetype.Consumable.Label",
+    description: "TRISKEL.Item.Archetype.Consumable.Description",
+    validLocations: ["hand", "ready", "pack", "dropped", "camp"]
+  },
+  {
+    id: "ammunition",
+    label: "TRISKEL.Item.Archetype.Ammunition.Label",
+    description: "TRISKEL.Item.Archetype.Ammunition.Description",
+    validLocations: ["hand", "ready", "pack", "dropped", "camp"]
   }
 ];
 

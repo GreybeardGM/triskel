@@ -227,8 +227,16 @@
         ],
         "archetype": "",
         "twoHanded": false,
-        "quantity": 1,
+        "quantity": {
+          "value": 1,
+          "stack": false
+        },
         "packLoad": null,
+        "uses": {
+          "value": 0,
+          "max": 0,
+          "limitedUse": false
+        },
         "overwrite": {
           "validLocations": null
         },

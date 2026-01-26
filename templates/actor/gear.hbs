@@ -50,7 +50,11 @@
                         class="inventory-list__item-quantity"
                         title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
                       >
-                        {{#if (gt item.system.quantity 1)}}&times;{{item.system.quantity}}{{/if}}
+                        {{#if item.system.quantity.stack}}
+                          &times;{{item.system.quantity.value}}
+                        {{else if item.system.uses.limitedUse}}
+                          {{item.system.uses.value}}/{{item.system.uses.max}}
+                        {{/if}}
                       </span>
                       <span class="inventory-list__item-label">
                         {{#if item.img}}
@@ -122,7 +126,11 @@
                     class="inventory-list__item-quantity"
                     title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
                   >
-                    {{#if (gt item.system.quantity 1)}}&times;{{item.system.quantity}}{{/if}}
+                    {{#if item.system.quantity.stack}}
+                      &times;{{item.system.quantity.value}}
+                    {{else if item.system.uses.limitedUse}}
+                      {{item.system.uses.value}}/{{item.system.uses.max}}
+                    {{/if}}
                   </span>
                   <span class="inventory-list__item-label">
                     {{#if item.img}}

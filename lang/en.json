@@ -496,9 +496,17 @@
     },
     "Item": {
       "Archetype": {
+        "Ammunition": {
+          "Description": "Ammunition and expendable supplies.",
+          "Label": "Ammunition"
+        },
         "Carried": {
           "Description": "Everything else you bring along.",
           "Label": "Carried"
+        },
+        "Consumable": {
+          "Description": "Consumable items used up on use.",
+          "Label": "Consumable"
         },
         "Held": {
           "Description": "Items that must be held in hand to function.",
@@ -546,7 +554,10 @@
       "Field": {
         "PackLoad": "Pack load",
         "Quantity": "Quantity",
-        "TwoHanded": "Two-handed"
+        "QuantityStack": "Stackable",
+        "TwoHanded": "Two-handed",
+        "Uses": "Uses",
+        "LimitedUse": "Limited use"
       },
       "Inventory": {
         "Delete": "Delete item",
