@@ -93,8 +93,7 @@ async function onAdjustGearValue(event, target) {
   const maxPath = `system.${field}.max`;
   const currentValue = toFiniteNumber(foundry.utils.getProperty(item, valuePath), 0);
   const maxValue = toFiniteNumber(foundry.utils.getProperty(item, maxPath), Number.NaN);
-  const isDecrement = event.type === "contextmenu" || event.button === 2;
-  const delta = isDecrement ? -1 : 1;
+  const delta = event.shiftKey ? 1 : -1;
 
   let nextValue = currentValue + delta;
   nextValue = Math.max(0, nextValue);
@@ -326,8 +325,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const gearValueTargets = root.querySelectorAll?.("[data-action=\"adjustGearValue\"]") ?? [];
     gearValueTargets.forEach((target) => {
-      target.addEventListener("mousedown", this._gearValueAdjustHandler, true);
-      target.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
+      target.addEventListener("click", this._gearValueAdjustHandler, true);
       this._gearValueElements.push(target);
     });
   }
@@ -343,8 +341,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
     if (this._gearValueAdjustHandler && Array.isArray(this._gearValueElements)) {
       this._gearValueElements.forEach((target) => {
-        target.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
-        target.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
+        target.removeEventListener("click", this._gearValueAdjustHandler, true);
       });
     }
     this._gearRoot = null;
