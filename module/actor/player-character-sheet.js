@@ -321,6 +321,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       onAdjustGearValue.call(this, event, target);
     });
 
+    this._gearValueAdjustHandler = (event) => {
+      const target = event.target?.closest?.("[data-action=\"adjustGearValue\"]");
+      if (!target) return;
+      onAdjustGearValue.call(this, event, target);
+    };
+
     root.addEventListener("change", this._carryLocationChangeHandler, true);
     root.addEventListener("mousedown", this._gearValueAdjustHandler, true);
     root.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
