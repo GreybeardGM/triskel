@@ -308,6 +308,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     this._unbindGearListeners();
     this._gearRoot = root;
+    this._gearValueElements = [];
 
     this._carryLocationChangeHandler = this._carryLocationChangeHandler ?? ((event) => {
       const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
@@ -321,15 +322,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       onAdjustGearValue.call(this, event, target);
     });
 
-    this._gearValueAdjustHandler = (event) => {
-      const target = event.target?.closest?.("[data-action=\"adjustGearValue\"]");
-      if (!target) return;
-      onAdjustGearValue.call(this, event, target);
-    };
-
     root.addEventListener("change", this._carryLocationChangeHandler, true);
-    root.addEventListener("mousedown", this._gearValueAdjustHandler, true);
-    root.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
+
+    const gearValueTargets = root.querySelectorAll?.("[data-action=\"adjustGearValue\"]") ?? [];
+    gearValueTargets.forEach((target) => {
+      target.addEventListener("mousedown", this._gearValueAdjustHandler, true);
+      target.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
+      this._gearValueElements.push(target);
+    });
   }
 
   _unbindGearListeners() {
@@ -341,11 +341,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (this._carryLocationChangeHandler) {
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
-    if (this._gearValueAdjustHandler) {
-      root.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
-      root.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
+    if (this._gearValueAdjustHandler && Array.isArray(this._gearValueElements)) {
+      this._gearValueElements.forEach((target) => {
+        target.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
+        target.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
+      });
     }
     this._gearRoot = null;
+    this._gearValueElements = [];
   }
 
   // -- Rendering ------------------------------------------------------------
