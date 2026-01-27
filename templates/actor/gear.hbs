@@ -47,8 +47,15 @@
                         </div>
                       {{/with}}
                       <span
-                        class="inventory-list__item-quantity"
+                        class="inventory-list__item-quantity{{#if (or item.system.quantity.stack item.system.uses.limitedUse)}} is-interactive{{/if}}"
                         title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
+                        {{#if item.system.quantity.stack}}
+                          data-action="adjustGearValue"
+                          data-item-field="quantity"
+                        {{else if item.system.uses.limitedUse}}
+                          data-action="adjustGearValue"
+                          data-item-field="uses"
+                        {{/if}}
                       >
                         {{#if item.system.quantity.stack}}
                           &times;{{item.system.quantity.value}}
@@ -123,8 +130,15 @@
                     </div>
                   {{/with}}
                   <span
-                    class="inventory-list__item-quantity"
+                    class="inventory-list__item-quantity{{#if (or item.system.quantity.stack item.system.uses.limitedUse)}} is-interactive{{/if}}"
                     title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
+                    {{#if item.system.quantity.stack}}
+                      data-action="adjustGearValue"
+                      data-item-field="quantity"
+                    {{else if item.system.uses.limitedUse}}
+                      data-action="adjustGearValue"
+                      data-item-field="uses"
+                    {{/if}}
                   >
                     {{#if item.system.quantity.stack}}
                       &times;{{item.system.quantity.value}}

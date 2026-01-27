@@ -438,6 +438,14 @@
       "Blackmagic": {
         "Description": "Der Zauberer legt ein Stück seiner Lebenskraft in den Zauber.",
         "Label": "Schwarze Magie"
+      },
+      "Stormcaller": {
+        "Description": "Der Zaubernde bindet Sturmenergie an seinen Willen und stärkt Blitzmagie.",
+        "Label": "Sturmruf"
+      },
+      "Emanation": {
+        "Description": "Der Zauber breitet sich auf alle gültigen Ziele in einer Zone aus, trifft Verbündete und Feinde gleichermaßen und ist auf einen Erfolgsgrad begrenzt.",
+        "Label": "Emanation"
       }
     },
     "Form": {
@@ -484,6 +492,10 @@
       "ShieldBrace": {
         "Description": "Stemme dich hinter das Schild, um selbst schwere Angriffe zu blocken.",
         "Label": "Schildstemmen"
+      },
+      "WardingRunes": {
+        "Description": "Schutzrunen lenken Willenskraft in Widerstand.",
+        "Label": "Schutzrunen"
       },
       "ShieldPull": {
         "Description": "Mit der Waffe lässt sich ein Schild aufreißen und sogleich binden.",

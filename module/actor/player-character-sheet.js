@@ -80,6 +80,40 @@ async function onChangeCarryLocation(event, target) {
   await sheet.render({ parts: ["gear"] });
 }
 
+async function onAdjustGearValue(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item) return;
+
+  const field = target?.dataset?.itemField ?? "";
+  if (!["quantity", "uses"].includes(field)) return;
+
+  const valuePath = `system.${field}.value`;
+  const maxPath = `system.${field}.max`;
+  const currentValue = toFiniteNumber(foundry.utils.getProperty(item, valuePath), 0);
+  const maxValue = toFiniteNumber(foundry.utils.getProperty(item, maxPath), Number.NaN);
+  const isDecrement = event.type === "contextmenu" || event.button === 2;
+  const delta = isDecrement ? -1 : 1;
+
+  let nextValue = currentValue + delta;
+  nextValue = Math.max(0, nextValue);
+  if (Number.isFinite(maxValue)) {
+    nextValue = Math.min(maxValue, nextValue);
+  }
+  if (nextValue === currentValue) return;
+
+  const actor = this.document;
+  if (actor?.updateEmbeddedDocuments) {
+    await actor.updateEmbeddedDocuments("Item", [{
+      _id: item.id,
+      [valuePath]: nextValue
+    }]);
+  } else {
+    await item.update({ [valuePath]: nextValue });
+  }
+}
+
 async function onSelectAction(event, target) {
   event.preventDefault();
 
@@ -248,28 +282,73 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   activateListeners(html) {
     super.activateListeners?.(html);
 
-    const root = asHTMLElement(html) ?? asHTMLElement(this.element);
-    if (!root) return;
-
-    if (this._carryLocationChangeHandler) {
-      root.removeEventListener("change", this._carryLocationChangeHandler, true);
-    }
-
-    this._carryLocationChangeHandler = (event) => {
-      const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
-      if (!target) return;
-      onChangeCarryLocation.call(this, event, target);
-    };
-
-    root.addEventListener("change", this._carryLocationChangeHandler, true);
+    const root = html?.[0]
+      ?? this.element?.[0]
+      ?? this.element
+      ?? asHTMLElement(html)
+      ?? asHTMLElement(this.element);
+    this._bindGearListeners(root);
   }
 
   async close(options = {}) {
-    const root = asHTMLElement(this.element);
-    if (root && this._carryLocationChangeHandler) {
+    this._unbindGearListeners();
+    return super.close(options);
+  }
+
+  async _onRender(context, options) {
+    await super._onRender?.(context, options);
+    const root = this.element?.[0]
+      ?? this.element
+      ?? asHTMLElement(this.element);
+    this._bindGearListeners(root);
+  }
+
+  _bindGearListeners(root) {
+    if (!root) return;
+
+    this._unbindGearListeners();
+    this._gearRoot = root;
+    this._gearValueElements = [];
+
+    this._carryLocationChangeHandler = this._carryLocationChangeHandler ?? ((event) => {
+      const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
+      if (!target) return;
+      onChangeCarryLocation.call(this, event, target);
+    });
+
+    this._gearValueAdjustHandler = this._gearValueAdjustHandler ?? ((event) => {
+      const target = event.target?.closest?.("[data-action=\"adjustGearValue\"]");
+      if (!target) return;
+      onAdjustGearValue.call(this, event, target);
+    });
+
+    root.addEventListener("change", this._carryLocationChangeHandler, true);
+
+    const gearValueTargets = root.querySelectorAll?.("[data-action=\"adjustGearValue\"]") ?? [];
+    gearValueTargets.forEach((target) => {
+      target.addEventListener("mousedown", this._gearValueAdjustHandler, true);
+      target.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
+      this._gearValueElements.push(target);
+    });
+  }
+
+  _unbindGearListeners() {
+    const root = this._gearRoot
+      ?? this.element?.[0]
+      ?? this.element
+      ?? asHTMLElement(this.element);
+    if (!root) return;
+    if (this._carryLocationChangeHandler) {
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
-    return super.close(options);
+    if (this._gearValueAdjustHandler && Array.isArray(this._gearValueElements)) {
+      this._gearValueElements.forEach((target) => {
+        target.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
+        target.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
+      });
+    }
+    this._gearRoot = null;
+    this._gearValueElements = [];
   }
 
   // -- Rendering ------------------------------------------------------------
@@ -400,6 +479,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     actions: {
       editImage: onEditImage,
       updateResourceValue: onUpdateResourceValue,
+      adjustGearValue: onAdjustGearValue,
       editItem: onEditItem,
       deleteItem: onDeleteItem,
       selectAction: onSelectAction,
