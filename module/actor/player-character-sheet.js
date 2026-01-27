@@ -287,30 +287,39 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       ?? this.element
       ?? asHTMLElement(html)
       ?? asHTMLElement(this.element);
-    console.log("TRISKEL gear adjust root", { root, html, element: this.element });
+    this._bindGearListeners(root);
+  }
+
+  async close(options = {}) {
+    this._unbindGearListeners();
+    return super.close(options);
+  }
+
+  async _onRender(context, options) {
+    await super._onRender?.(context, options);
+    const root = this.element?.[0]
+      ?? this.element
+      ?? asHTMLElement(this.element);
+    this._bindGearListeners(root);
+  }
+
+  _bindGearListeners(root) {
     if (!root) return;
 
-    if (this._carryLocationChangeHandler) {
-      root.removeEventListener("change", this._carryLocationChangeHandler, true);
-    }
-
-    if (this._gearValueAdjustHandler && this._gearRoot) {
-      this._gearRoot.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
-      this._gearRoot.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
-    }
-
+    this._unbindGearListeners();
     this._gearRoot = root;
 
-    if (this._gearValueAdjustHandler) {
-      root.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
-      root.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
-    }
-
-    this._carryLocationChangeHandler = (event) => {
+    this._carryLocationChangeHandler = this._carryLocationChangeHandler ?? ((event) => {
       const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
       if (!target) return;
       onChangeCarryLocation.call(this, event, target);
-    };
+    });
+
+    this._gearValueAdjustHandler = this._gearValueAdjustHandler ?? ((event) => {
+      const target = event.target?.closest?.("[data-action=\"adjustGearValue\"]");
+      if (!target) return;
+      onAdjustGearValue.call(this, event, target);
+    });
 
     this._gearValueAdjustHandler = (event) => {
       const target = event.target?.closest?.("[data-action=\"adjustGearValue\"]");
@@ -321,27 +330,22 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     root.addEventListener("change", this._carryLocationChangeHandler, true);
     root.addEventListener("mousedown", this._gearValueAdjustHandler, true);
     root.addEventListener("contextmenu", this._gearValueAdjustHandler, true);
-    console.log("TRISKEL gear adjust listeners bound", {
-      root,
-      hasCarryHandler: Boolean(this._carryLocationChangeHandler),
-      hasGearHandler: Boolean(this._gearValueAdjustHandler)
-    });
   }
 
-  async close(options = {}) {
+  _unbindGearListeners() {
     const root = this._gearRoot
       ?? this.element?.[0]
       ?? this.element
       ?? asHTMLElement(this.element);
-    if (root && this._carryLocationChangeHandler) {
+    if (!root) return;
+    if (this._carryLocationChangeHandler) {
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
-    if (root && this._gearValueAdjustHandler) {
+    if (this._gearValueAdjustHandler) {
       root.removeEventListener("mousedown", this._gearValueAdjustHandler, true);
       root.removeEventListener("contextmenu", this._gearValueAdjustHandler, true);
     }
     this._gearRoot = null;
-    return super.close(options);
   }
 
   // -- Rendering ------------------------------------------------------------
