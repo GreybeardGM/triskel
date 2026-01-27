@@ -311,6 +311,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     });
 
     root.addEventListener("change", this._carryLocationChangeHandler, true);
+
+    const gearValueTargets = root.querySelectorAll?.("[data-action=\"adjustGearValue\"]") ?? [];
+    gearValueTargets.forEach((target) => {
+      target.addEventListener("click", this._gearValueAdjustHandler, true);
+      this._gearValueElements.push(target);
+    });
   }
 
   _unbindGearListeners() {
