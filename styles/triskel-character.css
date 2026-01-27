@@ -560,6 +560,8 @@
   text-align: center;
   font-size: 0.75rem;
   color: var(--color-text-secondary);
+  height: 100%;
+  align-content: center;
 }
 
 .triskel .inventory-list__item-image {
