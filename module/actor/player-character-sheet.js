@@ -212,7 +212,6 @@ async function onRollHelper(event) {
   const rollData = rollHelper.rollData;
   const rollHelperSummary = rollHelper.summary;
   const rollHelperAction = rollHelper.action;
-  const rollHelperForms = rollHelper.forms;
   const rollHelperCost = toFiniteNumber(rollHelperAction?.cost, Number.NaN);
   if (!rollHelperSummary) return;
   if (rollHelperSummary.canAfford === false) return;
@@ -234,8 +233,8 @@ async function onRollHelper(event) {
   const reserveCosts = Array.isArray(rollHelperSummary?.reserveCosts)
     ? rollHelperSummary.reserveCosts
     : [];
-  const activeForms = Array.isArray(rollHelperForms)
-    ? rollHelperForms.filter(form => form?.active)
+  const activeForms = Array.isArray(rollHelperAction?.forms)
+    ? rollHelperAction.forms.filter(form => form?.active)
     : [];
 
   reserveCosts.forEach(reserve => {
@@ -428,8 +427,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       this._rollHelper = {
         rollData: rollHelperContext.rollHelperRollData ?? null,
         summary: rollHelperContext.rollHelperSummary ?? null,
-        action: rollHelperContext.rollHelper?.action ?? null,
-        forms: rollHelperContext.rollHelper?.forms ?? []
+        action: rollHelperContext.rollHelper?.action ?? null
       };
 
       return {
