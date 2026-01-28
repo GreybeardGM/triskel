@@ -44,8 +44,8 @@
       </div>
 
       {{#if rollHelper.hasSelection}}
-        {{#if rollHelper.forms.length}}
-          {{#each rollHelper.forms as |form|}}
+        {{#if rollHelper.action.forms.length}}
+          {{#each rollHelper.action.forms as |form|}}
             <div
               class="roll-helper__entry roll-helper__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
               data-action="toggleForm"
