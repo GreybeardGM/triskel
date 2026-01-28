@@ -536,6 +536,7 @@
   color: var(--color-text-secondary);
   height: 100%;
   align-content: center;
+  border-radius: 0.25rem;
 }
 
 .triskel .inventory-list__item-image {
