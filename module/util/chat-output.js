@@ -19,6 +19,7 @@
  * @param {Array<string>|null} [options.whisper=null] - Explicit whisper recipients; overrides roll mode behavior.
  * @param {boolean} [options.blind=false]      - Whether the message should be blind to players.
  * @param {User|string|null} [options.user=null] - User who sends the message (defaults to current user).
+ * @param {Actor|null} [options.actor=null]    - Optional actor to display in a header row.
  */
 export async function chatOutput({
   title = "",
@@ -37,9 +38,12 @@ export async function chatOutput({
   rollMode = null,
   whisper = null,
   blind = false,
-  user = null
+  user = null,
+  actor = null
 } = {}) {
-  const resolvedSpeaker = speaker ?? ChatMessage.getSpeaker();
+  const resolvedUser = user ?? game.user;
+  const resolvedUserId = typeof resolvedUser === "string" ? resolvedUser : resolvedUser?.id ?? game.user.id;
+  const resolvedSpeaker = ChatMessage.getSpeaker({ user: resolvedUserId });
   const resolvedRollMode = rollMode ?? game.settings.get("core", "rollMode");
   const gmRecipients = ChatMessage.getWhisperRecipients("GM").map(gm => gm.id);
 
@@ -49,7 +53,7 @@ export async function chatOutput({
   if (!Array.isArray(resolvedWhisper)) {
     switch (resolvedRollMode) {
       case "selfroll":
-        resolvedWhisper = [game.user.id];
+        resolvedWhisper = [resolvedUserId];
         break;
       case "gmroll":
         resolvedWhisper = gmRecipients;
@@ -73,17 +77,27 @@ export async function chatOutput({
     rollHTML = await roll.render();
   }
 
+  const resolvedTitle = title && game.i18n?.has?.(title)
+    ? game.i18n.localize(title)
+    : title;
+  const resolvedSubtitle = subtitle && game.i18n?.has?.(subtitle)
+    ? game.i18n.localize(subtitle)
+    : subtitle;
+  const resolvedActorName = actor?.system?.details?.fullNameAndTitle || actor?.name || "";
   const resolvedAction = actionTemplate
     ? await foundry.applications.handlebars.renderTemplate(actionTemplate, actionContext)
     : action;
   const resolvedFooter = footer || content;
 
   const templateData = {
-    title,
-    subtitle,
+    actorName: resolvedActorName,
+    actorImage: actor?.img ?? "",
+    hasActor: Boolean(resolvedActorName),
+    title: resolvedTitle,
+    subtitle: resolvedSubtitle,
     image,
     roll: rollHTML,
-    hasHeader: Boolean(title || subtitle || image),
+    hasHeader: Boolean(resolvedTitle || resolvedSubtitle || image),
     hasRoll: Boolean(roll),
     complication,
     complicationTone: complicationTone || "",
@@ -97,7 +111,7 @@ export async function chatOutput({
   );
 
   const messageData = {
-    user: typeof user === "string" ? user : user?.id ?? game.user.id,
+    user: resolvedUserId,
     speaker: resolvedSpeaker,
     content: html,
     flavor,

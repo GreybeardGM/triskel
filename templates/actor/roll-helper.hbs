@@ -69,7 +69,7 @@
                 {{/if}}
               {{/if}}
 
-              {{#if (ne form.modifier.skill 0)}}
+              {{#if form.hasSkillBonus}}
                 <div class="roll-helper__entry-skill">{{localize "TRISKEL.Actor.RollHelper.SkillBonus"}}</div>
                 <div class="roll-helper__entry-bonus">{{numberFormat form.modifier.skill decimals=0 sign=true}}</div>
               {{/if}}
