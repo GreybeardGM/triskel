@@ -233,6 +233,93 @@ export function getGearCarryLocationOptions(item = null) {
  * @returns {{collection: Array, hasEntries: boolean, renderNonce: string|null}}
  *  vorbereitete Actions/Spells mit angedockten Forms/Attunements
  */
+function resolveReserveLabel(reservesIndex, reserveId) {
+  if (!reserveId) return "";
+  const reserve = reservesIndex?.[reserveId] ?? {};
+  return reserve.label ?? reserveId;
+}
+
+function buildActionKeywords({
+  action = null,
+  keywordBuckets = null,
+  selectedKeywords = []
+} = {}) {
+  const bucketsByKeyword = keywordBuckets ?? {};
+  const selectedKeywordIds = new Set(Array.isArray(selectedKeywords) ? selectedKeywords : []);
+  const availableKeywords = Array.isArray(action?.availableKeywords)
+    ? action.availableKeywords
+    : [];
+
+  const attachedKeywords = [];
+  for (const keyword of availableKeywords) {
+    const normalizedKeyword = normalizeKeyword(keyword);
+    const keywordsForBucket = bucketsByKeyword?.[normalizedKeyword];
+    const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
+    if (!keywordCollection.length) continue;
+
+    for (const keywordEntry of keywordCollection) {
+      attachedKeywords.push({
+        ...keywordEntry,
+        active: selectedKeywordIds.has(keywordEntry.id)
+      });
+    }
+  }
+
+  return attachedKeywords;
+}
+
+function enrichActionLike({
+  action = null,
+  keywordBuckets = null,
+  selectedKeywords = [],
+  skills = {},
+  keywordProperty = "forms",
+  selectionCollection = null,
+  selectionKind = null
+} = {}) {
+  if (!action || typeof action !== "object" || !action.id) return null;
+
+  const reservesIndex = getTriskellIndex().reserves ?? {};
+  const resolvedSelectionKind = selectionKind ?? (action?.selectionKind === "spell" ? "spell" : "action");
+  const resolvedKeywordProperty = keywordProperty
+    ?? (resolvedSelectionKind === "spell" ? "attunements" : "forms");
+  const bucketsByKeyword = keywordBuckets ?? {};
+  const attachedKeywords = buildActionKeywords({
+    action,
+    keywordBuckets: bucketsByKeyword,
+    selectedKeywords
+  }).map(keywordEntry => ({
+    ...keywordEntry,
+    reserveLabel: resolveReserveLabel(reservesIndex, keywordEntry.reserve)
+  }));
+
+  const skillId = action?.skill ?? null;
+  const skillSource = skillId ? skills?.[skillId] ?? null : null;
+  const skillLabel = skillSource?.label ?? action?.skillLabel ?? (skillId ? skillId : null);
+  const skillTotal = skillId
+    ? toFiniteNumber([skillSource?.total, action?.skillTotal], 0)
+    : null;
+  const preparedAction = {
+    ...action,
+    reserveLabel: resolveReserveLabel(reservesIndex, action?.reserve),
+    [resolvedKeywordProperty]: attachedKeywords,
+    skill: skillId,
+    skillLabel,
+    skillTotal,
+    selectionKind: resolvedSelectionKind
+  };
+
+  if (selectionCollection) {
+    preparedAction.selectionCollection = selectionCollection;
+  }
+
+  // Kompatibilität: Forms oder Attunements optional auch im jeweils anderen Feld ablegen.
+  if (resolvedKeywordProperty !== "forms" && !preparedAction.forms) preparedAction.forms = attachedKeywords;
+  if (resolvedKeywordProperty !== "attunements" && !preparedAction.attunements) preparedAction.attunements = attachedKeywords;
+
+  return preparedAction;
+}
+
 export function prepareActionLikesWithKeywords({
   actionLikes = null,
   keywordBuckets = null,
@@ -242,62 +329,21 @@ export function prepareActionLikesWithKeywords({
   keywordProperty = "forms",
   selectionCollection = "selectedForms"
 } = {}) {
-  const bucketsByKeyword = keywordBuckets ?? {};
-  const selectedKeywordIds = new Set(Array.isArray(selectedKeywords) ? selectedKeywords : []);
-  const reservesIndex = getTriskellIndex().reserves ?? {};
   const actionLikesByType = actionLikes ?? {};
-
-  const resolveReserveLabel = (reserveId) => {
-    if (!reserveId) return "";
-    const reserve = reservesIndex[reserveId] ?? {};
-    return reserve.label ?? reserveId;
-  };
-
   const rawCollection = toArray(actionLikesByType?.[selectedTypeId]);
-  const collection = [];
-  for (const entry of rawCollection) {
-    const keywords = Array.isArray(entry?.availableKeywords)
-      ? entry.availableKeywords.map(keyword => normalizeKeyword(keyword))
-      : [];
-    const attachedKeywords = [];
-
-    keywords.forEach(keyword => {
-      const keywordsForBucket = bucketsByKeyword?.[keyword];
-      const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
-      if (!keywordCollection.length) return;
-
-      keywordCollection.forEach(keywordEntry => {
-        const preparedKeywordEntry = {
-          ...keywordEntry,
-          active: selectedKeywordIds.has(keywordEntry.id),
-          reserveLabel: resolveReserveLabel(keywordEntry.reserve)
-        };
-        attachedKeywords.push(preparedKeywordEntry);
-      });
-    });
-
-    const preparedAction = {
-      ...entry,
-      reserveLabel: resolveReserveLabel(entry.reserve),
+  const collection = rawCollection
+    .map(entry => enrichActionLike({
+      action: entry,
+      keywordBuckets,
+      selectedKeywords,
+      skills,
+      keywordProperty,
       selectionCollection,
-      [keywordProperty]: attachedKeywords
-    };
-
-    // Kompatibilität: Forms oder Attunements optional auch im jeweils anderen Feld ablegen.
-    if (keywordProperty !== "forms" && !preparedAction.forms) preparedAction.forms = attachedKeywords;
-    if (keywordProperty !== "attunements" && !preparedAction.attunements) preparedAction.attunements = attachedKeywords;
-
-    const skillId = entry?.skill ?? null;
-    const skillSource = skillId ? skills?.[skillId] ?? null : null;
-    preparedAction.skill = skillId;
-    preparedAction.skillLabel = skillSource?.label ?? (skillId ? skillId : null);
-    preparedAction.skillTotal = skillId ? toFiniteNumber(skillSource?.total, 0) : null;
-
-    collection.push(preparedAction);
-  }
+      selectionKind: keywordProperty === "attunements" ? "spell" : "action"
+    }))
+    .filter(Boolean);
 
   const hasEntries = collection.length > 0;
-
   const renderNonce = foundry?.utils?.randomID?.() ?? null;
 
   return {
@@ -348,56 +394,17 @@ export function enrichSelectedAction({
   selectedForms = [],
   skills = {}
 } = {}) {
-  if (!action || typeof action !== "object" || !action.id) return null;
-
-  const selectedFormIds = new Set(Array.isArray(selectedForms) ? selectedForms : []);
-  const availableKeywords = Array.isArray(action.availableKeywords) ? action.availableKeywords : [];
-  const reservesIndex = getTriskellIndex().reserves ?? {};
   const selectionKind = action?.selectionKind === "spell" ? "spell" : "action";
-  const keywordProperty = selectionKind === "spell" ? "attunements" : "forms";
   const keywordBuckets = selectionKind === "spell" ? attunements : forms;
-  const resolveReserveLabel = (reserveId) => {
-    if (!reserveId) return "";
-    const reserve = reservesIndex[reserveId] ?? {};
-    return reserve.label ?? reserveId;
-  };
-
-  const attachedForms = [];
-  for (const keyword of availableKeywords) {
-    const normalizedKeyword = normalizeKeyword(keyword);
-    const keywordsForBucket = keywordBuckets?.[normalizedKeyword];
-    const keywordCollection = Array.isArray(keywordsForBucket) ? keywordsForBucket : [];
-    if (!keywordCollection.length) continue;
-
-    for (const formEntry of keywordCollection) {
-      attachedForms.push({
-        ...formEntry,
-        active: selectedFormIds.has(formEntry.id),
-        reserveLabel: resolveReserveLabel(formEntry.reserve)
-      });
-    }
-  }
-
-  const skillId = action?.skill ?? null;
-  let skillLabel = null;
-  let skillTotal = null;
-  if (skillId) {
-    const skillSource = skills?.[skillId] ?? null;
-    skillLabel = skillSource?.label ?? action?.skillLabel ?? skillId;
-    const resolvedTotal = toFiniteNumber(skillSource?.total, Number.NaN);
-    skillTotal = Number.isFinite(resolvedTotal)
-      ? resolvedTotal
-      : toFiniteNumber(action?.skillTotal, 0);
-  }
-
-  return {
-    ...action,
-    [keywordProperty]: attachedForms,
-    reserveLabel: resolveReserveLabel(action?.reserve),
+  const selectedKeywords = Array.isArray(selectedForms) ? selectedForms : [];
+  return enrichActionLike({
+    action,
+    keywordBuckets,
+    selectedKeywords,
+    skills,
     selectionKind,
-    skillLabel,
-    skillTotal
-  };
+    keywordProperty: selectionKind === "spell" ? "attunements" : "forms"
+  });
 }
 
 export function getActionBucket(preparedActions, actionType) {

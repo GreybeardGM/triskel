@@ -144,9 +144,15 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static prepareReferenceEntries(entries = [], collection = []) {
     if (!Array.isArray(entries)) return [];
 
+    const labelById = new Map(
+      Array.isArray(collection)
+        ? collection.map(item => [item?.id ?? "", item?.label])
+        : []
+    );
+
     return entries.map((entry, index) => {
       const id = typeof entry === "string" ? entry : entry?.id ?? "";
-      const label = collection.find(item => item.id === id)?.label ?? id;
+      const label = labelById.get(id) ?? id;
 
       return { id, label, index };
     });
