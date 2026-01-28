@@ -115,19 +115,17 @@
   padding: 0.5em 0.75em;
   height: auto;
   gap: 0.35em;
+  border: 1px solid var(--color-light-6);
 }
 
 .triskel .roll-helper__entry-icon {
+  grid-area: icon;
   width: 2.5rem;
   height: 2.5rem;
-  grid-area: icon;
+  font-size: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.triskel .roll-helper__entry-icon--fa {
-  font-size: 2.5rem;
 }
 
 .triskel .roll-helper__entry-label {
@@ -158,11 +156,6 @@
   color: var(--triskel-color-text-inverse);
 }
 
-.triskel .roll-helper__entry-scale {
-  font-weight: 700;
-  justify-self: end;
-}
-
 .triskel .roll-helper__entry-cost {
   grid-area: cost;
   font-weight: 700;
@@ -177,11 +170,6 @@
   font-size: 0.85rem;
   opacity: 0.9;
   color: var(--color-form-hint);
-}
-
-.triskel .roll-helper__form.is-selected {
-  border-color: var(--triskel-color-highlight-default);
-  box-shadow: 0 0 0 1px var(--triskel-color-highlight-default);
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
