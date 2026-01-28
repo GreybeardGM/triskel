@@ -11,7 +11,6 @@ import {
 export function asHTMLElement(element) {
   if (!element) return null;
   if (element instanceof HTMLElement) return element;
-  if (Array.isArray(element) && element[0] instanceof HTMLElement) return element[0];
   if (element[0] instanceof HTMLElement) return element[0];
   return null;
 }
@@ -20,7 +19,7 @@ export function getItemFromTarget(sheet, target) {
   const itemId = target.closest("[data-item-id]")?.dataset.itemId ?? target.dataset.itemId;
   if (!itemId) return null;
 
-  return sheet.document?.items?.get(itemId) ?? null;
+  return sheet.document?.items?.get(itemId);
 }
 
 // ---------------------------------------------------------------------------
@@ -77,7 +76,7 @@ export function prepareAssetContext(assets = null, types = null) {
 
   const typeFilter = Array.isArray(types) ? types : [types];
   const itemsToDisplay = typeFilter.reduce((collection, type) => {
-    const bucket = assets?.[type] ?? null;
+    const bucket = assets?.[type];
     if (!bucket) return collection;
     collection.push(bucket);
     return collection;
@@ -95,15 +94,13 @@ export function prepareAssetContext(assets = null, types = null) {
 export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null } = {}) {
   if (!gearBucket || typeof gearBucket !== "object") return gearBucket;
 
-  const carryLocations = toArray(getTriskellCodex().carryLocations);
-  if (!carryLocations.length) {
+  const carryLocationDefinitions = toArray(getTriskellCodex().carryLocations);
+  if (!carryLocationDefinitions.length) {
     return { ...gearBucket, locationBuckets: [] };
   }
 
-  const locationBuckets = [];
-  const locationBucketsById = {};
-  for (const location of carryLocations) {
-    if (!location?.id) continue;
+  // Resolve load limits, including dynamic limits based on power.
+  const resolveLoadLimit = (location) => {
     let loadLimit = location.loadLimit ?? null;
     if (loadLimit === "power") {
       const resolvedPowerMax = toFiniteNumber(powerMax, Number.NaN);
@@ -112,12 +109,19 @@ export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null 
     if (typeof loadLimit === "number" && !Number.isFinite(loadLimit)) {
       loadLimit = null;
     }
+    return loadLimit;
+  };
+
+  const locationBuckets = [];
+  const locationBucketsById = {};
+  for (const location of carryLocationDefinitions) {
+    if (!location?.id) continue;
     const usesLocationLoad = ["packLoad", "hands"].includes(location.loadType);
     const bucket = {
       ...location,
       collection: [],
       locationLoad: usesLocationLoad ? 0 : null,
-      loadLimit,
+      loadLimit: resolveLoadLimit(location),
       overburdened: false
     };
     locationBuckets.push(bucket);
@@ -130,14 +134,13 @@ export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null 
   const gearItems = toArray(gearBucket.collection);
 
   for (const item of gearItems) {
-    const requestedLocation = normalizeKeyword(item?.system?.carryLocation ?? "", "");
-    const targetLocation = requestedLocation && locationBucketsById[requestedLocation]
-      ? requestedLocation
-      : fallbackLocationId;
-    if (!targetLocation) continue;
-    const bucket = locationBucketsById[targetLocation];
+    const requestedLocationId = normalizeKeyword(item?.system?.carryLocation ?? "", "");
+    const bucket = locationBucketsById[requestedLocationId] ?? locationBucketsById[fallbackLocationId];
     if (!bucket) continue;
+
     bucket.collection.push(item);
+
+    // Track load for buckets that support it (pack load / hands).
     if (bucket.locationLoad !== null) {
       const useStack = item?.system?.quantity?.stack ?? false;
       const quantity = useStack ? toFiniteNumber(item?.system?.quantity?.value, 1) : 1;
@@ -151,6 +154,7 @@ export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null 
         bucket.locationLoad += loadPerItem * quantity;
       }
     }
+
     if (bucket.loadLimit !== null) {
       bucket.overburdened = (bucket.locationLoad ?? 0) > bucket.loadLimit;
     }
@@ -172,7 +176,7 @@ export function getGearCarryLocationOptions(item = null) {
   if (!carryLocations.length) return [];
 
   const archetypeId = normalizeKeyword(item?.system?.archetype ?? "");
-  const archetype = archetypeId ? getTriskellIndex().gearArchetypes?.[archetypeId] ?? null : null;
+  const archetype = archetypeId ? getTriskellIndex().gearArchetypes?.[archetypeId] : null;
   const archetypeLocations = normalizeIdList(archetype?.validLocations);
   if (!archetypeLocations.length) return [];
   const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "");
@@ -498,7 +502,6 @@ export function prepareRollHelperTabContext({ actor = null, system = {}, reserve
   const rollHelperRollData = rollHelper?.hasSelection && rollHelper?.action?.roll?.active
     ? prepareRollHelperRollData({
       action: rollHelper.action,
-      forms: rollHelper.forms,
       commitValue: toFiniteNumber(commit?.value, 0)
     })
     : null;
@@ -544,23 +547,13 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
   const normalizedForms = Array.isArray(selectedAction?.forms)
     ? selectedAction.forms
     : (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : []);
-  const mappedForms = normalizedForms.map(form => {
-    const skillBonusValue = toFiniteNumber(form?.modifier?.skill ?? form?.skillBonus, 0);
-    const skillBonus = Number.isFinite(skillBonusValue) && skillBonusValue !== 0 ? skillBonusValue : null;
-
-    return {
-      ...form,
-      skillBonus
-    };
-  });
   const preparedAction = selectedAction
-    ? { ...selectedAction, forms: mappedForms, situationalModifier }
+    ? { ...selectedAction, forms: normalizedForms, situationalModifier }
     : {};
-  const activeForms = mappedForms.filter(form => form.active);
+  const activeForms = normalizedForms.filter(form => form.active);
   const rollHelper = {
     hasSelection: Boolean(selectedAction),
-    action: preparedAction,
-    forms: mappedForms
+    action: preparedAction
   };
 
   const rollHelperSummary = selectedAction
@@ -570,11 +563,18 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
   return { rollHelper, rollHelperSummary };
 }
 
-export function prepareRollHelperRollData({ action = null, forms = [], commitValue = 0 } = {}) {
+export function prepareRollHelperRollData({ action = null, commitValue = 0 } = {}) {
   if (!action?.id || action?.roll?.active === false) return null;
 
-  const actionLabel = action.skillLabel ?? action.label ?? action.id ?? "";
+  const actionLabel = action.label ?? action.id ?? "";
   const modifiers = Array.isArray(action.modifiers) ? [...action.modifiers] : [];
+  const addModifier = (label, value) => {
+    const numericValue = toFiniteNumber(value, Number.NaN);
+    if (!label || !Number.isFinite(numericValue) || numericValue === 0) return;
+    modifiers.push({ label, value: numericValue });
+  };
+
+  // Ensure the skill total is part of the modifier list (unless already present).
   const skillLabel = action.skillLabel ?? "";
   const skillTotal = toFiniteNumber(action.skillTotal, Number.NaN);
   const hasSkillModifier = skillLabel
@@ -584,39 +584,26 @@ export function prepareRollHelperRollData({ action = null, forms = [], commitVal
     modifiers.push({ label: skillLabel || actionLabel, value: skillTotal });
   }
 
-  const normalizedForms = Array.isArray(forms) ? forms : [];
+  const normalizedForms = Array.isArray(action?.forms) ? action.forms : [];
   normalizedForms
     .filter(form => form.active)
     .forEach(form => {
-      const formBonus = toFiniteNumber(form?.modifier?.skill ?? form?.skillBonus, Number.NaN);
-      if (!Number.isFinite(formBonus) || formBonus === 0) return;
-      modifiers.push({ label: form?.label ?? form?.id ?? "Form", value: formBonus });
+      const formBonus = form?.modifier?.skill;
+      addModifier(form?.label ?? form?.id ?? "Form", formBonus);
     });
 
   const normalizedCommitValue = action.reserve ? toFiniteNumber(commitValue, 0) : 0;
-  if (Number.isFinite(normalizedCommitValue) && normalizedCommitValue !== 0) {
-    modifiers.push({ label: "Commit", value: normalizedCommitValue });
-  }
+  addModifier("Commit", normalizedCommitValue);
 
   const situationalModifier = toFiniteNumber(action?.situationalModifier, 0);
-  if (Number.isFinite(situationalModifier) && situationalModifier !== 0) {
-    const situationalLabel = game.i18n?.localize?.("TRISKEL.Actor.RollHelper.SituationalModifier")
-      ?? "Situational Modifier";
-    modifiers.push({ label: situationalLabel, value: situationalModifier });
-  }
+  const situationalLabel = game.i18n?.localize?.("TRISKEL.Actor.RollHelper.SituationalModifier")
+    ?? "Situational Modifier";
+  addModifier(situationalLabel, situationalModifier);
 
   return {
     title: actionLabel,
     modifiers
   };
-}
-
-function calculateTotalCost(action, activeForms, commitValue = 0) {
-  const baseCost = toFiniteNumber(action?.cost, 0);
-  const formsCost = activeForms.reduce((total, form) => total + toFiniteNumber(form.cost, 0), 0);
-  const commitCost = action?.reserve ? toFiniteNumber(commitValue, 0) : 0;
-
-  return baseCost + formsCost + commitCost;
 }
 
 const addReserveCost = (collection, reserveId, cost) => {
@@ -654,7 +641,7 @@ function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}
     });
   }
   const totalSkillBonus = toFiniteNumber(action.skillTotal, 0)
-    + activeForms.reduce((sum, form) => sum + toFiniteNumber(form.skillBonus, 0), 0)
+    + activeForms.reduce((sum, form) => sum + toFiniteNumber(form?.modifier?.skill, 0), 0)
     + toFiniteNumber(action.situationalModifier, 0)
     + commitContribution;
 
@@ -723,7 +710,7 @@ export function prepareBars(bars = {}, codexReference = undefined) {
   if (!bars) return {};
 
   const reference = codexReference ?? getTriskellIndex().reserves ?? {};
-  const entries = Object.entries(bars ?? {});
+  const entries = Object.entries(bars);
   const collection = {};
   // Track the maximum segment count seen while building bars (default to 1).
   let maxSegments = 1;
@@ -783,7 +770,7 @@ export function prepareBars(bars = {}, codexReference = undefined) {
 // Skill display preparation
 // ---------------------------------------------------------------------------
 export function prepareSkillsDisplay(skills = {}) {
-  const preparedSkills = Object.values(skills ?? {});
+  const preparedSkills = Object.values(skills);
 
   const codex = getTriskellCodex();
 
