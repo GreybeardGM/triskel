@@ -9,9 +9,9 @@
       >
         {{#if rollHelper.hasSelection}}
           {{#if rollHelper.action.icon}}
-            <i class="roll-helper__entry-icon roll-helper__entry-icon--fa {{rollHelper.action.icon}}" aria-hidden="true"></i>
+            <i class="roll-helper__entry-icon {{rollHelper.action.icon}}" aria-hidden="true"></i>
           {{else if rollHelper.action.image}}
-            <img class="roll-helper__entry-icon roll-helper__entry-icon--image" src="{{rollHelper.action.image}}" alt="" />
+            <img class="roll-helper__entry-icon" src="{{rollHelper.action.image}}" alt="" />
           {{/if}}
 
           <div class="roll-helper__entry-label">{{rollHelper.action.label}}</div>
