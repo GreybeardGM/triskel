@@ -554,10 +554,17 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
   const normalizedForms = Array.isArray(selectedAction?.forms)
     ? selectedAction.forms
     : (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : []);
+  const preparedForms = normalizedForms.map(form => {
+    const skillBonus = toFiniteNumber(form?.modifier?.skill, Number.NaN);
+    return {
+      ...form,
+      hasSkillBonus: Number.isFinite(skillBonus) && skillBonus !== 0
+    };
+  });
   const preparedAction = selectedAction
-    ? { ...selectedAction, forms: normalizedForms, situationalModifier }
+    ? { ...selectedAction, forms: preparedForms, situationalModifier }
     : {};
-  const activeForms = normalizedForms.filter(form => form.active);
+  const activeForms = preparedForms.filter(form => form.active);
   const rollHelper = {
     hasSelection: Boolean(selectedAction),
     action: preparedAction
