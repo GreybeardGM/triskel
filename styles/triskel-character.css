@@ -43,8 +43,8 @@
 .triskel nav.sheet-tabs,
 .triskel .sheet-tabs-nav {
   margin-top: 1rem;
-  border-top: 2px solid #81231e;
-  border-bottom: 2px solid #81231e;
+  border-top: 2px solid var(--triskel-color-accent-danger);
+  border-bottom: 2px solid var(--triskel-color-accent-danger);
 }
 
 .triskel .tab {
@@ -93,7 +93,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #2b2c1e;
+  background-color: var(--triskel-color-accent-secondary);
   padding-left: 0.4em;
   margin: 0 2rem 0 -0.4em;
 }
@@ -133,30 +133,30 @@
 \*____________________*/
 
 .triskel .power {
-  --triskel-interactive-highlight: var(--triskel-color-resource-power);
+  --triskel-color-highlight-default: var(--triskel-color-highlight-power);
 }
 
 .triskel .grace {
-  --triskel-interactive-highlight: var(--triskel-color-resource-grace);
+  --triskel-color-highlight-default: var(--triskel-color-highlight-grace);
 }
 
 .triskel .will {
-  --triskel-interactive-highlight: var(--triskel-color-resource-will);
+  --triskel-color-highlight-default: var(--triskel-color-highlight-will);
 }
 
 .triskel .hp {
-  --triskel-interactive-highlight: var(--triskel-color-resource-hp);
+  --triskel-color-highlight-default: var(--triskel-color-highlight-hp);
 }
 
 .triskel .wounds {
-  --triskel-interactive-highlight: var(--triskel-color-resource-wounds);
+  --triskel-color-highlight-default: var(--triskel-color-highlight-wounds);
 }
 
 .triskel .virtue,
 .triskel .vice,
 .triskel .ward,
 .triskel .ruin {
-  --triskel-interactive-highlight: var(--triskel-color-resource-tension);
+  --triskel-color-highlight-default: var(--triskel-color-highlight-tension);
 }
 
 .triskel .resource-bar {
@@ -176,12 +176,12 @@
 }
 
 .triskel .resource-box.segment-strain {
-  background: var(--triskel-color-strain);
+  background: var(--triskel-color-highlight-strain);
   pointer-events: none;
 }
 
 .triskel .resource-box.segment-empty {
-  background: var(--triskel-color-segment-empty);
+  background: var(--triskel-color-barsegment-empty);
 }
 
 .triskel .resource-box.segment-placeholder {
@@ -190,7 +190,7 @@
 }
 
 .triskel .resource-box.segment-filled {
-  background: var(--triskel-interactive-highlight);
+  background: var(--triskel-color-highlight-default);
 }
 
 .triskel .resource-spacer {
@@ -384,7 +384,7 @@
 }
 
 .triskel .actions-phase-filter__option.is-selected {
-  color: var(--color-text-light-highlight, #fff);
+  color: var(--color-text-light-highlight, var(--triskel-color-text-inverse));
 }
 
 .triskel .actions-list {
@@ -400,11 +400,18 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.25em 0.5em;
-  background: var(--triskel-interactive-background);
+  background: var(--triskel-color-interactive-background);
 }
 
 .triskel .actions-list .action-row:nth-child(even) {
-  background: var(--triskel-interactive-background-alt, color-mix(in srgb, var(--triskel-interactive-background) 85%, #fff 15%));
+  background: var(
+    --triskel-color-interactive-background-alt,
+    color-mix(
+      in srgb,
+      var(--triskel-color-interactive-background) 85%,
+      var(--triskel-color-text-inverse) 15%
+    )
+  );
 }
 
 .triskel .action-row__icon {
@@ -439,12 +446,12 @@
   grid-area: cost;
   text-align: right;
   font-weight: 700;
-  color: var(--triskel-interactive-highlight);
+  color: var(--triskel-color-highlight-default);
 }
 
 .triskel .action-row__reserve {
   grid-area: reserve;
-  color: var(--triskel-interactive-highlight);
+  color: var(--triskel-color-highlight-default);
 }
 
 .triskel .action-row__forms {
@@ -461,7 +468,7 @@
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
   border: 1px solid var(--triskel-color-border-muted);
-  background: var(--triskel-color-surface);
+  background: var(--triskel-color-surface-muted);
   font-size: 0.85rem;
 }
 
@@ -474,7 +481,7 @@
 
 .triskel .action-row__form-cost {
   font-weight: 700;
-  color: var(--triskel-interactive-highlight);
+  color: var(--triskel-color-highlight-default);
 }
 
 .triskel .action-row__form:focus-visible {
@@ -523,7 +530,7 @@
 
 .triskel .inventory-location__load {
   font-size: 0.75em;
-  background: black;
+  background: var(--triskel-color-neutral-dark);
   padding: 0 0.5rem;
   border-radius: 999px;
 }
