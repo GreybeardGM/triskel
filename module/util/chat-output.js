@@ -19,6 +19,7 @@
  * @param {Array<string>|null} [options.whisper=null] - Explicit whisper recipients; overrides roll mode behavior.
  * @param {boolean} [options.blind=false]      - Whether the message should be blind to players.
  * @param {User|string|null} [options.user=null] - User who sends the message (defaults to current user).
+ * @param {Actor|null} [options.actor=null]    - Optional actor to display in a header row.
  */
 export async function chatOutput({
   title = "",
@@ -37,7 +38,8 @@ export async function chatOutput({
   rollMode = null,
   whisper = null,
   blind = false,
-  user = null
+  user = null,
+  actor = null
 } = {}) {
   const resolvedUser = user ?? game.user;
   const resolvedUserId = typeof resolvedUser === "string" ? resolvedUser : resolvedUser?.id ?? game.user.id;
@@ -81,12 +83,17 @@ export async function chatOutput({
   const resolvedSubtitle = subtitle && game.i18n?.has?.(subtitle)
     ? game.i18n.localize(subtitle)
     : subtitle;
+  const actorFullName = actor?.system?.details?.fullNameAndTitle ?? "";
+  const resolvedActorName = actorFullName || actor?.name || "";
   const resolvedAction = actionTemplate
     ? await foundry.applications.handlebars.renderTemplate(actionTemplate, actionContext)
     : action;
   const resolvedFooter = footer || content;
 
   const templateData = {
+    actorName: resolvedActorName,
+    actorImage: actor?.img ?? "",
+    hasActor: Boolean(resolvedActorName),
     title: resolvedTitle,
     subtitle: resolvedSubtitle,
     image,
