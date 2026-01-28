@@ -91,6 +91,10 @@
   cursor: pointer;
 }
 
+.triskel .is-hidden {
+  display: none !important;
+}
+
 .triskel .is-interactive:hover {
   box-shadow: inset 0 0 2px var(--triskel-color-highlight-default);
 }
