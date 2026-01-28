@@ -1,7 +1,5 @@
-import { onEditImage } from "../actor/sheet-helpers.js";
+import { getTriskellIndex, onEditImage } from "../actor/sheet-helpers.js";
 import { getCachedCollator } from "../util/collator.js";
-
-const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;

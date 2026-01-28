@@ -130,7 +130,6 @@ async function onSelectAction(event, target) {
   const selectedAction = selectionBucket.find(action => action?.id === actionKey) ?? null;
   if (!selectedAction) return;
 
-  await actor?.update({ "system.actions.selectedAction": null });
   await actor?.update({
     "system.actions.selectedAction": {
       ...selectedAction,
@@ -178,7 +177,6 @@ async function onSelectSkill(event, target) {
     ]
   };
 
-  await actor?.update({ "system.actions.selectedAction": null });
   await actor?.update({ "system.actions.selectedAction": pseudoAction });
 }
 

@@ -8,9 +8,8 @@ import {
 import { chatOutput } from "../util/chat-output.js";
 import { TriskelDieTerm } from "../dice/triskel-die-term.js";
 import { getCachedCollator } from "../util/collator.js";
+import { getTriskellCodex, getTriskellIndex } from "./sheet-helpers.js";
 
-const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
-const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
 const getEmptyPreparedBundle = () => ({
   refs: { actions: [], forms: [], spells: [], attunements: [], keys: {} },
   actions: {},

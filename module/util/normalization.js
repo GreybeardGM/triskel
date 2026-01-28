@@ -22,14 +22,6 @@ export function createArrayKey(value) {
   return JSON.stringify(toArray(value));
 }
 
-export function toFiniteNumbers(collection, extractor = (entry) => entry, fallback = 0) {
-  const entries = Array.isArray(collection) ? collection : [];
-
-  return entries
-    .map(item => toFiniteNumber(extractor(item), fallback))
-    .filter(Number.isFinite);
-}
-
 export function normalizeIdList(entries = []) {
   if (!Array.isArray(entries)) return [];
 
