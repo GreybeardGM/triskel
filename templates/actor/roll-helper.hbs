@@ -44,8 +44,8 @@
       </div>
 
       {{#if rollHelper.hasSelection}}
-        {{#if rollHelper.forms.length}}
-          {{#each rollHelper.forms as |form|}}
+        {{#if rollHelper.action.forms.length}}
+          {{#each rollHelper.action.forms as |form|}}
             <div
               class="roll-helper__entry roll-helper__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
               data-action="toggleForm"
@@ -69,7 +69,7 @@
                 {{/if}}
               {{/if}}
 
-              {{#if (ne form.modifier.skill 0)}}
+              {{#if form.hasSkillBonus}}
                 <div class="roll-helper__entry-skill">{{localize "TRISKEL.Actor.RollHelper.SkillBonus"}}</div>
                 <div class="roll-helper__entry-bonus">{{numberFormat form.modifier.skill decimals=0 sign=true}}</div>
               {{/if}}
