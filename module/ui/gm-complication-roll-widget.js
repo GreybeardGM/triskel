@@ -100,7 +100,7 @@ async function performComplicationRoll(localize) {
   const complicationLabel = formatComplicationLabel(localize, entryLabel, total);
 
   await chatOutput({
-    title: localize(`${I18N_ROOT}.Title`),
+    title: localize(`${I18N_ROOT}.Label`),
     subtitle: localize(`${I18N_ROOT}.Subtitle`),
     complication: complicationLabel,
     complicationTone: getComplicationTone(total),
@@ -116,7 +116,7 @@ async function performComplicationRoll(localize) {
   updateStoredComplicationDisplay(document, localize, storedComplication);
 
   await chatOutput({
-    title: localize(`${I18N_ROOT}.Title`),
+    title: localize(`${I18N_ROOT}.Label`),
     subtitle: localize(`${I18N_ROOT}.Subtitle`),
     content: localize(`${I18N_ROOT}.PublicMessage`),
     rollMode: "roll"
