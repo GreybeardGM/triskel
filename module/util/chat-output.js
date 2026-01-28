@@ -39,7 +39,9 @@ export async function chatOutput({
   blind = false,
   user = null
 } = {}) {
-  const resolvedSpeaker = speaker ?? ChatMessage.getSpeaker();
+  const resolvedUser = user ?? game.user;
+  const resolvedUserId = typeof resolvedUser === "string" ? resolvedUser : resolvedUser?.id ?? game.user.id;
+  const resolvedSpeaker = ChatMessage.getSpeaker({ user: resolvedUserId });
   const resolvedRollMode = rollMode ?? game.settings.get("core", "rollMode");
   const gmRecipients = ChatMessage.getWhisperRecipients("GM").map(gm => gm.id);
 
@@ -49,7 +51,7 @@ export async function chatOutput({
   if (!Array.isArray(resolvedWhisper)) {
     switch (resolvedRollMode) {
       case "selfroll":
-        resolvedWhisper = [game.user.id];
+        resolvedWhisper = [resolvedUserId];
         break;
       case "gmroll":
         resolvedWhisper = gmRecipients;
@@ -73,17 +75,23 @@ export async function chatOutput({
     rollHTML = await roll.render();
   }
 
+  const resolvedTitle = title && game.i18n?.has?.(title)
+    ? game.i18n.localize(title)
+    : title;
+  const resolvedSubtitle = subtitle && game.i18n?.has?.(subtitle)
+    ? game.i18n.localize(subtitle)
+    : subtitle;
   const resolvedAction = actionTemplate
     ? await foundry.applications.handlebars.renderTemplate(actionTemplate, actionContext)
     : action;
   const resolvedFooter = footer || content;
 
   const templateData = {
-    title,
-    subtitle,
+    title: resolvedTitle,
+    subtitle: resolvedSubtitle,
     image,
     roll: rollHTML,
-    hasHeader: Boolean(title || subtitle || image),
+    hasHeader: Boolean(resolvedTitle || resolvedSubtitle || image),
     hasRoll: Boolean(roll),
     complication,
     complicationTone: complicationTone || "",
@@ -97,7 +105,7 @@ export async function chatOutput({
   );
 
   const messageData = {
-    user: typeof user === "string" ? user : user?.id ?? game.user.id,
+    user: resolvedUserId,
     speaker: resolvedSpeaker,
     content: html,
     flavor,
