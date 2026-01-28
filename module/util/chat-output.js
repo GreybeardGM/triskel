@@ -83,8 +83,7 @@ export async function chatOutput({
   const resolvedSubtitle = subtitle && game.i18n?.has?.(subtitle)
     ? game.i18n.localize(subtitle)
     : subtitle;
-  const actorFullName = actor?.system?.details?.fullNameAndTitle ?? "";
-  const resolvedActorName = actorFullName || actor?.name || "";
+  const resolvedActorName = actor?.system?.details?.fullNameAndTitle || actor?.name || "";
   const resolvedAction = actionTemplate
     ? await foundry.applications.handlebars.renderTemplate(actionTemplate, actionContext)
     : action;
