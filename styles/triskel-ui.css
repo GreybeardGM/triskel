@@ -130,12 +130,6 @@
   font-size: 2.5rem;
 }
 
-.triskel .roll-helper__entry-icon--image {
-  object-fit: cover;
-  display: block;
-  border-radius: 0.5rem;
-}
-
 .triskel .roll-helper__entry-label {
   grid-area: label;
   font-size: 1.2rem;
