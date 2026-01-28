@@ -1,4 +1,15 @@
 <section class="triskel chat-output">
+  {{#if hasActor}}
+    <div class="chat-output__row chat-output__actor">
+      {{#if actorImage}}
+        <div class="chat-output__actor-image">
+          <img src="{{actorImage}}" alt="{{actorName}}">
+        </div>
+      {{/if}}
+      <div class="chat-output__actor-name">{{actorName}}</div>
+    </div>
+  {{/if}}
+
   {{#if hasHeader}}
     <div class="chat-output__row chat-output__header">
       {{#if image}}
