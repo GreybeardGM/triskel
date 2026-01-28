@@ -451,15 +451,10 @@
 }
 
 .triskel .action-row__form {
-  padding: 0 0.5rem;
+  padding: 0 0.75rem;
   color: var(--triskel-color-highlight-default);
   border-radius: 999px;
   font-weight: 600;
-}
-
-.triskel .action-row__form:focus-visible {
-  outline: 2px solid var(--color-primary-3);
-  outline-offset: 1px;
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
