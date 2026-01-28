@@ -13,7 +13,6 @@
  * @param {object} [options.actionContext={}]  - Template context for action row.
  * @param {string} [options.footer=""]       - HTML content for the footer row.
  * @param {Roll|null} [options.roll=null]      - Optional Foundry Roll instance to display.
- * @param {object|null} [options.speaker=null] - Optional speaker override for the chat message.
  * @param {string} [options.flavor=""]       - Optional flavor text for the chat message.
  * @param {string|null} [options.rollMode=null]- Roll mode override (defaults to current core roll mode).
  * @param {Array<string>|null} [options.whisper=null] - Explicit whisper recipients; overrides roll mode behavior.
@@ -33,7 +32,6 @@ export async function chatOutput({
   actionContext = {},
   footer = "",
   roll = null,
-  speaker = null,
   flavor = "",
   rollMode = null,
   whisper = null,
@@ -43,7 +41,10 @@ export async function chatOutput({
 } = {}) {
   const resolvedUser = user ?? game.user;
   const resolvedUserId = typeof resolvedUser === "string" ? resolvedUser : resolvedUser?.id ?? game.user.id;
-  const resolvedSpeaker = ChatMessage.getSpeaker({ user: resolvedUserId });
+  const resolvedSpeaker = ChatMessage.getSpeaker({
+    user: resolvedUserId,
+    alias: typeof resolvedUser === "string" ? game.user?.name : resolvedUser?.name
+  });
   const resolvedRollMode = rollMode ?? game.settings.get("core", "rollMode");
   const gmRecipients = ChatMessage.getWhisperRecipients("GM").map(gm => gm.id);
 

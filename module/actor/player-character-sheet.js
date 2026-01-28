@@ -263,7 +263,7 @@ async function onRollHelper(event) {
       actionCost: Number.isFinite(rollHelperCost) && rollHelperCost !== 0 ? rollHelperCost : null,
       reserveCosts
     },
-    speaker: ChatMessage.getSpeaker({ actor }),
+    actor,
     rollMode: rollData?.options?.rollMode ?? null
   });
 }
