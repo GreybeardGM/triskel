@@ -87,12 +87,12 @@
   height: 1.3em;
 }
 
-.triskel .is-interactive {
-  cursor: pointer;
-}
-
 .triskel .is-hidden {
   display: none !important;
+}
+
+.triskel .is-interactive {
+  cursor: pointer;
 }
 
 .triskel .is-interactive:hover {
