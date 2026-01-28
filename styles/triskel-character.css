@@ -371,11 +371,11 @@
   border-radius: 999px;
   padding: 0.15rem 0.7rem;
   font-size: 0.85rem;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid transparent;
 }
 
 .triskel .actions-phase-filter__option.is-selected {
-  color: var(--color-text-light-highlight, var(--triskel-color-text-inverse));
+  color: var(--triskel-color-text-inverse);
 }
 
 .triskel .actions-list {
