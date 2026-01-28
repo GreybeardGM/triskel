@@ -224,8 +224,11 @@
 
 .triskel .chat-output__actor {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px dotted black;
+  padding-bottom: 0.5rem;
 }
 
 .triskel .chat-output__actor-image {
@@ -243,6 +246,7 @@
 
 .triskel .chat-output__actor-name {
   font-weight: 600;
+  line-height: 1rem;
 }
 
 .triskel .chat-output__image {
