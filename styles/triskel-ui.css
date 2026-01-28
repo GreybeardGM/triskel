@@ -228,28 +228,11 @@
 .triskel .chat-output__actor-image {
   width: 2rem;
   height: 2rem;
-  flex: 0 0 auto;
-}
-
-.triskel .chat-output__actor-image img {
-  width: 100%;
-  height: 100%;
 }
 
 .triskel .chat-output__actor-name {
   font-weight: 600;
   line-height: 1rem;
-}
-
-.triskel .chat-output__image {
-  width: 3rem;
-  height: 3rem;
-  flex: 0 0 auto;
-}
-
-.triskel .chat-output__image img {
-  width: 100%;
-  height: 100%;
 }
 
 .triskel .chat-output__title {
