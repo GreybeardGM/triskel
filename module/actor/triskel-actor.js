@@ -227,7 +227,7 @@ export class TriskelActor extends Actor {
 
     // TODO: Iteration über alle Items und Aggregation von ActionRefs, FormRefs und Modifiers.
     // Placeholder: Items nach Typ den Asset-Kollektionen hinzufügen.
-    for (const item of Array.from(items ?? [])) {
+    for (const item of (items ?? [])) {
       const type = item?.type ?? "";
       if (!type || !assets[type]) continue;
 
@@ -271,7 +271,7 @@ export class TriskelActor extends Actor {
           if (!skill) return;
 
           const value = toFiniteNumber(modifier?.value, 0);
-          modifiers[skill] = toFiniteNumber(modifiers[skill] ?? 0, 0) + value;
+          modifiers[skill] = toFiniteNumber(modifiers[skill], 0) + value;
         });
       }
     }

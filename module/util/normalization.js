@@ -1,6 +1,16 @@
 export function toFiniteNumber(value, fallback = 0) {
-  const parsedValue = Number(value);
-  return Number.isFinite(parsedValue) ? parsedValue : fallback;
+  if (Array.isArray(value)) {
+    for (const candidate of value) {
+      const parsedValue = Number(candidate);
+      if (Number.isFinite(parsedValue)) return parsedValue;
+    }
+  } else {
+    const parsedValue = Number(value);
+    if (Number.isFinite(parsedValue)) return parsedValue;
+  }
+
+  const parsedFallback = Number(fallback);
+  return Number.isFinite(parsedFallback) ? parsedFallback : 0;
 }
 
 export function toArray(value) {
