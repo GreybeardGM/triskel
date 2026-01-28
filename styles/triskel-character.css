@@ -16,8 +16,6 @@
 
 .triskel .profile-img {
   max-height: 10rem;
-  height: auto;
-  border-radius: 0.5rem;
 }
 
 .triskel .charname {
@@ -182,11 +180,6 @@
 
 .triskel .resource-box.segment-empty {
   background: var(--triskel-color-barsegment-empty);
-}
-
-.triskel .resource-box.segment-placeholder {
-  opacity: 0;
-  pointer-events: none;
 }
 
 .triskel .resource-box.segment-filled {
@@ -416,8 +409,6 @@
   grid-area: icon;
   width: 1.5em;
   height: 1.5em;
-  object-fit: cover;
-  border-radius: 0.35em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -460,26 +451,10 @@
 }
 
 .triskel .action-row__form {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  border: 1px solid var(--triskel-color-border-muted);
-  background: var(--triskel-color-surface-muted);
-  font-size: 0.85rem;
-}
-
-.triskel .action-row__form-icon {
-  width: 1.1rem;
-  height: 1.1rem;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.triskel .action-row__form-cost {
-  font-weight: 700;
+  padding: 0 0.5rem;
   color: var(--triskel-color-highlight-default);
+  border-radius: 999px;
+  font-weight: 600;
 }
 
 .triskel .action-row__form:focus-visible {
@@ -572,8 +547,6 @@
 .triskel .inventory-list__item-image {
   width: 2rem;
   height: 2rem;
-  object-fit: cover;
-  border-radius: 0.25rem;
 }
 
 .triskel .inventory-list__toggle {
