@@ -451,7 +451,7 @@
 }
 
 .triskel .action-row__form {
-  padding: 0 0.75rem;
+  padding: 0 0.5rem;
   color: var(--triskel-color-highlight-default);
   border-radius: 999px;
   font-weight: 600;
