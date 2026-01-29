@@ -1,4 +1,4 @@
-import { getTriskellIndex, onEditImage } from "../actor/sheet-helpers.js";
+import { getTriskelIndex, onEditImage } from "../actor/sheet-helpers.js";
 import { getCachedCollator } from "../util/collator.js";
 
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -9,7 +9,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const context = await super._prepareContext(options);
     const item = this.document;
 
-    const triskellIndex = getTriskellIndex();
+    const triskelIndex = getTriskelIndex();
 
     const actionRefs = this.getReferenceList("system.actions.ref");
     const formRefs = this.getReferenceList("system.forms.ref");
@@ -17,27 +17,27 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const attunementRefs = this.getReferenceList("system.attunements.ref");
 
     const references = {
-      actions: this.constructor.prepareReferenceEntries(actionRefs, Object.values(triskellIndex.advancedActions ?? {})),
-      forms: this.constructor.prepareReferenceEntries(formRefs, Object.values(triskellIndex.forms ?? {})),
-      spells: this.constructor.prepareReferenceEntries(spellRefs, Object.values(triskellIndex.spells ?? {})),
-      attunements: this.constructor.prepareReferenceEntries(attunementRefs, Object.values(triskellIndex.attunements ?? {}))
+      actions: this.constructor.prepareReferenceEntries(actionRefs, Object.values(triskelIndex.advancedActions ?? {})),
+      forms: this.constructor.prepareReferenceEntries(formRefs, Object.values(triskelIndex.forms ?? {})),
+      spells: this.constructor.prepareReferenceEntries(spellRefs, Object.values(triskelIndex.spells ?? {})),
+      attunements: this.constructor.prepareReferenceEntries(attunementRefs, Object.values(triskelIndex.attunements ?? {}))
     };
 
     const referenceOptions = {
-      actions: this.constructor.prepareOptions(triskellIndex.advancedActions ?? {}),
-      forms: this.constructor.prepareOptions(triskellIndex.forms),
-      spells: this.constructor.prepareOptions(triskellIndex.spells),
-      attunements: this.constructor.prepareOptions(triskellIndex.attunements)
+      actions: this.constructor.prepareOptions(triskelIndex.advancedActions ?? {}),
+      forms: this.constructor.prepareOptions(triskelIndex.forms),
+      spells: this.constructor.prepareOptions(triskelIndex.spells),
+      attunements: this.constructor.prepareOptions(triskelIndex.attunements)
     };
 
-    const gearArchetypeOptions = this.constructor.prepareOptions(triskellIndex.gearArchetypes ?? {})
+    const gearArchetypeOptions = this.constructor.prepareOptions(triskelIndex.gearArchetypes ?? {})
       .map(option => ({
         ...option,
         selected: option.value === item?.system?.archetype
       }));
 
     const modifiers = this.constructor.prepareModifiers(this.document.system?.modifiers);
-    const modifierOptions = this.constructor.prepareOptions(triskellIndex.skills);
+    const modifierOptions = this.constructor.prepareOptions(triskelIndex.skills);
 
     const itemTypeLabel = CONFIG.Item?.typeLabels?.[this.document.type] ?? this.document.type ?? "";
 
@@ -159,7 +159,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static prepareModifiers(modifiers = []) {
     if (!Array.isArray(modifiers)) return [];
 
-    const skillsById = getTriskellIndex().skills ?? {};
+    const skillsById = getTriskelIndex().skills ?? {};
 
     return modifiers.map((modifier, index) => {
       const skill = skillsById[modifier.skill] ?? {};

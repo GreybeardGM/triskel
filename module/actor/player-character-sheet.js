@@ -1,6 +1,6 @@
 import {
-  getTriskellCodex,
-  getTriskellIndex,
+  getTriskelCodex,
+  getTriskelIndex,
   getGearCarryLocationOptions,
   getActionBucket,
   asHTMLElement,
@@ -371,8 +371,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     if (partId === "info") {
       const tierValue = actor?.system?.tier?.value;
-      const tierLabelKey = getTriskellCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
-        ?? getTriskellIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+      const tierLabelKey = getTriskelCodex()?.tiers?.find(tier => tier.tier === tierValue)?.label
+        ?? getTriskelIndex()?.tiers?.find(tier => tier.tier === tierValue)?.label
         ?? null;
       const tierLabel = tierLabelKey ? (game.i18n?.localize?.(tierLabelKey) ?? tierLabelKey) : null;
 
