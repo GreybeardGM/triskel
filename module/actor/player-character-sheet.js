@@ -92,7 +92,9 @@ async function onAdjustGearValue(event, target) {
   const valuePath = `system.${field}.value`;
   const maxPath = `system.${field}.max`;
   const currentValue = toFiniteNumber(foundry.utils.getProperty(item, valuePath), 0);
-  const maxValue = toFiniteNumber(foundry.utils.getProperty(item, maxPath), Number.NaN);
+  const rawMaxValue = foundry.utils.getProperty(item, maxPath);
+  const parsedMaxValue = Number(rawMaxValue);
+  const maxValue = Number.isFinite(parsedMaxValue) ? parsedMaxValue : Number.NaN;
   const delta = event.shiftKey ? 1 : -1;
 
   let nextValue = currentValue + delta;
