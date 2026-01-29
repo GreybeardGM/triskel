@@ -113,11 +113,6 @@
   margin-top: 1em;
 }
 
-.triskel .reference-controls select,
-.triskel .reference-controls input[type="number"] {
-  flex: 1;
-}
-
 .triskel .modifier-value {
   font-weight: 700;
   flex: 1;
