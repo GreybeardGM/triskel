@@ -275,11 +275,12 @@ function enrichActionLike({
   skills = {},
   keywordProperty = "forms",
   selectionCollection = null,
-  selectionKind = null
+  selectionKind = null,
+  reservesIndex = null
 } = {}) {
   if (!action || typeof action !== "object" || !action.id) return null;
 
-  const reservesIndex = getTriskellIndex().reserves ?? {};
+  const resolvedReservesIndex = reservesIndex ?? (getTriskellIndex().reserves ?? {});
   const resolvedSelectionKind = selectionKind ?? (action?.selectionKind === "spell" ? "spell" : "action");
   const resolvedKeywordProperty = keywordProperty
     ?? (resolvedSelectionKind === "spell" ? "attunements" : "forms");
@@ -290,7 +291,7 @@ function enrichActionLike({
     selectedKeywords
   }).map(keywordEntry => ({
     ...keywordEntry,
-    reserveLabel: resolveReserveLabel(reservesIndex, keywordEntry.reserve)
+    reserveLabel: resolveReserveLabel(resolvedReservesIndex, keywordEntry.reserve)
   }));
 
   const skillId = action?.skill ?? null;
@@ -301,7 +302,7 @@ function enrichActionLike({
     : null;
   const preparedAction = {
     ...action,
-    reserveLabel: resolveReserveLabel(reservesIndex, action?.reserve),
+    reserveLabel: resolveReserveLabel(resolvedReservesIndex, action?.reserve),
     [resolvedKeywordProperty]: attachedKeywords,
     skill: skillId,
     skillLabel,
@@ -331,6 +332,7 @@ export function prepareActionLikesWithKeywords({
 } = {}) {
   const actionLikesByType = actionLikes ?? {};
   const rawCollection = toArray(actionLikesByType?.[selectedTypeId]);
+  const reservesIndex = getTriskellIndex().reserves ?? {};
   const collection = rawCollection
     .map(entry => enrichActionLike({
       action: entry,
@@ -339,7 +341,8 @@ export function prepareActionLikesWithKeywords({
       skills,
       keywordProperty,
       selectionCollection,
-      selectionKind: keywordProperty === "attunements" ? "spell" : "action"
+      selectionKind: keywordProperty === "attunements" ? "spell" : "action",
+      reservesIndex
     }))
     .filter(Boolean);
 
@@ -389,21 +392,24 @@ function buildGearCarryLocationSelections(itemsToDisplay = []) {
 
 export function enrichSelectedAction({
   action = null,
-  forms = {},
-  attunements = {},
+  formLikes = {},
+  keywordProperty = "forms",
   selectedForms = [],
-  skills = {}
+  skills = {},
+  selectionKind = null,
+  reservesIndex = null
 } = {}) {
-  const selectionKind = action?.selectionKind === "spell" ? "spell" : "action";
-  const keywordBuckets = selectionKind === "spell" ? attunements : forms;
+  const resolvedSelectionKind = selectionKind ?? (action?.selectionKind === "spell" ? "spell" : "action");
   const selectedKeywords = Array.isArray(selectedForms) ? selectedForms : [];
+  const resolvedKeywordProperty = keywordProperty ?? (resolvedSelectionKind === "spell" ? "attunements" : "forms");
   return enrichActionLike({
     action,
-    keywordBuckets,
+    keywordBuckets: formLikes,
     selectedKeywords,
     skills,
-    selectionKind,
-    keywordProperty: selectionKind === "spell" ? "attunements" : "forms"
+    selectionKind: resolvedSelectionKind,
+    keywordProperty: resolvedKeywordProperty,
+    reservesIndex
   });
 }
 
@@ -478,20 +484,88 @@ export function prepareActionsTabContext(actor = null, selectedActionType = "imp
   };
 }
 
-export function prepareRollHelperTabContext({ actor = null, system = {}, reserves = {}, commit = null } = {}) {
+export function prepareRollHelperContext({ actor = null, system = {}, reserves = {}, commit = null } = {}) {
   const storedSelectedAction = system?.actions?.selectedAction ?? null;
-  let enrichedSelectedAction = null;
-  if (storedSelectedAction?.id) {
-    const selectedForms = toArray(system?.actions?.selectedForms);
-    const preparedForms = actor?.preparedActions?.forms ?? {};
-    const preparedAttunements = actor?.preparedActions?.attunements ?? {};
-    enrichedSelectedAction = enrichSelectedAction({
-      action: storedSelectedAction,
-      forms: preparedForms,
-      attunements: preparedAttunements,
-      selectedForms,
-      skills: actor?.system?.skills ?? {}
+  if (!storedSelectedAction || typeof storedSelectedAction !== "object" || !storedSelectedAction.selectionKind) {
+    const { rollHelper, rollHelperSummary } = prepareRollHelperSelectionContext({
+      selectedAction: null,
+      reserves,
+      commit
     });
+    return {
+      rollHelper,
+      rollHelperSummary,
+      rollHelperRollData: null
+    };
+  }
+  let enrichedSelectedAction = null;
+  const selectionKind = storedSelectedAction.selectionKind;
+  const actionType = storedSelectedAction.actionType ?? system?.actions?.selectedType ?? "impact";
+  const situationalModifier = toFiniteNumber(storedSelectedAction?.situationalModifier, 0);
+  const skills = actor?.system?.skills ?? {};
+  const reservesIndex = getTriskellIndex().reserves ?? {};
+
+  if (selectionKind === "action" || selectionKind === "spell") {
+    if (storedSelectedAction?.actionId) {
+      const selectedForms = toArray(system?.actions?.selectedForms);
+      const preparedForms = actor?.preparedActions?.forms ?? {};
+      const preparedAttunements = actor?.preparedActions?.attunements ?? {};
+      const preparedActions = actor?.preparedActions?.actions ?? {};
+      const preparedSpells = actor?.preparedActions?.spells ?? {};
+      const actionBucket = getActionBucket(preparedActions, actionType);
+      const spellBucket = getActionBucket(preparedSpells, actionType);
+      const selectionBucket = selectionKind === "spell" ? spellBucket : actionBucket;
+      const selectedAction = selectionBucket.find(action => action?.id === storedSelectedAction?.actionId) ?? null;
+      if (selectedAction) {
+        const formLikes = selectionKind === "spell" ? preparedAttunements : preparedForms;
+        const keywordProperty = selectionKind === "spell" ? "attunements" : "forms";
+        enrichedSelectedAction = enrichSelectedAction({
+          action: {
+            ...selectedAction,
+            selectionKind,
+            situationalModifier
+          },
+          formLikes,
+          keywordProperty,
+          selectedForms,
+          skills,
+          selectionKind,
+          reservesIndex
+        });
+      }
+    }
+  }
+
+  else if (selectionKind === "skill") {
+    const skillId = storedSelectedAction?.skillId ?? null;
+    const skill = skillId ? skills?.[skillId] ?? null : null;
+    if (skillId && skill) {
+      const skillLabel = skill?.label ?? skillId;
+      const skillTotal = toFiniteNumber(skill?.total, 0);
+      const description = skill?.description ?? "";
+      enrichedSelectedAction = {
+        id: skillId,
+        label: skillLabel,
+        cost: 0,
+        reserve: null,
+        skill: skillId,
+        skillLabel,
+        skillTotal,
+        description,
+        forms: [],
+        modifiers: [
+          {
+            label: skillLabel,
+            value: skillTotal
+          }
+        ],
+        selectionKind,
+        situationalModifier
+      };
+    }
+  }
+
+  if (enrichedSelectedAction) {
     const rollActive = Boolean(enrichedSelectedAction?.skill);
     enrichedSelectedAction = {
       ...enrichedSelectedAction,
@@ -501,7 +575,7 @@ export function prepareRollHelperTabContext({ actor = null, system = {}, reserve
       }
     };
   }
-  const { rollHelper, rollHelperSummary } = prepareRollHelperContext({
+  const { rollHelper, rollHelperSummary } = prepareRollHelperSelectionContext({
     selectedAction: enrichedSelectedAction,
     reserves,
     commit
@@ -548,7 +622,16 @@ export async function prepareNotesTabContext(actor = null) {
  * @param {object} [options.reserves={}] vorbereitete Reserves aus prepareActorBarsContext
  * @returns {{rollHelper: object, rollHelperSummary: object|null}}
  */
-export function prepareRollHelperContext({ selectedAction = null, reserves = {}, commit = null } = {}) {
+export function prepareRollHelperSelectionContext({ selectedAction = null, reserves = {}, commit = null } = {}) {
+  if (!selectedAction) {
+    return {
+      rollHelper: {
+        hasSelection: false,
+        action: {}
+      },
+      rollHelperSummary: null
+    };
+  }
   const commitValue = toFiniteNumber(commit?.value, 0);
   const situationalModifier = toFiniteNumber(selectedAction?.situationalModifier, 0);
   const selectionKind = selectedAction?.selectionKind === "spell" ? "spell" : "action";
@@ -562,18 +645,14 @@ export function prepareRollHelperContext({ selectedAction = null, reserves = {},
       hasSkillBonus: Number.isFinite(skillBonus) && skillBonus !== 0
     };
   });
-  const preparedAction = selectedAction
-    ? { ...selectedAction, forms: preparedForms, situationalModifier }
-    : {};
+  const preparedAction = { ...selectedAction, forms: preparedForms, situationalModifier };
   const activeForms = preparedForms.filter(form => form.active);
   const rollHelper = {
-    hasSelection: Boolean(selectedAction),
+    hasSelection: true,
     action: preparedAction
   };
 
-  const rollHelperSummary = selectedAction
-    ? prepareRollHelperSummary({ action: preparedAction, activeForms, reserves, commitValue })
-    : null;
+  const rollHelperSummary = prepareRollHelperSummary({ action: preparedAction, activeForms, reserves, commitValue });
 
   return { rollHelper, rollHelperSummary };
 }
