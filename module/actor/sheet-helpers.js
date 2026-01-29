@@ -314,10 +314,6 @@ function enrichActionLike({
     preparedAction.selectionCollection = selectionCollection;
   }
 
-  // Kompatibilität: Forms oder Attunements optional auch im jeweils anderen Feld ablegen.
-  if (resolvedKeywordProperty !== "forms" && !preparedAction.forms) preparedAction.forms = attachedKeywords;
-  if (resolvedKeywordProperty !== "attunements" && !preparedAction.attunements) preparedAction.attunements = attachedKeywords;
-
   return preparedAction;
 }
 
@@ -401,7 +397,7 @@ export function enrichSelectedAction({
   const resolvedSelectionKind = selectionKind ?? (action?.selectionKind === "spell" ? "spell" : "action");
   const selectedKeywords = Array.isArray(selectedForms) ? selectedForms : [];
   const resolvedKeywordProperty = keywordProperty ?? (resolvedSelectionKind === "spell" ? "attunements" : "forms");
-  return enrichActionLike({
+  const enrichedAction = enrichActionLike({
     action,
     keywordBuckets: formLikes,
     selectedKeywords,
@@ -409,6 +405,14 @@ export function enrichSelectedAction({
     selectionKind: resolvedSelectionKind,
     keywordProperty: resolvedKeywordProperty
   });
+  if (!enrichedAction) return null;
+
+  return {
+    ...enrichedAction,
+    formLikes: Array.isArray(enrichedAction[resolvedKeywordProperty])
+      ? enrichedAction[resolvedKeywordProperty]
+      : []
+  };
 }
 
 export function getActionBucket(preparedActions, actionType) {
@@ -539,20 +543,20 @@ export function prepareRollHelperContext({ actor = null, system = {}, reserves =
       const skillLabel = skill?.label ?? skillId;
       const skillTotal = toFiniteNumber(skill?.total, 0);
       const description = skill?.description ?? "";
-      enrichedSelectedAction = {
-        id: skillId,
-        label: skillLabel,
-        cost: 0,
-        reserve: null,
-        skill: skillId,
-        skillLabel,
-        skillTotal,
-        description,
-        forms: [],
-        modifiers: [
-          {
-            label: skillLabel,
-            value: skillTotal
+        enrichedSelectedAction = {
+          id: skillId,
+          label: skillLabel,
+          cost: 0,
+          reserve: null,
+          skill: skillId,
+          skillLabel,
+          skillTotal,
+          description,
+          formLikes: [],
+          modifiers: [
+            {
+              label: skillLabel,
+              value: skillTotal
           }
         ],
         selectionKind,
@@ -630,19 +634,16 @@ export function prepareRollHelperSelectionContext({ selectedAction = null, reser
   }
   const commitValue = toFiniteNumber(commit?.value, 0);
   const situationalModifier = toFiniteNumber(selectedAction?.situationalModifier, 0);
-  const selectionKind = selectedAction?.selectionKind === "spell" ? "spell" : "action";
-  const normalizedForms = selectionKind === "spell"
-    ? (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : [])
-    : (Array.isArray(selectedAction?.forms) ? selectedAction.forms : []);
-  const preparedForms = normalizedForms.map(form => {
+  const normalizedFormLikes = Array.isArray(selectedAction?.formLikes) ? selectedAction.formLikes : [];
+  const preparedFormLikes = normalizedFormLikes.map(form => {
     const skillBonus = toFiniteNumber(form?.modifier?.skill, Number.NaN);
     return {
       ...form,
       hasSkillBonus: Number.isFinite(skillBonus) && skillBonus !== 0
     };
   });
-  const preparedAction = { ...selectedAction, forms: preparedForms, situationalModifier };
-  const activeForms = preparedForms.filter(form => form.active);
+  const preparedAction = { ...selectedAction, formLikes: preparedFormLikes, situationalModifier };
+  const activeForms = preparedFormLikes.filter(form => form.active);
   const rollHelper = {
     hasSelection: true,
     action: preparedAction
@@ -674,8 +675,8 @@ export function prepareRollHelperRollData({ action = null, commitValue = 0 } = {
     modifiers.push({ label: skillLabel || actionLabel, value: skillTotal });
   }
 
-  const normalizedForms = Array.isArray(action?.forms) ? action.forms : [];
-  normalizedForms
+  const normalizedFormLikes = Array.isArray(action?.formLikes) ? action.formLikes : [];
+  normalizedFormLikes
     .filter(form => form.active)
     .forEach(form => {
       const formBonus = form?.modifier?.skill;
