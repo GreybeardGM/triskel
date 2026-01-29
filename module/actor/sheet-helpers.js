@@ -25,8 +25,8 @@ export function getItemFromTarget(sheet, target) {
 // ---------------------------------------------------------------------------
 // Config accessors
 // ---------------------------------------------------------------------------
-export const getTriskellIndex = () => CONFIG.triskell?.index ?? {};
-export const getTriskellCodex = () => CONFIG.triskell?.codex ?? {};
+export const getTriskelIndex = () => CONFIG.triskel?.index ?? {};
+export const getTriskelCodex = () => CONFIG.triskel?.codex ?? {};
 
 // ---------------------------------------------------------------------------
 // Shared UI handlers
@@ -94,7 +94,7 @@ export function prepareAssetContext(assets = null, types = null) {
 export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null } = {}) {
   if (!gearBucket || typeof gearBucket !== "object") return gearBucket;
 
-  const carryLocationDefinitions = toArray(getTriskellCodex().carryLocations);
+  const carryLocationDefinitions = toArray(getTriskelCodex().carryLocations);
   if (!carryLocationDefinitions.length) {
     return { ...gearBucket, locationBuckets: [] };
   }
@@ -172,15 +172,15 @@ export function prepareGearLocationBuckets(gearBucket = null, { powerMax = null 
 export function getGearCarryLocationOptions(item = null) {
   if (item?.type && item.type !== "gear") return [];
 
-  const carryLocations = toArray(getTriskellCodex().carryLocations);
+  const carryLocations = toArray(getTriskelCodex().carryLocations);
   if (!carryLocations.length) return [];
 
   const archetypeId = normalizeKeyword(item?.system?.archetype ?? "");
-  const archetype = archetypeId ? getTriskellIndex().gearArchetypes?.[archetypeId] : null;
+  const archetype = archetypeId ? getTriskelIndex().gearArchetypes?.[archetypeId] : null;
   const archetypeLocations = normalizeIdList(archetype?.validLocations);
   if (!archetypeLocations.length) return [];
   const currentLocation = normalizeKeyword(item?.system?.carryLocation ?? "");
-  const carryLocationsById = getTriskellIndex().carryLocations ?? {};
+  const carryLocationsById = getTriskelIndex().carryLocations ?? {};
   const validLocationIds = archetypeLocations
     .map(locationId => normalizeKeyword(locationId))
     .filter(Boolean);
@@ -280,7 +280,7 @@ function enrichActionLike({
 } = {}) {
   if (!action || typeof action !== "object" || !action.id) return null;
 
-  const resolvedReservesIndex = reservesIndex ?? (getTriskellIndex().reserves ?? {});
+  const resolvedReservesIndex = reservesIndex ?? (getTriskelIndex().reserves ?? {});
   const resolvedSelectionKind = selectionKind ?? "action";
   const resolvedKeywordProperty = keywordProperty ?? "forms";
   const bucketsByKeyword = keywordBuckets ?? {};
@@ -327,7 +327,7 @@ export function prepareActionLikesWithKeywords({
 } = {}) {
   const actionLikesByType = actionLikes ?? {};
   const rawCollection = toArray(actionLikesByType?.[selectedTypeId]);
-  const reservesIndex = getTriskellIndex().reserves ?? {};
+  const reservesIndex = getTriskelIndex().reserves ?? {};
   const collection = rawCollection
     .map(entry => enrichActionLike({
       action: entry,
@@ -459,7 +459,7 @@ export function prepareActionsTabContext(actor = null, selectedActionType = "imp
     selectedTypeId: selectedActionType,
     keywordProperty: "forms"
   });
-  const actionCategoryList = getTriskellCodex().actionCategories;
+  const actionCategoryList = getTriskelCodex().actionCategories;
   const normalizedActions = Array.isArray(actions.collection) ? actions.collection : [];
   const actionsByCategory = normalizedActions.reduce((collection, action) => {
     if (!action.category) return collection;
@@ -478,7 +478,7 @@ export function prepareActionsTabContext(actor = null, selectedActionType = "imp
   }).filter(category => category.hasEntries);
   const actionTypeOrder = ["position", "setup", "impact", "defense"];
   const actionTypeFilters = actionTypeOrder.map(typeId => {
-    const type = getTriskellCodex().actionTypes.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
+    const type = getTriskelCodex().actionTypes.find(entry => entry.id === typeId) ?? { id: typeId, label: typeId };
     return {
       ...type,
       isSelected: selectedActionType === typeId
@@ -699,7 +699,7 @@ function prepareRollHelperSummary({ action = {}, activeForms = [], reserves = {}
   addReserveCost(reserveTotals, action.reserve, (action.cost ?? 0) + commitContribution);
   activeForms.forEach(form => addReserveCost(reserveTotals, form.reserve, form.cost));
 
-  const reserveIndex = getTriskellIndex().reserves ?? {};
+  const reserveIndex = getTriskelIndex().reserves ?? {};
   const normalizedReserves = reserves && typeof reserves === "object" ? reserves : {};
 
   const reserveCosts = [];
@@ -793,7 +793,7 @@ const isStrainActive = (entry) => {
 export function prepareActorBarsContext(actor = null) {
   if (!actor?.system) return {};
 
-  const index = getTriskellIndex();
+  const index = getTriskelIndex();
   const result = {};
 
   if (actor.type === "character") {
@@ -815,7 +815,7 @@ export function prepareActorBarsContext(actor = null) {
 export function prepareBars(bars = {}, codexReference = undefined) {
   if (!bars) return {};
 
-  const reference = codexReference ?? getTriskellIndex().reserves ?? {};
+  const reference = codexReference ?? getTriskelIndex().reserves ?? {};
   const entries = Object.entries(bars);
   const collection = {};
   // Track the maximum segment count seen while building bars (default to 1).
@@ -878,7 +878,7 @@ export function prepareBars(bars = {}, codexReference = undefined) {
 export function prepareSkillsDisplay(skills = {}) {
   const preparedSkills = Object.values(skills);
 
-  const codex = getTriskellCodex();
+  const codex = getTriskelCodex();
 
   const byCategory = preparedSkills.reduce((collection, skill) => {
     if (!skill?.id) return collection;

@@ -62,8 +62,8 @@ Hooks.once("init", function() {
   CONFIG.Actor.sheetClasses.character = PlayerCharacterSheet;
   CONFIG.Actor.sheetClasses.npc = NpcSheet;
 
-  CONFIG.triskell = {
-    ...(CONFIG.triskell ?? {}),
+  CONFIG.triskel = {
+    ...(CONFIG.triskel ?? {}),
     codex: TRISKEL_CODEX,
     index: TRISKEL_CODEX_INDEX
   };
@@ -78,7 +78,7 @@ Hooks.once("init", function() {
     registerSheets(localize);
     setTypeLabels(localize);
 
-    localizeCodexCollections(CONFIG.triskell?.codex, CONFIG.triskell?.index, localize);
+    localizeCodexCollections(CONFIG.triskel?.codex, CONFIG.triskel?.index, localize);
   });
 
 });
