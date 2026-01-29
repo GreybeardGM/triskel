@@ -17,10 +17,10 @@
     "module/triskel.js"
   ],
   "styles": [
-    "styles/triskel.css",
-    "styles/triskel-ui.css",
-    "styles/triskel-character.css",
-    "styles/triskel-item.css"
+    { "src": "styles/triskel.css" },
+    { "src": "styles/triskel-ui.css" },
+    { "src": "styles/triskel-character.css" },
+    { "src": "styles/triskel-item.css" }
   ],
   "packs": [],
   "languages": [
