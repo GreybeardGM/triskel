@@ -470,7 +470,8 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       type: "character"
     },
     window: {
-      resizable: true
+      resizable: true,
+      contentClasses: ["character-sheet"]
     },
     position: {
       height: "auto",
