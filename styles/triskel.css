@@ -1,234 +1,110 @@
-.triskel.complication-roll-widget {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin: 0 0 0.5rem;
+.triskel {
+  /* UI text & surfaces */
+  --triskel-color-text-strong: #111111;
+  --triskel-color-text-inverse: #ffffff;
+  --triskel-color-text-muted: #7a7a7a;
+  --triskel-color-surface-muted: #EAE3D4;
+  --triskel-color-border-muted: #C9B68F;
+  --triskel-color-border-subtle: rgba(0, 0, 0, 0.2);
+  --triskel-color-neutral-dark: #000000;
+  --triskel-color-accent-primary: #5f6a54;
+  --triskel-color-accent-secondary: #2b2c1e;
+  --triskel-color-accent-danger: #81231e;
+
+  /* Interaction states */
+  --triskel-color-interactive-background: #0f141b;
+  --triskel-color-interactive-background-alt: color-mix(
+    in srgb,
+    var(--triskel-color-interactive-background) 85%,
+    var(--triskel-color-text-inverse) 15%
+  );
+
+  /* Highlights */
+  --triskel-color-highlight-default: #cab891;
+  --triskel-color-highlight-obstacle: #f2a11b;
+  --triskel-color-highlight-threat: #a0191d;
+  --triskel-color-highlight-power: #d9534f;
+  --triskel-color-highlight-grace: #5cb85c;
+  --triskel-color-highlight-will: #5bc0de;
+  --triskel-color-highlight-hp: #ffd15c;
+  --triskel-color-highlight-wounds: #7a1f1f;
+  --triskel-color-highlight-tension: #ffd15c;
+  --triskel-color-highlight-strain: #a00000;
+
+  /* Bar segments */
+  --triskel-color-barsegment-empty: #4a4a4a;
 }
 
-.triskel .complication-roll__button {
-  width: 100%;
+.triskel .window-content {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: 8px;
 }
 
-.triskel .complication-roll__stored {
-  display: flex;
-  gap: 0.35rem;
-}
-
-.triskel .complication-roll__card {
-  flex: 1 1 auto;
-  padding: 0.25rem 0.5rem;
-  border: 3px solid var(--triskel-color-border-muted);
-  border-radius: 4px;
-  background: var(--triskel-color-surface-muted);
-  color: var(--triskel-color-text-strong);
-  text-align: center;
-}
-
-.triskel .complication-tone.obstacle {
-  border-color: var(--triskel-color-highlight-obstacle);
-}
-
-.triskel .complication-tone.threat {
-  border-color: var(--triskel-color-highlight-threat);
-}
-
-/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
-| --    ROLL HELPER  -- |
-\*____________________*/
-
-.triskel .roll-helper {
-  grid-area: roll;
-}
-
-.triskel .roll-helper__selection-row {
-  display: flex;
-  gap: 0.5rem;
-  flex-direction: column;
-}
-
-.triskel .roll-helper__commit {
-  display: flex;
-  gap: 0.25rem;
-  flex: 1;
-}
-
-.triskel .roll-helper__summary-row {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.triskel .roll-helper__situational {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.35rem 0.6rem;
-  border-radius: 999px;
-  background: var(--triskel-color-neutral-dark);
-  margin-top: 0.5rem;
-}
-
-.triskel .roll-helper__situational-label {
-  font-weight: 700;
-}
-
-.triskel .roll-helper__situational-input {
-  width: 3rem;
-}
-
-.triskel .roll-helper__summary-entry {
-  display: flex;
-  gap: 0.35rem;
-  align-items: center;
-  padding: 0.35rem 0.6rem;
-  border-radius: 999px;
-  background: var(--triskel-color-neutral-dark);
-  justify-content: space-between;
-  width: 100%;
-  color: var(--color-light-2);
-}
-
-.triskel .roll-helper__summary-reserves {
-  display: flex;
-  flex-direction: row;
-  gap: 0.35rem;
-}
-
-.triskel .roll-helper__summary-label {
-  font-weight: 700;
-}
-
-.triskel .roll-helper__summary-value {
-  color: var(--triskel-color-highlight-default);
-  font-weight: 700;
-}
-
-.triskel .roll-helper__entry {
+.triskel.sheet.actor.character .window-content,
+.triskel.sheet.actor.npc .window-content {
   display: grid;
-  grid-template-columns: 2.5rem 1fr 2.5rem;
+  grid-template-columns: minmax(0, 14rem) 1fr;
   grid-template-areas:
-    "icon  label cost   " "bonus skill reserve" "desc  desc  desc   ";
-  border-radius: 0.75em;
-  padding: 0.5em 0.75em;
-  height: auto;
-  gap: 0.35em;
+    "info resources      " "roll tabcontent";
+  align-items: start;
+  gap: 1rem;
+  grid-template-rows: auto 1fr;
 }
 
-.triskel .roll-helper__entry-icon {
-  grid-area: icon;
-  width: 2.5rem;
-  height: 2.5rem;
-  font-size: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.triskel .roll-helper__entry-label {
-  grid-area: label;
-  font-size: 1.2rem;
-  font-weight: 700;
+.triskel .window-content h2 {
+  font-family: Modesto Condensed;
   text-align: center;
-  line-height: 1em;
-  align-content: center;
-}
+  margin: 0.5rem 0;
+  color: var(--color-text-secondary);
 
-.triskel .roll-helper__entry-reserve {
-  grid-area: reserve;
-  color: var(--triskel-color-highlight-default);
-  justify-self: end;
-}
-
-.triskel .roll-helper__entry-skill {
-  grid-area: skill;
-  text-align: center;
-}
-
-.triskel .roll-helper__entry-bonus {
-  grid-area: bonus;
-  text-align: center;
-  background: var(--triskel-color-neutral-dark);
-  border-radius: 999px;
-  color: var(--triskel-color-text-inverse);
-}
-
-.triskel .roll-helper__entry-cost {
-  grid-area: cost;
-  font-weight: 700;
-  color: var(--triskel-color-highlight-default);
-  justify-self: end;
-  font-size: 1.6rem;
-  align-content: center;
-}
-
-.triskel .roll-helper__entry-description {
-  grid-area: desc;
-  font-size: 0.85rem;
-  opacity: 0.9;
-  color: var(--color-form-hint);
-}
-
-/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
-| --   CHAT OUTPUT   -- |
-\*____________________*/
-
-.triskel.chat-output {
-  display: grid;
-  gap: 0;
-}
-
-.triskel .chat-output__action {
-  margin: 2px;
-}
-.triskel .chat-output__row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.triskel .chat-output__complication {
-  padding: 0.25rem 0.5rem;
-}
-
-.triskel .chat-output__row + .chat-output__row {
-  margin-top: .75rem;
-}
-
-.triskel .chat-output__header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.triskel .chat-output__actor {
-  display: flex;
-  gap: 0.5rem;
-  flex-direction: row;
-  align-items: center;
-  border-bottom: 1px dotted var(--triskel-color-neutral-dark);
-  padding-bottom: 0.5rem;
-}
-
-.triskel .chat-output__actor-image {
-  width: 2rem;
-  height: 2rem;
-}
-
-.triskel .chat-output__actor-name {
-  font-weight: 600;
-  line-height: 1rem;
-}
-
-.triskel .chat-output__title {
-  font-family: "modesto Condensed";
-  margin: 0;
+  background: var(--triskel-color-accent-primary);
   font-size: 1.4rem;
 }
 
-.triskel .chat-output__subtitle {
-  margin: 0;
-  color: var(--color-text-light, var(--triskel-color-text-muted));
+.triskel .window-content h1 {
+  font-size: 2rem;
+}
+
+.triskel input {
+  text-align: center;
+}
+
+.triskel img {
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid var(--triskel-color-border-subtle);
+  border-radius: 10%;
+  object-fit: cover;
+}
+
+.triskel.sheet input[type="number"] {
+  color: var(--triskel-color-text-strong);
+  background: var(--triskel-color-surface-muted);
+  border: 1px solid var(--triskel-color-border-muted);
+  border-radius: 999px;
+  font-weight: 700;
+  height: 1.3em;
+}
+
+.triskel .is-hidden {
+  display: none !important;
+}
+
+.triskel .is-interactive {
+  cursor: pointer;
+}
+
+.triskel .is-interactive:hover {
+  outline: 1px solid var(--triskel-color-highlight-default);
+  outline-offset: 1px;
+  z-index: +10;
+}
+
+.triskel .is-selected {
+  border: 1px solid var(--triskel-color-highlight-default);
+}
+
+.has-conflict {
+  background: var(--triskel-color-accent-danger) !important;
 }
