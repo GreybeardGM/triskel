@@ -61,7 +61,7 @@ export const TRISKEL_ACTION_CATEGORIES = [
     icon: "fa-solid fa-swords"
   },
   {
-    id: "spells",
+    id: "spell",
     label: "TRISKEL.Action.Category.Spells",
     icon: "fa-solid fa-wand-sparkles"
   },

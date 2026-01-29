@@ -8,7 +8,7 @@ import {
 import { chatOutput } from "../util/chat-output.js";
 import { TriskelDieTerm } from "../dice/triskel-die-term.js";
 import { getCachedCollator } from "../util/collator.js";
-import { getTriskellCodex, getTriskellIndex } from "./sheet-helpers.js";
+import { getTriskelCodex, getTriskelIndex } from "./sheet-helpers.js";
 
 const getEmptyPreparedBundle = () => ({
   refs: { actions: [], forms: [], keys: {} },
@@ -99,7 +99,7 @@ export class TriskelActor extends Actor {
     // Indirekte Werte nur für Spielercharaktere vorbereiten.
     if (this.type !== "character") return;
 
-    const triskellIndex = getTriskellIndex();
+    const triskelIndex = getTriskelIndex();
     const tierValue = toFiniteNumber(this.system?.tier?.value);
     const tensionValue = toFiniteNumber(this.system?.tension?.value);
 
@@ -177,7 +177,7 @@ export class TriskelActor extends Actor {
    */
   _prepareActorItems(items = []) {
     // Grundstruktur für Assets nach Item-Kategorien mit Labeln aufbauen.
-    const itemCategories = getTriskellIndex().itemCategories ?? {};
+    const itemCategories = getTriskelIndex().itemCategories ?? {};
     const assets = Object.entries(itemCategories).reduce((collection, [id, category]) => {
       collection[id] = {
         id,
@@ -190,7 +190,17 @@ export class TriskelActor extends Actor {
 
     const actionRefs = [];
     const formRefs = [];
+    const actionRefKeys = new Set();
+    const formRefKeys = new Set();
     const modifiers = {};
+
+    const addRef = (collection, keySet, { id, itemId = null, image = null }) => {
+      if (!id) return;
+      const key = `${id}|${itemId ?? ""}`;
+      if (keySet.has(key)) return;
+      keySet.add(key);
+      collection.push({ id, itemId, image });
+    };
 
     // TODO: Iteration über alle Items und Aggregation von ActionRefs, FormRefs und Modifiers.
     // Placeholder: Items nach Typ den Asset-Kollektionen hinzufügen.
@@ -207,29 +217,31 @@ export class TriskelActor extends Actor {
       // Action- und Form-Referenzen sammeln, inkl. Spells/Attunements.
       const itemActionRefs = normalizeIdList(item?.system?.actions?.ref);
       const itemFormRefs = normalizeIdList(item?.system?.forms?.ref);
-      itemActionRefs.forEach(actionId => actionRefs.push({
+      const itemImage = item?.img ?? item?.image ?? null;
+      const itemId = item?.id ?? null;
+      itemActionRefs.forEach(actionId => addRef(actionRefs, actionRefKeys, {
         id: actionId,
-        itemId: item?.id ?? null,
-        image: item?.img ?? item?.image ?? null
+        itemId,
+        image: itemImage
       }));
-      itemFormRefs.forEach(formId => formRefs.push({
+      itemFormRefs.forEach(formId => addRef(formRefs, formRefKeys, {
         id: formId,
-        itemId: item?.id ?? null,
-        image: item?.img ?? item?.image ?? null
+        itemId,
+        image: itemImage
       }));
 
       const itemSpellRefs = normalizeIdList(item?.system?.spells?.ref);
-      itemSpellRefs.forEach(spellId => actionRefs.push({
+      itemSpellRefs.forEach(spellId => addRef(actionRefs, actionRefKeys, {
         id: spellId,
-        itemId: item?.id ?? null,
-        image: item?.img ?? item?.image ?? null
+        itemId,
+        image: itemImage
       }));
 
       const itemAttunementRefs = normalizeIdList(item?.system?.attunements?.ref);
-      itemAttunementRefs.forEach(attunementId => formRefs.push({
+      itemAttunementRefs.forEach(attunementId => addRef(formRefs, formRefKeys, {
         id: attunementId,
-        itemId: item?.id ?? null,
-        image: item?.img ?? item?.image ?? null
+        itemId,
+        image: itemImage
       }));
 
       if (Array.isArray(item?.system?.modifiers)) {
@@ -278,7 +290,7 @@ export class TriskelActor extends Actor {
    * @returns {object} Zusammengeführte Skills.
    */
   _prepareCharacterSkills({ skills = {}, modifiers = {} } = {}) {
-    const codexSkills = Array.isArray(getTriskellCodex().skills) ? getTriskellCodex().skills : [];
+    const codexSkills = Array.isArray(getTriskelCodex().skills) ? getTriskelCodex().skills : [];
 
     const modifierBySkill = modifiers && typeof modifiers === "object" ? modifiers : {};
 
@@ -403,7 +415,7 @@ export class TriskelActor extends Actor {
 function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = {}) {
   const collator = getCachedCollator(game.i18n?.lang, { sensitivity: "base" });
   const result = {};
-  const baseActionTypes = getTriskellCodex()?.actionTypes ?? [];
+  const baseActionTypes = getTriskelCodex()?.actionTypes ?? [];
   const typeOrder = baseActionTypes.map(type => type.id);
 
   const ensureType = (typeId) => {
@@ -415,11 +427,13 @@ function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = 
   const addEntryToType = (entry, { source = null, image = null } = {}) => {
     if (!entry) return;
     const label = entry.label ?? entry.id ?? "";
+    const category = entry.category;
     const typeId = entry.type ?? "untyped";
     const bucket = ensureType(typeId);
     bucket.push({
       ...entry,
       label,
+      category,
       source,
       image: image ?? entry.image ?? entry.img ?? null
     });
@@ -446,8 +460,8 @@ function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = 
 }
 
 function prepareActorActions(actor = null) {
-  const codex = getTriskellCodex();
-  const index = getTriskellIndex();
+  const codex = getTriskelCodex();
+  const index = getTriskelIndex();
   const actionRefs = toArray(actor?.refs?.actions);
   const actionEntries = {
     ...(index.advancedActions ?? {}),
@@ -465,9 +479,10 @@ function prepareActorActions(actor = null) {
 
 function prepareActorForms(actor = null) {
   const formRefs = toArray(actor?.refs?.forms);
+  const index = getTriskelIndex();
   const formsIndex = {
-    ...(getTriskellIndex().forms ?? {}),
-    ...(getTriskellIndex().attunements ?? {})
+    ...(index.forms ?? {}),
+    ...(index.attunements ?? {})
   };
 
   return prepareKeywordBucketsActor({ refs: formRefs, index: formsIndex, keywordField: "keyword" });

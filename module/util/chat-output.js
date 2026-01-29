@@ -88,7 +88,7 @@ export async function chatOutput({
   const resolvedAction = actionTemplate
     ? await foundry.applications.handlebars.renderTemplate(actionTemplate, actionContext)
     : action;
-  const resolvedFooter = footer || content;
+  const resolvedFooter = footer ?? content;
 
   const templateData = {
     actorName: resolvedActorName,

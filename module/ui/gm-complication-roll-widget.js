@@ -1,4 +1,5 @@
 import { chatOutput } from "../util/chat-output.js";
+import { getTriskelCodex } from "../actor/sheet-helpers.js";
 
 const WIDGET_CONTAINER_CLASS = "complication-roll-widget";
 const STORED_ROW_CLASS = "complication-roll__stored";
@@ -9,7 +10,7 @@ const I18N_ROOT = "TRISKEL.Widget.ComplicationRoll";
 const STORED_SETTING_KEY = "storedComplicationRoll";
 
 function getComplicationEntry(total) {
-  const entries = CONFIG.triskell?.codex?.complicationTable?.entries ?? [];
+  const entries = getTriskelCodex()?.complicationTable?.entries ?? [];
   return entries.find(item => item?.range && total >= item.range.min && total <= item.range.max) ?? null;
 }
 
@@ -29,7 +30,7 @@ function getComplicationTone(total) {
   return null;
 }
 
-function createIconButton(localize, { icon, title, label, extraClass = "" } = {}) {
+function createIconButton({ icon, title, label, extraClass = "" } = {}) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = `ui-control ${extraClass}`.trim();
@@ -42,7 +43,7 @@ function createIconButton(localize, { icon, title, label, extraClass = "" } = {}
 }
 
 function createDropButton(localize) {
-  return createIconButton(localize, {
+  return createIconButton({
     icon: "fa-solid fa-hand-pointer",
     title: localize(`${I18N_ROOT}.DropTooltip`),
     extraClass: STORED_DROP_CLASS
@@ -50,7 +51,7 @@ function createDropButton(localize) {
 }
 
 function createRollButton(localize) {
-  return createIconButton(localize, {
+  return createIconButton({
     icon: "fa-solid fa-dice-d10",
     title: localize(`${I18N_ROOT}.Tooltip`),
     label: localize(`${I18N_ROOT}.Label`),
@@ -110,7 +111,7 @@ async function performComplicationRoll(localize) {
 
   const storedComplication = {
     total,
-    label: formatComplicationLabel(localize, entryLabel, total)
+    label: complicationLabel
   };
   await setStoredComplication(storedComplication);
   updateStoredComplicationDisplay(document, localize, storedComplication);
