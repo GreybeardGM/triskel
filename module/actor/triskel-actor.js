@@ -11,11 +11,9 @@ import { getCachedCollator } from "../util/collator.js";
 import { getTriskellCodex, getTriskellIndex } from "./sheet-helpers.js";
 
 const getEmptyPreparedBundle = () => ({
-  refs: { actions: [], forms: [], spells: [], attunements: [], keys: {} },
+  refs: { actions: [], forms: [], keys: {} },
   actions: {},
-  spells: {},
-  forms: {},
-  attunements: {}
+  forms: {}
 });
 
 export class TriskelActor extends Actor {
@@ -33,7 +31,7 @@ export class TriskelActor extends Actor {
     this._prepareCharacterDerivedData();
 
     // Platzhalter: zukünftige Item-Auswertung (ActionRefs, FormRefs, Assets, Modifiers).
-    const previousRefs = this.refs ?? { keys: {}, keywords: { forms: [], attunements: [] } };
+    const previousRefs = this.refs ?? { keys: {}, keywords: { forms: [] } };
     const previousPrepared = this.preparedActions ?? getEmptyPreparedBundle();
     const { refs, assets, modifiers } = this._prepareActorItems(this.items);
     this.assets = assets;
@@ -41,9 +39,7 @@ export class TriskelActor extends Actor {
       ...refs,
       keys: {
         actions: createArrayKey(toArray(refs?.actions)),
-        forms: createArrayKey(toArray(refs?.forms)),
-        spells: createArrayKey(toArray(refs?.spells)),
-        attunements: createArrayKey(toArray(refs?.attunements))
+        forms: createArrayKey(toArray(refs?.forms))
       }
     };
 
@@ -56,20 +52,12 @@ export class TriskelActor extends Actor {
 
     const actionRefsKey = this.refs?.keys?.actions;
     const formRefsKey = this.refs?.keys?.forms;
-    const spellRefsKey = this.refs?.keys?.spells;
-    const attunementRefsKey = this.refs?.keys?.attunements;
-
     let preparedActions = previousPrepared.actions ?? null;
     let preparedForms = previousPrepared.forms ?? null;
-    let preparedSpells = previousPrepared.spells ?? null;
-    let preparedAttunements = previousPrepared.attunements ?? null;
     let formKeywords = previousRefs.keywords?.forms ?? [];
-    let attunementKeywords = previousRefs.keywords?.attunements ?? [];
 
     const actionsChanged = actionRefsKey !== previousRefs.keys?.actions || !preparedActions;
     const formsChanged = formRefsKey !== previousRefs.keys?.forms || !preparedForms;
-    const spellsChanged = spellRefsKey !== previousRefs.keys?.spells || !preparedSpells;
-    const attunementsChanged = attunementRefsKey !== previousRefs.keys?.attunements || !preparedAttunements;
 
     if (actionsChanged) {
       preparedActions = prepareActorActions(this);
@@ -80,38 +68,21 @@ export class TriskelActor extends Actor {
       formKeywords = this._collectKeywords(preparedForms);
     }
 
-    if (spellsChanged) {
-      preparedSpells = prepareActorSpells(this);
-    }
-
-    if (attunementsChanged) {
-      preparedAttunements = prepareActorAttunements(this);
-      attunementKeywords = this._collectKeywords(preparedAttunements);
-    }
-
     if (actionsChanged || formsChanged) {
       const sharedKeywords = new Set(formKeywords ?? []);
       preparedActions = this._applyAvailableKeywords(preparedActions, sharedKeywords);
     }
 
-    if (spellsChanged || attunementsChanged) {
-      const sharedAttunementKeywords = new Set(attunementKeywords ?? []);
-      preparedSpells = this._applyAvailableKeywords(preparedSpells, sharedAttunementKeywords);
-    }
-
     this.refs = {
       ...this.refs,
       keywords: {
-        forms: formKeywords ?? [],
-        attunements: attunementKeywords ?? []
+        forms: formKeywords ?? []
       }
     };
 
     this.preparedActions = {
       actions: preparedActions,
-      spells: preparedSpells,
-      forms: preparedForms,
-      attunements: preparedAttunements
+      forms: preparedForms
     };
 
     // Platzhalter: NPC-Ressourcen vorbereiten.
@@ -192,14 +163,13 @@ export class TriskelActor extends Actor {
 
   /**
    * Platzhalter: Hier werden später Items ausgewertet und ActionRefs, FormRefs, Assets, Modifiers erzeugt.
+   * Spell- und Attunement-Refs werden aktuell in Actions bzw. Forms zusammengeführt.
    *
    * @param {Item[]} [items=[]] Item-Daten des Actors.
    * @returns {{
    *  refs: {
    *    actions: Array<{id: string, itemId: string|null, image: string|null}>,
-   *    forms: Array<{id: string, itemId: string|null, image: string|null}>,
-   *    spells: Array<{id: string, itemId: string|null, image: string|null}>,
-   *    attunements: Array<{id: string, itemId: string|null, image: string|null}>
+   *    forms: Array<{id: string, itemId: string|null, image: string|null}>
    *  },
    *  assets: object,
    *  modifiers: object
@@ -220,8 +190,6 @@ export class TriskelActor extends Actor {
 
     const actionRefs = [];
     const formRefs = [];
-    const spellRefs = [];
-    const attunementRefs = [];
     const modifiers = {};
 
     // TODO: Iteration über alle Items und Aggregation von ActionRefs, FormRefs und Modifiers.
@@ -236,7 +204,7 @@ export class TriskelActor extends Actor {
       // Inaktive Items beeinflussen Actions, Forms oder Modifiers nicht.
       if (!isActive) continue;
 
-      // Action- und Form-Referenzen sammeln, falls vorhanden.
+      // Action- und Form-Referenzen sammeln, inkl. Spells/Attunements.
       const itemActionRefs = normalizeIdList(item?.system?.actions?.ref);
       const itemFormRefs = normalizeIdList(item?.system?.forms?.ref);
       itemActionRefs.forEach(actionId => actionRefs.push({
@@ -251,14 +219,14 @@ export class TriskelActor extends Actor {
       }));
 
       const itemSpellRefs = normalizeIdList(item?.system?.spells?.ref);
-      itemSpellRefs.forEach(spellId => spellRefs.push({
+      itemSpellRefs.forEach(spellId => actionRefs.push({
         id: spellId,
         itemId: item?.id ?? null,
         image: item?.img ?? item?.image ?? null
       }));
 
       const itemAttunementRefs = normalizeIdList(item?.system?.attunements?.ref);
-      itemAttunementRefs.forEach(attunementId => attunementRefs.push({
+      itemAttunementRefs.forEach(attunementId => formRefs.push({
         id: attunementId,
         itemId: item?.id ?? null,
         image: item?.img ?? item?.image ?? null
@@ -277,9 +245,7 @@ export class TriskelActor extends Actor {
 
     const refs = {
       actions: actionRefs,
-      forms: formRefs,
-      spells: spellRefs,
-      attunements: attunementRefs
+      forms: formRefs
     };
 
     return { refs, assets, modifiers };
@@ -483,39 +449,26 @@ function prepareActorActions(actor = null) {
   const codex = getTriskellCodex();
   const index = getTriskellIndex();
   const actionRefs = toArray(actor?.refs?.actions);
+  const actionEntries = {
+    ...(index.advancedActions ?? {}),
+    ...(index.spells ?? {})
+  };
 
   if (!actionRefs.length && !(codex?.baseActions?.length)) return {};
 
   return prepareActionLike({
     refs: actionRefs,
-    indexEntries: index.advancedActions ?? {},
+    indexEntries: actionEntries,
     baseEntries: codex?.baseActions ?? []
   });
 }
 
-function prepareActorSpells(actor = null) {
-  const spellRefs = toArray(actor?.refs?.spells);
-  const index = getTriskellIndex();
-
-  if (!spellRefs.length) return {};
-
-  return prepareActionLike({
-    refs: spellRefs,
-    indexEntries: index.spells ?? {},
-    baseEntries: []
-  });
-}
-
-function prepareActorAttunements(actor = null) {
-  const attunementRefs = toArray(actor?.refs?.attunements);
-  const attunementsIndex = getTriskellIndex().attunements ?? {};
-
-  return prepareKeywordBucketsActor({ refs: attunementRefs, index: attunementsIndex, keywordField: "keyword" });
-}
-
 function prepareActorForms(actor = null) {
   const formRefs = toArray(actor?.refs?.forms);
-  const formsIndex = getTriskellIndex().forms ?? {};
+  const formsIndex = {
+    ...(getTriskellIndex().forms ?? {}),
+    ...(getTriskellIndex().attunements ?? {})
+  };
 
   return prepareKeywordBucketsActor({ refs: formRefs, index: formsIndex, keywordField: "keyword" });
 }

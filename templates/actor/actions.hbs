@@ -93,13 +93,15 @@
     </div>
   {{/if}}
 
-  {{#if actions.hasEntries}}
-    <h2 class="actions-subtitle">{{localize "TRISKEL.Actor.Tab.Actions"}}</h2>
-    {{> actionRows actions=actions.collection actionKind="action" renderNonce=actions.renderNonce}}
-  {{/if}}
-
-  {{#if spells.hasEntries}}
-    <h2 class="actions-subtitle">{{localize "TRISKEL.Item.Type.Spell"}}</h2>
-    {{> actionRows actions=spells.collection actionKind="spell" renderNonce=spells.renderNonce}}
+  {{#if actionCategories.length}}
+    {{#each actionCategories as |category|}}
+      <h2 class="actions-subtitle">
+        {{#if category.icon}}
+          <i class="fa-fw {{category.icon}}" aria-hidden="true"></i>
+        {{/if}}
+        {{category.label}}
+      </h2>
+      {{> actionRows actions=category.actions actionKind="action" renderNonce=actions.renderNonce}}
+    {{/each}}
   {{/if}}
 </section>

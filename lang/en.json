@@ -105,6 +105,11 @@
           "Label": "Traverse Hazard"
         }
       },
+      "Category": {
+        "Combat": "Combat",
+        "Skill": "Skill",
+        "Spells": "Spells"
+      },
       "Phase": {
         "Any": "Any",
         "Combat": "Combat",
