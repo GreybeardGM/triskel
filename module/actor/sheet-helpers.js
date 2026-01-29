@@ -551,9 +551,10 @@ export async function prepareNotesTabContext(actor = null) {
 export function prepareRollHelperContext({ selectedAction = null, reserves = {}, commit = null } = {}) {
   const commitValue = toFiniteNumber(commit?.value, 0);
   const situationalModifier = toFiniteNumber(selectedAction?.situationalModifier, 0);
-  const normalizedForms = Array.isArray(selectedAction?.forms)
-    ? selectedAction.forms
-    : (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : []);
+  const selectionKind = selectedAction?.selectionKind === "spell" ? "spell" : "action";
+  const normalizedForms = selectionKind === "spell"
+    ? (Array.isArray(selectedAction?.attunements) ? selectedAction.attunements : [])
+    : (Array.isArray(selectedAction?.forms) ? selectedAction.forms : []);
   const preparedForms = normalizedForms.map(form => {
     const skillBonus = toFiniteNumber(form?.modifier?.skill, Number.NaN);
     return {
