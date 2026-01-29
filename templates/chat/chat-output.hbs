@@ -2,9 +2,7 @@
   {{#if hasActor}}
     <div class="chat-output__row chat-output__actor">
       {{#if actorImage}}
-        <div class="chat-output__actor-image">
-          <img src="{{actorImage}}" alt="{{actorName}}">
-        </div>
+        <img class="chat-output__actor-image" src="{{actorImage}}" alt="{{actorName}}">
       {{/if}}
       <div class="chat-output__actor-name">{{actorName}}</div>
     </div>
@@ -13,9 +11,7 @@
   {{#if hasHeader}}
     <div class="chat-output__row chat-output__header">
       {{#if image}}
-        <div class="chat-output__image">
-          <img src="{{image}}" alt="{{title}}">
-        </div>
+        <img class="chat-output__image" src="{{image}}" alt="{{title}}">
       {{/if}}
       <div class="chat-output__titles">
         {{#if title}}
