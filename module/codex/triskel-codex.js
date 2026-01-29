@@ -54,6 +54,24 @@ export const TRISKEL_ITEM_CATEGORIES = [
   }
 ];
 
+export const TRISKEL_ACTION_CATEGORIES = [
+  {
+    id: "combat",
+    label: "TRISKEL.Action.Category.Combat",
+    icon: "fa-solid fa-swords"
+  },
+  {
+    id: "spells",
+    label: "TRISKEL.Action.Category.Spells",
+    icon: "fa-solid fa-wand-sparkles"
+  },
+  {
+    id: "skill",
+    label: "TRISKEL.Action.Category.Skill",
+    icon: "fa-solid fa-brain"
+  }
+];
+
 export const TRISKEL_CARRY_LOCATIONS = [
   {
     id: "ready",
@@ -494,6 +512,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   actionTypes: TRISKEL_ACTION_TYPES,
   tiers: TRISKEL_TIERS,
   itemCategories: TRISKEL_ITEM_CATEGORIES,
+  actionCategories: TRISKEL_ACTION_CATEGORIES,
   carryLocations: TRISKEL_CARRY_LOCATIONS,
   gearArchetypes: TRISKEL_GEAR_ARCHETYPES,
   skillCategories: TRISKEL_SKILL_CATEGORIES,
@@ -512,6 +531,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
 
 export const TRISKEL_TIERS_BY_ID = TRISKEL_CODEX_INDEX.tiers;
 export const TRISKEL_ITEM_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.itemCategories;
+export const TRISKEL_ACTION_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.actionCategories;
 export const TRISKEL_CARRY_LOCATIONS_BY_ID = TRISKEL_CODEX_INDEX.carryLocations;
 export const TRISKEL_GEAR_ARCHETYPES_BY_ID = TRISKEL_CODEX_INDEX.gearArchetypes;
 export const TRISKEL_SKILL_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.skillCategories;

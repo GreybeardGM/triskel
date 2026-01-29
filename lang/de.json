@@ -105,6 +105,11 @@
           "Label": "Gefahr überwinden"
         }
       },
+      "Category": {
+        "Combat": "Kampf",
+        "Skill": "Fertigkeit",
+        "Spells": "Zauber"
+      },
       "Phase": {
         "Any": "Beliebig",
         "Combat": "Kampf",

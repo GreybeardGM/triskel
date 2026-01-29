@@ -123,11 +123,8 @@ async function onSelectAction(event, target) {
   const selectedActionType = actor?.system?.actions?.selectedType ?? "impact";
   const actionKind = target.closest("[data-action-kind]")?.dataset.actionKind ?? "action";
   const preparedActions = actor?.preparedActions?.actions ?? {};
-  const preparedSpells = actor?.preparedActions?.spells ?? {};
   const actionBucket = getActionBucket(preparedActions, selectedActionType);
-  const spellBucket = getActionBucket(preparedSpells, selectedActionType);
-  const selectionBucket = actionKind === "spell" ? spellBucket : actionBucket;
-  const selectedAction = selectionBucket.find(action => action?.id === actionKey) ?? null;
+  const selectedAction = actionBucket.find(action => action?.id === actionKey) ?? null;
   if (!selectedAction) return;
 
   const situationalModifier = toFiniteNumber(actor?.system?.actions?.selectedAction?.situationalModifier, 0);
