@@ -11,7 +11,7 @@ import {
   prepareActionsTabContext,
   prepareGearTabContext,
   prepareNotesTabContext,
-  prepareRollHelperTabContext,
+  prepareRollHelperContext,
   prepareSkillsTabContext
 } from "./sheet-helpers.js";
 import { chatOutput } from "../util/chat-output.js";
@@ -130,10 +130,13 @@ async function onSelectAction(event, target) {
   const selectedAction = selectionBucket.find(action => action?.id === actionKey) ?? null;
   if (!selectedAction) return;
 
+  const situationalModifier = toFiniteNumber(actor?.system?.actions?.selectedAction?.situationalModifier, 0);
   await actor?.update({
     "system.actions.selectedAction": {
-      ...selectedAction,
-      selectionKind: actionKind
+      selectionKind: actionKind,
+      actionId: actionKey,
+      actionType: selectedActionType,
+      situationalModifier
     }
   });
 }
@@ -155,29 +158,16 @@ async function onSelectSkill(event, target) {
   const skill = actor?.system?.skills?.[skillId] ?? null;
   if (!skill) return;
 
-  const skillLabel = skill?.label ?? skillId;
-  const skillTotal = toFiniteNumber(skill?.total, 0);
-  const description = skill?.description ?? "";
-
-  const pseudoAction = {
-    id: skillId,
-    label: skillLabel,
-    cost: 0,
-    reserve: null,
-    skill: skillId,
-    skillLabel,
-    skillTotal,
-    description,
-    forms: [],
-    modifiers: [
-      {
-        label: skillLabel,
-        value: skillTotal
-      }
-    ]
-  };
-
-  await actor?.update({ "system.actions.selectedAction": pseudoAction });
+  const situationalModifier = toFiniteNumber(actor?.system?.actions?.selectedAction?.situationalModifier, 0);
+  const selectedActionType = actor?.system?.actions?.selectedType ?? "impact";
+  await actor?.update({
+    "system.actions.selectedAction": {
+      selectionKind: "skill",
+      skillId,
+      actionType: selectedActionType,
+      situationalModifier
+    }
+  });
 }
 
 async function onToggleForm(event, target) {
@@ -416,7 +406,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     if (partId === "rollHelper") {
-      const rollHelperContext = prepareRollHelperTabContext({
+      const rollHelperContext = prepareRollHelperContext({
         actor,
         system: basePartContext.system,
         reserves: basePartContext.reserves ?? {},
