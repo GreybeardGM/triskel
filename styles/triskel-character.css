@@ -1,4 +1,38 @@
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --     LAYOUT     -- |
+\*____________________*/
+
+.triskel .character-sheet,
+.triskel .npc-sheet {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) 1fr;
+  grid-template-areas:
+    "info resources      " "roll tabcontent";
+  align-items: start;
+  gap: 1rem;
+  grid-template-rows: auto 1fr;
+}
+
+.triskel .character-sheet h2,
+.triskel .npc-sheet h2 {
+  font-family: Modesto Condensed;
+  text-align: center;
+  margin: 0.5rem 0;
+  color: var(--color-text-secondary);
+
+  background: var(--triskel-color-accent-primary);
+  font-size: 1.4rem;
+}
+
+.triskel .character-sheet h1,
+.triskel .npc-sheet h1 {
+  font-size: 2rem;
+}
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --     HEADER     -- |
 \*____________________*/
 

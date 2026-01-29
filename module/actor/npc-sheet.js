@@ -41,7 +41,8 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       type: "npc"
     },
     window: {
-      resizable: true
+      resizable: true,
+      contentClasses: ["npc-sheet"]
     },
     position: {
       height: "auto",

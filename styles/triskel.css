@@ -35,37 +35,6 @@
   --triskel-color-barsegment-empty: #4a4a4a;
 }
 
-.triskel .window-content {
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-  padding: 8px;
-}
-
-.triskel.sheet.actor.character .window-content,
-.triskel.sheet.actor.npc .window-content {
-  display: grid;
-  grid-template-columns: minmax(0, 14rem) 1fr;
-  grid-template-areas:
-    "info resources      " "roll tabcontent";
-  align-items: start;
-  gap: 1rem;
-  grid-template-rows: auto 1fr;
-}
-
-.triskel .window-content h2 {
-  font-family: Modesto Condensed;
-  text-align: center;
-  margin: 0.5rem 0;
-  color: var(--color-text-secondary);
-
-  background: var(--triskel-color-accent-primary);
-  font-size: 1.4rem;
-}
-
-.triskel .window-content h1 {
-  font-size: 2rem;
-}
-
 .triskel input {
   text-align: center;
 }
