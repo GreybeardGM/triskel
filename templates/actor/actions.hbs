@@ -52,8 +52,7 @@
           <div class="action-row__forms" role="group">
             {{#if action.forms.length}}
               {{#each action.forms as |form|}}
-                <button
-                  type="button"
+                <div
                   class="action-row__form is-interactive {{form.reserve}} {{#if form.active}}is-selected{{/if}}"
                   title="{{#if form.description}}{{form.label}} — {{form.description}}{{else}}{{form.label}}{{/if}}"
                   data-action="toggleForm"
@@ -62,12 +61,12 @@
                   data-selection-collection="{{action.selectionCollection}}"
                 >
                   {{#if form.image}}
-                    <img class="action-row__form-icon" src="{{form.image}}" alt="" />
+                    <img src="{{form.image}}" alt="" />
                   {{/if}}
                   {{#if form.cost}}
-                    <span class="action-row__form-cost">{{numberFormat form.cost decimals=0}}</span>
+                    <span>{{numberFormat form.cost decimals=0}}</span>
                   {{/if}}
-                </button>
+                </div>
               {{/each}}
             {{/if}}
           </div>
