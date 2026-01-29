@@ -173,16 +173,16 @@
   color: var(--triskel-color-text-inverse);
 }
 
-.triskel .resource-box.segment-strain {
+.triskel .segment-strain {
   background: var(--triskel-color-highlight-strain);
   pointer-events: none;
 }
 
-.triskel .resource-box.segment-empty {
+.triskel .segment-empty {
   background: var(--triskel-color-barsegment-empty);
 }
 
-.triskel .resource-box.segment-filled {
+.triskel .segment-filled {
   background: var(--triskel-color-highlight-default);
 }
 
@@ -340,14 +340,6 @@
 | --    ACTIONS     -- |
 \*____________________*/
 
-.triskel .actions-grid__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
-}
-
 .triskel .actions-phase-filter {
   display: flex;
   align-items: center;
@@ -372,10 +364,6 @@
   padding: 0.15rem 0.7rem;
   font-size: 0.85rem;
   border: 1px solid transparent;
-}
-
-.triskel .actions-phase-filter__option.is-selected {
-  color: var(--triskel-color-text-inverse);
 }
 
 .triskel .actions-list {
