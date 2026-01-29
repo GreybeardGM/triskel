@@ -396,8 +396,7 @@ export function enrichSelectedAction({
   keywordProperty = "forms",
   selectedForms = [],
   skills = {},
-  selectionKind = null,
-  reservesIndex = null
+  selectionKind = null
 } = {}) {
   const resolvedSelectionKind = selectionKind ?? (action?.selectionKind === "spell" ? "spell" : "action");
   const selectedKeywords = Array.isArray(selectedForms) ? selectedForms : [];
@@ -408,8 +407,7 @@ export function enrichSelectedAction({
     selectedKeywords,
     skills,
     selectionKind: resolvedSelectionKind,
-    keywordProperty: resolvedKeywordProperty,
-    reservesIndex
+    keywordProperty: resolvedKeywordProperty
   });
 }
 
@@ -503,7 +501,6 @@ export function prepareRollHelperContext({ actor = null, system = {}, reserves =
   const actionType = storedSelectedAction.actionType ?? system?.actions?.selectedType ?? "impact";
   const situationalModifier = toFiniteNumber(storedSelectedAction?.situationalModifier, 0);
   const skills = actor?.system?.skills ?? {};
-  const reservesIndex = getTriskellIndex().reserves ?? {};
 
   if (selectionKind === "action" || selectionKind === "spell") {
     if (storedSelectedAction?.actionId) {
@@ -529,8 +526,7 @@ export function prepareRollHelperContext({ actor = null, system = {}, reserves =
           keywordProperty,
           selectedForms,
           skills,
-          selectionKind,
-          reservesIndex
+          selectionKind
         });
       }
     }
