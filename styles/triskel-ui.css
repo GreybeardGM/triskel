@@ -33,6 +33,68 @@
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --  DIFFICULTY WIDGET -- |
+\*____________________*/
+
+.triskel.difficulty-widget {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem 0.75rem;
+  background: var(--triskel-color-surface-muted);
+  border: 2px solid var(--triskel-color-border-muted);
+  border-radius: 0 0 0.75rem 0.75rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.triskel.difficulty-widget.is-collapsed .difficulty-widget__value,
+.triskel.difficulty-widget.is-collapsed .difficulty-widget__controls {
+  display: none;
+}
+
+.triskel .difficulty-widget__toggle {
+  align-self: center;
+}
+
+.triskel .difficulty-widget__value {
+  text-align: center;
+  padding: 0.25rem 1.25rem;
+  border-radius: 0.75rem;
+  background: var(--triskel-color-neutral-dark);
+  color: var(--triskel-color-text-inverse);
+  min-width: 10rem;
+}
+
+.triskel .difficulty-widget__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.triskel .difficulty-widget__number {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.triskel .difficulty-widget__controls {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.triskel .difficulty-widget__control {
+  min-width: 2.5rem;
+  font-weight: 700;
+}
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --    ROLL HELPER  -- |
 \*____________________*/
 
