@@ -19,8 +19,6 @@ export class NpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const { skillCategories } = prepareSkillsDisplay(this.document?.system?.skills ?? {});
     context.skillCategories = skillCategories;
     context.assets = prepareAssetContext(this.document?.assets);
-    const preparedBundle = this.document?.preparedActions ?? {};
-    context.actions = preparedBundle.actions ?? {};
     const { npcStats } = prepareActorBarsContext(this.document);
     if (npcStats) context.npcStats = npcStats;
     if (context.system && npcStats) context.system.npcStats = npcStats;
