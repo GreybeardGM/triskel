@@ -1,6 +1,11 @@
 {
   "TRISKEL": {
     "Widget": {
+      "Difficulty": {
+        "Label": "Difficulty",
+        "Empty": "—",
+        "Toggle": "Toggle difficulty display"
+      },
       "ComplicationRoll": {
         "Label": "Complication Roll",
         "Subtitle": "1dt Threat - 1dt Obstacle",
@@ -284,6 +289,9 @@
       "RollHelper": {
         "Difficulty": "Difficulty",
         "NoActionSelected": "No action selected",
+        "OutcomeMisses": "Misses",
+        "OutcomeSuccesses": "Successes",
+        "OutcomeTie": "Tie",
         "Roll": "Roll",
         "SituationalModifier": "Situational modifier",
         "SkillBonus": "Skill bonus",
