@@ -46,11 +46,8 @@
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.5rem 0.75rem 0.75rem;
-  background: var(--triskel-color-surface-muted);
-  border: 2px solid var(--triskel-color-border-muted);
+  background: var(--color-cool-5-25);
   border-radius: 0 0 0.75rem 0.75rem;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
 .triskel.difficulty-widget.is-collapsed .difficulty-widget__value,
@@ -59,7 +56,8 @@
 }
 
 .triskel .difficulty-widget__toggle {
-  align-self: center;
+  width: 5rem;
+  border-radius: 0 0 1em 1rem;
 }
 
 .triskel .difficulty-widget__value {
@@ -69,6 +67,7 @@
   background: var(--triskel-color-neutral-dark);
   color: var(--triskel-color-text-inverse);
   min-width: 10rem;
+  margin: 0 0.5rem;
 }
 
 .triskel .difficulty-widget__label {
@@ -87,11 +86,7 @@
 .triskel .difficulty-widget__controls {
   display: flex;
   gap: 0.4rem;
-}
-
-.triskel .difficulty-widget__control {
-  min-width: 2.5rem;
-  font-weight: 700;
+  margin: 0 0.5rem 0.5rem;
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
@@ -262,9 +257,9 @@
 
 .triskel .chat-output__outcome {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
   gap: 0.5rem;
-  align-items: center;
+  justify-content: space-evenly;
 }
 
 .triskel .chat-output__difficulty {
@@ -278,6 +273,7 @@
   font-weight: 700;
 }
 
+.triskel .chat-output__outcome-label,
 .triskel .chat-output__difficulty-label {
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -285,6 +281,7 @@
   opacity: 0.85;
 }
 
+.triskel .chat-output__outcome-value,
 .triskel .chat-output__difficulty-value {
   font-size: 1.1rem;
 }
@@ -297,21 +294,20 @@
   border-radius: 0.6rem;
   border: 2px solid var(--triskel-color-border-muted);
   background: var(--triskel-color-surface-muted);
+  color: var(--color-light-3);
   font-weight: 700;
 }
 
 .triskel .chat-output__outcome-pill.success {
-  border-color: var(--triskel-color-highlight-default);
-  color: var(--triskel-color-highlight-default);
+  background: var(--triskel-color-accent-primary);
 }
 
 .triskel .chat-output__outcome-pill.miss {
-  border-color: var(--triskel-color-highlight-obstacle);
-  color: var(--triskel-color-highlight-obstacle);
+  background: var(--triskel-color-accent-danger);
 }
 
 .triskel .chat-output__outcome-pill.tie {
-  border-color: var(--triskel-color-border-muted);
+  background: var(--triskel-color-accent-secondary);
 }
 
 .triskel .chat-output__header {
