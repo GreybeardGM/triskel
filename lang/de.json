@@ -1,6 +1,11 @@
 {
   "TRISKEL": {
     "Widget": {
+      "Difficulty": {
+        "Label": "Schwierigkeit",
+        "Empty": "—",
+        "Toggle": "Schwierigkeit ein-/ausblenden"
+      },
       "ComplicationRoll": {
         "Label": "Komplikationswurf",
         "Subtitle": "1dt Bedrohung - 1dt Hindernis",
