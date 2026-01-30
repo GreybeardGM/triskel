@@ -289,6 +289,9 @@
       "RollHelper": {
         "Difficulty": "Difficulty",
         "NoActionSelected": "No action selected",
+        "OutcomeMisses": "Misses",
+        "OutcomeSuccesses": "Successes",
+        "OutcomeTie": "Tie",
         "Roll": "Roll",
         "SituationalModifier": "Situational modifier",
         "SkillBonus": "Skill bonus",

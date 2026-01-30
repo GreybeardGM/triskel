@@ -289,6 +289,9 @@
       "RollHelper": {
         "Difficulty": "Schwierigkeit",
         "NoActionSelected": "Keine Aktion ausgewählt",
+        "OutcomeMisses": "Fehlschläge",
+        "OutcomeSuccesses": "Erfolge",
+        "OutcomeTie": "Gleichstand",
         "Roll": "Würfeln",
         "SituationalModifier": "Situativer Modifikator",
         "SkillBonus": "Fertigkeitsbonus",
