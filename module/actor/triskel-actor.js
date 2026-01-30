@@ -50,6 +50,20 @@ export class TriskelActor extends Actor {
       modifiers: this.system?.modifiers
     });
 
+    if (this.type === "npc") {
+      this.preparedActions = { actions: {}, forms: {} };
+      this.refs = {
+        ...this.refs,
+        keywords: {
+          forms: []
+        }
+      };
+
+      // Platzhalter: NPC-Ressourcen vorbereiten.
+      this._prepareNpcResources();
+      return;
+    }
+
     const actionRefsKey = this.refs?.keys?.actions;
     const formRefsKey = this.refs?.keys?.forms;
     let preparedActions = previousPrepared.actions ?? null;
@@ -299,7 +313,8 @@ export class TriskelActor extends Actor {
     const upsertSkill = (id, source = {}) => {
       const current = skills?.[id] ?? {};
       const mod = toFiniteNumber(modifierBySkill[id], 0);
-      const value = toFiniteNumber(current.value);
+      const defaultValue = this.type === "npc" ? 10 : 0;
+      const value = toFiniteNumber(current.value, defaultValue);
       const category = source.category ?? current.category ?? null;
 
       prepared[id] = {
