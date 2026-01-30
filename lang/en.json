@@ -289,7 +289,9 @@
       "RollHelper": {
         "Difficulty": "Difficulty",
         "NoActionSelected": "No action selected",
+        "OutcomeMiss": "Miss",
         "OutcomeMisses": "Misses",
+        "OutcomeSuccess": "Success",
         "OutcomeSuccesses": "Successes",
         "OutcomeTie": "Tie",
         "Roll": "Roll",

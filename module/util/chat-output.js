@@ -12,6 +12,12 @@
  * @param {string} [options.actionTemplate=""] - Handlebars template path for action row.
  * @param {object} [options.actionContext={}]  - Template context for action row.
  * @param {string} [options.footer=""]       - HTML content for the footer row.
+ * @param {object|null} [options.outcome=null] - Optional roll outcome data.
+ * @param {string} [options.outcome.label=""] - Outcome label (success/miss/tie).
+ * @param {string|null} [options.outcome.tone=null] - Outcome tone class.
+ * @param {number|null} [options.outcome.value=null] - Outcome magnitude.
+ * @param {string} [options.outcome.difficultyLabel=""] - Difficulty label.
+ * @param {number|null} [options.outcome.difficultyValue=null] - Difficulty value.
  * @param {Roll|null} [options.roll=null]      - Optional Foundry Roll instance to display.
  * @param {string} [options.flavor=""]       - Optional flavor text for the chat message.
  * @param {string|null} [options.rollMode=null]- Roll mode override (defaults to current core roll mode).
@@ -31,6 +37,7 @@ export async function chatOutput({
   actionTemplate = "",
   actionContext = {},
   footer = "",
+  outcome = null,
   roll = null,
   flavor = "",
   rollMode = null,
@@ -103,7 +110,8 @@ export async function chatOutput({
     complication,
     complicationTone: complicationTone || "",
     action: resolvedAction,
-    footer: resolvedFooter
+    footer: resolvedFooter,
+    outcome
   };
 
   const html = await foundry.applications.handlebars.renderTemplate(

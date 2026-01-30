@@ -246,7 +246,7 @@ async function onRollHelper(event) {
     "system.actions.commit.value": 0
   });
 
-  let difficultyOutcomeLine = "";
+  let difficultyOutcome = null;
   if (Number.isFinite(difficultyValue) && rollResult?.roll) {
     const total = toFiniteNumber(rollResult.roll.total, Number.NaN);
     if (Number.isFinite(total)) {
@@ -254,15 +254,29 @@ async function onRollHelper(event) {
       const localize = game.i18n?.localize?.bind(game.i18n) ?? (key => key);
       const difficultyLabel = localize("TRISKEL.Actor.RollHelper.Difficulty");
       let outcomeLabel = localize("TRISKEL.Actor.RollHelper.OutcomeTie");
-      let outcomeSuffix = "";
+      let outcomeTone = "tie";
+      let outcomeValue = null;
       if (difference > 0) {
-        outcomeLabel = localize("TRISKEL.Actor.RollHelper.OutcomeSuccesses");
-        outcomeSuffix = `: ${difference}`;
+        outcomeLabel = difference === 1
+          ? localize("TRISKEL.Actor.RollHelper.OutcomeSuccess")
+          : localize("TRISKEL.Actor.RollHelper.OutcomeSuccesses");
+        outcomeTone = "success";
+        outcomeValue = difference;
       } else if (difference < 0) {
-        outcomeLabel = localize("TRISKEL.Actor.RollHelper.OutcomeMisses");
-        outcomeSuffix = `: ${difference}`;
+        const misses = Math.abs(difference);
+        outcomeLabel = misses === 1
+          ? localize("TRISKEL.Actor.RollHelper.OutcomeMiss")
+          : localize("TRISKEL.Actor.RollHelper.OutcomeMisses");
+        outcomeTone = "miss";
+        outcomeValue = misses;
       }
-      difficultyOutcomeLine = `<p>${difficultyLabel}: ${difficultyValue} | ${outcomeLabel}${outcomeSuffix}</p>`;
+      difficultyOutcome = {
+        label: outcomeLabel,
+        tone: outcomeTone,
+        value: outcomeValue,
+        difficultyLabel,
+        difficultyValue
+      };
     }
   }
 
@@ -281,7 +295,7 @@ async function onRollHelper(event) {
     },
     actor,
     rollMode: rollData?.options?.rollMode ?? null,
-    footer: difficultyOutcomeLine
+    outcome: difficultyOutcome
   });
 }
 

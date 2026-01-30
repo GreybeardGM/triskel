@@ -260,6 +260,60 @@
   margin-top: .75rem;
 }
 
+.triskel .chat-output__outcome {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.triskel .chat-output__difficulty {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.6rem;
+  background: var(--triskel-color-neutral-dark);
+  color: var(--triskel-color-text-inverse);
+  font-weight: 700;
+}
+
+.triskel .chat-output__difficulty-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.triskel .chat-output__difficulty-value {
+  font-size: 1.1rem;
+}
+
+.triskel .chat-output__outcome-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 2px solid var(--triskel-color-border-muted);
+  background: var(--triskel-color-surface-muted);
+  font-weight: 700;
+}
+
+.triskel .chat-output__outcome-pill.success {
+  border-color: var(--triskel-color-highlight-default);
+  color: var(--triskel-color-highlight-default);
+}
+
+.triskel .chat-output__outcome-pill.miss {
+  border-color: var(--triskel-color-highlight-obstacle);
+  color: var(--triskel-color-highlight-obstacle);
+}
+
+.triskel .chat-output__outcome-pill.tie {
+  border-color: var(--triskel-color-border-muted);
+}
+
 .triskel .chat-output__header {
   display: flex;
   align-items: center;
