@@ -203,11 +203,16 @@ async function onRollHelper(event) {
   if (!rollHelperSummary) return;
   if (rollHelperSummary.canAfford === false) return;
 
+  const scene = game.scenes?.current ?? game.canvas?.scene ?? null;
+  const sceneDifficulty = scene?.getFlag?.("triskel", "difficulty") ?? null;
+  const difficultyValue = Number.isFinite(sceneDifficulty?.value) ? sceneDifficulty.value : null;
+  const shouldResetDifficulty = sceneDifficulty?.persist !== true;
   const shouldRoll = Boolean(rollData);
   if (shouldRoll && typeof actor?.rollTriskelDice !== "function") return;
   const rollResult = shouldRoll
     ? await actor.rollTriskelDice({
       ...rollData,
+      difficulty: Number.isFinite(difficultyValue) ? difficultyValue : null,
       options: {
         ...rollData?.options,
         chatOutput: false
@@ -241,6 +246,44 @@ async function onRollHelper(event) {
     "system.actions.commit.value": 0
   });
 
+  let difficultyOutcome = null;
+  if (Number.isFinite(difficultyValue) && rollResult?.roll) {
+    const total = toFiniteNumber(rollResult.roll.total, Number.NaN);
+    if (Number.isFinite(total)) {
+      const difference = total - difficultyValue;
+      const localize = game.i18n?.localize?.bind(game.i18n) ?? (key => key);
+      const difficultyLabel = localize("TRISKEL.Actor.RollHelper.Difficulty");
+      let outcomeLabel = localize("TRISKEL.Actor.RollHelper.OutcomeTie");
+      let outcomeTone = "tie";
+      let outcomeValue = null;
+      if (difference > 0) {
+        outcomeLabel = difference === 1
+          ? localize("TRISKEL.Actor.RollHelper.OutcomeSuccess")
+          : localize("TRISKEL.Actor.RollHelper.OutcomeSuccesses");
+        outcomeTone = "success";
+        outcomeValue = difference;
+      } else if (difference < 0) {
+        const misses = Math.abs(difference);
+        outcomeLabel = misses === 1
+          ? localize("TRISKEL.Actor.RollHelper.OutcomeMiss")
+          : localize("TRISKEL.Actor.RollHelper.OutcomeMisses");
+        outcomeTone = "miss";
+        outcomeValue = misses;
+      }
+      difficultyOutcome = {
+        label: outcomeLabel,
+        tone: outcomeTone,
+        value: outcomeValue,
+        difficultyLabel,
+        difficultyValue
+      };
+    }
+  }
+
+  if (shouldResetDifficulty && scene) {
+    await scene.setFlag("triskel", "difficulty", { value: null, persist: false });
+  }
+
   await chatOutput({
     roll: rollResult?.roll ?? null,
     actionTemplate: rollHelperAction ? "systems/triskel/templates/chat/roll-helper-action.hbs" : "",
@@ -251,7 +294,8 @@ async function onRollHelper(event) {
       reserveCosts
     },
     actor,
-    rollMode: rollData?.options?.rollMode ?? null
+    rollMode: rollData?.options?.rollMode ?? null,
+    outcome: difficultyOutcome
   });
 }
 

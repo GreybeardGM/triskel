@@ -38,6 +38,21 @@
     <div class="chat-output__row chat-output__roll">{{{roll}}}</div>
   {{/if}}
 
+  {{#if outcome}}
+    <div class="chat-output__row chat-output__outcome">
+      <div class="chat-output__difficulty">
+        <span class="chat-output__difficulty-label">{{outcome.difficultyLabel}}</span>
+        <span class="chat-output__difficulty-value">{{outcome.difficultyValue}}</span>
+      </div>
+      <div class="chat-output__outcome-pill {{outcome.tone}}">
+        <span class="chat-output__outcome-label">{{outcome.label}}</span>
+        {{#if outcome.value}}
+          <span class="chat-output__outcome-value">{{outcome.value}}</span>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+
   {{#if footer}}
     <div class="chat-output__row chat-output__footer">{{{footer}}}</div>
   {{/if}}

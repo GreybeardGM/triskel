@@ -33,6 +33,68 @@
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --  DIFFICULTY WIDGET -- |
+\*____________________*/
+
+.triskel.difficulty-widget {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem 0.75rem;
+  background: var(--triskel-color-surface-muted);
+  border: 2px solid var(--triskel-color-border-muted);
+  border-radius: 0 0 0.75rem 0.75rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.triskel.difficulty-widget.is-collapsed .difficulty-widget__value,
+.triskel.difficulty-widget.is-collapsed .difficulty-widget__controls {
+  display: none;
+}
+
+.triskel .difficulty-widget__toggle {
+  align-self: center;
+}
+
+.triskel .difficulty-widget__value {
+  text-align: center;
+  padding: 0.25rem 1.25rem;
+  border-radius: 0.75rem;
+  background: var(--triskel-color-neutral-dark);
+  color: var(--triskel-color-text-inverse);
+  min-width: 10rem;
+}
+
+.triskel .difficulty-widget__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.triskel .difficulty-widget__number {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.triskel .difficulty-widget__controls {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.triskel .difficulty-widget__control {
+  min-width: 2.5rem;
+  font-weight: 700;
+}
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
 | --    ROLL HELPER  -- |
 \*____________________*/
 
@@ -196,6 +258,60 @@
 
 .triskel .chat-output__row + .chat-output__row {
   margin-top: .75rem;
+}
+
+.triskel .chat-output__outcome {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.triskel .chat-output__difficulty {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.6rem;
+  background: var(--triskel-color-neutral-dark);
+  color: var(--triskel-color-text-inverse);
+  font-weight: 700;
+}
+
+.triskel .chat-output__difficulty-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.triskel .chat-output__difficulty-value {
+  font-size: 1.1rem;
+}
+
+.triskel .chat-output__outcome-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 2px solid var(--triskel-color-border-muted);
+  background: var(--triskel-color-surface-muted);
+  font-weight: 700;
+}
+
+.triskel .chat-output__outcome-pill.success {
+  border-color: var(--triskel-color-highlight-default);
+  color: var(--triskel-color-highlight-default);
+}
+
+.triskel .chat-output__outcome-pill.miss {
+  border-color: var(--triskel-color-highlight-obstacle);
+  color: var(--triskel-color-highlight-obstacle);
+}
+
+.triskel .chat-output__outcome-pill.tie {
+  border-color: var(--triskel-color-border-muted);
 }
 
 .triskel .chat-output__header {

@@ -1,6 +1,11 @@
 {
   "TRISKEL": {
     "Widget": {
+      "Difficulty": {
+        "Label": "Schwierigkeit",
+        "Empty": "—",
+        "Toggle": "Schwierigkeit ein-/ausblenden"
+      },
       "ComplicationRoll": {
         "Label": "Komplikationswurf",
         "Subtitle": "1dt Bedrohung - 1dt Hindernis",
@@ -284,6 +289,11 @@
       "RollHelper": {
         "Difficulty": "Schwierigkeit",
         "NoActionSelected": "Keine Aktion ausgewählt",
+        "OutcomeMiss": "Fehlschlag",
+        "OutcomeMisses": "Fehlschläge",
+        "OutcomeSuccess": "Erfolg",
+        "OutcomeSuccesses": "Erfolge",
+        "OutcomeTie": "Gleichstand",
         "Roll": "Würfeln",
         "SituationalModifier": "Situativer Modifikator",
         "SkillBonus": "Fertigkeitsbonus",
