@@ -1,5 +1,6 @@
 import { chatOutput } from "../util/chat-output.js";
 import { getTriskelCodex } from "../actor/sheet-helpers.js";
+import { getWidgetHost } from "./widget-host.js";
 
 const WIDGET_CONTAINER_CLASS = "complication-roll-widget";
 const STORED_ROW_CLASS = "complication-roll__stored";
@@ -8,6 +9,10 @@ const STORED_DROP_CLASS = "complication-roll__drop";
 const ROLL_FORMULA = "1dt[Threat]-1dt[Obstacle]";
 const I18N_ROOT = "TRISKEL.Widget.ComplicationRoll";
 const STORED_SETTING_KEY = "storedComplicationRoll";
+
+function getLocalize() {
+  return game.i18n?.localize?.bind(game.i18n) ?? (key => key);
+}
 
 function getComplicationEntry(total) {
   const entries = getTriskelCodex()?.complicationTable?.entries ?? [];
@@ -124,19 +129,14 @@ async function performComplicationRoll(localize) {
   });
 }
 
-function addWidgetToRightColumn(app, html) {
+// Mount the widget next to the difficulty widget in the shared host.
+function addWidgetToHost() {
   if (!game.user?.isGM) return;
 
-  const root = app?.element?.[0] ?? document;
+  const host = getWidgetHost(document);
+  if (!host || host.querySelector(`.${WIDGET_CONTAINER_CLASS}`)) return;
 
-  const column = root.querySelector("#ui-right-column-1");
-  if (!column) return;
-  if (column.querySelector(`.${WIDGET_CONTAINER_CLASS}`)) return;
-
-  const notifications = column.querySelector("#chat-notifications");
-  if (!notifications) return;
-
-  const localize = game.i18n.localize.bind(game.i18n);
+  const localize = getLocalize();
   const storedRow = document.createElement("div");
   storedRow.className = STORED_ROW_CLASS;
 
@@ -170,7 +170,14 @@ function addWidgetToRightColumn(app, html) {
   container.className = `triskel ${WIDGET_CONTAINER_CLASS}`;
   container.append(storedRow, button);
 
-  column.insertBefore(container, notifications);
+  const difficultyWidget = host.querySelector(".difficulty-widget");
+  if (difficultyWidget?.nextSibling) {
+    host.insertBefore(container, difficultyWidget.nextSibling);
+  } else if (difficultyWidget) {
+    host.append(container);
+  } else {
+    host.append(container);
+  }
   updateStoredComplicationDisplay(container, localize);
 }
 
@@ -182,18 +189,17 @@ export function registerComplicationRollSettings() {
     type: Object,
     default: null,
     onChange: value => {
-      const localize = game.i18n?.localize?.bind(game.i18n) ?? (key => key);
-      updateStoredComplicationDisplay(document, localize, value);
+      updateStoredComplicationDisplay(document, getLocalize(), value);
     }
   });
 }
 
 export function registerComplicationRollWidget() {
-  Hooks.on("renderChatLog", (app, html) => {
-    addWidgetToRightColumn(app, html);
+  Hooks.on("renderChatLog", () => {
+    addWidgetToHost();
   });
 
-  Hooks.on("renderChatSidebar", (app, html) => {
-    addWidgetToRightColumn(app, html);
+  Hooks.on("renderChatSidebar", () => {
+    addWidgetToHost();
   });
 }
