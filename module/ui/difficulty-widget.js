@@ -6,6 +6,10 @@ const I18N_ROOT = "TRISKEL.Widget.Difficulty";
 const FLAG_KEY = "difficulty";
 const DIFFICULTY_VALUES = [10, 12, 14, 16];
 
+function getLocalize() {
+  return game.i18n?.localize?.bind(game.i18n) ?? (key => key);
+}
+
 function getCurrentScene() {
   return game.scenes?.current ?? game.canvas?.scene ?? null;
 }
@@ -87,7 +91,7 @@ function updateToggleState(container, expanded) {
 function addWidget(root) {
   if (!root || root.querySelector(`.${WIDGET_CONTAINER_CLASS}`)) return;
 
-  const localize = game.i18n.localize.bind(game.i18n);
+  const localize = getLocalize();
   const container = document.createElement("div");
   container.className = `triskel ${WIDGET_CONTAINER_CLASS}`;
 
@@ -139,13 +143,11 @@ export function registerDifficultyWidget() {
 
   Hooks.on("canvasReady", () => {
     ensureWidget();
-    const localize = game.i18n?.localize?.bind(game.i18n) ?? (key => key);
-    updateDifficultyDisplay(document, localize);
+    updateDifficultyDisplay(document, getLocalize());
   });
 
   Hooks.on("updateScene", scene => {
     if (scene.id !== getCurrentScene()?.id) return;
-    const localize = game.i18n?.localize?.bind(game.i18n) ?? (key => key);
-    updateDifficultyDisplay(document, localize);
+    updateDifficultyDisplay(document, getLocalize());
   });
 }
