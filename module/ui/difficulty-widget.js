@@ -1,3 +1,5 @@
+import { getWidgetHost } from "./widget-host.js";
+
 const WIDGET_CONTAINER_CLASS = "difficulty-widget";
 const TOGGLE_BUTTON_CLASS = "difficulty-widget__toggle";
 const VALUE_CLASS = "difficulty-widget__value";
@@ -88,6 +90,7 @@ function updateToggleState(container, expanded) {
   }
 }
 
+// Adds the widget to the shared host, keeping it anchored at the top-center.
 function addWidget(root) {
   if (!root || root.querySelector(`.${WIDGET_CONTAINER_CLASS}`)) return;
 
@@ -123,31 +126,42 @@ function addWidget(root) {
     updateToggleState(container, !expanded);
   });
 
-  root.append(container);
+  const complicationWidget = root.querySelector(".complication-roll-widget");
+  if (complicationWidget) {
+    root.insertBefore(container, complicationWidget);
+  } else {
+    root.append(container);
+  }
   updateToggleState(container, true);
   updateDifficultyDisplay(container, localize);
 }
 
 function ensureWidget() {
-  addWidget(document.body);
+  const host = getWidgetHost(document);
+  if (!host) return;
+  addWidget(host);
 }
 
 export function registerDifficultyWidget() {
   Hooks.on("renderChatLog", () => {
+    // Ensure the widget exists after chat/sidebar renders.
     ensureWidget();
   });
 
   Hooks.on("renderChatSidebar", () => {
+    // Sidebar render can happen without canvas, so ensure the widget too.
     ensureWidget();
   });
 
   Hooks.on("canvasReady", () => {
+    // Refresh value on canvas ready to reflect the current scene flag.
     ensureWidget();
     updateDifficultyDisplay(document, getLocalize());
   });
 
   Hooks.on("updateScene", scene => {
     if (scene.id !== getCurrentScene()?.id) return;
+    // Keep the displayed value in sync with the scene flag.
     updateDifficultyDisplay(document, getLocalize());
   });
 }
