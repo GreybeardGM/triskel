@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  margin: 0 0 0.5rem;
+  background: var(--color-cool-5-25);
+  padding: 0.5rem;
+  border-radius: 0 0 0.65rem 0.75rem;
 }
 
 .triskel .complication-roll__button {
@@ -22,6 +24,7 @@
   background: var(--triskel-color-surface-muted);
   color: var(--triskel-color-text-strong);
   text-align: center;
+  min-width: 15rem;
 }
 
 .triskel .complication-tone.obstacle {
@@ -45,10 +48,6 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-}
-
-.triskel.triskel-widget-host .triskel.complication-roll-widget {
-  margin: 0;
 }
 
 .triskel.difficulty-widget {
