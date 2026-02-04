@@ -35,22 +35,31 @@ const getTokenDimensions = token => {
 
 const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, centerDeg, color) => {
   const clampedValue = Math.max(0, Math.min(MAX_RESERVE_VALUE, reserveValue ?? 0));
+  if (clampedValue <= 0 || clampedValue >= MAX_RESERVE_VALUE) {
+    return;
+  }
+
   const fillAngle = clampedValue * RESERVE_DEGREES_PER_POINT;
+  const outlineAngle = MAX_RESERVE_VALUE * RESERVE_DEGREES_PER_POINT;
 
   if (fillAngle <= 0) {
     return;
   }
 
+  const outlineStart = (centerDeg - outlineAngle / 2) * DEG_TO_RAD;
+  const outlineEnd = (centerDeg + outlineAngle / 2) * DEG_TO_RAD;
   const start = (centerDeg - fillAngle / 2) * DEG_TO_RAD;
   const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
+  const outlineStartX = centerX + radius * Math.cos(outlineStart);
+  const outlineStartY = centerY + radius * Math.sin(outlineStart);
   const startX = centerX + radius * Math.cos(start);
   const startY = centerY + radius * Math.sin(start);
   const outlineWidth = LINE_WIDTH + OUTLINE_WIDTH * 2;
 
   graphics.lineStyle(outlineWidth, 0x000000, 1);
-  graphics.moveTo(startX, startY);
-  graphics.arc(centerX, centerY, radius, start, end);
+  graphics.moveTo(outlineStartX, outlineStartY);
+  graphics.arc(centerX, centerY, radius, outlineStart, outlineEnd);
 
   graphics.lineStyle(LINE_WIDTH, color, 1);
   graphics.moveTo(startX, startY);
@@ -69,7 +78,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.power?.min ?? 0,
+    MAX_RESERVE_VALUE - (reserves.power?.min ?? 0),
     270,
     getTokenColor("power")
   );
@@ -79,7 +88,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.grace?.min ?? 0,
+    MAX_RESERVE_VALUE - (reserves.grace?.min ?? 0),
     150,
     getTokenColor("grace")
   );
@@ -89,7 +98,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.will?.min ?? 0,
+    MAX_RESERVE_VALUE - (reserves.will?.min ?? 0),
     30,
     getTokenColor("will")
   );
@@ -104,8 +113,12 @@ const drawNpcBars = (graphics, token) => {
     return;
   }
 
-  const missingRatio = Math.max(0, Math.min(1, (max - value) / max));
-  const fillAngle = NPC_ARC_DEGREES * missingRatio;
+  if (value >= max) {
+    return;
+  }
+
+  const fillRatio = Math.max(0, Math.min(1, value / max));
+  const fillAngle = NPC_ARC_DEGREES * fillRatio;
 
   if (fillAngle <= 0) {
     return;
@@ -120,13 +133,17 @@ const drawNpcBars = (graphics, token) => {
   const start = (centerDeg - fillAngle / 2) * DEG_TO_RAD;
   const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
+  const outlineStart = (centerDeg - NPC_ARC_DEGREES / 2) * DEG_TO_RAD;
+  const outlineEnd = (centerDeg + NPC_ARC_DEGREES / 2) * DEG_TO_RAD;
+  const outlineStartX = centerX + radius * Math.cos(outlineStart);
+  const outlineStartY = centerY + radius * Math.sin(outlineStart);
   const startX = centerX + radius * Math.cos(start);
   const startY = centerY + radius * Math.sin(start);
   const outlineWidth = LINE_WIDTH + OUTLINE_WIDTH * 2;
 
   graphics.lineStyle(outlineWidth, 0x000000, 1);
-  graphics.moveTo(startX, startY);
-  graphics.arc(centerX, centerY, radius, start, end);
+  graphics.moveTo(outlineStartX, outlineStartY);
+  graphics.arc(centerX, centerY, radius, outlineStart, outlineEnd);
 
   graphics.lineStyle(LINE_WIDTH, getTokenColor("wounds"), 1);
   graphics.moveTo(startX, startY);
