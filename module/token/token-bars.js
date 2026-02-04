@@ -30,7 +30,7 @@ const drawOutlinedArc = ({
   const outlineWidth = LINE_WIDTH + OUTLINE_WIDTH * 2;
 
   // Draw the outline arc for the full segment.
-  graphics.lineStyle(outlineWidth, 0x000000, 1);
+  graphics.lineStyle(outlineWidth, 0x000000, 0.7);
   graphics.moveTo(outlineStartX, outlineStartY);
   graphics.arc(centerX, centerY, radius, outlineStart, outlineEnd);
 
@@ -222,7 +222,8 @@ export const drawTriskelTokenBars = token => {
     woundsMax: wounds.max ?? null
   };
 
-  if (token.triskelBars && areStatesEqual(token.triskelBarsState, nextState)) {
+  const hasActiveBars = token.triskelBars && !token.triskelBars.destroyed;
+  if (hasActiveBars && areStatesEqual(token.triskelBarsState, nextState)) {
     return;
   }
 
