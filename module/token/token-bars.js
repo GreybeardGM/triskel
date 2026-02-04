@@ -35,6 +35,10 @@ const getTokenDimensions = token => {
 
 const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, centerDeg, color) => {
   const clampedValue = Math.max(0, Math.min(MAX_RESERVE_VALUE, reserveValue ?? 0));
+  if (clampedValue >= MAX_RESERVE_VALUE) {
+    return;
+  }
+
   const outlineAngle = MAX_RESERVE_VALUE * RESERVE_DEGREES_PER_POINT;
   const outlineStart = (centerDeg - outlineAngle / 2) * DEG_TO_RAD;
   const outlineEnd = (centerDeg + outlineAngle / 2) * DEG_TO_RAD;
@@ -46,7 +50,7 @@ const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, 
   graphics.moveTo(outlineStartX, outlineStartY);
   graphics.arc(centerX, centerY, radius, outlineStart, outlineEnd);
 
-  if (clampedValue <= 0 || clampedValue >= MAX_RESERVE_VALUE) {
+  if (clampedValue <= 0) {
     return;
   }
 
@@ -109,6 +113,10 @@ const drawNpcBars = (graphics, token) => {
     return;
   }
 
+  if (value >= max) {
+    return;
+  }
+
   const fillRatio = Math.max(0, Math.min(1, value / max));
   const fillAngle = NPC_ARC_DEGREES * fillRatio;
 
@@ -128,7 +136,7 @@ const drawNpcBars = (graphics, token) => {
   graphics.moveTo(outlineStartX, outlineStartY);
   graphics.arc(centerX, centerY, radius, outlineStart, outlineEnd);
 
-  if (value <= 0 || value >= max) {
+  if (value <= 0) {
     return;
   }
 
