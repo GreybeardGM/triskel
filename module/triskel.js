@@ -89,4 +89,5 @@ Hooks.once("init", function() {
 Hooks.once("diceSoNiceReady", registerTriskelDiceSoNice);
 
 Hooks.on("refreshToken", token => drawTriskelTokenBars(token));
+Hooks.on("drawToken", token => drawTriskelTokenBars(token));
 Hooks.on("destroyToken", token => cleanupTriskelTokenBars(token));
