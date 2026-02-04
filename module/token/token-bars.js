@@ -2,7 +2,8 @@ const DEG_TO_RAD = Math.PI / 180;
 const MAX_RESERVE_VALUE = 5;
 const RESERVE_DEGREES_PER_POINT = 22;
 const NPC_ARC_DEGREES = 180;
-const LINE_WIDTH = 2;
+const LINE_WIDTH = 3;
+const OUTLINE_WIDTH = 1;
 
 const TRISKEL_TOKEN_COLORS = {
   power: "#d9534f",
@@ -43,8 +44,16 @@ const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, 
   const start = (centerDeg - fillAngle / 2) * DEG_TO_RAD;
   const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
+  const startX = centerX + radius * Math.cos(start);
+  const startY = centerY + radius * Math.sin(start);
+  const outlineWidth = LINE_WIDTH + OUTLINE_WIDTH * 2;
+
+  graphics.lineStyle(outlineWidth, 0x000000, 1);
+  graphics.moveTo(startX, startY);
+  graphics.arc(centerX, centerY, radius, start, end);
+
   graphics.lineStyle(LINE_WIDTH, color, 1);
-  graphics.moveTo(centerX + radius * Math.cos(start), centerY + radius * Math.sin(start));
+  graphics.moveTo(startX, startY);
   graphics.arc(centerX, centerY, radius, start, end);
 };
 
@@ -111,8 +120,16 @@ const drawNpcBars = (graphics, token) => {
   const start = (centerDeg - fillAngle / 2) * DEG_TO_RAD;
   const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
+  const startX = centerX + radius * Math.cos(start);
+  const startY = centerY + radius * Math.sin(start);
+  const outlineWidth = LINE_WIDTH + OUTLINE_WIDTH * 2;
+
+  graphics.lineStyle(outlineWidth, 0x000000, 1);
+  graphics.moveTo(startX, startY);
+  graphics.arc(centerX, centerY, radius, start, end);
+
   graphics.lineStyle(LINE_WIDTH, getTokenColor("wounds"), 1);
-  graphics.moveTo(centerX + radius * Math.cos(start), centerY + radius * Math.sin(start));
+  graphics.moveTo(startX, startY);
   graphics.arc(centerX, centerY, radius, start, end);
 };
 
