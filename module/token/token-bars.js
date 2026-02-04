@@ -5,9 +5,13 @@ const NPC_ARC_DEGREES = 180;
 const LINE_WIDTH = 2;
 
 const getCssColor = variableName => {
-  const value = getComputedStyle(document.documentElement)
+  const rootValue = getComputedStyle(document.documentElement)
     .getPropertyValue(variableName)
     .trim();
+  const bodyValue = getComputedStyle(document.body)
+    .getPropertyValue(variableName)
+    .trim();
+  const value = rootValue || bodyValue;
   return PIXI.utils.string2hex(value || "#ffffff");
 };
 
@@ -42,6 +46,7 @@ const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, 
   const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
   graphics.lineStyle(LINE_WIDTH, color, 1);
+  graphics.moveTo(centerX + radius * Math.cos(start), centerY + radius * Math.sin(start));
   graphics.arc(centerX, centerY, radius, start, end);
 };
 
@@ -57,7 +62,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.power?.value ?? 0,
+    reserves.power?.min ?? 0,
     135,
     getCssColor("--triskel-color-highlight-power")
   );
@@ -67,7 +72,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.grace?.value ?? 0,
+    reserves.grace?.min ?? 0,
     45,
     getCssColor("--triskel-color-highlight-grace")
   );
@@ -77,7 +82,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.will?.value ?? 0,
+    reserves.will?.min ?? 0,
     270,
     getCssColor("--triskel-color-highlight-will")
   );
@@ -109,6 +114,7 @@ const drawNpcBars = (graphics, token) => {
   const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
   graphics.lineStyle(LINE_WIDTH, getCssColor("--triskel-color-highlight-wounds"), 1);
+  graphics.moveTo(centerX + radius * Math.cos(start), centerY + radius * Math.sin(start));
   graphics.arc(centerX, centerY, radius, start, end);
 };
 
