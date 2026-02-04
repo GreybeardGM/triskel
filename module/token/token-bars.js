@@ -1,19 +1,17 @@
 const DEG_TO_RAD = Math.PI / 180;
 const MAX_RESERVE_VALUE = 5;
-const RESERVE_DEGREES_PER_POINT = 24;
+const RESERVE_DEGREES_PER_POINT = 22;
 const NPC_ARC_DEGREES = 180;
 const LINE_WIDTH = 2;
 
-const getCssColor = variableName => {
-  const rootValue = getComputedStyle(document.documentElement)
-    .getPropertyValue(variableName)
-    .trim();
-  const bodyValue = getComputedStyle(document.body)
-    .getPropertyValue(variableName)
-    .trim();
-  const value = rootValue || bodyValue;
-  return PIXI.utils.string2hex(value || "#ffffff");
+const TRISKEL_TOKEN_COLORS = {
+  power: "#d9534f",
+  grace: "#5cb85c",
+  will: "#5bc0de",
+  wounds: "#7a1f1f"
 };
+
+const getTokenColor = key => PIXI.utils.string2hex(TRISKEL_TOKEN_COLORS[key] ?? "#ffffff");
 
 const removeExistingBars = token => {
   if (!token?.triskelBars) {
@@ -63,8 +61,8 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     reserves.power?.min ?? 0,
-    135,
-    getCssColor("--triskel-color-highlight-power")
+    270,
+    getTokenColor("power")
   );
 
   drawPcReserveSegment(
@@ -73,8 +71,8 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     reserves.grace?.min ?? 0,
-    45,
-    getCssColor("--triskel-color-highlight-grace")
+    150,
+    getTokenColor("grace")
   );
 
   drawPcReserveSegment(
@@ -83,8 +81,8 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     reserves.will?.min ?? 0,
-    270,
-    getCssColor("--triskel-color-highlight-will")
+    30,
+    getTokenColor("will")
   );
 };
 
@@ -113,7 +111,7 @@ const drawNpcBars = (graphics, token) => {
   const start = (centerDeg - fillAngle / 2) * DEG_TO_RAD;
   const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
-  graphics.lineStyle(LINE_WIDTH, getCssColor("--triskel-color-highlight-wounds"), 1);
+  graphics.lineStyle(LINE_WIDTH, getTokenColor("wounds"), 1);
   graphics.moveTo(centerX + radius * Math.cos(start), centerY + radius * Math.sin(start));
   graphics.arc(centerX, centerY, radius, start, end);
 };
