@@ -57,7 +57,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.power,
+    reserves.power?.value ?? 0,
     135,
     getCssColor("--triskel-color-highlight-power")
   );
@@ -67,7 +67,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.grace,
+    reserves.grace?.value ?? 0,
     45,
     getCssColor("--triskel-color-highlight-grace")
   );
@@ -77,7 +77,7 @@ const drawPcBars = (graphics, token) => {
     centerX,
     centerY,
     radius,
-    reserves.will,
+    reserves.will?.value ?? 0,
     270,
     getCssColor("--triskel-color-highlight-will")
   );
@@ -104,8 +104,9 @@ const drawNpcBars = (graphics, token) => {
   const centerY = height / 2;
   const radius = Math.max(0, Math.min(width, height) / 2 - LINE_WIDTH);
 
-  const start = 180 * DEG_TO_RAD;
-  const end = (180 - fillAngle) * DEG_TO_RAD;
+  const centerDeg = 270;
+  const start = (centerDeg - fillAngle / 2) * DEG_TO_RAD;
+  const end = (centerDeg + fillAngle / 2) * DEG_TO_RAD;
 
   graphics.lineStyle(LINE_WIDTH, getCssColor("--triskel-color-highlight-wounds"), 1);
   graphics.arc(centerX, centerY, radius, start, end);
