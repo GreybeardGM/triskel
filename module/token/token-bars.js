@@ -233,6 +233,10 @@ export const drawTriskelTokenBars = token => {
   token.triskelBars = graphics;
   token.triskelBarsState = nextState;
   token.addChild(graphics);
+  // Ensure arcs render above the token mesh even after Foundry re-sorts children.
+  token.sortableChildren = true;
+  graphics.zIndex = 1;
+  token.sortChildren();
 
   if (token.actor?.type === "character") {
     drawPcBars(graphics, token);
