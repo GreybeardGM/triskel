@@ -82,8 +82,8 @@ const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, 
   const outlineEnd = (centerDeg + outlineAngle / 2) * DEG_TO_RAD;
 
   const fillAngle = isEmpty ? 0 : clampedValue * RESERVE_DEGREES_PER_POINT;
-  const fillStart = isEmpty ? null : (centerDeg - fillAngle / 2) * DEG_TO_RAD;
-  const fillEnd = isEmpty ? null : (centerDeg + fillAngle / 2) * DEG_TO_RAD;
+  const fillStart = isEmpty ? null : outlineStart;
+  const fillEnd = isEmpty ? null : outlineStart + fillAngle * DEG_TO_RAD;
 
   drawOutlinedArc({
     graphics,
@@ -168,8 +168,8 @@ const drawNpcBars = (graphics, token) => {
 
   const fillRatio = isEmpty ? 0 : Math.max(0, Math.min(1, value / max));
   const fillAngle = NPC_ARC_DEGREES * fillRatio;
-  const fillStart = isEmpty ? null : (centerDeg - fillAngle / 2) * DEG_TO_RAD;
-  const fillEnd = isEmpty ? null : (centerDeg + fillAngle / 2) * DEG_TO_RAD;
+  const fillStart = isEmpty ? null : outlineStart;
+  const fillEnd = isEmpty ? null : outlineStart + fillAngle * DEG_TO_RAD;
 
   drawOutlinedArc({
     graphics,
