@@ -112,7 +112,7 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     MAX_RESERVE_VALUE - (reserves.power?.min ?? 0),
-    325,
+    320,
     getTokenColor("power"),
     outlineAngle
   );
@@ -123,7 +123,7 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     MAX_RESERVE_VALUE - (reserves.grace?.min ?? 0),
-    205,
+    200,
     getTokenColor("grace"),
     outlineAngle
   );
@@ -134,7 +134,7 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     MAX_RESERVE_VALUE - (reserves.will?.min ?? 0),
-    85,
+    80,
     getTokenColor("will"),
     outlineAngle
   );
