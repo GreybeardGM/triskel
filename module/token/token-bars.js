@@ -67,7 +67,7 @@ const getTokenDimensions = token => {
   return { width, height };
 };
 
-const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, centerDeg, color, outlineAngle) => {
+const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, startDeg, color, outlineAngle) => {
   // Reserve values are inverted (5 - min) so higher min shrinks the arc.
   const clampedValue = Math.max(0, Math.min(MAX_RESERVE_VALUE, reserveValue ?? 0));
   const isEmpty = clampedValue <= 0;
@@ -78,11 +78,11 @@ const drawPcReserveSegment = (graphics, centerX, centerY, radius, reserveValue, 
     return;
   }
 
-  const outlineStart = (centerDeg - outlineAngle / 2) * DEG_TO_RAD;
-  const outlineEnd = (centerDeg + outlineAngle / 2) * DEG_TO_RAD;
+  const outlineStart = (startDeg - 1) * DEG_TO_RAD;
+  const outlineEnd = (startDeg + outlineAngle + 1) * DEG_TO_RAD;
 
   const fillAngle = isEmpty ? 0 : clampedValue * RESERVE_DEGREES_PER_POINT;
-  const fillStart = isEmpty ? null : outlineStart;
+  const fillStart = isEmpty ? null : startDeg * DEG_TO_RAD;
   const fillEnd = isEmpty ? null : outlineStart + fillAngle * DEG_TO_RAD;
 
   drawOutlinedArc({
@@ -104,7 +104,7 @@ const drawPcBars = (graphics, token) => {
   const centerX = width / 2;
   const centerY = height / 2;
   const radius = Math.max(0, Math.min(width, height) / 2 - LINE_WIDTH);
-  const outlineAngle = MAX_RESERVE_VALUE * RESERVE_DEGREES_PER_POINT;
+  const outlineAngle = MAX_RESERVE_VALUE * RESERVE_DEGREES_PER_POINT + 2;
 
   drawPcReserveSegment(
     graphics,
@@ -112,7 +112,7 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     MAX_RESERVE_VALUE - (reserves.power?.min ?? 0),
-    270,
+    325,
     getTokenColor("power"),
     outlineAngle
   );
@@ -123,7 +123,7 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     MAX_RESERVE_VALUE - (reserves.grace?.min ?? 0),
-    150,
+    205,
     getTokenColor("grace"),
     outlineAngle
   );
@@ -134,7 +134,7 @@ const drawPcBars = (graphics, token) => {
     centerY,
     radius,
     MAX_RESERVE_VALUE - (reserves.will?.min ?? 0),
-    30,
+    85,
     getTokenColor("will"),
     outlineAngle
   );
