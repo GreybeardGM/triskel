@@ -13,14 +13,14 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     const actionRefs = this.getReferenceList("system.actions.ref");
     const formRefs = this.getReferenceList("system.forms.ref");
-    const spellRefs = this.getReferenceList("system.spells.ref");
-    const attunementRefs = this.getReferenceList("system.attunements.ref");
+    const spellActionRefs = this.getReferenceList("system.spells.ref");
+    const spellFormRefs = this.getReferenceList("system.attunements.ref");
 
     const references = {
       actions: this.constructor.prepareReferenceEntries(actionRefs, Object.values(triskelIndex.advancedActions ?? {})),
       forms: this.constructor.prepareReferenceEntries(formRefs, Object.values(triskelIndex.forms ?? {})),
-      spells: this.constructor.prepareReferenceEntries(spellRefs, Object.values(triskelIndex.spells ?? {})),
-      attunements: this.constructor.prepareReferenceEntries(attunementRefs, Object.values(triskelIndex.attunements ?? {}))
+      spells: this.constructor.prepareReferenceEntries(spellActionRefs, Object.values(triskelIndex.spells ?? {})),
+      attunements: this.constructor.prepareReferenceEntries(spellFormRefs, Object.values(triskelIndex.attunements ?? {}))
     };
 
     const referenceOptions = {
@@ -275,7 +275,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.constructor._handleRemoveReference.call(this, event, target, { defaultRefPath: "system.forms.ref" });
   }
 
-  // ---------- Add / Remove Spells ----------
+  // ---------- Add / Remove Spell Actions ----------
 
   static async onAddSpellReference(event, target) {
     await this.constructor._handleAddReference.call(this, event, target, {
@@ -288,7 +288,7 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.constructor._handleRemoveReference.call(this, event, target, { defaultRefPath: "system.spells.ref" });
   }
 
-  // ---------- Add / Remove Attunements ----------
+  // ---------- Add / Remove Spell Forms ----------
 
   static async onAddAttunementReference(event, target) {
     await this.constructor._handleAddReference.call(this, event, target, {

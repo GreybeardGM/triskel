@@ -223,7 +223,7 @@ export function getGearCarryLocationOptions(item = null) {
  * Actions mit Forms zusammenführen.
  *
  * @param {object} [options={}]
- * @param {object|null} [options.actionLikes=null] vorbereitete Actions
+ * @param {object|null} [options.actionsByType=null] vorbereitete Actions
  * @param {object|null} [options.keywordBuckets=null] vorbereitete Forms
  * @param {Array<string>} [options.selectedKeywords=[]] aktuell gewählte Form-IDs
  * @param {object} [options.skills={}] vorbereitete Actor-Skills aus prepareDerivedData
@@ -268,7 +268,7 @@ function buildActionKeywords({
   return attachedKeywords;
 }
 
-function enrichActionLike({
+function enrichAction({
   action = null,
   keywordBuckets = null,
   selectedKeywords = [],
@@ -316,8 +316,8 @@ function enrichActionLike({
   return preparedAction;
 }
 
-export function prepareActionLikesWithKeywords({
-  actionLikes = null,
+export function prepareActionsWithKeywords({
+  actionsByType = null,
   keywordBuckets = null,
   selectedKeywords = [],
   skills = {},
@@ -325,11 +325,11 @@ export function prepareActionLikesWithKeywords({
   keywordProperty = "forms",
   selectionCollection = "selectedForms"
 } = {}) {
-  const actionLikesByType = actionLikes ?? {};
-  const rawCollection = toArray(actionLikesByType?.[selectedTypeId]);
+  const actionCollectionByType = actionsByType ?? {};
+  const rawCollection = toArray(actionCollectionByType?.[selectedTypeId]);
   const reservesIndex = getTriskelIndex().reserves ?? {};
   const collection = rawCollection
-    .map(entry => enrichActionLike({
+    .map(entry => enrichAction({
       action: entry,
       keywordBuckets,
       selectedKeywords,
@@ -387,7 +387,7 @@ function buildGearCarryLocationSelections(itemsToDisplay = []) {
 
 export function enrichSelectedAction({
   action = null,
-  formLikes = {},
+  formsByKeyword = {},
   keywordProperty = "forms",
   selectedForms = [],
   skills = {},
@@ -396,9 +396,9 @@ export function enrichSelectedAction({
   const resolvedSelectionKind = selectionKind ?? "action";
   const selectedKeywords = Array.isArray(selectedForms) ? selectedForms : [];
   const resolvedKeywordProperty = keywordProperty ?? "forms";
-  const enrichedAction = enrichActionLike({
+  const enrichedAction = enrichAction({
     action,
-    keywordBuckets: formLikes,
+    keywordBuckets: formsByKeyword,
     selectedKeywords,
     skills,
     selectionKind: resolvedSelectionKind,
@@ -406,12 +406,7 @@ export function enrichSelectedAction({
   });
   if (!enrichedAction) return null;
 
-  return {
-    ...enrichedAction,
-    formLikes: Array.isArray(enrichedAction[resolvedKeywordProperty])
-      ? enrichedAction[resolvedKeywordProperty]
-      : []
-  };
+  return enrichedAction;
 }
 
 export function getActionBucket(preparedActions, actionType) {
@@ -451,8 +446,8 @@ export function prepareActionsTabContext(actor = null, selectedActionType = "imp
   const preparedForms = preparedBundle.forms;
   const preparedActions = preparedBundle.actions;
   const selectedForms = toArray(actor.system.actions.selectedForms);
-  const actions = prepareActionLikesWithKeywords({
-    actionLikes: preparedActions,
+  const actions = prepareActionsWithKeywords({
+    actionsByType: preparedActions,
     keywordBuckets: preparedForms,
     selectedKeywords: selectedForms,
     skills: actor.system.skills,
@@ -525,7 +520,7 @@ export function prepareRollHelperContext({ actor = null, system = {}, reserves =
             selectionKind: "action",
             situationalModifier
           },
-          formLikes: preparedForms,
+          formsByKeyword: preparedForms,
           keywordProperty: "forms",
           selectedForms,
           skills,
@@ -617,16 +612,16 @@ export function prepareRollHelperSelectionContext({ selectedAction = null, reser
   }
   const commitValue = toFiniteNumber(commit?.value, 0);
   const situationalModifier = toFiniteNumber(selectedAction?.situationalModifier, 0);
-  const normalizedFormLikes = Array.isArray(selectedAction?.formLikes) ? selectedAction.formLikes : [];
-  const preparedFormLikes = normalizedFormLikes.map(form => {
+  const normalizedForms = Array.isArray(selectedAction?.forms) ? selectedAction.forms : [];
+  const preparedForms = normalizedForms.map(form => {
     const skillBonus = toFiniteNumber(form?.modifier?.skill, Number.NaN);
     return {
       ...form,
       hasSkillBonus: Number.isFinite(skillBonus) && skillBonus !== 0
     };
   });
-  const preparedAction = { ...selectedAction, formLikes: preparedFormLikes, situationalModifier };
-  const activeForms = preparedFormLikes.filter(form => form.active);
+  const preparedAction = { ...selectedAction, forms: preparedForms, situationalModifier };
+  const activeForms = preparedForms.filter(form => form.active);
   const rollHelper = {
     hasSelection: true,
     action: preparedAction
@@ -658,8 +653,8 @@ export function prepareRollHelperRollData({ action = null, commitValue = 0 } = {
     modifiers.push({ label: skillLabel || actionLabel, value: skillTotal });
   }
 
-  const normalizedFormLikes = Array.isArray(action?.formLikes) ? action.formLikes : [];
-  normalizedFormLikes
+  const normalizedForms = Array.isArray(action?.forms) ? action.forms : [];
+  normalizedForms
     .filter(form => form.active)
     .forEach(form => {
       const formBonus = form?.modifier?.skill;
@@ -746,7 +741,7 @@ function buildSkillAction({ skillId = null, skill = null, situationalModifier = 
     skillLabel,
     skillTotal,
     description,
-    formLikes: [],
+    forms: [],
     modifiers: [
       {
         label: skillLabel,
