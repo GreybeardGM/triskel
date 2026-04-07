@@ -8,7 +8,11 @@
       <div class="inventory-category {{#if category.locationBuckets.length}}inventory-category--gear-locations{{/if}}">
         {{#if category.locationBuckets.length}}
           {{#each category.locationBuckets as |location|}}
-            <div class="inventory-location" style="grid-area: {{location.id}};">
+            <div
+              class="inventory-location"
+              style="grid-area: {{location.id}};"
+              data-carry-location-id="{{location.id}}"
+            >
               <h2 class="inventory-location__title">
                 <span class="inventory-location__label">
                   {{localize location.label}}
@@ -23,7 +27,7 @@
                 {{#if location.collection.length}}
                   {{#each location.collection as |item|}}
                     <li
-                      class="inventory-list__item"
+                      class="inventory-list__item draggable"
                       data-item-id="{{item.id}}"
                     >
                       {{#with (lookup ../../../carryLocationSelections item.id) as |carrySelection|}}
@@ -106,7 +110,7 @@
             {{#if category.collection.length}}
               {{#each category.collection as |item|}}
                 <li
-                  class="inventory-list__item"
+                  class="inventory-list__item draggable"
                   data-item-id="{{item.id}}"
                 >
                   {{#with (lookup ../../carryLocationSelections item.id) as |carrySelection|}}
