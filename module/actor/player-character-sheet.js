@@ -60,8 +60,15 @@ async function onChangeCarryLocation(event, target) {
 
   const locationId = normalizeKeyword(selectElement.value ?? "", "");
   if (!locationId) return;
+  await updateItemCarryLocation(sheet, item, locationId);
+}
+
+async function updateItemCarryLocation(sheet, item, locationId) {
+  if (!sheet || !item || !locationId) return false;
+
   const locationOptions = getGearCarryLocationOptions(item);
   const selectedLocation = locationOptions.find(option => option.id === locationId) ?? null;
+  if (!selectedLocation) return false;
   const active = Boolean(selectedLocation?.defaultActive);
 
   const actor = sheet.document;
@@ -78,6 +85,7 @@ async function onChangeCarryLocation(event, target) {
     });
   }
   await sheet.render({ parts: ["gear"] });
+  return true;
 }
 
 async function onAdjustGearValue(event, target) {
@@ -311,11 +319,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   activateListeners(html) {
     super.activateListeners?.(html);
 
-    const root = html?.[0]
-      ?? this.element?.[0]
-      ?? this.element
-      ?? asHTMLElement(html)
-      ?? asHTMLElement(this.element);
+    const root = this._getSheetRoot(html);
     this._bindGearListeners(root);
   }
 
@@ -326,6 +330,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   async _onRender(context, options) {
     await super._onRender?.(context, options);
+    const root = this._getSheetRoot();
+    this._bindGearListeners(root);
+  }
+
+  _getSheetRoot(preferred = null) {
+    return preferred?.[0]
+      ?? asHTMLElement(preferred)
+      ?? this._gearRoot
+      ?? this.element?.[0]
+      ?? asHTMLElement(this.element)
+      ?? null;
   }
 
   _bindGearListeners(root) {
@@ -339,26 +354,141 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       if (!target) return;
       onChangeCarryLocation.call(this, event, target);
     });
-
     root.addEventListener("change", this._carryLocationChangeHandler, true);
 
-    const gearValueTargets = root.querySelectorAll?.("[data-action=\"adjustGearValue\"]") ?? [];
-    gearValueTargets.forEach((target) => {
-      target.addEventListener("click", this._gearValueAdjustHandler, true);
-      this._gearValueElements.push(target);
-    });
   }
 
   _unbindGearListeners() {
-    const root = this._gearRoot
-      ?? this.element?.[0]
-      ?? this.element
-      ?? asHTMLElement(this.element);
+    const root = this._getSheetRoot();
     if (!root) return;
     if (this._carryLocationChangeHandler) {
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
     }
+    this._clearDragState();
     this._gearRoot = null;
+  }
+
+  _onGearDragStart(event) {
+    const target = event.currentTarget
+      ?? event.target?.closest?.(".inventory-list--gear .inventory-list__item[data-item-id]");
+    if (!target) return;
+
+    const itemId = target.dataset.itemId;
+    if (!itemId) return;
+    this._draggedGearItemId = itemId;
+    target.classList.add("is-dragging");
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+      const baseDragData = foundry.applications.ux.TextEditor.getDragEventData(event) ?? {};
+      event.dataTransfer.setData("text/plain", JSON.stringify({
+        ...baseDragData,
+        triskelGearMove: {
+          actorId: this.document?.id ?? null,
+          itemId
+        }
+      }));
+    }
+  }
+
+  _onGearDragEnd() {
+    this._clearDragState();
+  }
+
+  _onGearDragOver(event) {
+    super._onDragOver?.(event);
+    const location = event.target?.closest?.(".inventory-location[data-carry-location-id]");
+    if (!location) {
+      if (this._activeDropLocation) {
+        this._activeDropLocation.classList.remove("is-drop-target");
+        this._activeDropLocation = null;
+      }
+      return;
+    }
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = "move";
+    }
+    if (this._activeDropLocation && this._activeDropLocation !== location) {
+      this._activeDropLocation.classList.remove("is-drop-target");
+    }
+    this._activeDropLocation = location;
+    location.classList.add("is-drop-target");
+  }
+
+  async _onGearDrop(event) {
+    const location = event.target?.closest?.(".inventory-location[data-carry-location-id]");
+    if (!location) {
+      this._clearDragState();
+      return super._onDrop?.(event);
+    }
+
+    event.preventDefault();
+    const droppedLocationId = normalizeKeyword(location.dataset.carryLocationId ?? "", "");
+    const { itemId: movedItemId, actorId: sourceActorId } = this._extractGearMoveData(event);
+
+    if (!droppedLocationId || !movedItemId) {
+      this._clearDragState();
+      return super._onDrop?.(event);
+    }
+
+    const isSameActorMove = !sourceActorId || sourceActorId === this.document?.id;
+    const item = isSameActorMove ? this.document?.items?.get(movedItemId) : null;
+    if (!item || item.type !== "gear") {
+      this._clearDragState();
+      return super._onDrop?.(event);
+    }
+
+    await updateItemCarryLocation(this, item, droppedLocationId);
+    this._clearDragState();
+  }
+
+  _onDragStart(event) {
+    const result = super._onDragStart?.(event);
+    this._onGearDragStart(event);
+    return result;
+  }
+
+  _onDragOver(event) {
+    this._onGearDragOver(event);
+  }
+
+  _onDragEnd(event) {
+    this._onGearDragEnd(event);
+    return super._onDragEnd?.(event);
+  }
+
+  _onDrop(event) {
+    return this._onGearDrop(event);
+  }
+
+  _clearDragState() {
+    const root = this._getSheetRoot();
+    root?.querySelectorAll?.(".inventory-list__item.is-dragging")
+      ?.forEach(element => element.classList.remove("is-dragging"));
+    root?.querySelectorAll?.(".inventory-location.is-drop-target")
+      ?.forEach(element => element.classList.remove("is-drop-target"));
+    this._activeDropLocation = null;
+    this._draggedGearItemId = null;
+  }
+
+  _extractGearMoveData(event) {
+    const dragData = foundry.applications.ux.TextEditor.getDragEventData(event) ?? {};
+    const itemId = normalizeKeyword(
+      dragData?.triskelGearMove?.itemId
+      ?? dragData?._id
+      ?? dragData?.data?._id
+      ?? this._draggedGearItemId
+      ?? "",
+      ""
+    );
+    const actorId = normalizeKeyword(
+      dragData?.triskelGearMove?.actorId
+      ?? dragData?.actorId
+      ?? "",
+      ""
+    );
+    const isValid = Boolean(itemId);
+    return { itemId, actorId, isValid };
   }
 
   // -- Rendering ------------------------------------------------------------
