@@ -354,7 +354,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       if (!target) return;
       onChangeCarryLocation.call(this, event, target);
     });
+    this._gearDragCleanupHandler = this._gearDragCleanupHandler ?? (() => {
+      this._clearDragState();
+    });
     root.addEventListener("change", this._carryLocationChangeHandler, true);
+    root.addEventListener("dragend", this._gearDragCleanupHandler, true);
 
   }
 
@@ -363,6 +367,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     if (!root) return;
     if (this._carryLocationChangeHandler) {
       root.removeEventListener("change", this._carryLocationChangeHandler, true);
+    }
+    if (this._gearDragCleanupHandler) {
+      root.removeEventListener("dragend", this._gearDragCleanupHandler, true);
     }
     this._clearDragState();
     this._gearRoot = null;
@@ -404,6 +411,18 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       }
       return;
     }
+    const locationId = normalizeKeyword(location.dataset.carryLocationId ?? "", "");
+    const draggedItem = this._draggedGearItemId
+      ? this.document?.items?.get(this._draggedGearItemId)
+      : null;
+    const isValidTarget = this._isValidCarryLocationForItem(draggedItem, locationId);
+    if (!isValidTarget) {
+      if (this._activeDropLocation) {
+        this._activeDropLocation.classList.remove("is-drop-target");
+        this._activeDropLocation = null;
+      }
+      return;
+    }
     event.preventDefault();
     if (event.dataTransfer) {
       event.dataTransfer.dropEffect = "move";
@@ -438,7 +457,13 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       return super._onDrop?.(event);
     }
 
-    await updateItemCarryLocation(this, item, droppedLocationId);
+    const wasUpdated = await updateItemCarryLocation(this, item, droppedLocationId);
+    if (!wasUpdated) {
+      ui.notifications?.warn?.(
+        game.i18n?.localize?.("TRISKEL.Item.CarryLocation.InvalidDrop")
+        ?? "Ungültiger Trageort für dieses Item."
+      );
+    }
     this._clearDragState();
   }
 
@@ -489,6 +514,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     );
     const isValid = Boolean(itemId);
     return { itemId, actorId, isValid };
+  }
+
+  _isValidCarryLocationForItem(item, locationId) {
+    if (!item || item.type !== "gear" || !locationId) return false;
+    const locationOptions = getGearCarryLocationOptions(item);
+    return locationOptions.some(option => option.id === locationId);
   }
 
   // -- Rendering ------------------------------------------------------------
