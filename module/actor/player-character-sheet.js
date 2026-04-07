@@ -49,20 +49,6 @@ async function onDeleteItem(event, target) {
   await this.document?.deleteEmbeddedDocuments("Item", [item.id]);
 }
 
-async function onChangeCarryLocation(event, target) {
-  event.preventDefault();
-
-  const sheet = this;
-  const selectElement = asHTMLElement(target);
-  if (!selectElement) return;
-  const item = getItemFromTarget(sheet, selectElement);
-  if (!item) return;
-
-  const locationId = normalizeKeyword(selectElement.value ?? "", "");
-  if (!locationId) return;
-  await updateItemCarryLocation(sheet, item, locationId);
-}
-
 async function updateItemCarryLocation(sheet, item, locationId) {
   if (!sheet || !item || !locationId) return false;
 
@@ -349,15 +335,9 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     this._unbindGearListeners();
     this._gearRoot = root;
 
-    this._carryLocationChangeHandler = this._carryLocationChangeHandler ?? ((event) => {
-      const target = event.target?.closest?.("[data-action=\"changeCarryLocation\"]");
-      if (!target) return;
-      onChangeCarryLocation.call(this, event, target);
-    });
     this._gearDragCleanupHandler = this._gearDragCleanupHandler ?? (() => {
       this._clearDragState();
     });
-    root.addEventListener("change", this._carryLocationChangeHandler, true);
     root.addEventListener("dragend", this._gearDragCleanupHandler, true);
 
   }
@@ -365,9 +345,6 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   _unbindGearListeners() {
     const root = this._getSheetRoot();
     if (!root) return;
-    if (this._carryLocationChangeHandler) {
-      root.removeEventListener("change", this._carryLocationChangeHandler, true);
-    }
     if (this._gearDragCleanupHandler) {
       root.removeEventListener("dragend", this._gearDragCleanupHandler, true);
     }
@@ -655,8 +632,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollHelper: onRollHelper,
       filterActionType: onFilterActionType,
       toggleActiveItem: onToggleActiveItem,
-      selectSkill: onSelectSkill,
-      changeCarryLocation: onChangeCarryLocation
+      selectSkill: onSelectSkill
     },
     actor: {
       type: "character"

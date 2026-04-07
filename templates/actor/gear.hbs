@@ -30,26 +30,6 @@
                       class="inventory-list__item draggable"
                       data-item-id="{{item.id}}"
                     >
-                      {{#with (lookup ../../../carryLocationSelections item.id) as |carrySelection|}}
-                        <div class="inventory-list__location-select">
-                          <span class="inventory-list__location-icon" aria-hidden="true">
-                            <i class="{{carrySelection.currentIcon}}"></i>
-                          </span>
-                          <select
-                            class="inventory-list__location-select-input is-interactive"
-                            data-action="changeCarryLocation"
-                            data-item-type="{{item.type}}"
-                            data-item-id="{{item.id}}"
-                            title="{{localize 'TRISKEL.Item.CarryLocation.Label'}}"
-                          >
-                            {{#each carrySelection.options as |option|}}
-                              <option value="{{option.id}}" {{#if option.isSelected}}selected{{/if}}>
-                                {{localize option.label}}
-                              </option>
-                            {{/each}}
-                          </select>
-                        </div>
-                      {{/with}}
                       <span
                         class="inventory-list__item-quantity{{#if (or item.system.quantity.stack item.system.uses.limitedUse)}} is-interactive{{/if}}"
                         title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
@@ -113,26 +93,6 @@
                   class="inventory-list__item draggable"
                   data-item-id="{{item.id}}"
                 >
-                  {{#with (lookup ../../carryLocationSelections item.id) as |carrySelection|}}
-                    <div class="inventory-list__location-select">
-                      <span class="inventory-list__location-icon" aria-hidden="true">
-                        <i class="{{carrySelection.currentIcon}}"></i>
-                      </span>
-                      <select
-                        class="inventory-list__location-select-input is-interactive"
-                        data-action="changeCarryLocation"
-                        data-item-type="{{item.type}}"
-                        data-item-id="{{item.id}}"
-                        title="{{localize 'TRISKEL.Item.CarryLocation.Label'}}"
-                      >
-                        {{#each carrySelection.options as |option|}}
-                          <option value="{{option.id}}" {{#if option.isSelected}}selected{{/if}}>
-                            {{localize option.label}}
-                          </option>
-                        {{/each}}
-                      </select>
-                    </div>
-                  {{/with}}
                   <span
                     class="inventory-list__item-quantity{{#if (or item.system.quantity.stack item.system.uses.limitedUse)}} is-interactive{{/if}}"
                     title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
