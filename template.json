@@ -128,11 +128,11 @@
           "add": [],
           "ref": []
         },
-        "spells": {
+        "spellActions": {
           "add": [],
           "ref": []
         },
-        "attunements": {
+        "spellForms": {
           "add": [],
           "ref": []
         },

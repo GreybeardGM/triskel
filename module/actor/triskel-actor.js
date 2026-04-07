@@ -261,8 +261,8 @@ export class TriskelActor extends Actor {
       // Referenzen je Semantik sammeln.
       const itemMundaneActionRefs = normalizeIdList(item?.system?.actions?.ref);
       const itemMundaneFormRefs = normalizeIdList(item?.system?.forms?.ref);
-      const itemSpellActionRefs = normalizeIdList(item?.system?.spells?.ref);
-      const itemSpellFormRefs = normalizeIdList(item?.system?.attunements?.ref);
+      const itemSpellActionRefs = normalizeIdList(item?.system?.spellActions?.ref);
+      const itemSpellFormRefs = normalizeIdList(item?.system?.spellForms?.ref);
       const itemImage = item?.img ?? item?.image ?? null;
       const itemId = item?.id ?? null;
 
@@ -514,7 +514,7 @@ function prepareActorActions(actor = null) {
   const actionRefs = [...mundaneActionRefs, ...spellActionRefs];
 
   const mundaneActionEntries = index.advancedActions ?? {};
-  const spellActionEntries = index.spells ?? {};
+  const spellActionEntries = index.spellActions ?? {};
   const actionEntries = {
     ...mundaneActionEntries,
     ...spellActionEntries
@@ -536,7 +536,7 @@ function prepareActorForms(actor = null) {
   const formRefs = [...mundaneFormRefs, ...spellFormRefs];
 
   const mundaneFormEntries = index.forms ?? {};
-  const spellFormEntries = index.attunements ?? {};
+  const spellFormEntries = index.spellForms ?? {};
   const formsIndex = {
     ...mundaneFormEntries,
     ...spellFormEntries
