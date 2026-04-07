@@ -354,36 +354,6 @@ export function prepareActionsWithKeywords({
 // ---------------------------------------------------------------------------
 // Sheet tab preparation (items, actions, roll helper, notes, skills)
 // ---------------------------------------------------------------------------
-function buildGearCarryLocationSelections(itemsToDisplay = []) {
-  const selections = {};
-  if (!Array.isArray(itemsToDisplay)) return selections;
-
-  const collectItems = (collection) => {
-    for (const item of toArray(collection)) {
-      if (!item?.id) continue;
-      const options = getGearCarryLocationOptions(item);
-      if (!options.length) continue;
-      const selectedOption = options.find(option => option.isSelected) ?? options[0] ?? null;
-      selections[item.id] = {
-        options,
-        currentIcon: selectedOption?.icon ?? "fa-solid fa-location-dot"
-      };
-    }
-  };
-
-  for (const category of itemsToDisplay) {
-    if (!category) continue;
-    if (Array.isArray(category.locationBuckets) && category.locationBuckets.length) {
-      for (const bucket of category.locationBuckets) {
-        collectItems(bucket?.collection);
-      }
-    } else {
-      collectItems(category.collection);
-    }
-  }
-
-  return selections;
-}
 
 export function enrichSelectedAction({
   action = null,
@@ -431,13 +401,8 @@ export function prepareGearTabContext(actor = null, partId = null) {
       return prepareGearLocationBuckets(category, { powerMax });
     });
   }
-  const carryLocationSelections = partId === "gear"
-    ? buildGearCarryLocationSelections(itemsToDisplay)
-    : {};
-
   return {
-    itemsToDisplay,
-    carryLocationSelections
+    itemsToDisplay
   };
 }
 
