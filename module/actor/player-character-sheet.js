@@ -503,12 +503,12 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       ?? dragData?._id
       ?? dragData?.data?._id
       ?? this._draggedGearItemId
-      ?? "",
+      ?? ""
     ).toString().trim();
     const actorId = (
       dragData?.triskelGearMove?.actorId
       ?? dragData?.actorId
-      ?? "",
+      ?? ""
     ).toString().trim();
     const isValid = Boolean(itemId);
     return { itemId, actorId, isValid };
