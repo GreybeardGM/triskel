@@ -505,10 +505,6 @@
   cursor: grab;
 }
 
-.triskel .inventory-list--gear .inventory-list__item.is-dragging {
-  opacity: 0.5;
-}
-
 .triskel .inventory-category {
   display: flex;
   flex-direction: column;
@@ -536,7 +532,6 @@
 .triskel .inventory-location.is-drop-target {
   outline: 2px dashed var(--triskel-color-highlight-default);
   outline-offset: 2px;
-  border-radius: 0.25rem;
 }
 
 .triskel .inventory-location__load {
