@@ -5,33 +5,33 @@
 >
   <h2>Spells</h2>
   <ol class="reference-entries">
-    {{#each references.spells as |reference|}}
+    {{#each references.spellActions as |reference|}}
       <li class="reference-row">
         <span class="reference-label">{{reference.label}}</span>
-        <button type="button" data-action="removeSpellReference" data-index="{{reference.index}}">Entfernen</button>
+        <button type="button" data-action="removeSpellActionReference" data-index="{{reference.index}}">Entfernen</button>
       </li>
     {{/each}}
-    {{#unless references.spells.length}}
+    {{#unless references.spellActions.length}}
       <li class="reference-row reference-row--empty">Keine Referenzen hinterlegt</li>
     {{/unless}}
   </ol>
 
   <div class="reference-controls__inputs">
     <select
-      id="spells-reference-select"
-      name="spellsRef"
-      data-reference-select="spells"
+      id="spell-actions-reference-select"
+      name="spellActionsRef"
+      data-reference-select="spellActions"
     >
-      {{#each referenceOptions.spells as |option|}}
+      {{#each referenceOptions.spellActions as |option|}}
         <option value="{{option.value}}">{{option.label}}</option>
       {{/each}}
     </select>
 
     <button
       type="button"
-      data-action="addSpellReference"
-      data-select-field="spellsRef"
-      data-ref-path="system.spells.ref"
+      data-action="addSpellActionReference"
+      data-select-field="spellActionsRef"
+      data-ref-path="system.spellActions.ref"
     >
       Hinzufügen
     </button>

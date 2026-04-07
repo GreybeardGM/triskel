@@ -11,7 +11,13 @@ import { getCachedCollator } from "../util/collator.js";
 import { getTriskelCodex, getTriskelIndex } from "./sheet-helpers.js";
 
 const getEmptyPreparedBundle = () => ({
-  refs: { actions: [], forms: [], keys: {} },
+  refs: {
+    mundaneActions: [],
+    spellActions: [],
+    mundaneForms: [],
+    spellForms: [],
+    keys: {}
+  },
   actions: {},
   forms: {}
 });
@@ -31,15 +37,28 @@ export class TriskelActor extends Actor {
     this._prepareCharacterDerivedData();
 
     // Platzhalter: zukünftige Item-Auswertung (ActionRefs, FormRefs, Assets, Modifiers).
-    const previousRefs = this.refs ?? { keys: {}, keywords: { forms: [] } };
+    const previousRefs = this.refs ?? {
+      mundaneActions: [],
+      spellActions: [],
+      mundaneForms: [],
+      spellForms: [],
+      keys: {},
+      keywords: { forms: [] }
+    };
     const previousPrepared = this.preparedActions ?? getEmptyPreparedBundle();
     const { refs, assets, modifiers } = this._prepareActorItems(this.items);
     this.assets = assets;
     this.refs = {
       ...refs,
       keys: {
-        actions: createArrayKey(toArray(refs?.actions)),
-        forms: createArrayKey(toArray(refs?.forms))
+        actions: [
+          createArrayKey(toArray(refs?.mundaneActions)),
+          createArrayKey(toArray(refs?.spellActions))
+        ].join("||"),
+        forms: [
+          createArrayKey(toArray(refs?.mundaneForms)),
+          createArrayKey(toArray(refs?.spellForms))
+        ].join("||")
       }
     };
 
@@ -176,14 +195,20 @@ export class TriskelActor extends Actor {
   }
 
   /**
-   * Platzhalter: Hier werden später Items ausgewertet und ActionRefs, FormRefs, Assets, Modifiers erzeugt.
-   * Spell- und Attunement-Refs werden aktuell in Actions bzw. Forms zusammengeführt.
+   * Platzhalter: Hier werden später Items ausgewertet und Ref-Buckets für
+   * - Mundane Actions
+   * - Spell Actions
+   * - Mundane Forms
+   * - Spell Forms
+   * erzeugt. Die Generalisierung zu Actions/Forms passiert erst in den Prepare-Helfern.
    *
    * @param {Item[]} [items=[]] Item-Daten des Actors.
    * @returns {{
    *  refs: {
-   *    actions: Array<{id: string, itemId: string|null, image: string|null}>,
-   *    forms: Array<{id: string, itemId: string|null, image: string|null}>
+   *    mundaneActions: Array<{id: string, itemId: string|null, image: string|null}>,
+   *    spellActions: Array<{id: string, itemId: string|null, image: string|null}>,
+   *    mundaneForms: Array<{id: string, itemId: string|null, image: string|null}>,
+   *    spellForms: Array<{id: string, itemId: string|null, image: string|null}>
    *  },
    *  assets: object,
    *  modifiers: object
@@ -202,10 +227,15 @@ export class TriskelActor extends Actor {
       return collection;
     }, {});
 
-    const actionRefs = [];
-    const formRefs = [];
-    const actionRefKeys = new Set();
-    const formRefKeys = new Set();
+    const mundaneActionRefs = [];
+    const spellActionRefs = [];
+    const mundaneFormRefs = [];
+    const spellFormRefs = [];
+
+    const mundaneActionRefKeys = new Set();
+    const spellActionRefKeys = new Set();
+    const mundaneFormRefKeys = new Set();
+    const spellFormRefKeys = new Set();
     const modifiers = {};
 
     const addRef = (collection, keySet, { id, itemId = null, image = null }) => {
@@ -228,32 +258,31 @@ export class TriskelActor extends Actor {
       // Inaktive Items beeinflussen Actions, Forms oder Modifiers nicht.
       if (!isActive) continue;
 
-      // Action- und Form-Referenzen sammeln, inkl. Spells/Attunements.
-      const itemActionRefs = normalizeIdList(item?.system?.actions?.ref);
-      const itemFormRefs = normalizeIdList(item?.system?.forms?.ref);
+      // Referenzen je Semantik sammeln.
+      const itemMundaneActionRefs = normalizeIdList(item?.system?.actions?.ref);
+      const itemMundaneFormRefs = normalizeIdList(item?.system?.forms?.ref);
+      const itemSpellActionRefs = normalizeIdList(item?.system?.spellActions?.ref);
+      const itemSpellFormRefs = normalizeIdList(item?.system?.spellForms?.ref);
       const itemImage = item?.img ?? item?.image ?? null;
       const itemId = item?.id ?? null;
-      itemActionRefs.forEach(actionId => addRef(actionRefs, actionRefKeys, {
+
+      itemMundaneActionRefs.forEach(actionId => addRef(mundaneActionRefs, mundaneActionRefKeys, {
         id: actionId,
         itemId,
         image: itemImage
       }));
-      itemFormRefs.forEach(formId => addRef(formRefs, formRefKeys, {
+      itemSpellActionRefs.forEach(actionId => addRef(spellActionRefs, spellActionRefKeys, {
+        id: actionId,
+        itemId,
+        image: itemImage
+      }));
+      itemMundaneFormRefs.forEach(formId => addRef(mundaneFormRefs, mundaneFormRefKeys, {
         id: formId,
         itemId,
         image: itemImage
       }));
-
-      const itemSpellRefs = normalizeIdList(item?.system?.spells?.ref);
-      itemSpellRefs.forEach(spellId => addRef(actionRefs, actionRefKeys, {
-        id: spellId,
-        itemId,
-        image: itemImage
-      }));
-
-      const itemAttunementRefs = normalizeIdList(item?.system?.attunements?.ref);
-      itemAttunementRefs.forEach(attunementId => addRef(formRefs, formRefKeys, {
-        id: attunementId,
+      itemSpellFormRefs.forEach(formId => addRef(spellFormRefs, spellFormRefKeys, {
+        id: formId,
         itemId,
         image: itemImage
       }));
@@ -270,8 +299,10 @@ export class TriskelActor extends Actor {
     }
 
     const refs = {
-      actions: actionRefs,
-      forms: formRefs
+      mundaneActions: mundaneActionRefs,
+      spellActions: spellActionRefs,
+      mundaneForms: mundaneFormRefs,
+      spellForms: spellFormRefs
     };
 
     return { refs, assets, modifiers };
@@ -477,10 +508,16 @@ function prepareActionLike({ refs = [], indexEntries = {}, baseEntries = [] } = 
 function prepareActorActions(actor = null) {
   const codex = getTriskelCodex();
   const index = getTriskelIndex();
-  const actionRefs = toArray(actor?.refs?.actions);
+
+  const mundaneActionRefs = toArray(actor?.refs?.mundaneActions);
+  const spellActionRefs = toArray(actor?.refs?.spellActions);
+  const actionRefs = [...mundaneActionRefs, ...spellActionRefs];
+
+  const mundaneActionEntries = index.advancedActions ?? {};
+  const spellActionEntries = index.spellActions ?? {};
   const actionEntries = {
-    ...(index.advancedActions ?? {}),
-    ...(index.spells ?? {})
+    ...mundaneActionEntries,
+    ...spellActionEntries
   };
 
   if (!actionRefs.length && !(codex?.baseActions?.length)) return {};
@@ -493,11 +530,16 @@ function prepareActorActions(actor = null) {
 }
 
 function prepareActorForms(actor = null) {
-  const formRefs = toArray(actor?.refs?.forms);
   const index = getTriskelIndex();
+  const mundaneFormRefs = toArray(actor?.refs?.mundaneForms);
+  const spellFormRefs = toArray(actor?.refs?.spellForms);
+  const formRefs = [...mundaneFormRefs, ...spellFormRefs];
+
+  const mundaneFormEntries = index.forms ?? {};
+  const spellFormEntries = index.spellForms ?? {};
   const formsIndex = {
-    ...(index.forms ?? {}),
-    ...(index.attunements ?? {})
+    ...mundaneFormEntries,
+    ...spellFormEntries
   };
 
   return prepareKeywordBucketsActor({ refs: formRefs, index: formsIndex, keywordField: "keyword" });

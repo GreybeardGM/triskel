@@ -1,4 +1,4 @@
-export const TRISKEL_ATTUNEMENTS = [
+export const TRISKEL_SPELL_FORMS = [
   {
     id: "blackmagic",
     label: "TRISKEL.Attunement.Blackmagic.Label",
