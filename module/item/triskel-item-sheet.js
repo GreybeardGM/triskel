@@ -13,21 +13,21 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     const actionRefs = this.getReferenceList("system.actions.ref");
     const formRefs = this.getReferenceList("system.forms.ref");
-    const spellActionRefs = this.getReferenceList("system.spells.ref");
-    const spellFormRefs = this.getReferenceList("system.attunements.ref");
+    const spellActionRefs = this.getReferenceList("system.spellActions.ref");
+    const spellFormRefs = this.getReferenceList("system.spellForms.ref");
 
     const references = {
       actions: this.constructor.prepareReferenceEntries(actionRefs, Object.values(triskelIndex.advancedActions ?? {})),
       forms: this.constructor.prepareReferenceEntries(formRefs, Object.values(triskelIndex.forms ?? {})),
-      spells: this.constructor.prepareReferenceEntries(spellActionRefs, Object.values(triskelIndex.spells ?? {})),
-      attunements: this.constructor.prepareReferenceEntries(spellFormRefs, Object.values(triskelIndex.attunements ?? {}))
+      spellActions: this.constructor.prepareReferenceEntries(spellActionRefs, Object.values(triskelIndex.spellActions ?? {})),
+      spellForms: this.constructor.prepareReferenceEntries(spellFormRefs, Object.values(triskelIndex.spellForms ?? {}))
     };
 
     const referenceOptions = {
       actions: this.constructor.prepareOptions(triskelIndex.advancedActions ?? {}),
       forms: this.constructor.prepareOptions(triskelIndex.forms),
-      spells: this.constructor.prepareOptions(triskelIndex.spells),
-      attunements: this.constructor.prepareOptions(triskelIndex.attunements)
+      spellActions: this.constructor.prepareOptions(triskelIndex.spellActions),
+      spellForms: this.constructor.prepareOptions(triskelIndex.spellForms)
     };
 
     const gearArchetypeOptions = this.constructor.prepareOptions(triskelIndex.gearArchetypes ?? {})
@@ -69,10 +69,10 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       removeActionReference: this.onRemoveActionReference,
       addFormReference: this.onAddFormReference,
       removeFormReference: this.onRemoveFormReference,
-      addSpellReference: this.onAddSpellReference,
-      removeSpellReference: this.onRemoveSpellReference,
-      addAttunementReference: this.onAddAttunementReference,
-      removeAttunementReference: this.onRemoveAttunementReference,
+      addSpellActionReference: this.onAddSpellActionReference,
+      removeSpellActionReference: this.onRemoveSpellActionReference,
+      addSpellFormReference: this.onAddSpellFormReference,
+      removeSpellFormReference: this.onRemoveSpellFormReference,
       addModifier: this.onAddModifier,
       removeModifier: this.onRemoveModifier
     },
@@ -102,13 +102,13 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       id: "forms",
       template: "systems/triskel/templates/item/triskel-item-forms.hbs"
     },
-    spells: {
-      id: "spells",
-      template: "systems/triskel/templates/item/triskel-item-spells.hbs"
+    spellActions: {
+      id: "spellActions",
+      template: "systems/triskel/templates/item/triskel-item-spell-actions.hbs"
     },
-    attunements: {
-      id: "attunements",
-      template: "systems/triskel/templates/item/triskel-item-attunements.hbs"
+    spellForms: {
+      id: "spellForms",
+      template: "systems/triskel/templates/item/triskel-item-spell-forms.hbs"
     },
     modifiers: {
       id: "modifiers",
@@ -277,28 +277,28 @@ export class TriskelItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   // ---------- Add / Remove Spell Actions ----------
 
-  static async onAddSpellReference(event, target) {
+  static async onAddSpellActionReference(event, target) {
     await this.constructor._handleAddReference.call(this, event, target, {
       defaultSelectField: "",
-      defaultRefPath: "system.spells.ref"
+      defaultRefPath: "system.spellActions.ref"
     });
   }
 
-  static async onRemoveSpellReference(event, target) {
-    await this.constructor._handleRemoveReference.call(this, event, target, { defaultRefPath: "system.spells.ref" });
+  static async onRemoveSpellActionReference(event, target) {
+    await this.constructor._handleRemoveReference.call(this, event, target, { defaultRefPath: "system.spellActions.ref" });
   }
 
   // ---------- Add / Remove Spell Forms ----------
 
-  static async onAddAttunementReference(event, target) {
+  static async onAddSpellFormReference(event, target) {
     await this.constructor._handleAddReference.call(this, event, target, {
       defaultSelectField: "",
-      defaultRefPath: "system.attunements.ref"
+      defaultRefPath: "system.spellForms.ref"
     });
   }
 
-  static async onRemoveAttunementReference(event, target) {
-    await this.constructor._handleRemoveReference.call(this, event, target, { defaultRefPath: "system.attunements.ref" });
+  static async onRemoveSpellFormReference(event, target) {
+    await this.constructor._handleRemoveReference.call(this, event, target, { defaultRefPath: "system.spellForms.ref" });
   }
 
   // ---------- Add / Remove Modifiers ----------
