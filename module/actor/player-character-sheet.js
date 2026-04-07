@@ -498,20 +498,18 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   _extractGearMoveData(event) {
     const dragData = foundry.applications.ux.TextEditor.getDragEventData(event) ?? {};
-    const itemId = normalizeKeyword(
+    const itemId = (
       dragData?.triskelGearMove?.itemId
       ?? dragData?._id
       ?? dragData?.data?._id
       ?? this._draggedGearItemId
       ?? "",
-      ""
-    );
-    const actorId = normalizeKeyword(
+    ).toString().trim();
+    const actorId = (
       dragData?.triskelGearMove?.actorId
       ?? dragData?.actorId
       ?? "",
-      ""
-    );
+    ).toString().trim();
     const isValid = Boolean(itemId);
     return { itemId, actorId, isValid };
   }
