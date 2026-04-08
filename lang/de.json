@@ -67,7 +67,7 @@
         },
         "Guard": {
           "Description": "Nimmt eine defensive Struktur ein; verbessert den nächsten Paradeversuch.",
-          "Label": "Wache"
+          "Label": "Parade"
         },
         "Invocation": {
           "Description": "Der Charakter ruft kosmische Mächte an.",
@@ -197,7 +197,7 @@
         "Label": "Pfade",
         "Ruin": {
           "Description": "Bruch, Verfall, das Zerbrechen des Selbst.",
-          "Label": "Zerstörer",
+          "Label": "Ruin",
           "Steps": {
             "Desire": "Begierde",
             "Despair": "Verzweiflung",
@@ -206,7 +206,7 @@
         },
         "Vice": {
           "Description": "Zug zu Impuls, Schwäche und Selbstvergnügen.",
-          "Label": "Sünder",
+          "Label": "Sünde",
           "Steps": {
             "Decay": "Verfall",
             "Depravity": "Verderbtheit",
@@ -250,7 +250,7 @@
             "S4": "Von der Rolle",
             "S5": "Blockiert"
           },
-          "Label": "Strain-Stufen",
+          "Label": "Belastungsstufen",
           "Power": {
             "S1": "Außer Atem",
             "S2": "Entkräftet",
@@ -279,7 +279,7 @@
         "Label": "Resistenzen",
         "Resolve": {
           "Description": "Mentale Widerstandskraft gegen Furcht, Einfluss oder Verzweiflung.",
-          "Label": "Entschlossenheit"
+          "Label": "Willenskraft"
         },
         "Snap": {
           "Description": "Unmittelbare Reflexreaktion auf plötzliche Bedrohungen.",

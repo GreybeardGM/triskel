@@ -662,7 +662,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     },
     position: {
       height: "auto",
-      width: 720
+      width: 820
     }
   };
 

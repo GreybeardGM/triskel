@@ -30,6 +30,14 @@
                       class="inventory-list__item draggable"
                       data-item-id="{{item.id}}"
                     >
+                      <span class="inventory-list__item-label">
+                        {{#if item.img}}
+                          <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
+                        {{else}}
+                          <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+                        {{/if}}
+                        <span class="inventory-list__item-name">{{item.name}}</span>
+                      </span>
                       <span class="inventory-list__item-quantity-group">
                         <span
                           class="inventory-list__item-quantity"
@@ -48,31 +56,23 @@
                               class="inventory-list__item-action inventory-list__item-action--quantity is-interactive"
                               data-action="adjustGearValueByButton"
                               data-item-field="{{#if item.system.quantity.stack}}quantity{{else}}uses{{/if}}"
-                              data-delta="-1"
-                              title="{{localize 'TRISKEL.Item.Field.Quantity'}} -1"
+                              data-delta="+1"
+                              title="{{localize 'TRISKEL.Item.Field.Quantity'}} +1"
                             >
-                              <i class="fa-solid fa-minus"></i>
+                              <i class="fa-solid fa-chevron-up"></i>
                             </div>
                             <div
                               type="button"
                               class="inventory-list__item-action inventory-list__item-action--quantity is-interactive"
                               data-action="adjustGearValueByButton"
                               data-item-field="{{#if item.system.quantity.stack}}quantity{{else}}uses{{/if}}"
-                              data-delta="+1"
-                              title="{{localize 'TRISKEL.Item.Field.Quantity'}} +1"
+                              data-delta="-1"
+                              title="{{localize 'TRISKEL.Item.Field.Quantity'}} -1"
                             >
-                              <i class="fa-solid fa-plus"></i>
+                              <i class="fa-solid fa-chevron-down"></i>
                             </div>
                           </span>
                         {{/if}}
-                      </span>
-                      <span class="inventory-list__item-label">
-                        {{#if item.img}}
-                          <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
-                        {{else}}
-                          <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
-                        {{/if}}
-                        <span class="inventory-list__item-name">{{item.name}}</span>
                       </span>
                       <span
                         class="inventory-list__item-packload"
@@ -112,42 +112,6 @@
                   class="inventory-list__item draggable"
                   data-item-id="{{item.id}}"
                 >
-                  <span class="inventory-list__item-quantity-group">
-                    <span
-                      class="inventory-list__item-quantity"
-                      title="{{localize 'TRISKEL.Item.Field.Quantity'}}"
-                    >
-                      {{#if item.system.quantity.stack}}
-                        &times;{{item.system.quantity.value}}
-                      {{else if item.system.uses.limitedUse}}
-                        {{item.system.uses.value}}/{{item.system.uses.max}}
-                      {{/if}}
-                    </span>
-                    {{#if (or item.system.quantity.stack item.system.uses.limitedUse)}}
-                      <span class="inventory-list__item-quantity-buttons">
-                        <div
-                          type="button"
-                          class="inventory-list__item-action inventory-list__item-action--quantity is-interactive"
-                          data-action="adjustGearValueByButton"
-                          data-item-field="{{#if item.system.quantity.stack}}quantity{{else}}uses{{/if}}"
-                          data-delta="-1"
-                          title="{{localize 'TRISKEL.Item.Field.Quantity'}} -1"
-                        >
-                          <i class="fa-solid fa-minus"></i>
-                        </div>
-                        <div
-                          type="button"
-                          class="inventory-list__item-action inventory-list__item-action--quantity is-interactive"
-                          data-action="adjustGearValueByButton"
-                          data-item-field="{{#if item.system.quantity.stack}}quantity{{else}}uses{{/if}}"
-                          data-delta="+1"
-                          title="{{localize 'TRISKEL.Item.Field.Quantity'}} +1"
-                        >
-                          <i class="fa-solid fa-plus"></i>
-                        </div>
-                      </span>
-                    {{/if}}
-                  </span>
                   <span class="inventory-list__item-label">
                     {{#if item.img}}
                       <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
