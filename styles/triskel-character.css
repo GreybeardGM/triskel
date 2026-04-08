@@ -498,7 +498,7 @@
 }
 
 .triskel .inventory-list--gear .inventory-list__item {
-  grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: 3rem 1fr auto auto;
 }
 
 .triskel .inventory-list--gear .inventory-list__item.draggable {
@@ -582,10 +582,8 @@
 }
 
 .triskel .inventory-list__item-action--quantity {
-  min-height: 0.75rem;
-  min-width: 0.75rem;
-  padding: 0;
-  line-height: 1;
+  min-height: 0.85rem;
+  min-width: 1rem;
   font-size: 0.55rem;
   display: inline-flex;
   align-items: center;
