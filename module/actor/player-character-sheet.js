@@ -200,7 +200,7 @@ async function onRollHelper(event) {
   const scene = game.scenes?.current ?? game.canvas?.scene ?? null;
   const sceneDifficulty = scene?.getFlag?.("triskel", "difficulty") ?? null;
   const difficultyValue = Number.isFinite(sceneDifficulty?.value) ? sceneDifficulty.value : null;
-  const shouldResetDifficulty = sceneDifficulty?.persist !== true;
+  const difficultyPersist = sceneDifficulty?.persist === true;
   const shouldRoll = Boolean(rollData);
   if (shouldRoll && typeof actor?.rollTriskelDice !== "function") return;
   const rollResult = shouldRoll
@@ -274,11 +274,7 @@ async function onRollHelper(event) {
     }
   }
 
-  if (shouldResetDifficulty && scene) {
-    await scene.setFlag("triskel", "difficulty", { value: null, persist: false });
-  }
-
-  await chatOutput({
+  const chatMessage = await chatOutput({
     roll: rollResult?.roll ?? null,
     actionTemplate: rollHelperAction ? "systems/triskel/templates/chat/roll-helper-action.hbs" : "",
     actionContext: {
@@ -291,6 +287,21 @@ async function onRollHelper(event) {
     rollMode: rollData?.options?.rollMode ?? null,
     outcome: difficultyOutcome
   });
+
+  const difficultyUsedPayload = {
+    sceneId: scene?.id ?? null,
+    actorId: actor?.id ?? null,
+    messageId: chatMessage?.id ?? null,
+    difficultyValue,
+    persist: difficultyPersist,
+    timestamp: Date.now()
+  };
+
+  try {
+    Hooks.callAll("triskelDifficultyUsed", difficultyUsedPayload);
+  } catch (error) {
+    console.error("Triskel | Failed to publish triskelDifficultyUsed hook.", error);
+  }
 }
 
 async function onToggleActiveItem(event, target) {
