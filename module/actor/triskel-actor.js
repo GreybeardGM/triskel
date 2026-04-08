@@ -238,9 +238,9 @@ export class TriskelActor extends Actor {
     const spellFormRefKeys = new Set();
     const modifiers = {};
 
-    const addRef = (collection, keySet, { id, itemId = null, image = null }) => {
+    const addRef = (collection, keySet, { id, itemId = null, image = null }, { keyBy = "idAndItem" } = {}) => {
       if (!id) return;
-      const key = `${id}|${itemId ?? ""}`;
+      const key = keyBy === "id" ? id : `${id}|${itemId ?? ""}`;
       if (keySet.has(key)) return;
       keySet.add(key);
       collection.push({ id, itemId, image });
@@ -270,12 +270,12 @@ export class TriskelActor extends Actor {
         id: actionId,
         itemId,
         image: itemImage
-      }));
+      }, { keyBy: "id" }));
       itemSpellActionRefs.forEach(actionId => addRef(spellActionRefs, spellActionRefKeys, {
         id: actionId,
         itemId,
         image: itemImage
-      }));
+      }, { keyBy: "id" }));
       itemMundaneFormRefs.forEach(formId => addRef(mundaneFormRefs, mundaneFormRefKeys, {
         id: formId,
         itemId,
