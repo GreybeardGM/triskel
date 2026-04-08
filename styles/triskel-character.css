@@ -565,6 +565,31 @@
 
 .triskel .inventory-list__item-actions {
   display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.triskel .inventory-list__item-quantity-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.triskel .inventory-list__item-quantity-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.triskel .inventory-list__item-action--quantity {
+  min-height: 0.75rem;
+  min-width: 0.75rem;
+  padding: 0;
+  line-height: 1;
+  font-size: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .triskel .inventory-list__item-quantity,

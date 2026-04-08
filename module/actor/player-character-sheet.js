@@ -74,14 +74,11 @@ async function updateItemCarryLocation(sheet, item, locationId) {
   return true;
 }
 
-async function onAdjustGearValue(event, target) {
-  event.preventDefault();
-
-  const item = getItemFromTarget(this, target);
-  if (!item) return;
-
-  const field = target?.dataset?.itemField ?? "";
+async function adjustGearValueByDelta(sheet, item, field, delta) {
+  if (!sheet || !item) return;
   if (!["quantity", "uses"].includes(field)) return;
+  const parsedDelta = Number(delta);
+  if (!Number.isFinite(parsedDelta) || parsedDelta === 0) return;
 
   const valuePath = `system.${field}.value`;
   const maxPath = `system.${field}.max`;
@@ -89,16 +86,15 @@ async function onAdjustGearValue(event, target) {
   const rawMaxValue = foundry.utils.getProperty(item, maxPath);
   const parsedMaxValue = Number(rawMaxValue);
   const maxValue = Number.isFinite(parsedMaxValue) ? parsedMaxValue : Number.NaN;
-  const delta = event.shiftKey ? 1 : -1;
 
-  let nextValue = currentValue + delta;
+  let nextValue = currentValue + parsedDelta;
   nextValue = Math.max(0, nextValue);
   if (Number.isFinite(maxValue)) {
     nextValue = Math.min(maxValue, nextValue);
   }
   if (nextValue === currentValue) return;
 
-  const actor = this.document;
+  const actor = sheet.document;
   if (actor?.updateEmbeddedDocuments) {
     await actor.updateEmbeddedDocuments("Item", [{
       _id: item.id,
@@ -107,6 +103,18 @@ async function onAdjustGearValue(event, target) {
   } else {
     await item.update({ [valuePath]: nextValue });
   }
+}
+
+async function adjustGearValueByButton(event, target) {
+  event.preventDefault();
+
+  const item = getItemFromTarget(this, target);
+  if (!item) return;
+
+  const actionTarget = target?.closest?.("[data-action='adjustGearValueByButton']") ?? target;
+  const field = actionTarget?.dataset?.itemField ?? "";
+  const delta = Number(actionTarget?.dataset?.delta);
+  await adjustGearValueByDelta(this, item, field, delta);
 }
 
 async function onSelectAction(event, target) {
@@ -635,7 +643,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     actions: {
       editImage: onEditImage,
       updateResourceValue: onUpdateResourceValue,
-      adjustGearValue: onAdjustGearValue,
+      adjustGearValueByButton,
       editItem: onEditItem,
       deleteItem: onDeleteItem,
       selectAction: onSelectAction,
