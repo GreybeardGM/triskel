@@ -7,6 +7,7 @@ const GM_CONTROLS_CLASS = "difficulty-widget__controls";
 const I18N_ROOT = "TRISKEL.Widget.Difficulty";
 const FLAG_KEY = "difficulty";
 const DIFFICULTY_VALUES = [10, 12, 14, 16];
+const RESET_ON_CONSUME = true;
 
 function getLocalize() {
   return game.i18n?.localize?.bind(game.i18n) ?? (key => key);
@@ -20,10 +21,59 @@ function getDifficulty() {
   return getCurrentScene()?.getFlag("triskel", FLAG_KEY) ?? null;
 }
 
+function normalizeDifficultyData(data) {
+  return {
+    value: Number.isFinite(data?.value) ? data.value : null,
+    persist: data?.persist === true
+  };
+}
+
+function isSameDifficultyState(left, right) {
+  const a = normalizeDifficultyData(left);
+  const b = normalizeDifficultyData(right);
+  return a.value === b.value && a.persist === b.persist;
+}
+
 async function setDifficulty(value) {
   const scene = getCurrentScene();
   if (!scene) return;
   await scene.setFlag("triskel", FLAG_KEY, { value, persist: false });
+}
+
+async function onDifficultyUsed(payload = {}) {
+  if (!game.user?.isGM) return;
+
+  const sceneId = payload?.sceneId;
+  if (!sceneId) return;
+
+  const scene = game.scenes?.get?.(sceneId) ?? null;
+  if (!scene) return;
+
+  const currentFlag = scene.getFlag("triskel", FLAG_KEY) ?? null;
+  const expectedFlag = {
+    value: Number.isFinite(payload?.difficultyValue) ? payload.difficultyValue : null,
+    persist: payload?.persist === true
+  };
+
+  // Idempotency/race guard: only continue if the flag still matches the consumed difficulty snapshot.
+  if (!isSameDifficultyState(currentFlag, expectedFlag)) return;
+
+  if (expectedFlag.persist === true) {
+    ui.notifications?.info("Difficulty retained");
+    return;
+  }
+
+  if (!RESET_ON_CONSUME) {
+    ui.notifications?.info("Difficulty retained");
+    return;
+  }
+
+  // Compare-before-write guard: avoid stomping over any newer value.
+  const latestFlag = scene.getFlag("triskel", FLAG_KEY) ?? null;
+  if (!isSameDifficultyState(latestFlag, currentFlag)) return;
+
+  await scene.setFlag("triskel", FLAG_KEY, { ...normalizeDifficultyData(latestFlag), value: null });
+  ui.notifications?.info("Difficulty consumed");
 }
 
 function createToggleButton(localize) {
@@ -163,5 +213,11 @@ export function registerDifficultyWidget() {
     if (scene.id !== getCurrentScene()?.id) return;
     // Keep the displayed value in sync with the scene flag.
     updateDifficultyDisplay(document, getLocalize());
+  });
+
+  Hooks.on("triskelDifficultyUsed", payload => {
+    void onDifficultyUsed(payload).catch(error => {
+      console.error("Triskel | Failed to process triskelDifficultyUsed hook.", error);
+    });
   });
 }
