@@ -243,11 +243,7 @@ async function onRollHelper(event) {
     reserveUpdates[`${reservePath}.value`] = updatedValue;
   });
 
-  await actor.update({
-    ...reserveUpdates,
-    "system.actions.commit.value": 0
-  });
-
+  let incrementTensionOnMiss = false;
   let difficultyOutcome = null;
   if (Number.isFinite(difficultyValue) && rollResult?.roll) {
     const total = toFiniteNumber(rollResult.roll.total, Number.NaN);
@@ -258,6 +254,7 @@ async function onRollHelper(event) {
       let outcomeLabel = localize("TRISKEL.Actor.RollHelper.OutcomeTie");
       let outcomeTone = "tie";
       let outcomeValue = null;
+
       if (difference > 0) {
         outcomeLabel = difference === 1
           ? localize("TRISKEL.Actor.RollHelper.OutcomeSuccess")
@@ -271,7 +268,9 @@ async function onRollHelper(event) {
           : localize("TRISKEL.Actor.RollHelper.OutcomeMisses");
         outcomeTone = "miss";
         outcomeValue = misses;
+        incrementTensionOnMiss = true;
       }
+
       difficultyOutcome = {
         label: outcomeLabel,
         tone: outcomeTone,
@@ -281,6 +280,28 @@ async function onRollHelper(event) {
       };
     }
   }
+
+  if (incrementTensionOnMiss) {
+    const currentTension = toFiniteNumber(actor?.system?.tension?.value, Number.NaN);
+    if (Number.isFinite(currentTension)) {
+      const tensionMax = toFiniteNumber(actor?.system?.tension?.max, Number.NaN);
+      const updatedTension = Number.isFinite(tensionMax)
+        ? Math.min(tensionMax, currentTension + 1)
+        : currentTension + 1;
+      reserveUpdates["system.tension.value"] = updatedTension;
+    }
+  }
+
+  const actorUpdate = {
+    ...reserveUpdates,
+    "system.actions.commit.value": 0
+  };
+
+  if (shouldRoll) {
+    actorUpdate["system.actions.selectedAction.situationalModifier"] = 0;
+  }
+
+  await actor.update(actorUpdate);
 
   const chatMessage = await chatOutput({
     roll: rollResult?.roll ?? null,

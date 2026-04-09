@@ -134,7 +134,8 @@ export class TriskelActor extends Actor {
 
     const triskelIndex = getTriskelIndex();
     const tierValue = toFiniteNumber(this.system?.tier?.value);
-    const tensionValue = toFiniteNumber(this.system?.tension?.value);
+    const tension = this.system?.tension ?? {};
+    const rawTensionValue = toFiniteNumber(tension?.value);
 
     // Reserves: Minimum aus aktiven Strains und aktueller Wert basierend auf Tier.
     const reserves = this.system?.reserves ?? {};
@@ -159,17 +160,23 @@ export class TriskelActor extends Actor {
 
     // Paths: Wert folgt der aktuellen Spannung, aber maximal bis zum definierten Maximum.
     const paths = this.system?.paths ?? {};
+    let highestPathMax = 0;
     Object.values(paths).forEach(path => {
       if (!path) return;
 
       const max = Math.max(0, toFiniteNumber(path.max));
-      const cappedValue = Number.isFinite(tensionValue)
-        ? Math.min(Math.max(0, tensionValue), max)
-        : 0;
+      highestPathMax = Math.max(highestPathMax, max);
+
+      const cappedValue = Math.min(Math.max(0, rawTensionValue), max);
 
       path.max = max;
       path.value = cappedValue;
     });
+
+    const tensionMax = Math.max(0, highestPathMax);
+    const tensionValue = Math.min(Math.max(0, rawTensionValue), tensionMax);
+    tension.max = tensionMax;
+    tension.value = tensionValue;
 
     // Commit: Maximum orientiert sich am aktuellen Tier.
     const commit = this.system?.actions?.commit ?? null;
