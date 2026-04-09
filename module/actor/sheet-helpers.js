@@ -549,7 +549,8 @@ export function prepareSkillsTabContext(actor = null) {
 
 export async function prepareNotesTabContext(actor = null) {
   const notes = actor?.system?.details?.notes ?? "";
-  const notesHTML = await TextEditor?.enrichHTML?.(notes, { async: true }) ?? notes;
+  const textEditor = foundry?.applications?.ux?.TextEditor?.implementation;
+  const notesHTML = await textEditor?.enrichHTML?.(notes, { async: true }) ?? notes;
 
   return { notesHTML };
 }
