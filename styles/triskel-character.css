@@ -578,11 +578,10 @@
 .triskel .inventory-list__item-quantity-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
 }
 
 .triskel .inventory-list__item-action--quantity {
-  min-height: 0.85rem;
+  min-height: 1rem;
   min-width: 1rem;
   font-size: 0.55rem;
   display: inline-flex;
