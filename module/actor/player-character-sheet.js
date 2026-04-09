@@ -254,6 +254,7 @@ async function onRollHelper(event) {
       let outcomeLabel = localize("TRISKEL.Actor.RollHelper.OutcomeTie");
       let outcomeTone = "tie";
       let outcomeValue = null;
+
       if (difference > 0) {
         outcomeLabel = difference === 1
           ? localize("TRISKEL.Actor.RollHelper.OutcomeSuccess")
@@ -267,8 +268,9 @@ async function onRollHelper(event) {
           : localize("TRISKEL.Actor.RollHelper.OutcomeMisses");
         outcomeTone = "miss";
         outcomeValue = misses;
-        incrementTensionOnMiss = misses > 0;
+        incrementTensionOnMiss = true;
       }
+
       difficultyOutcome = {
         label: outcomeLabel,
         tone: outcomeTone,
