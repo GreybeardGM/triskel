@@ -159,6 +159,28 @@
         }
       }
     },
+    "StatusEffect": {
+      "Exposed": {
+        "Label": "Entblößt",
+        "Description": "Das Ziel ist offengelegt und leichter mit defensivem Druck zu kontrollieren."
+      },
+      "Bound": {
+        "Label": "Gebunden",
+        "Description": "Die Nahkampfwaffe des Ziels ist gebunden und kann nicht mehr effektiv eingesetzt werden."
+      },
+      "Pushed": {
+        "Label": "Gestoßen",
+        "Description": "Das Ziel wird zurückgedrängt und verliert einen sicheren Stand."
+      },
+      "Fortified": {
+        "Label": "Gefestigt",
+        "Description": "Das Ziel ist geschützt und deutlich schwerer zu verwunden."
+      },
+      "Cover": {
+        "Label": "Deckung",
+        "Description": "Das Ziel ist für Fernkämpfer teilweise verdeckt und schwerer zu treffen."
+      }
+    },
     "Codex": {
       "ComplicationTable": {
         "Label": "Komplikationstabelle",
