@@ -159,6 +159,28 @@
         }
       }
     },
+    "StatusEffect": {
+      "Exposed": {
+        "Label": "Exposed",
+        "Description": "The target is left open and easier to attack."
+      },
+      "Bound": {
+        "Label": "Bound",
+        "Description": "The target's melee weapon is tied up and cannot be used effectively."
+      },
+      "Pushed": {
+        "Label": "Pushed",
+        "Description": "The target is driven backward and loses a stable combat stance."
+      },
+      "Fortified": {
+        "Label": "Fortified",
+        "Description": "The target is protected and significantly harder to wound."
+      },
+      "Cover": {
+        "Label": "Cover",
+        "Description": "The target is partially obscured from ranged attackers and harder to hit."
+      }
+    },
     "Codex": {
       "ComplicationTable": {
         "Label": "Complication Table",

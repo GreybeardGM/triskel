@@ -9,6 +9,7 @@ import {
 } from "./action-codex.js";
 import { TRISKEL_SPELL_FORMS } from "./spell-form-codex.js";
 import { TRISKEL_FORMS } from "./form-codex.js";
+import { TRISKEL_STATUS_EFFECTS } from "./status-codex.js";
 
 const indexById = (entries = []) => entries.reduce((collection, entry) => {
   if (entry?.id) collection[entry.id] = entry;
@@ -524,6 +525,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   actions: TRISKEL_ALL_ACTIONS,
   forms: TRISKEL_FORMS,
   reserves: TRISKEL_RESERVES,
+  statusEffects: TRISKEL_STATUS_EFFECTS,
   npcStats: TRISKEL_NPC_STATS,
   paths: TRISKEL_PATHS,
   complicationTable: TRISKEL_COMPLICATION_TABLE
@@ -541,5 +543,6 @@ export const TRISKEL_ACTIONS_BY_ID = TRISKEL_CODEX_INDEX.actions;
 export const TRISKEL_SPELL_FORMS_BY_ID = TRISKEL_CODEX_INDEX.spellForms;
 export const TRISKEL_FORMS_BY_ID = TRISKEL_CODEX_INDEX.forms;
 export const TRISKEL_RESERVES_BY_ID = TRISKEL_CODEX_INDEX.reserves;
+export const TRISKEL_STATUS_EFFECTS_BY_ID = TRISKEL_CODEX_INDEX.statusEffects;
 export const TRISKEL_NPC_STATS_BY_ID = TRISKEL_CODEX_INDEX.npcStats;
 export const TRISKEL_PATHS_BY_ID = TRISKEL_CODEX_INDEX.paths;
