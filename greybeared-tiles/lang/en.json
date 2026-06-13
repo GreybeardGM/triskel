@@ -1,0 +1,18 @@
+{
+  "gbtm": {
+    "Controls": {
+      "AddSetpiece": "Add selected tile as setpiece",
+      "ToggleSetpieces": "Show setpiece bar"
+    },
+    "Notifications": {
+      "NoSelectedTile": "Select a tile first.",
+      "SetpieceAdded": "Setpiece slot added.",
+      "SetpieceChanged": "Setpiece changed: {path}",
+      "TileNotFound": "The tile for this setpiece no longer exists."
+    },
+    "Setpieces": {
+      "Empty": "No setpieces saved for this scene yet.",
+      "FallbackName": "Setpiece"
+    }
+  }
+}
