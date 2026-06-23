@@ -158,25 +158,39 @@ export class TriskelActor extends Actor {
         : Math.max(currentValue, strainMinimum);
     });
 
-    // Paths: Wert folgt der aktuellen Spannung, aber maximal bis zum definierten Maximum.
-    const paths = this.system?.paths ?? {};
-    let highestPathMax = 0;
-    Object.values(paths).forEach(path => {
-      if (!path) return;
+    // Convictions: Wert folgt der aktuellen Spannung, aber maximal bis zum definierten Maximum.
+    const convictions = this.system?.convictions ?? {};
+    let highestConvictionMax = 0;
+    Object.values(convictions).forEach(conviction => {
+      if (!conviction) return;
 
-      const max = Math.max(0, toFiniteNumber(path.max));
-      highestPathMax = Math.max(highestPathMax, max);
+      const max = Math.max(0, toFiniteNumber(conviction.max));
+      highestConvictionMax = Math.max(highestConvictionMax, max);
 
       const cappedValue = Math.min(Math.max(0, rawTensionValue), max);
 
-      path.max = max;
-      path.value = cappedValue;
+      conviction.max = max;
+      conviction.value = cappedValue;
     });
 
-    const tensionMax = Math.max(0, highestPathMax);
+    const tensionMax = Math.max(0, highestConvictionMax);
     const tensionValue = Math.min(Math.max(0, rawTensionValue), tensionMax);
     tension.max = tensionMax;
     tension.value = tensionValue;
+
+    // Corruptions: Ruin und Vice bleiben feste 0-9-Werte außerhalb der Convictions.
+    const corruptions = this.system?.corruptions ?? {};
+    Object.values(corruptions).forEach(corruption => {
+      if (!corruption) return;
+
+      const min = 0;
+      const max = 9;
+      const value = toFiniteNumber(corruption.value, min);
+
+      corruption.min = min;
+      corruption.max = max;
+      corruption.value = Math.min(Math.max(value, min), max);
+    });
 
     // Commit: Maximum orientiert sich am aktuellen Tier.
     const commit = this.system?.actions?.commit ?? null;

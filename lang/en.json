@@ -215,45 +215,6 @@
           "Title": "Stat Grid"
         }
       },
-      "Path": {
-        "Label": "Paths",
-        "Ruin": {
-          "Description": "Fracture, decay, the breaking of the self.",
-          "Label": "Destroyer",
-          "Steps": {
-            "Desire": "Desire",
-            "Despair": "Despair",
-            "Righteousness": "Righteousness"
-          }
-        },
-        "Vice": {
-          "Description": "Pull toward impulse, weakness, self-indulgence.",
-          "Label": "Sinner",
-          "Steps": {
-            "Decay": "Decay",
-            "Depravity": "Depravity",
-            "Indulgence": "Indulgence"
-          }
-        },
-        "Virtue": {
-          "Description": "Capacity for discipline and moral steadiness.",
-          "Label": "Virtue",
-          "Steps": {
-            "Constancy": "Constancy",
-            "Discipline": "Discipline",
-            "Integrity": "Integrity"
-          }
-        },
-        "Ward": {
-          "Description": "Inner boundaries, spiritual posture, personal sanctum.",
-          "Label": "Ward",
-          "Steps": {
-            "Presence": "Presence",
-            "Renewal": "Renewal",
-            "Stewardship": "Stewardship"
-          }
-        }
-      },
       "Reserve": {
         "Grace": {
           "Description": "Precision, movement, coordination.",
@@ -426,9 +387,9 @@
           "Description": "Shift positions, move objects, or bend states and space.",
           "Label": "Transpose"
         },
-        "Ward": {
-          "Description": "Create barriers, protections, or magical defenses.",
-          "Label": "Ward"
+        "Reverence": {
+          "Description": "Align with sacred boundaries, protections, and naturalistic cosmic powers.",
+          "Label": "Reverence"
         }
       },
       "Tab": {
@@ -469,6 +430,48 @@
       "Type": {
         "Character": "Player Character",
         "NPC": "NPC"
+      },
+      "Conviction": {
+        "Label": "Convictions",
+        "Virtue": {
+          "Description": "Capacity for discipline and moral steadiness.",
+          "Label": "Virtue",
+          "Steps": {
+            "Constancy": "Constancy",
+            "Discipline": "Discipline",
+            "Integrity": "Integrity"
+          }
+        },
+        "Reverence": {
+          "Description": "Attunement to naturalistic cosmic powers and their sanctity.",
+          "Label": "Reverence",
+          "Steps": {
+            "Presence": "Presence",
+            "Renewal": "Renewal",
+            "Stewardship": "Stewardship"
+          }
+        }
+      },
+      "Corruption": {
+        "Label": "Corruption",
+        "Vice": {
+          "Description": "Pull toward impulse, weakness, self-indulgence.",
+          "Label": "Vice",
+          "Steps": {
+            "Decay": "Decay",
+            "Depravity": "Depravity",
+            "Indulgence": "Indulgence"
+          }
+        },
+        "Ruin": {
+          "Description": "Fracture, decay, the breaking of the self.",
+          "Label": "Ruin",
+          "Steps": {
+            "Desire": "Desire",
+            "Despair": "Despair",
+            "Righteousness": "Righteousness"
+          }
+        }
       }
     },
     "Attunement": {

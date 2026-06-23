@@ -34,20 +34,12 @@
         "selectedAction": {},
         "selectedForms": []
       },
-      "paths": {
+      "convictions": {
         "virtue": {
           "min": 0,
           "max": 1
         },
-        "vice": {
-          "min": 0,
-          "max": 1
-        },
-        "ward": {
-          "min": 0,
-          "max": 1
-        },
-        "ruin": {
+        "reverence": {
           "min": 0,
           "max": 1
         }
@@ -90,6 +82,18 @@
       "tension": {
         "min": 0,
         "value": 0
+      },
+      "corruptions": {
+        "ruin": {
+          "min": 0,
+          "value": 0,
+          "max": 9
+        },
+        "vice": {
+          "min": 0,
+          "value": 0,
+          "max": 9
+        }
       }
     },
     "npc": {

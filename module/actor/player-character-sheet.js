@@ -572,9 +572,10 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     context.actor ??= actor;
     context.system ??= actor?.system ?? {};
-    const { reserves, paths, commit } = prepareActorBarsContext(actor);
+    const { reserves, convictions, corruptions, commit } = prepareActorBarsContext(actor);
     if (reserves) context.reserves = reserves;
-    if (paths) context.paths = paths;
+    if (convictions) context.convictions = convictions;
+    if (corruptions) context.corruptions = corruptions;
     if (commit) context.commit = commit;
 
     return context;
