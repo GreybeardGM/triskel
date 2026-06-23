@@ -215,45 +215,6 @@
           "Title": "Statusraster"
         }
       },
-      "Path": {
-        "Label": "Pfade",
-        "Ruin": {
-          "Description": "Bruch, Verfall, das Zerbrechen des Selbst.",
-          "Label": "Ruin",
-          "Steps": {
-            "Desire": "Begierde",
-            "Despair": "Verzweiflung",
-            "Righteousness": "Selbstgerechtigkeit"
-          }
-        },
-        "Vice": {
-          "Description": "Zug zu Impuls, Schwäche und Selbstvergnügen.",
-          "Label": "Sünde",
-          "Steps": {
-            "Decay": "Verfall",
-            "Depravity": "Verderbtheit",
-            "Indulgence": "Genuss"
-          }
-        },
-        "Virtue": {
-          "Description": "Fähigkeit zu Disziplin und moralischer Beständigkeit.",
-          "Label": "Tugend",
-          "Steps": {
-            "Constancy": "Beständigkeit",
-            "Discipline": "Disziplin",
-            "Integrity": "Integrität"
-          }
-        },
-        "Ward": {
-          "Description": "Innere Grenzen, geistige Haltung, persönliches Heiligtum.",
-          "Label": "Schutz",
-          "Steps": {
-            "Presence": "Präsenz",
-            "Renewal": "Erneuerung",
-            "Stewardship": "Verantwortung"
-          }
-        }
-      },
       "Reserve": {
         "Grace": {
           "Description": "Präzision, Bewegung, Koordination.",
@@ -426,9 +387,9 @@
           "Description": "Verschiebt Positionen, bewegt Objekte oder beugt Zustände und Raum.",
           "Label": "Versetzen"
         },
-        "Ward": {
-          "Description": "Errichtet Barrieren, Schutz oder magische Verteidigung.",
-          "Label": "Schirmen"
+        "Reverence": {
+          "Description": "Richtet euch auf heilige Grenzen, Schutz und naturalistische kosmische Mächte aus.",
+          "Label": "Ehrfurcht"
         }
       },
       "Tab": {
@@ -469,6 +430,48 @@
       "Type": {
         "Character": "Spielercharakter",
         "NPC": "NSC"
+      },
+      "Conviction": {
+        "Label": "Überzeugungen",
+        "Virtue": {
+          "Description": "Fähigkeit zu Disziplin und moralischer Beständigkeit.",
+          "Label": "Tugend",
+          "Steps": {
+            "Constancy": "Beständigkeit",
+            "Discipline": "Disziplin",
+            "Integrity": "Integrität"
+          }
+        },
+        "Reverence": {
+          "Description": "Einklang mit den naturalistischen Mächten des Kosmos und ihrer Heiligkeit.",
+          "Label": "Ehrfurcht",
+          "Steps": {
+            "Presence": "Präsenz",
+            "Renewal": "Erneuerung",
+            "Stewardship": "Verantwortung"
+          }
+        }
+      },
+      "Corruption": {
+        "Label": "Verderbnis",
+        "Vice": {
+          "Description": "Zug zu Impuls, Schwäche und Selbstvergnügen.",
+          "Label": "Laster",
+          "Steps": {
+            "Decay": "Verfall",
+            "Depravity": "Verderbtheit",
+            "Indulgence": "Genuss"
+          }
+        },
+        "Ruin": {
+          "Description": "Bruch, Verfall, das Zerbrechen des Selbst.",
+          "Label": "Ruin",
+          "Steps": {
+            "Desire": "Begierde",
+            "Despair": "Verzweiflung",
+            "Righteousness": "Selbstgerechtigkeit"
+          }
+        }
       }
     },
     "Attunement": {

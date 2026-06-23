@@ -54,24 +54,24 @@
     </div>
   </section>
 
-  <section class="paths">
-    <h2>{{localize "TRISKEL.Actor.Path.Label"}}</h2>
-    <div class="paths-grid">
-      {{#each paths as |path|}}
-        {{#if path.id}}
-          <div class="path-bar {{path.id}}" style="grid-area: {{path.id}};">
-            <div class="path-label" title="{{path.description}}">{{path.label}}</div>
+  <section class="convictions">
+    <h2>{{localize "TRISKEL.Actor.Conviction.Label"}}</h2>
+    <div class="convictions-grid">
+      {{#each convictions as |conviction|}}
+        {{#if conviction.id}}
+          <div class="conviction-bar {{conviction.id}}" style="grid-area: {{conviction.id}};">
+            <div class="conviction-label" title="{{conviction.description}}">{{conviction.label}}</div>
             <input
-              id="path-{{path.id}}-max"
-              class="path-max-input"
+              id="conviction-{{conviction.id}}-max"
+              class="conviction-max-input"
               type="number"
               min="0"
               data-dtype="Number"
-              name="system.paths.{{path.id}}.max"
-              value="{{path.max}}"
+              name="system.convictions.{{conviction.id}}.max"
+              value="{{conviction.max}}"
             />
-            <div class="path-segments">
-              {{#each path._segments as |segment|}}
+            <div class="conviction-segments">
+              {{#each conviction._segments as |segment|}}
                 <div
                   class="resource-box is-interactive segment-{{segment.state}}"
                   data-action="updateResourceValue"
@@ -82,7 +82,7 @@
                   {{segment.index}}
                 </div>
               {{/each}}
-              <div class="resource-spacer" style="--resource-spacer-flex: {{path._spacerFlex}};"></div>
+              <div class="resource-spacer" style="--resource-spacer-flex: {{conviction._spacerFlex}};"></div>
             </div>
           </div>
         {{/if}}
@@ -101,6 +101,53 @@
           <i class="fa-solid fa-bolt" aria-hidden="true"></i>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="corruptions">
+    <h2>{{localize "TRISKEL.Actor.Corruption.Label"}}</h2>
+    <div class="corruptions-grid">
+      {{#with corruptions.vice as |vice|}}
+        {{#if vice.id}}
+          <div class="corruption-bar vice" style="grid-area: vice;">
+            <div class="corruption-label" title="{{vice.description}}">{{vice.label}}</div>
+            <div class="corruption-segments">
+              {{#each vice._segments as |segment|}}
+                <div
+                  class="resource-box is-interactive segment-{{segment.state}}"
+                  data-action="updateResourceValue"
+                  data-resource="corruptions.vice"
+                  data-resource-value="{{segment.index}}"
+                >
+                  {{segment.index}}
+                </div>
+              {{/each}}
+              <div class="resource-spacer" style="--resource-spacer-flex: {{vice._spacerFlex}};"></div>
+            </div>
+          </div>
+        {{/if}}
+      {{/with}}
+
+      {{#with corruptions.ruin as |ruin|}}
+        {{#if ruin.id}}
+          <div class="corruption-bar ruin" style="grid-area: ruin;">
+            <div class="corruption-label" title="{{ruin.description}}">{{ruin.label}}</div>
+            <div class="corruption-segments">
+              {{#each ruin._segments as |segment|}}
+                <div
+                  class="resource-box is-interactive segment-{{segment.state}}"
+                  data-action="updateResourceValue"
+                  data-resource="corruptions.ruin"
+                  data-resource-value="{{segment.index}}"
+                >
+                  {{segment.index}}
+                </div>
+              {{/each}}
+              <div class="resource-spacer" style="--resource-spacer-flex: {{ruin._spacerFlex}};"></div>
+            </div>
+          </div>
+        {{/if}}
+      {{/with}}
     </div>
   </section>
 

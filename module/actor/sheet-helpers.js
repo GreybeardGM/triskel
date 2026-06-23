@@ -746,10 +746,10 @@ const isStrainActive = (entry) => {
 };
 
 /**
- * Bars (Reserven/Wege/Commit/NPC-Stats) für das Sheet vorbereiten.
+ * Prepare actor resource bars for sheet rendering.
  *
  * @param {Actor|null} actor
- * @returns {{reserves?: object, paths?: object, commit?: object, npcStats?: object}}
+ * @returns {{reserves?: object, convictions?: object, corruptions?: object, commit?: object, npcStats?: object}}
  */
 export function prepareActorBarsContext(actor = null) {
   if (!actor?.system) return {};
@@ -759,12 +759,14 @@ export function prepareActorBarsContext(actor = null) {
 
   if (actor.type === "character") {
     const reserves = prepareBars(actor.system.reserves, index.reserves);
-    const paths = prepareBars(actor.system.paths, index.paths);
+    const convictions = prepareBars(actor.system.convictions, index.convictions);
+    const corruptions = prepareBars(actor.system.corruptions, index.corruption);
     const commitData = actor.system.actions?.commit ?? { id: "commit", min: 0, max: 0, value: 0 };
     const commit = prepareBars({ commit: commitData }, index.actions)?.commit ?? commitData;
 
     result.reserves = reserves;
-    result.paths = paths;
+    result.convictions = convictions;
+    result.corruptions = corruptions;
     result.commit = commit;
   } else if (actor.type === "npc") {
     result.npcStats = prepareBars(actor.system.npcStats, index.npcStats);

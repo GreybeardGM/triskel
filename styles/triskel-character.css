@@ -185,10 +185,13 @@
 }
 
 .triskel .virtue,
-.triskel .vice,
-.triskel .ward,
-.triskel .ruin {
+.triskel .reverence {
   --triskel-color-highlight-default: var(--triskel-color-highlight-tension);
+}
+
+.triskel .vice,
+.triskel .ruin {
+  --triskel-color-highlight-default: var(--triskel-color-highlight-corruption);
 }
 
 .triskel .resource-bar {
@@ -225,41 +228,39 @@
 }
 
 /*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
-| --     PATHS      -- |
+| --  CONVICTIONS   -- |
 \*____________________*/
 
-.triskel .paths {
+.triskel .convictions {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.triskel .paths-grid {
+.triskel .convictions-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  grid-template-areas: "virtue tension ward" "vice tension ruin";
+  grid-template-areas: "virtue tension reverence";
   align-items: center;
   gap: 0.25rem;
 }
 
-.triskel .path-bar {
+.triskel .conviction-bar {
   display: flex;
   align-items: center;
   gap: 0.35rem;
   justify-content: flex-end;
 }
 
-.triskel .paths .path-bar.virtue,
-.triskel .paths .path-bar.vice {
+.triskel .convictions .conviction-bar.virtue {
   flex-direction: row;
 }
 
-.triskel .paths .path-bar.ward,
-.triskel .paths .path-bar.ruin {
+.triskel .convictions .conviction-bar.reverence {
   flex-direction: row-reverse;
 }
 
-.triskel .path-label {
+.triskel .conviction-label {
   font-family: Modesto Condensed;
   letter-spacing: 0.5px;
   font-weight: 700;
@@ -267,24 +268,74 @@
   text-align: center;
 }
 
-.triskel .path-max-input {
+.triskel .conviction-max-input {
   width: 2.25em;
   font-size: 1rem;
 }
 
-.triskel .path-segments {
+.triskel .conviction-segments {
   display: flex;
   width: 100%;
 }
 
-.triskel .ward .path-segments,
-.triskel .ruin .path-segments {
+.triskel .reverence .conviction-segments {
   flex-direction: row;
 }
 
-.triskel .virtue .path-segments,
-.triskel .vice .path-segments {
+.triskel .virtue .conviction-segments {
   flex-direction: row-reverse;
+}
+
+/*‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾*\
+| --  CORRUPTIONS   -- |
+\*____________________*/
+
+.triskel .corruptions {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.triskel .corruptions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "vice ruin";
+  gap: 0.25rem;
+}
+
+.triskel .corruption-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.triskel .corruption-bar.vice {
+  flex-direction: row;
+}
+
+.triskel .corruption-bar.ruin {
+  flex-direction: row-reverse;
+}
+
+.triskel .corruption-label {
+  font-family: Modesto Condensed;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.triskel .corruption-segments {
+  display: flex;
+  width: 100%;
+}
+
+.triskel .vice .corruption-segments {
+  flex-direction: row-reverse;
+}
+
+.triskel .ruin .corruption-segments {
+  flex-direction: row;
 }
 
 .triskel .tension-card {

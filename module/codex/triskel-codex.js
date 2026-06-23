@@ -385,9 +385,9 @@ export const TRISKEL_SKILLS = [
     category: "magic"
   },
   {
-    id: "ward",
-    label: "TRISKEL.Actor.Skill.Ward.Label",
-    description: "TRISKEL.Actor.Skill.Ward.Description",
+    id: "reverence",
+    label: "TRISKEL.Actor.Skill.Reverence.Label",
+    description: "TRISKEL.Actor.Skill.Reverence.Description",
     category: "magic"
   }
 ];
@@ -444,49 +444,52 @@ export const TRISKEL_NPC_STATS = [
   }
 ];
 
-export const TRISKEL_PATHS = [
+export const TRISKEL_CONVICTIONS = [
   {
     id: "virtue",
-    label: "TRISKEL.Actor.Path.Virtue.Label",
-    description: "TRISKEL.Actor.Path.Virtue.Description",
+    label: "TRISKEL.Actor.Conviction.Virtue.Label",
+    description: "TRISKEL.Actor.Conviction.Virtue.Description",
     tags: ["Good", "Moralistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Actor.Path.Virtue.Steps.Discipline" },
-      { tier: 2, label: "TRISKEL.Actor.Path.Virtue.Steps.Constancy" },
-      { tier: 3, label: "TRISKEL.Actor.Path.Virtue.Steps.Integrity" }
+      { tier: 1, label: "TRISKEL.Actor.Conviction.Virtue.Steps.Discipline" },
+      { tier: 2, label: "TRISKEL.Actor.Conviction.Virtue.Steps.Constancy" },
+      { tier: 3, label: "TRISKEL.Actor.Conviction.Virtue.Steps.Integrity" }
     ]
   },
   {
-    id: "ward",
-    label: "TRISKEL.Actor.Path.Ward.Label",
-    description: "TRISKEL.Actor.Path.Ward.Description",
+    id: "reverence",
+    label: "TRISKEL.Actor.Conviction.Reverence.Label",
+    description: "TRISKEL.Actor.Conviction.Reverence.Description",
     tags: ["Good", "Naturalistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Actor.Path.Ward.Steps.Presence" },
-      { tier: 2, label: "TRISKEL.Actor.Path.Ward.Steps.Stewardship" },
-      { tier: 3, label: "TRISKEL.Actor.Path.Ward.Steps.Renewal" }
+      { tier: 1, label: "TRISKEL.Actor.Conviction.Reverence.Steps.Presence" },
+      { tier: 2, label: "TRISKEL.Actor.Conviction.Reverence.Steps.Stewardship" },
+      { tier: 3, label: "TRISKEL.Actor.Conviction.Reverence.Steps.Renewal" }
     ]
-  },
+  }
+];
+
+export const TRISKEL_CORRUPTION = [
   {
     id: "vice",
-    label: "TRISKEL.Actor.Path.Vice.Label",
-    description: "TRISKEL.Actor.Path.Vice.Description",
+    label: "TRISKEL.Actor.Corruption.Vice.Label",
+    description: "TRISKEL.Actor.Corruption.Vice.Description",
     tags: ["Evil", "Moralistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Actor.Path.Vice.Steps.Indulgence" },
-      { tier: 2, label: "TRISKEL.Actor.Path.Vice.Steps.Decay" },
-      { tier: 3, label: "TRISKEL.Actor.Path.Vice.Steps.Depravity" }
+      { tier: 1, label: "TRISKEL.Actor.Corruption.Vice.Steps.Indulgence" },
+      { tier: 2, label: "TRISKEL.Actor.Corruption.Vice.Steps.Decay" },
+      { tier: 3, label: "TRISKEL.Actor.Corruption.Vice.Steps.Depravity" }
     ]
   },
   {
     id: "ruin",
-    label: "TRISKEL.Actor.Path.Ruin.Label",
-    description: "TRISKEL.Actor.Path.Ruin.Description",
+    label: "TRISKEL.Actor.Corruption.Ruin.Label",
+    description: "TRISKEL.Actor.Corruption.Ruin.Description",
     tags: ["Evil", "Naturalistic"],
     steps: [
-      { tier: 1, label: "TRISKEL.Actor.Path.Ruin.Steps.Desire" },
-      { tier: 2, label: "TRISKEL.Actor.Path.Ruin.Steps.Despair" },
-      { tier: 3, label: "TRISKEL.Actor.Path.Ruin.Steps.Righteousness" }
+      { tier: 1, label: "TRISKEL.Actor.Corruption.Ruin.Steps.Desire" },
+      { tier: 2, label: "TRISKEL.Actor.Corruption.Ruin.Steps.Despair" },
+      { tier: 3, label: "TRISKEL.Actor.Corruption.Ruin.Steps.Righteousness" }
     ]
   }
 ];
@@ -527,7 +530,8 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   reserves: TRISKEL_RESERVES,
   statusEffects: TRISKEL_STATUS_EFFECTS,
   npcStats: TRISKEL_NPC_STATS,
-  paths: TRISKEL_PATHS,
+  convictions: TRISKEL_CONVICTIONS,
+  corruption: TRISKEL_CORRUPTION,
   complicationTable: TRISKEL_COMPLICATION_TABLE
 });
 
@@ -545,4 +549,5 @@ export const TRISKEL_FORMS_BY_ID = TRISKEL_CODEX_INDEX.forms;
 export const TRISKEL_RESERVES_BY_ID = TRISKEL_CODEX_INDEX.reserves;
 export const TRISKEL_STATUS_EFFECTS_BY_ID = TRISKEL_CODEX_INDEX.statusEffects;
 export const TRISKEL_NPC_STATS_BY_ID = TRISKEL_CODEX_INDEX.npcStats;
-export const TRISKEL_PATHS_BY_ID = TRISKEL_CODEX_INDEX.paths;
+export const TRISKEL_CONVICTIONS_BY_ID = TRISKEL_CODEX_INDEX.convictions;
+export const TRISKEL_CORRUPTION_BY_ID = TRISKEL_CODEX_INDEX.corruption;
