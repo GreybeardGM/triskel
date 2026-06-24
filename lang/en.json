@@ -533,6 +533,10 @@
         "Description": "Turn a strike into a precise thrust that gains extra accuracy for a brief moment.",
         "Label": "Precision Thrust"
       },
+      "Quickshot": {
+        "Description": "The shooter loads a projectile in one flowing motion and fires immediately. This allows the weapon to shoot with the attack even while unloaded.",
+        "Label": "Quickshot"
+      },
       "SureStrike": {
         "Description": "Deliver controlled, deliberate strikes with careful aim.",
         "Label": "Sure Strike"

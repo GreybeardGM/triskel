@@ -124,5 +124,13 @@ export const TRISKEL_FORMS = [
     keyword: "resistance",
     modifier: { skill: 1 },
     description: "TRISKEL.Form.WardingRunes.Description"
+  },
+  {
+    id: "quickshot",
+    label: "TRISKEL.Form.Quickshot.Label",
+    cost: 1,
+    reserve: "grace",
+    keyword: "shoot",
+    description: "TRISKEL.Form.Quickshot.Description"
   }
 ];

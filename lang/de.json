@@ -103,7 +103,7 @@
         },
         "Switchgear": {
           "Description": "Der Charakter wechselt die geführten Gegenstände.",
-          "Label": "Umschalten"
+          "Label": "Wechseln"
         },
         "TakeCover": {
           "Description": "Du machst dich klein und bewegst dich in eine nahegelegene Deckung.",
@@ -532,6 +532,10 @@
       "PrecisionThrust": {
         "Description": "Wandelt einen Schlag in einen genauen Stoß, der kurzzeitig zusätzliche Treffgenauigkeit gewinnt.",
         "Label": "Präzisionsstoß"
+      },
+      "Quickshot": {
+        "Description": "Der Schütze legt in einer fließenden Bewegung schnell ein Geschoss ein und schießt direkt los. Dadurch kann die Waffe auch im ungeladenen Zustand mit der Attacke schießen.",
+        "Label": "Quickshot"
       },
       "SureStrike": {
         "Description": "Führt kontrollierte, gezielte Hiebe aus.",
