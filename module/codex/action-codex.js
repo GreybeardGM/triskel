@@ -342,6 +342,30 @@ export const TRISKEL_SPELLS = [
     keywords: ["spell", "arcane", "action", "manifestation"]
   },
   {
+    id: "dancingLight",
+    label: "TRISKEL.Action.Spell.DancingLight.Label",
+    type: "setup",
+    category: "spell",
+    skill: "manifest",
+    reserve: "will",
+    cost: 1,
+    range: "near",
+    description: "TRISKEL.Action.Spell.DancingLight.Description",
+    keywords: ["spell", "arcane", "setup", "manifestation", "light"]
+  },
+  {
+    id: "prestidigitation",
+    label: "TRISKEL.Action.Spell.Prestidigitation.Label",
+    type: "impact",
+    category: "spell",
+    skill: "manifest",
+    reserve: "will",
+    cost: 0,
+    range: "near",
+    description: "TRISKEL.Action.Spell.Prestidigitation.Description",
+    keywords: ["spell", "arcane", "action", "manifestation", "utility"]
+  },
+  {
     id: "rebukeEvil",
     label: "TRISKEL.Action.Spell.RebukeEvil.Label",
     type: "impact",
@@ -363,6 +387,18 @@ export const TRISKEL_SPELLS = [
     range: "near",
     description: "TRISKEL.Action.Spell.ProtectivePrayer.Description",
     keywords: ["spell", "divine", "setup", "warding"]
+  },
+  {
+    id: "sanctify",
+    label: "TRISKEL.Action.Spell.Sanctify.Label",
+    type: "setup",
+    category: "spell",
+    skill: "ward",
+    reserve: "will",
+    cost: 1,
+    range: "touch",
+    description: "TRISKEL.Action.Spell.Sanctify.Description",
+    keywords: ["spell", "divine", "setup", "warding", "cleansing"]
   }
 ];
 

@@ -379,15 +379,15 @@ export const TRISKEL_SKILLS = [
     category: "magic"
   },
   {
-    id: "transpose",
-    label: "TRISKEL.Actor.Skill.Transpose.Label",
-    description: "TRISKEL.Actor.Skill.Transpose.Description",
+    id: "ward",
+    label: "TRISKEL.Actor.Skill.Ward.Label",
+    description: "TRISKEL.Actor.Skill.Ward.Description",
     category: "magic"
   },
   {
-    id: "reverence",
-    label: "TRISKEL.Actor.Skill.Reverence.Label",
-    description: "TRISKEL.Actor.Skill.Reverence.Description",
+    id: "transpose",
+    label: "TRISKEL.Actor.Skill.Transpose.Label",
+    description: "TRISKEL.Actor.Skill.Transpose.Description",
     category: "magic"
   }
 ];

@@ -131,9 +131,21 @@
           "Description": "Creates a small area of sticky fluid.\n1-2 -> Exposed\n3-4 -> Slowed\n5+ -> Grabbed",
           "Label": "Glue"
         },
+        "DancingLight": {
+          "Description": "You create a floating light that follows you or a willing ally. For 1 additional Will, you may instead command it to follow another creature or move to a point within sight.\nDuration: Until the next Breather",
+          "Label": "Dancing Light"
+        },
+        "Prestidigitation": {
+          "Description": "You produce a small, broadly useful magical effect: sparks, a sharp report, a brief scent, a crude image, or a simple object. The effect is no more dangerous than a small firecracker, no more convincing than a crayon drawing, and no more durable than modelling clay.\n\nBefore casting, you may spend Will. The spell can create no more successes than the Will spent this way. If no successes are required, it succeeds automatically.",
+          "Label": "Prestidigitation"
+        },
         "ProtectivePrayer": {
           "Description": "Offers an ally Fortified 1+ against the next incoming attack.",
           "Label": "Protective Prayer"
+        },
+        "Sanctify": {
+          "Description": "Cleanse a creature or object of dirt, foul odors, or wetness. A creature covered in a substance is immediately freed of it. If you must touch something hazardous to do so—such as acid, burning oil, or venomous slime—you suffer that substance’s effect once before the cleansing takes hold.\n\nWhen cast on a cursed creature or object, the spell fails in an immediately noticeable way.",
+          "Label": "Sanctify"
         },
         "RebukeEvil": {
           "Description": "Instills dread in all nearby beings with evil intent.\n0-1 -> Frightened 1\n2-3 -> Frightened 2\n4-5 -> Frightened 3\n6+ -> Frightened 4",
@@ -371,6 +383,10 @@
           "Description": "Expose truth, detect hidden things, or gain insight.",
           "Label": "Reveal"
         },
+        "Ward": {
+          "Description": "Protect or cleanse targets through magical safeguards.",
+          "Label": "Ward"
+        },
         "Stealth": {
           "Description": "Avoid detection through silence, concealment, or timing.",
           "Label": "Stealth"
@@ -386,10 +402,6 @@
         "Transpose": {
           "Description": "Shift positions, move objects, or bend states and space.",
           "Label": "Transpose"
-        },
-        "Reverence": {
-          "Description": "Align with sacred boundaries, protections, and naturalistic cosmic powers.",
-          "Label": "Reverence"
         }
       },
       "Tab": {
