@@ -189,6 +189,19 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["position", "movement", "maneuver", "move"]
   },
   {
+    id: "holdTheLine",
+    label: "TRISKEL.Action.Base.HoldTheLine.Label",
+    type: "position",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.HoldTheLine.Description",
+    icon: "fa-solid fa-person-military-pointing",
+    keywords: ["position", "defense", "melee", "protection", "hold the line"]
+  },
+  {
     id: "takeCover",
     label: "TRISKEL.Action.Base.TakeCover.Label",
     type: "setup",

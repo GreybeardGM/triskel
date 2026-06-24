@@ -61,6 +61,10 @@
           "Description": "Unarmed restraint that limits the target’s movement.",
           "Label": "Grapple"
         },
+        "HoldTheLine": {
+          "Description": "The character positions themself in the path of their enemies. Until their next activation, the character can draw melee attacks onto themself, but can no longer evade.",
+          "Label": "Hold the Line"
+        },
         "Grit": {
           "Description": "A reflexive brace drawing on the character's raw toughness.",
           "Label": "Grit"

@@ -61,6 +61,10 @@
           "Description": "Unbewaffnete Fesselung, die die Bewegung des Ziels einschränkt.",
           "Label": "Ringen"
         },
+        "HoldTheLine": {
+          "Description": "Der Charakter positioniert sich im Weg seiner Gegner. Bis zu seiner nächsten Aktivierung kann der Charakter Nahkampfangriffe auf sich lenken, darf aber nicht mehr ausweichen.",
+          "Label": "Linie halten"
+        },
         "Grit": {
           "Description": "Eine reflexhafte Abhärtung, die sich auf die körperliche Robustheit stützt.",
           "Label": "Zähigkeit"
