@@ -131,9 +131,21 @@
           "Description": "Erzeugt ein kleines Areal aus klebriger Flüssigkeit.\n1-2 -> Entblößt\n3-4 -> Verlangsamt\n5+ -> Gepackt",
           "Label": "Leim"
         },
+        "DancingLight": {
+          "Description": "Du erschaffst ein schwebendes Licht, das dir oder einem willigen Verbündeten folgt. Für 1 zusätzlichen Willen kannst du es stattdessen anweisen, einer anderen Kreatur zu folgen oder sich zu einem Punkt in Sichtweite zu bewegen.\nDauer: Bis zur nächsten Verschnaufpause",
+          "Label": "Tanzendes Licht"
+        },
+        "Prestidigitation": {
+          "Description": "Du erzeugst einen kleinen, breit nützlichen magischen Effekt: Funken, einen scharfen Knall, einen kurzen Geruch, ein grobes Bild oder einen einfachen Gegenstand. Der Effekt ist nicht gefährlicher als ein kleiner Knallkörper, nicht überzeugender als eine Wachsmalzeichnung und nicht haltbarer als Modelliermasse.\n\nVor dem Wirken kannst du Willen ausgeben. Der Zauber kann nicht mehr Erfolge erzeugen als den auf diese Weise ausgegebenen Willen. Wenn keine Erfolge erforderlich sind, gelingt er automatisch.",
+          "Label": "Zaubertrick"
+        },
         "ProtectivePrayer": {
           "Description": "Verleiht einem Verbündeten gegen den nächsten Angriff den Zustand Gefestigt 1+.",
           "Label": "Schutzgebet"
+        },
+        "Sanctify": {
+          "Description": "Reinige eine Kreatur oder einen Gegenstand von Schmutz, üblen Gerüchen oder Nässe. Eine Kreatur, die von einer Substanz bedeckt ist, wird sofort davon befreit. Wenn du dafür etwas Gefährliches berühren musst – etwa Säure, brennendes Öl oder giftigen Schleim –, erleidest du einmal den Effekt dieser Substanz, bevor die Reinigung greift.\n\nWird der Zauber auf eine verfluchte Kreatur oder einen verfluchten Gegenstand gewirkt, schlägt er auf unmittelbar bemerkbare Weise fehl.",
+          "Label": "Weihen"
         },
         "RebukeEvil": {
           "Description": "Versetzt alle Wesen mit bösen Absichten in der Nähe in Furcht.\n0-1 -> Verängstigt 1\n2-3 -> Verängstigt 2\n4-5 -> Verängstigt 3\n6+ -> Verängstigt 4",
@@ -371,6 +383,10 @@
           "Description": "Legt Wahrheit offen, entdeckt Verborgenes oder gewinnt Einsicht.",
           "Label": "Enthüllen"
         },
+        "Ward": {
+          "Description": "Schützt oder reinigt Ziele durch magische Schutzvorkehrungen.",
+          "Label": "Schützen"
+        },
         "Stealth": {
           "Description": "Vermeidet Entdeckung durch Lautlosigkeit, Deckung oder Timing.",
           "Label": "Heimlichkeit"
@@ -386,10 +402,6 @@
         "Transpose": {
           "Description": "Verschiebt Positionen, bewegt Objekte oder beugt Zustände und Raum.",
           "Label": "Versetzen"
-        },
-        "Reverence": {
-          "Description": "Richtet euch auf heilige Grenzen, Schutz und naturalistische kosmische Mächte aus.",
-          "Label": "Ehrfurcht"
         }
       },
       "Tab": {
