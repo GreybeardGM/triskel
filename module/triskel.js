@@ -12,6 +12,10 @@ import {
   TRISKEL_ITEM_CATEGORIES
 } from "./codex/triskel-codex.js";
 import { localizeCodexCollections } from "./codex/codex-localization.js";
+import {
+  applyCurrentRulesCodex,
+  applyCurrentRulesLocalization
+} from "./codex/current-rules-sync.js";
 
 const itemTypes = TRISKEL_ITEM_CATEGORIES.map(category => category.id);
 const itemTypeLabelMap = TRISKEL_ITEM_CATEGORIES.reduce((labels, category) => {
@@ -70,20 +74,22 @@ Hooks.once("init", function() {
     index: TRISKEL_CODEX_INDEX
   };
 
+  applyCurrentRulesCodex(CONFIG.triskel.codex, CONFIG.triskel.index);
+
   registerTriskelDiceTerm();
   registerComplicationRollSettings();
   registerComplicationRollWidget();
   registerDifficultyWidget();
 
   Hooks.once("i18nInit", () => {
-    const localize = game.i18n.localize.bind(game.i18n);
+    applyCurrentRulesLocalization(game.i18n.lang, game.i18n.translations);
 
+    const localize = game.i18n.localize.bind(game.i18n);
     registerSheets(localize);
     setTypeLabels(localize);
 
     localizeCodexCollections(CONFIG.triskel?.codex, CONFIG.triskel?.index, localize);
   });
-
 });
 
 Hooks.once("diceSoNiceReady", registerTriskelDiceSoNice);
