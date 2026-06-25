@@ -50,7 +50,7 @@
           "Label": "Break"
         },
         "Evade": {
-          "Description": "Moves lightly out of line; improves the next evasion attempt.",
+          "Description": "The character defends by moving out of the line of attack.",
           "Label": "Evade"
         },
         "Expose": {
@@ -58,7 +58,7 @@
           "Label": "Expose"
         },
         "Grapple": {
-          "Description": "Unarmed restraint that limits the target’s movement.",
+          "Description": "Unarmed grab of an opponent.",
           "Label": "Grapple"
         },
         "HoldTheLine": {
@@ -70,12 +70,16 @@
           "Label": "Grit"
         },
         "Guard": {
-          "Description": "Adopts a defensive structure; improves the next guard attempt.",
+          "Description": "The character defends by catching or redirecting the attack.",
           "Label": "Guard"
         },
-        "Invocation": {
-          "Description": "The character calls upon cosmic powers.",
-          "Label": "Invocation"
+        "Unleash": {
+          "Description": "Grants a +1 bonus to the next impact for each point of Conviction, up to a maximum equal to Reverence.",
+          "Label": "Unleash"
+        },
+        "Focus": {
+          "Description": "After the impact, returns 1 Reserve for each point of Conviction, up to a maximum equal to Virtue.",
+          "Label": "Focus"
         },
         "Move": {
           "Description": "Shift into a new region of the battlefield.",
@@ -110,7 +114,7 @@
           "Label": "Take Cover"
         },
         "TraverseHazard": {
-          "Description": "Cross a dangerous obstacle by relying on athletic footing and balance.",
+          "Description": "Rush through a dangerous hazard.",
           "Label": "Traverse Hazard"
         }
       },
@@ -176,21 +180,37 @@
       }
     },
     "StatusEffect": {
+      "Impaired": {
+        "Label": "Impaired",
+        "Description": "The target is hindered on offensive, defensive, and physical checks."
+      },
       "Exposed": {
         "Label": "Exposed",
-        "Description": "The target is left open and easier to attack."
+        "Description": "The target is open and hindered when using guard or evade."
       },
       "Bound": {
         "Label": "Bound",
-        "Description": "The target's melee weapon is tied up and cannot be used effectively."
+        "Description": "The target is tied up and hindered when using strike or guard."
       },
       "Pushed": {
         "Label": "Pushed",
-        "Description": "The target is driven backward and loses a stable combat stance."
+        "Description": "The target is driven back and hindered when using brace."
+      },
+      "Frightened": {
+        "Label": "Frightened",
+        "Description": "The target is shaken and hindered when using strike or control."
+      },
+      "Pinned": {
+        "Label": "Pinned",
+        "Description": "The target is pinned down and cannot take position actions."
+      },
+      "Grabbed": {
+        "Label": "Grabbed",
+        "Description": "The target is fixed in place and cannot move."
       },
       "Fortified": {
         "Label": "Fortified",
-        "Description": "The target is protected and significantly harder to wound."
+        "Description": "The target is reinforced on defensive checks."
       },
       "Cover": {
         "Label": "Cover",
@@ -510,7 +530,7 @@
         "Label": "Break Stance"
       },
       "Counterguard": {
-        "Description": "Sharpen your defensive structure to gain a stronger guard against the next attack.",
+        "Description": "Skillfully catch an enemy attack by using the weapon's leverage.",
         "Label": "Counterguard"
       },
       "Drag": {
