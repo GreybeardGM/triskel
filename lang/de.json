@@ -74,11 +74,11 @@
           "Label": "Parade"
         },
         "Unleash": {
-          "Description": "Gibt für jeden Punkt Überzeugung einen Bonus von +1 auf die nächste Wirkung, bis zu einem Maximum in Höhe der Ehrfurcht.",
+          "Description": "Verbrauche den gesamten aktuellen Favour-Vorrat über Ehrfurcht. Ehrfurcht begrenzt die Konvertierung.",
           "Label": "Entfesseln"
         },
         "Focus": {
-          "Description": "Gibt nach der Wirkung für jeden Punkt Überzeugung 1 Reserve zurück, bis zu einem Maximum in Höhe der Tugend.",
+          "Description": "Verbrauche den gesamten aktuellen Favour-Vorrat über Tugend. Tugend begrenzt die Konvertierung.",
           "Label": "Fokus"
         },
         "Move": {
@@ -132,11 +132,11 @@
       },
       "Spell": {
         "Arc": {
-          "Description": "Entlädt einen kurzen arkanen Bogen aus Energie.",
+          "Description": "Triff ein Ziel mit einem kurzen Lichtbogen. Das Ziel widersteht mit Reflex.\nSkalierung: [1] Beeinträchtigt +1; [4] Schaden +1",
           "Label": "Lichtbogen"
         },
         "Glue": {
-          "Description": "Erzeugt einen kleinen Bereich aus klebriger Flüssigkeit.\n1-2 -> Offen\n3-4 -> Verlangsamt\n5+ -> Fixiert",
+          "Description": "Erzeuge einen kleinen Bereich aus haftender Flüssigkeit.\nSkalierung: [1] Beeinträchtigt 1; [3] Festgesetzt; [5] Fixiert",
           "Label": "Leim"
         },
         "DancingLight": {
@@ -148,7 +148,7 @@
           "Label": "Zaubertrick"
         },
         "ProtectivePrayer": {
-          "Description": "Verleiht einem Verbündeten gegen den nächsten Angriff den Zustand Gefestigt 1+.",
+          "Description": "Verleihe einem Verbündeten für eine Runde Gefestigt. Jeder ausgegebene Punkt Willenskraft erhöht Gefestigt um 1, bis zu deinem Tier.",
           "Label": "Schutzgebet"
         },
         "Sanctify": {
@@ -156,7 +156,7 @@
           "Label": "Weihen"
         },
         "RebukeEvil": {
-          "Description": "Versetzt alle Wesen mit bösen Absichten in der Nähe in Furcht.\n0-1 -> Verängstigt 1\n2-3 -> Verängstigt 2\n4-5 -> Verängstigt 3\n6+ -> Verängstigt 4",
+          "Description": "Versetzt alle Wesen mit bösen Absichten in der Nähe in Furcht.\nSkalierung: [0] Verängstigt 1 +1/2",
           "Label": "Böses Zurückweisen"
         }
       },
@@ -182,35 +182,35 @@
     "StatusEffect": {
       "Impaired": {
         "Label": "Beeinträchtigt",
-        "Description": "Das Ziel ist bei offensiven, defensiven und körperlichen Proben behindert."
+        "Description": "Das Ziel erleidet einen Malus auf alle Aktionswürfe. Zähigkeit, Reflex und Willenskraft bleiben unverändert."
       },
       "Exposed": {
         "Label": "Offen",
-        "Description": "Das Ziel ist offen und bei Parade oder Ausweichen behindert."
+        "Description": "Das Ziel erleidet einen Malus auf Parade und Ausweichen."
       },
       "Bound": {
         "Label": "Gebunden",
-        "Description": "Das Ziel ist gebunden und bei Schlag oder Parade behindert."
+        "Description": "Das Ziel erleidet einen Malus auf Schlag und Parade."
       },
       "Pushed": {
         "Label": "Zurückgedrängt",
-        "Description": "Das Ziel wird zurückgedrängt und ist bei Standhalten behindert."
+        "Description": "Das Ziel erleidet einen Malus auf Standhalten und Parade."
       },
       "Frightened": {
         "Label": "Verängstigt",
-        "Description": "Das Ziel ist verängstigt und bei Schlag oder Kontrolle behindert."
+        "Description": "Das Ziel erleidet einen Malus auf Schlag und Kontrolle."
       },
       "Pinned": {
         "Label": "Festgesetzt",
-        "Description": "Das Ziel ist festgesetzt und kann keine Positionsaktion nutzen."
+        "Description": "Das Ziel kann keine Positionsaktion ausführen. Dadurch entfallen reguläre Bewegung, Deckung, Abfangen und vergleichbare Positionsmanöver. Durch eine andere Aktion kann es sich weiterhin bewegen; Weg sichern bleibt möglich, weil es eine Wirkungsaktion ist."
       },
       "Grabbed": {
         "Label": "Fixiert",
-        "Description": "Das Ziel ist fixiert und kann sich nicht bewegen."
+        "Description": "Das Ziel kann weder Positionsaktionen noch irgendeine andere Form eigener Bewegung oder Positionierung nutzen."
       },
       "Fortified": {
         "Label": "Gefestigt",
-        "Description": "Das Ziel ist bei defensiven Proben gestärkt."
+        "Description": "Das Ziel erhält einen Bonus auf Standhalten, Parade und Ausweichen."
       },
       "Cover": {
         "Label": "Deckung",
@@ -538,11 +538,11 @@
         "Label": "Heranziehen"
       },
       "Deny": {
-        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Gebunden 1.",
+        "Description": "Bei einer erfolgreichen Parade verursacht der erste Erfolg Gebunden 1.",
         "Label": "Verwehren"
       },
       "Intercept": {
-        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Gebunden 1.",
+        "Description": "Bei einer erfolgreichen Parade verursacht der erste Erfolg Gebunden 1.",
         "Label": "Abfangen"
       },
       "PowerStrike": {
