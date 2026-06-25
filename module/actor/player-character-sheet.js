@@ -243,7 +243,7 @@ async function onRollHelper(event) {
     reserveUpdates[`${reservePath}.value`] = updatedValue;
   });
 
-  let incrementTensionOnMiss = false;
+  let incrementFavourOnMiss = false;
   let difficultyOutcome = null;
   if (Number.isFinite(difficultyValue) && rollResult?.roll) {
     const total = toFiniteNumber(rollResult.roll.total, Number.NaN);
@@ -268,7 +268,7 @@ async function onRollHelper(event) {
           : localize("TRISKEL.Actor.RollHelper.OutcomeMisses");
         outcomeTone = "miss";
         outcomeValue = misses;
-        incrementTensionOnMiss = true;
+        incrementFavourOnMiss = true;
       }
 
       difficultyOutcome = {
@@ -281,14 +281,14 @@ async function onRollHelper(event) {
     }
   }
 
-  if (incrementTensionOnMiss) {
-    const currentTension = toFiniteNumber(actor?.system?.tension?.value, Number.NaN);
-    if (Number.isFinite(currentTension)) {
-      const tensionMax = toFiniteNumber(actor?.system?.tension?.max, Number.NaN);
-      const updatedTension = Number.isFinite(tensionMax)
-        ? Math.min(tensionMax, currentTension + 1)
-        : currentTension + 1;
-      reserveUpdates["system.tension.value"] = updatedTension;
+  if (incrementFavourOnMiss) {
+    const currentFavour = toFiniteNumber(actor?.system?.favour?.value, Number.NaN);
+    if (Number.isFinite(currentFavour)) {
+      const favourMax = toFiniteNumber(actor?.system?.favour?.max, Number.NaN);
+      const updatedFavour = Number.isFinite(favourMax)
+        ? Math.min(favourMax, currentFavour + 1)
+        : currentFavour + 1;
+      reserveUpdates["system.favour.value"] = updatedFavour;
     }
   }
 

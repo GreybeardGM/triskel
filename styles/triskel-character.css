@@ -186,7 +186,7 @@
 
 .triskel .virtue,
 .triskel .reverence {
-  --triskel-color-highlight-default: var(--triskel-color-highlight-tension);
+  --triskel-color-highlight-default: var(--triskel-color-highlight-favour);
 }
 
 .triskel .vice,
@@ -240,7 +240,7 @@
 .triskel .convictions-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  grid-template-areas: "virtue tension reverence";
+  grid-template-areas: "virtue favour reverence";
   align-items: center;
   gap: 0.25rem;
 }
@@ -338,14 +338,14 @@
   flex-direction: row;
 }
 
-.triskel .tension-card {
-  grid-area: tension;
+.triskel .favour-card {
+  grid-area: favour;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.triskel .tension-card .resource-box {
+.triskel .favour-card .resource-box {
   width: 2rem;
   height: 2rem;
 }

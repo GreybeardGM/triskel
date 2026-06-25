@@ -126,7 +126,7 @@ export class TriskelActor extends Actor {
    * Bereitet alle abgeleiteten Werte speziell für Spielercharaktere vor.
    * - Strain-Minimum aus aktiven Schritten bestimmen
    * - Reserve- und Commit-Werte basierend auf Tier setzen
-   * - Pfad-Werte mit aktueller Spannung deckeln
+   * - Pfad-Werte mit aktuellem Favour deckeln
    */
   _prepareCharacterDerivedData() {
     // Indirekte Werte nur für Spielercharaktere vorbereiten.
@@ -134,8 +134,8 @@ export class TriskelActor extends Actor {
 
     const triskelIndex = getTriskelIndex();
     const tierValue = toFiniteNumber(this.system?.tier?.value);
-    const tension = this.system?.tension ?? {};
-    const rawTensionValue = toFiniteNumber(tension?.value);
+    const favour = this.system?.favour ?? {};
+    const rawFavourValue = toFiniteNumber(favour?.value);
 
     // Reserves: Minimum aus aktiven Strains und aktueller Wert basierend auf Tier.
     const reserves = this.system?.reserves ?? {};
@@ -158,7 +158,7 @@ export class TriskelActor extends Actor {
         : Math.max(currentValue, strainMinimum);
     });
 
-    // Convictions: Wert folgt der aktuellen Spannung, aber maximal bis zum definierten Maximum.
+    // Convictions: Wert folgt dem aktuellen Favour, aber maximal bis zum definierten Maximum.
     const convictions = this.system?.convictions ?? {};
     let highestConvictionMax = 0;
     Object.values(convictions).forEach(conviction => {
@@ -167,16 +167,16 @@ export class TriskelActor extends Actor {
       const max = Math.max(0, toFiniteNumber(conviction.max));
       highestConvictionMax = Math.max(highestConvictionMax, max);
 
-      const cappedValue = Math.min(Math.max(0, rawTensionValue), max);
+      const cappedValue = Math.min(Math.max(0, rawFavourValue), max);
 
       conviction.max = max;
       conviction.value = cappedValue;
     });
 
-    const tensionMax = Math.max(0, highestConvictionMax);
-    const tensionValue = Math.min(Math.max(0, rawTensionValue), tensionMax);
-    tension.max = tensionMax;
-    tension.value = tensionValue;
+    const favourMax = Math.max(0, highestConvictionMax);
+    const favourValue = Math.min(Math.max(0, rawFavourValue), favourMax);
+    favour.max = favourMax;
+    favour.value = favourValue;
 
     // Corruptions: Ruin und Vice bleiben feste 0-9-Werte außerhalb der Convictions.
     const corruptions = this.system?.corruptions ?? {};

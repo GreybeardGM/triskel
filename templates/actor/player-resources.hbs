@@ -75,7 +75,7 @@
                 <div
                   class="resource-box is-interactive segment-{{segment.state}}"
                   data-action="updateResourceValue"
-                  data-resource="tension"
+                  data-resource="favour"
                   data-resource-field="value"
                   data-resource-value="{{segment.index}}"
                 >
@@ -88,11 +88,11 @@
         {{/if}}
       {{/each}}
 
-      <div class="tension-card">
+      <div class="favour-card">
         <div
-          class="resource-box is-interactive segment-{{#if (gt system.tension.value 0)}}filled{{else}}empty{{/if}}"
+          class="resource-box is-interactive segment-{{#if (gt system.favour.value 0)}}filled{{else}}empty{{/if}}"
           data-action="updateResourceValue"
-          data-resource="tension"
+          data-resource="favour"
           data-resource-field="value"
           data-resource-value="0"
           title="{{localize "TRISKEL.Actor.Conviction.Label"}}"
