@@ -4,14 +4,22 @@ export const TRISKEL_STATUS_EFFECTS = [
     label: "TRISKEL.StatusEffect.Impaired.Label",
     description: "TRISKEL.StatusEffect.Impaired.Description",
     category: "debuff",
-    modifiedSkillCategories: ["offense", "defense", "physical"]
+    modifiedSkillCategories: [
+      "offense",
+      "defense",
+      "physical",
+      "professional",
+      "social",
+      "intellectual",
+      "magic"
+    ]
   },
   {
     id: "exposed",
     label: "TRISKEL.StatusEffect.Exposed.Label",
     description: "TRISKEL.StatusEffect.Exposed.Description",
     category: "debuff",
-    modifiedSkills: ["guard", "evade"]
+    modifiedSkills: ["guard", "evasion"]
   },
   {
     id: "bound",
@@ -25,7 +33,7 @@ export const TRISKEL_STATUS_EFFECTS = [
     label: "TRISKEL.StatusEffect.Pushed.Label",
     description: "TRISKEL.StatusEffect.Pushed.Description",
     category: "debuff",
-    modifiedSkills: ["brace"]
+    modifiedSkills: ["brace", "guard"]
   },
   {
     id: "frightened",
@@ -46,20 +54,22 @@ export const TRISKEL_STATUS_EFFECTS = [
     label: "TRISKEL.StatusEffect.Grabbed.Label",
     description: "TRISKEL.StatusEffect.Grabbed.Description",
     category: "debuff",
-    blockedActions: ["move"]
+    blockedActionTypes: ["position"],
+    blocksMovement: true,
+    blocksPositioning: true
   },
   {
     id: "fortified",
     label: "TRISKEL.StatusEffect.Fortified.Label",
     description: "TRISKEL.StatusEffect.Fortified.Description",
     category: "buff",
-    modifiedSkillCategories: ["defense"]
+    modifiedSkills: ["brace", "guard", "evasion"]
   },
   {
     id: "cover",
     label: "TRISKEL.StatusEffect.Cover.Label",
     description: "TRISKEL.StatusEffect.Cover.Description",
     category: "buff",
-    modifiedSkills: ["evade"]
+    modifiedSkills: ["evasion"]
   }
 ];
