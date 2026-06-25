@@ -74,11 +74,11 @@
           "Label": "Guard"
         },
         "Unleash": {
-          "Description": "Grants a +1 bonus to the next impact for each point of Conviction, up to a maximum equal to Reverence.",
+          "Description": "Consume the entire current Favour pool through Reverence. Reverence limits the conversion.",
           "Label": "Unleash"
         },
         "Focus": {
-          "Description": "After the impact, returns 1 Reserve for each point of Conviction, up to a maximum equal to Virtue.",
+          "Description": "Consume the entire current Favour pool through Virtue. Virtue limits the conversion.",
           "Label": "Focus"
         },
         "Move": {
@@ -132,11 +132,11 @@
       },
       "Spell": {
         "Arc": {
-          "Description": "Channel a short arcing spell of energy.",
+          "Description": "Strike a target with a short arc of energy. The target resists with Snap.\nScaling: [1] Impaired +1; [4] Damage +1",
           "Label": "Arc"
         },
         "Glue": {
-          "Description": "Creates a small area of sticky fluid.\n1-2 -> Exposed\n3-4 -> Slowed\n5+ -> Grabbed",
+          "Description": "Create a small area of adhesive fluid.\nScaling: [1] Impaired 1; [3] Pinned; [5] Grabbed",
           "Label": "Glue"
         },
         "DancingLight": {
@@ -148,7 +148,7 @@
           "Label": "Prestidigitation"
         },
         "ProtectivePrayer": {
-          "Description": "Offers an ally Fortified 1+ against the next incoming attack.",
+          "Description": "Grant an ally Fortified for one round. Each point of Will spent increases Fortified by 1, up to your Tier.",
           "Label": "Protective Prayer"
         },
         "Sanctify": {
@@ -156,7 +156,7 @@
           "Label": "Sanctify"
         },
         "RebukeEvil": {
-          "Description": "Instills dread in all nearby beings with evil intent.\n0-1 -> Frightened 1\n2-3 -> Frightened 2\n4-5 -> Frightened 3\n6+ -> Frightened 4",
+          "Description": "Instills dread in all nearby beings with evil intent.\nScaling: [0] Frightened 1 +1/2",
           "Label": "Rebuke Evil"
         }
       },
@@ -182,35 +182,35 @@
     "StatusEffect": {
       "Impaired": {
         "Label": "Impaired",
-        "Description": "The target is hindered on offensive, defensive, and physical checks."
+        "Description": "The target takes a penalty to all Action Rolls. Grit, Snap, and Resolve are unaffected."
       },
       "Exposed": {
         "Label": "Exposed",
-        "Description": "The target is open and hindered when using guard or evade."
+        "Description": "The target takes a penalty to Guard and Evade."
       },
       "Bound": {
         "Label": "Bound",
-        "Description": "The target is tied up and hindered when using strike or guard."
+        "Description": "The target takes a penalty to Strike and Guard."
       },
       "Pushed": {
         "Label": "Pushed",
-        "Description": "The target is driven back and hindered when using brace."
+        "Description": "The target takes a penalty to Brace and Guard."
       },
       "Frightened": {
         "Label": "Frightened",
-        "Description": "The target is shaken and hindered when using strike or control."
+        "Description": "The target takes a penalty to Strike and Control."
       },
       "Pinned": {
         "Label": "Pinned",
-        "Description": "The target is pinned down and cannot take position actions."
+        "Description": "The target cannot take Position actions. This prevents regular movement, taking cover, intercepting, and similar positioning maneuvers. The target can still move by spending another action; Secure Passage remains available because it is an Impact action."
       },
       "Grabbed": {
         "Label": "Grabbed",
-        "Description": "The target is fixed in place and cannot move."
+        "Description": "The target cannot take Position actions or use any other form of its own movement or positioning."
       },
       "Fortified": {
         "Label": "Fortified",
-        "Description": "The target is reinforced on defensive checks."
+        "Description": "The target gains a bonus to Brace, Guard, and Evade."
       },
       "Cover": {
         "Label": "Cover",
@@ -538,11 +538,11 @@
         "Label": "Drag"
       },
       "Deny": {
-        "Description": "On a successful guard, the first success grants the target Bind 1.",
+        "Description": "On a successful Guard, the first success applies Bound 1.",
         "Label": "Deny"
       },
       "Intercept": {
-        "Description": "On a successful guard, the first success grants the target Bind 1.",
+        "Description": "On a successful Guard, the first success applies Bound 1.",
         "Label": "Intercept"
       },
       "PowerStrike": {
