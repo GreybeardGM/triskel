@@ -46,19 +46,19 @@
           "Label": "Standhalten"
         },
         "Break": {
-          "Description": "Schüttelt negative Zustände ab; reduziert gebunden/offengelegt/gestoßen.",
+          "Description": "Schüttelt negative Zustände ab; reduziert Gebunden, Offen oder Zurückgedrängt.",
           "Label": "Lösen"
         },
         "Evade": {
-          "Description": "Tritt leicht aus der Linie; verbessert den nächsten Ausweichversuch.",
+          "Description": "Der Charakter verteidigt sich, indem er sich aus der Angriffslinie bewegt.",
           "Label": "Ausweichen"
         },
         "Expose": {
-          "Description": "Erzwingt eine Lücke in der Verteidigung des Gegners und verhängt offengelegt(X).",
+          "Description": "Erzwingt eine Lücke in der Verteidigung des Gegners und verhängt Offen(X).",
           "Label": "Öffnen"
         },
         "Grapple": {
-          "Description": "Unbewaffnete Fesselung, die die Bewegung des Ziels einschränkt.",
+          "Description": "Unbewaffnetes Greifen des Gegners.",
           "Label": "Ringen"
         },
         "HoldTheLine": {
@@ -70,19 +70,23 @@
           "Label": "Zähigkeit"
         },
         "Guard": {
-          "Description": "Nimmt eine defensive Struktur ein; verbessert den nächsten Paradeversuch.",
+          "Description": "Der Charakter verteidigt sich, indem er den Angriff abfängt oder umleitet.",
           "Label": "Parade"
         },
-        "Invocation": {
-          "Description": "Der Charakter ruft kosmische Mächte an.",
-          "Label": "Anrufung"
+        "Unleash": {
+          "Description": "Gibt für jeden Punkt Überzeugung einen Bonus von +1 auf die nächste Wirkung, bis zu einem Maximum in Höhe der Ehrfurcht.",
+          "Label": "Entfesseln"
+        },
+        "Focus": {
+          "Description": "Gibt nach der Wirkung für jeden Punkt Überzeugung 1 Reserve zurück, bis zu einem Maximum in Höhe der Tugend.",
+          "Label": "Fokus"
         },
         "Move": {
           "Description": "Du bewegst dich in eine neue Region des Schlachtfelds.",
           "Label": "Bewegen"
         },
         "Push": {
-          "Description": "Drängt den Gegner zurück und verhängt gestoßen(X).",
+          "Description": "Drängt den Gegner zurück und verhängt Zurückgedrängt(X).",
           "Label": "Stoßen"
         },
         "Resolve": {
@@ -110,8 +114,8 @@
           "Label": "In Deckung gehen"
         },
         "TraverseHazard": {
-          "Description": "Überquere ein gefährliches Hindernis mit athletischem Schritt und Balance.",
-          "Label": "Gefahr überwinden"
+          "Description": "Eile durch ein gefährliches Hindernis.",
+          "Label": "Gefahr durchqueren"
         }
       },
       "Category": {
@@ -132,7 +136,7 @@
           "Label": "Lichtbogen"
         },
         "Glue": {
-          "Description": "Erzeugt ein kleines Areal aus klebriger Flüssigkeit.\n1-2 -> Entblößt\n3-4 -> Verlangsamt\n5+ -> Gepackt",
+          "Description": "Erzeugt einen kleinen Bereich aus klebriger Flüssigkeit.\n1-2 -> Offen\n3-4 -> Verlangsamt\n5+ -> Fixiert",
           "Label": "Leim"
         },
         "DancingLight": {
@@ -140,7 +144,7 @@
           "Label": "Tanzendes Licht"
         },
         "Prestidigitation": {
-          "Description": "Du erzeugst einen kleinen, breit nützlichen magischen Effekt: Funken, einen scharfen Knall, einen kurzen Geruch, ein grobes Bild oder einen einfachen Gegenstand. Der Effekt ist nicht gefährlicher als ein kleiner Knallkörper, nicht überzeugender als eine Wachsmalzeichnung und nicht haltbarer als Modelliermasse.\n\nVor dem Wirken kannst du Willen ausgeben. Der Zauber kann nicht mehr Erfolge erzeugen als den auf diese Weise ausgegebenen Willen. Wenn keine Erfolge erforderlich sind, gelingt er automatisch.",
+          "Description": "Du erzeugst eine kleine, breit nützliche magische Wirkung: Funken, einen scharfen Knall, einen kurzen Geruch, ein grobes Bild oder einen einfachen Gegenstand. Die Wirkung ist nicht gefährlicher als ein kleiner Knallkörper, nicht überzeugender als eine Wachsmalzeichnung und nicht haltbarer als Modelliermasse.\n\nVor dem Wirken kannst du Willen ausgeben. Der Zauber kann nicht mehr Erfolge erzeugen als den auf diese Weise ausgegebenen Willen. Wenn keine Erfolge erforderlich sind, gelingt er automatisch.",
           "Label": "Zaubertrick"
         },
         "ProtectivePrayer": {
@@ -148,7 +152,7 @@
           "Label": "Schutzgebet"
         },
         "Sanctify": {
-          "Description": "Reinige eine Kreatur oder einen Gegenstand von Schmutz, üblen Gerüchen oder Nässe. Eine Kreatur, die von einer Substanz bedeckt ist, wird sofort davon befreit. Wenn du dafür etwas Gefährliches berühren musst – etwa Säure, brennendes Öl oder giftigen Schleim –, erleidest du einmal den Effekt dieser Substanz, bevor die Reinigung greift.\n\nWird der Zauber auf eine verfluchte Kreatur oder einen verfluchten Gegenstand gewirkt, schlägt er auf unmittelbar bemerkbare Weise fehl.",
+          "Description": "Reinige eine Kreatur oder einen Gegenstand von Schmutz, üblen Gerüchen oder Nässe. Eine Kreatur, die von einer Substanz bedeckt ist, wird sofort davon befreit. Wenn du dafür etwas Gefährliches berühren musst – etwa Säure, brennendes Öl oder giftigen Schleim –, erleidest du einmal die Wirkung dieser Substanz, bevor die Reinigung greift.\n\nWird der Zauber auf eine verfluchte Kreatur oder einen verfluchten Gegenstand gewirkt, schlägt er auf unmittelbar bemerkbare Weise fehl.",
           "Label": "Weihen"
         },
         "RebukeEvil": {
@@ -176,21 +180,37 @@
       }
     },
     "StatusEffect": {
+      "Impaired": {
+        "Label": "Beeinträchtigt",
+        "Description": "Das Ziel ist bei offensiven, defensiven und körperlichen Proben behindert."
+      },
       "Exposed": {
-        "Label": "Entblößt",
-        "Description": "Das Ziel ist offengelegt und leichter mit defensivem Druck zu kontrollieren."
+        "Label": "Offen",
+        "Description": "Das Ziel ist offen und bei Parade oder Ausweichen behindert."
       },
       "Bound": {
         "Label": "Gebunden",
-        "Description": "Die Nahkampfwaffe des Ziels ist gebunden und kann nicht mehr effektiv eingesetzt werden."
+        "Description": "Das Ziel ist gebunden und bei Schlag oder Parade behindert."
       },
       "Pushed": {
-        "Label": "Gestoßen",
-        "Description": "Das Ziel wird zurückgedrängt und verliert einen sicheren Stand."
+        "Label": "Zurückgedrängt",
+        "Description": "Das Ziel wird zurückgedrängt und ist bei Standhalten behindert."
+      },
+      "Frightened": {
+        "Label": "Verängstigt",
+        "Description": "Das Ziel ist verängstigt und bei Schlag oder Kontrolle behindert."
+      },
+      "Pinned": {
+        "Label": "Festgesetzt",
+        "Description": "Das Ziel ist festgesetzt und kann keine Positionsaktion nutzen."
+      },
+      "Grabbed": {
+        "Label": "Fixiert",
+        "Description": "Das Ziel ist fixiert und kann sich nicht bewegen."
       },
       "Fortified": {
         "Label": "Gefestigt",
-        "Description": "Das Ziel ist geschützt und deutlich schwerer zu verwunden."
+        "Description": "Das Ziel ist bei defensiven Proben gestärkt."
       },
       "Cover": {
         "Label": "Deckung",
@@ -501,7 +521,7 @@
       },
       "Emanation": {
         "Description": "Der Zauber breitet sich auf alle gültigen Ziele in einer Zone aus, trifft Verbündete und Feinde gleichermaßen und ist auf einen Erfolgsgrad begrenzt.",
-        "Label": "Emanation"
+        "Label": "Ausstrahlung"
       }
     },
     "Form": {
@@ -510,7 +530,7 @@
         "Label": "Standbruch"
       },
       "Counterguard": {
-        "Description": "Schärft deine defensive Struktur, um beim nächsten Angriff eine stärkere Parade zu erhalten.",
+        "Description": "Gekonntes Abfangen eines gegnerischen Angriffs, das den Hebelarm der Waffe nutzt.",
         "Label": "Gegenwache"
       },
       "Drag": {
@@ -518,11 +538,11 @@
         "Label": "Heranziehen"
       },
       "Deny": {
-        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Bind 1.",
-        "Label": "Festsetzen"
+        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Gebunden 1.",
+        "Label": "Verwehren"
       },
       "Intercept": {
-        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Bind 1.",
+        "Description": "Bei einer Abwehr verleiht der erste Erfolgspunkt dem Gegner Gebunden 1.",
         "Label": "Abfangen"
       },
       "PowerStrike": {
@@ -534,8 +554,8 @@
         "Label": "Präzisionsstoß"
       },
       "Quickshot": {
-        "Description": "Der Schütze legt in einer fließenden Bewegung schnell ein Geschoss ein und schießt direkt los. Dadurch kann die Waffe auch im ungeladenen Zustand mit der Attacke schießen.",
-        "Label": "Quickshot"
+        "Description": "Der Schütze legt in einer fließenden Bewegung schnell ein Geschoss ein und schießt direkt los. Dadurch kann die Waffe auch im ungeladenen Zustand mit dem Angriff schießen.",
+        "Label": "Schnellschuss"
       },
       "SureStrike": {
         "Description": "Führt kontrollierte, gezielte Hiebe aus.",
@@ -550,7 +570,7 @@
         "Label": "Schilddeckung"
       },
       "ShieldBrace": {
-        "Description": "Stemme dich hinter das Schild, um selbst schwere Angriffe zu blocken.",
+        "Description": "Stemme dich hinter das Schild, um selbst schwere Angriffe abzuwehren.",
         "Label": "Schildstemmen"
       },
       "WardingRunes": {

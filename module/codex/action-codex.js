@@ -150,17 +150,30 @@ export const TRISKEL_BASE_ACTIONS = [
     keywords: ["defense", "will", "resolve", "resistance"]
   },
   {
-    id: "invocation",
-    label: "TRISKEL.Action.Base.Invocation.Label",
+    id: "unleash",
+    label: "TRISKEL.Action.Base.Unleash.Label",
     type: "setup",
     category: "combat",
     skill: null,
     reserve: null,
     cost: 0,
     range: "self",
-    description: "TRISKEL.Action.Base.Invocation.Description",
-    icon: "fa-solid fa-wand-sparkles",
-    keywords: ["setup", "magic", "invocation"]
+    description: "TRISKEL.Action.Base.Unleash.Description",
+    icon: "fa-solid fa-meteor",
+    keywords: ["setup", "invocation", "unleash", "conviction", "reverence"]
+  },
+  {
+    id: "focus",
+    label: "TRISKEL.Action.Base.Focus.Label",
+    type: "setup",
+    category: "combat",
+    skill: null,
+    reserve: null,
+    cost: 0,
+    range: "self",
+    description: "TRISKEL.Action.Base.Focus.Description",
+    icon: "fa-solid fa-arrows-rotate",
+    keywords: ["setup", "invocation", "focus", "conviction", "virtue"]
   },
   {
     id: "switchgear",
