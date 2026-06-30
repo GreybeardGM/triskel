@@ -4,7 +4,10 @@
       "Difficulty": {
         "Label": "Schwierigkeit",
         "Empty": "—",
-        "Toggle": "Schwierigkeit ein-/ausblenden"
+        "Toggle": "Schwierigkeit ein-/ausblenden",
+        "PersistControl": "Nach Würfen behalten",
+        "PersistOn": "Bleibt nach Würfen erhalten",
+        "PersistOff": "Wird nach dem nächsten Wurf gelöscht"
       },
       "ComplicationRoll": {
         "Label": "Komplikationswurf",

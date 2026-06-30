@@ -5,6 +5,8 @@ const WIDGET_CONTAINER_CLASS = "difficulty-widget";
 const TOGGLE_BUTTON_CLASS = "difficulty-widget__toggle";
 const VALUE_CLASS = "difficulty-widget__value";
 const GM_CONTROLS_CLASS = "difficulty-widget__controls";
+const PERSIST_INPUT_CLASS = "difficulty-widget__persist-input";
+const PERSIST_STATUS_CLASS = "difficulty-widget__persist-status";
 const I18N_ROOT = "TRISKEL.Widget.Difficulty";
 const DIFFICULTY_VALUES = [10, 12, 14, 16];
 
@@ -34,11 +36,12 @@ function createValueDisplay(localize) {
   wrapper.innerHTML = `
     <div class="difficulty-widget__label">${localize(`${I18N_ROOT}.Label`)}</div>
     <div class="difficulty-widget__number">—</div>
+    <div class="${PERSIST_STATUS_CLASS}">${localize(`${I18N_ROOT}.PersistOff`)}</div>
   `;
   return wrapper;
 }
 
-function createControls() {
+function createControls(localize) {
   const controls = document.createElement("div");
   controls.className = GM_CONTROLS_CLASS;
 
@@ -51,6 +54,14 @@ function createControls() {
     controls.append(button);
   });
 
+  const persistLabel = document.createElement("label");
+  persistLabel.className = "difficulty-widget__persist-control";
+  persistLabel.innerHTML = `
+    <input class="${PERSIST_INPUT_CLASS}" type="checkbox">
+    <span>${localize(`${I18N_ROOT}.PersistControl`)}</span>
+  `;
+  controls.append(persistLabel);
+
   return controls;
 }
 
@@ -58,12 +69,25 @@ function updateDifficultyDisplay(root, localize, data = getDifficulty()) {
   const widgets = root.querySelectorAll(`.${WIDGET_CONTAINER_CLASS}`);
   widgets.forEach(widget => {
     const number = widget.querySelector(`.${VALUE_CLASS} .difficulty-widget__number`);
+    const persistStatus = widget.querySelector(`.${PERSIST_STATUS_CLASS}`);
+    const persistInput = widget.querySelector(`.${PERSIST_INPUT_CLASS}`);
     if (!number) return;
+
+    const isPersistent = data?.persist === true;
+    widget.classList.toggle("is-persistent", isPersistent);
 
     if (Number.isFinite(data?.value)) {
       number.textContent = String(data.value);
     } else {
       number.textContent = localize(`${I18N_ROOT}.Empty`);
+    }
+
+    if (persistStatus) {
+      persistStatus.textContent = localize(`${I18N_ROOT}.${isPersistent ? "PersistOn" : "PersistOff"}`);
+    }
+
+    if (persistInput) {
+      persistInput.checked = isPersistent;
     }
   });
 }
@@ -94,7 +118,7 @@ function addWidget(root) {
   container.append(toggleButton, valueDisplay);
 
   if (game.user?.isGM) {
-    const controls = createControls();
+    const controls = createControls(localize);
     container.append(controls);
 
     controls.addEventListener("click", async event => {
@@ -102,12 +126,19 @@ function addWidget(root) {
       if (!button) return;
       const value = Number(button.dataset.value);
       if (!Number.isFinite(value)) return;
+      const persist = controls.querySelector(`.${PERSIST_INPUT_CLASS}`)?.checked === true;
       button.disabled = true;
       try {
-        await setSceneDifficulty(value, { persist: false });
+        await setSceneDifficulty(value, { persist });
       } finally {
         button.disabled = false;
       }
+    });
+
+    controls.addEventListener("change", async event => {
+      if (!event.target.matches(`.${PERSIST_INPUT_CLASS}`)) return;
+      const currentDifficulty = getDifficulty();
+      await setSceneDifficulty(currentDifficulty.value, { persist: event.target.checked });
     });
   }
 

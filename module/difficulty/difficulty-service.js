@@ -51,8 +51,10 @@ async function handleConsumeDifficultyRequest(message) {
   const requestingUserId = message?.userId;
   if (!message?.requestId || !getUser(requestingUserId)) return;
 
+  let difficulty = normalizeDifficultyData(null);
   let value = null;
   try {
+    difficulty = normalizeDifficultyData(getScene(message.sceneId)?.getFlag(FLAG_SCOPE, FLAG_KEY) ?? null);
     value = await consumeSceneDifficulty({ sceneId: message.sceneId });
   } catch (error) {
     console.error("Triskel | Failed to consume difficulty for socket request.", error);
@@ -64,7 +66,7 @@ async function handleConsumeDifficultyRequest(message) {
     userId: requestingUserId,
     sceneId: message.sceneId ?? null,
     value: Number.isFinite(value) ? value : null,
-    persist: false
+    persist: difficulty.persist === true
   });
 }
 
@@ -128,8 +130,9 @@ export function registerDifficultyService() {
 
 export async function requestDifficultyForRoll({ sceneId, timeout = DIFFICULTY_REQUEST_TIMEOUT_MS } = {}) {
   if (game.user?.isGM) {
+    const difficulty = normalizeDifficultyData(getScene(sceneId)?.getFlag(FLAG_SCOPE, FLAG_KEY) ?? null);
     const value = await consumeSceneDifficulty({ sceneId });
-    return normalizeDifficultyData({ value });
+    return normalizeDifficultyData({ value, persist: difficulty.persist });
   }
 
   if (!getActiveGms().length) {
