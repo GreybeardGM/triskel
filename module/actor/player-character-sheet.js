@@ -207,15 +207,16 @@ async function onRollHelper(event) {
   if (rollHelperSummary.canAfford === false) return;
 
   const scene = game.scenes?.current ?? game.canvas?.scene ?? null;
-  const sceneDifficulty = await requestDifficultyForRoll({ sceneId: scene?.id });
-  if (sceneDifficulty?.aborted) return;
-  const difficultyValue = Number.isFinite(sceneDifficulty?.value) ? sceneDifficulty.value : null;
+  const difficulty = await requestDifficultyForRoll({ sceneId: scene?.id ?? null });
+  if (difficulty?.aborted) return;
+  const difficultyValue = Number.isFinite(difficulty?.value) ? difficulty.value : null;
+  const difficultyPersist = difficulty?.persist === true;
   const shouldRoll = Boolean(rollData);
   if (shouldRoll && typeof actor?.rollTriskelDice !== "function") return;
   const rollResult = shouldRoll
     ? await actor.rollTriskelDice({
       ...rollData,
-      difficulty: Number.isFinite(difficultyValue) ? difficultyValue : null,
+      difficulty: difficultyValue,
       options: {
         ...rollData?.options,
         chatOutput: false
