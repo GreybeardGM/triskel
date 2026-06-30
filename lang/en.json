@@ -4,7 +4,10 @@
       "Difficulty": {
         "Label": "Difficulty",
         "Empty": "—",
-        "Toggle": "Toggle difficulty display"
+        "Toggle": "Toggle difficulty display",
+        "PersistControl": "Keep after rolls",
+        "PersistOn": "Persists after rolls",
+        "PersistOff": "Clears after next roll"
       },
       "ComplicationRoll": {
         "Label": "Complication Roll",
