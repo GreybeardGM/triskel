@@ -14,6 +14,7 @@ import {
   prepareRollHelperContext,
   prepareSkillsTabContext
 } from "./sheet-helpers.js";
+import { requestDifficultyForRoll } from "../difficulty/difficulty-service.js";
 import { chatOutput } from "../util/chat-output.js";
 import { normalizeKeyword, toArray, toFiniteNumber } from "../util/normalization.js";
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -206,9 +207,8 @@ async function onRollHelper(event) {
   if (rollHelperSummary.canAfford === false) return;
 
   const scene = game.scenes?.current ?? game.canvas?.scene ?? null;
-  const sceneDifficulty = scene?.getFlag?.("triskel", "difficulty") ?? null;
+  const sceneDifficulty = requestDifficultyForRoll({ sceneId: scene?.id });
   const difficultyValue = Number.isFinite(sceneDifficulty?.value) ? sceneDifficulty.value : null;
-  const difficultyPersist = sceneDifficulty?.persist === true;
   const shouldRoll = Boolean(rollData);
   if (shouldRoll && typeof actor?.rollTriskelDice !== "function") return;
   const rollResult = shouldRoll
@@ -303,7 +303,7 @@ async function onRollHelper(event) {
 
   await actor.update(actorUpdate);
 
-  const chatMessage = await chatOutput({
+  await chatOutput({
     roll: rollResult?.roll ?? null,
     actionTemplate: rollHelperAction ? "systems/triskel/templates/chat/roll-helper-action.hbs" : "",
     actionContext: {
@@ -316,21 +316,6 @@ async function onRollHelper(event) {
     rollMode: rollData?.options?.rollMode ?? null,
     outcome: difficultyOutcome
   });
-
-  const difficultyUsedPayload = {
-    sceneId: scene?.id ?? null,
-    actorId: actor?.id ?? null,
-    messageId: chatMessage?.id ?? null,
-    difficultyValue,
-    persist: difficultyPersist,
-    timestamp: Date.now()
-  };
-
-  try {
-    Hooks.callAll("triskelDifficultyUsed", difficultyUsedPayload);
-  } catch (error) {
-    console.error("Triskel | Failed to publish triskelDifficultyUsed hook.", error);
-  }
 }
 
 async function onToggleActiveItem(event, target) {
