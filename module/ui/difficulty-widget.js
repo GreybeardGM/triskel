@@ -73,10 +73,11 @@ function updateDifficultyDisplay(root, localize, data = getDifficulty()) {
     const persistInput = widget.querySelector(`.${PERSIST_INPUT_CLASS}`);
     if (!number) return;
 
-    const isPersistent = data?.persist === true;
+    const hasDifficulty = Number.isFinite(data?.value);
+    const isPersistent = hasDifficulty && data?.persist === true;
     widget.classList.toggle("is-persistent", isPersistent);
 
-    if (Number.isFinite(data?.value)) {
+    if (hasDifficulty) {
       number.textContent = String(data.value);
     } else {
       number.textContent = localize(`${I18N_ROOT}.Empty`);
@@ -87,7 +88,8 @@ function updateDifficultyDisplay(root, localize, data = getDifficulty()) {
     }
 
     if (persistInput) {
-      persistInput.checked = isPersistent;
+      persistInput.checked = hasDifficulty && isPersistent;
+      persistInput.disabled = !hasDifficulty;
     }
   });
 }
@@ -138,6 +140,10 @@ function addWidget(root) {
     controls.addEventListener("change", async event => {
       if (!event.target.matches(`.${PERSIST_INPUT_CLASS}`)) return;
       const currentDifficulty = getDifficulty();
+      if (!Number.isFinite(currentDifficulty.value)) {
+        event.target.checked = false;
+        return;
+      }
       await setSceneDifficulty(currentDifficulty.value, { persist: event.target.checked });
     });
   }
