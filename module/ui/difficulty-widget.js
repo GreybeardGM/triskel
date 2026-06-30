@@ -1,4 +1,4 @@
-import { consumeSceneDifficulty, getCurrentScene, normalizeDifficultyData, setSceneDifficulty } from "../difficulty/difficulty-service.js";
+import { getCurrentScene, normalizeDifficultyData, setSceneDifficulty } from "../difficulty/difficulty-service.js";
 import { getWidgetHost } from "./widget-host.js";
 
 const WIDGET_CONTAINER_CLASS = "difficulty-widget";
@@ -104,7 +104,7 @@ function addWidget(root) {
       if (!Number.isFinite(value)) return;
       button.disabled = true;
       try {
-        await setSceneDifficulty(value);
+        await setSceneDifficulty(value, { persist: false });
       } finally {
         button.disabled = false;
       }
@@ -153,11 +153,5 @@ export function registerDifficultyWidget() {
     if (scene.id !== getCurrentScene()?.id) return;
     // Keep the displayed value in sync with the scene flag.
     updateDifficultyDisplay(document, getLocalize());
-  });
-
-  Hooks.on("triskelDifficultyUsed", payload => {
-    void consumeSceneDifficulty({ sceneId: payload?.sceneId }).catch(error => {
-      console.error("Triskel | Failed to process triskelDifficultyUsed hook.", error);
-    });
   });
 }
