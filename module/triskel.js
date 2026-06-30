@@ -4,6 +4,7 @@ import { NpcSheet } from "./actor/npc-sheet.js";
 import { TriskelItemSheet } from "./item/triskel-item-sheet.js";
 import { registerTriskelDiceSoNice, registerTriskelDiceTerm } from "./dice/triskel-die-term.js";
 import { registerComplicationRollSettings, registerComplicationRollWidget } from "./ui/gm-complication-roll-widget.js";
+import { registerDifficultyService } from "./difficulty/difficulty-service.js";
 import { registerDifficultyWidget } from "./ui/difficulty-widget.js";
 import { cleanupTriskelTokenBars, drawTriskelTokenBars } from "./token/token-bars.js";
 import {
@@ -73,6 +74,7 @@ Hooks.once("init", function() {
   registerTriskelDiceTerm();
   registerComplicationRollSettings();
   registerComplicationRollWidget();
+  registerDifficultyService();
   registerDifficultyWidget();
 
   Hooks.once("i18nInit", () => {
