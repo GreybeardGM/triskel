@@ -652,7 +652,8 @@
         "QuantityStack": "Stapelbar",
         "TwoHanded": "Zweihändig",
         "Uses": "Verwendungen",
-        "LimitedUse": "Begrenzte Nutzung"
+        "LimitedUse": "Begrenzte Nutzung",
+        "Complexity": "Complexity"
       },
       "Inventory": {
         "Delete": "Gegenstand löschen",
@@ -668,6 +669,22 @@
         "Actions": "Aktionen",
         "Base": "Basis",
         "Spells": "Zauber"
+      },
+      "SpellPreparation": {
+        "Label": "Vorbereitungszustand",
+        "Prepared": {
+          "Label": "Vorbereitet",
+          "Description": "Vorbereitete Zauber sind aktiv und zählen mit ihrer Complexity gegen Will."
+        },
+        "Ritual": {
+          "Label": "Ritual",
+          "Description": "Der Zauber wurde verinnerlicht, aber kann aktuell nur in einem aufwendigen Ritual vollzogen werden."
+        },
+        "Untrained": {
+          "Label": "Untrained",
+          "Description": "Der Zauber wurde noch nicht verinnerlicht und steht noch nicht zur Verfügung."
+        },
+        "InvalidDrop": "Ungültiger Vorbereitungszustand für diesen Zauber."
       }
     },
     "Misc": {

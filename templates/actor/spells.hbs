@@ -5,53 +5,68 @@
 >
   {{#if itemsToDisplay.length}}
     {{#each itemsToDisplay as |category|}}
-      <div class="inventory-category">
-        <h2 class="inventory-category__title">{{category.labelPlural}}</h2>
-        <ul class="inventory-list">
-          {{#if category.collection.length}}
-            {{#each category.collection as |item|}}
-              <li
-                class="inventory-list__item"
-                data-item-id="{{item.id}}"
-              >
-                <button
-                  type="button"
-                  class="inventory-list__toggle is-interactive {{#if item.system.active}}is-selected{{/if}}"
-                  data-action="toggleActiveItem"
-                  data-item-type="{{item.type}}"
-                >
-                  {{#if item.system.active}}
-                    <i class="fa-solid fa-check"></i>
-                  {{/if}}
-                </button>
-                {{#if item.img}}
-                  <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
-                {{else}}
-                  <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+      <div class="inventory-category {{#if category.preparationBuckets.length}}inventory-category--spell-preparations{{/if}}">
+        {{#if category.preparationBuckets.length}}
+          {{#each category.preparationBuckets as |state|}}
+            <div
+              class="inventory-location"
+              style="grid-area: {{state.id}};"
+              data-preparation-state-id="{{state.id}}"
+            >
+              <h2 class="inventory-location__title">
+                <span class="inventory-location__label">
+                  {{localize state.label}}
+                </span>
+                {{#if (and (ne state.loadLimit null) (eq state.loadType "complexity"))}}
+                  <span class="inventory-location__load {{#if state.overburdened}}has-conflict{{/if}}">
+                    {{state.locationLoad}} / {{state.loadLimit}}
+                  </span>
                 {{/if}}
+              </h2>
+              <ul class="inventory-list inventory-list--gear inventory-list--spells">
+                {{#if state.collection.length}}
+                  {{#each state.collection as |item|}}
+                    <li
+                      class="inventory-list__item draggable"
+                      data-item-id="{{item.id}}"
+                    >
+                      <span class="inventory-list__item-label">
+                        {{#if item.img}}
+                          <img class="inventory-list__item-image" src="{{item.img}}" alt="" />
+                        {{else}}
+                          <span class="inventory-list__item-image inventory-list__item-image--placeholder"></span>
+                        {{/if}}
+                        <span class="inventory-list__item-name">{{item.name}}</span>
+                      </span>
+                      <span
+                        class="inventory-list__item-packload"
+                        title="{{localize 'TRISKEL.Item.Field.Complexity'}}"
+                      >
+                        {{#if (gt item.system.complexity 0)}}{{item.system.complexity}}{{/if}}
+                      </span>
+                      <div class="inventory-list__item-actions">
+                        <button type="button" class="inventory-list__item-action" data-action="editItem" title="{{localize 'TRISKEL.Item.Inventory.Edit'}}">
+                          <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button type="button" class="inventory-list__item-action" data-action="deleteItem" title="{{localize 'TRISKEL.Item.Inventory.Delete'}}">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </li>
+                  {{/each}}
+                {{/if}}
+              </ul>
+            </div>
+          {{/each}}
+        {{else}}
+          <ul class="inventory-list">
+            {{#each category.collection as |item|}}
+              <li class="inventory-list__item" data-item-id="{{item.id}}">
                 <span class="inventory-list__item-name">{{item.name}}</span>
-                <div class="inventory-list__item-actions">
-                  <button
-                    type="button"
-                    class="inventory-list__item-action"
-                    data-action="editItem"
-                    title="{{localize 'TRISKEL.Item.Inventory.Edit'}}"
-                  >
-                    <i class="fa-solid fa-pen-to-square"></i>
-                  </button>
-                  <button
-                    type="button"
-                    class="inventory-list__item-action"
-                    data-action="deleteItem"
-                    title="{{localize 'TRISKEL.Item.Inventory.Delete'}}"
-                  >
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                </div>
               </li>
             {{/each}}
-          {{/if}}
-        </ul>
+          </ul>
+        {{/if}}
       </div>
     {{/each}}
   {{/if}}
