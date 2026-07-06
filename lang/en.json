@@ -652,7 +652,8 @@
         "QuantityStack": "Stackable",
         "TwoHanded": "Two-handed",
         "Uses": "Uses",
-        "LimitedUse": "Limited use"
+        "LimitedUse": "Limited use",
+        "Complexity": "Complexity"
       },
       "Inventory": {
         "Delete": "Delete item",
@@ -668,6 +669,22 @@
         "Actions": "Actions",
         "Base": "Base",
         "Spells": "Spells"
+      },
+      "SpellPreparation": {
+        "Label": "Preparation state",
+        "Prepared": {
+          "Label": "Prepared",
+          "Description": "Prepared spells are active and count against Will by complexity."
+        },
+        "Ritual": {
+          "Label": "Ritual",
+          "Description": "Ritual spells are known for ritual use, inactive, and have no size limit."
+        },
+        "Untrained": {
+          "Label": "Untrained",
+          "Description": "Untrained spells are inactive and have no size limit."
+        },
+        "InvalidDrop": "Invalid preparation state for this spell."
       }
     },
     "Misc": {

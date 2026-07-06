@@ -211,6 +211,96 @@ export function getGearCarryLocationOptions(item = null) {
   return options;
 }
 
+/**
+ * Spell-Items nach Vorbereitungszuständen bündeln.
+ *
+ * @param {object|null} spellBucket vorbereiteter Spell-Bucket
+ * @param {object} options
+ * @param {number|null} options.willMax maximale Complexity für vorbereitete Zauber
+ * @returns {object|null} Spell-Bucket mit preparationBuckets
+ */
+export function prepareSpellPreparationBuckets(spellBucket = null, { willMax = null } = {}) {
+  if (!spellBucket || typeof spellBucket !== "object") return spellBucket;
+
+  const preparationDefinitions = toArray(getTriskelCodex().spellPreparationStates);
+  if (!preparationDefinitions.length) {
+    return { ...spellBucket, preparationBuckets: [] };
+  }
+
+  const resolveLoadLimit = (state) => {
+    let loadLimit = state.loadLimit ?? null;
+    if (loadLimit === "will") {
+      const resolvedWillMax = toFiniteNumber(willMax, Number.NaN);
+      loadLimit = Number.isFinite(resolvedWillMax) ? resolvedWillMax : null;
+    }
+    if (typeof loadLimit === "number" && !Number.isFinite(loadLimit)) {
+      loadLimit = null;
+    }
+    return loadLimit;
+  };
+
+  const preparationBuckets = [];
+  const preparationBucketsById = {};
+  for (const state of preparationDefinitions) {
+    if (!state?.id) continue;
+    const usesComplexityLoad = state.loadType === "complexity";
+    const bucket = {
+      ...state,
+      collection: [],
+      locationLoad: usesComplexityLoad ? 0 : null,
+      loadLimit: resolveLoadLimit(state),
+      overburdened: false
+    };
+    preparationBuckets.push(bucket);
+    preparationBucketsById[state.id] = bucket;
+  }
+
+  const fallbackStateId = preparationBucketsById.untrained
+    ? "untrained"
+    : (preparationBuckets[0]?.id ?? null);
+  const spellItems = toArray(spellBucket.collection);
+
+  for (const item of spellItems) {
+    const requestedStateId = normalizeKeyword(item?.system?.preparationState ?? "", "");
+    const bucket = preparationBucketsById[requestedStateId] ?? preparationBucketsById[fallbackStateId];
+    if (!bucket) continue;
+
+    bucket.collection.push(item);
+
+    if (bucket.locationLoad !== null) {
+      bucket.locationLoad += toFiniteNumber(item?.system?.complexity, 1);
+    }
+
+    if (bucket.loadLimit !== null) {
+      bucket.overburdened = (bucket.locationLoad ?? 0) > bucket.loadLimit;
+    }
+  }
+
+  return { ...spellBucket, preparationBuckets };
+}
+
+/**
+ * Verfügbare Vorbereitungszustände für ein Spell-Item bestimmen.
+ *
+ * @param {object|null} item Spell-Item
+ * @returns {Array<object>} Liste mit gültigen Zuständen
+ */
+export function getSpellPreparationStateOptions(item = null) {
+  if (item?.type && item.type !== "spell") return [];
+
+  const preparationStates = toArray(getTriskelCodex().spellPreparationStates);
+  if (!preparationStates.length) return [];
+
+  const currentState = normalizeKeyword(item?.system?.preparationState ?? "");
+  return preparationStates
+    .filter(state => state?.id)
+    .map(state => ({
+      ...state,
+      id: normalizeKeyword(state.id),
+      isSelected: normalizeKeyword(state.id) === currentState
+    }));
+}
+
 // ---------------------------------------------------------------------------
 // Action/keyword preparation
 // ---------------------------------------------------------------------------
@@ -389,6 +479,7 @@ export function prepareGearTabContext(actor = null, partId = null) {
   if (!["gear", "spells"].includes(partId)) return {};
 
   const powerMax = toFiniteNumber(actor?.system?.reserves?.power?.max, Number.NaN);
+  const willMax = toFiniteNumber(actor?.system?.reserves?.will?.max, Number.NaN);
   const selectedTypesByPart = {
     gear: ["gear"],
     spells: ["spell"]
@@ -399,6 +490,12 @@ export function prepareGearTabContext(actor = null, partId = null) {
     itemsToDisplay = itemsToDisplay.map(category => {
       if (category?.id !== "gear") return category;
       return prepareGearLocationBuckets(category, { powerMax });
+    });
+  }
+  if (partId === "spells" && Array.isArray(itemsToDisplay)) {
+    itemsToDisplay = itemsToDisplay.map(category => {
+      if (category?.id !== "spell") return category;
+      return prepareSpellPreparationBuckets(category, { willMax });
     });
   }
   return {

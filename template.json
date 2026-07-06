@@ -171,7 +171,9 @@
       "spell": {
         "templates": [
           "base"
-        ]
+        ],
+        "complexity": 1,
+        "preparationState": "untrained"
       }
     }
   }

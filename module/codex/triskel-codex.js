@@ -130,6 +130,36 @@ export const TRISKEL_CARRY_LOCATIONS = [
   }
 ];
 
+export const TRISKEL_SPELL_PREPARATION_STATES = [
+  {
+    id: "prepared",
+    label: "TRISKEL.Item.SpellPreparation.Prepared.Label",
+    description: "TRISKEL.Item.SpellPreparation.Prepared.Description",
+    defaultActive: true,
+    icon: "fa-solid fa-book-open",
+    loadType: "complexity",
+    loadLimit: "will"
+  },
+  {
+    id: "ritual",
+    label: "TRISKEL.Item.SpellPreparation.Ritual.Label",
+    description: "TRISKEL.Item.SpellPreparation.Ritual.Description",
+    defaultActive: false,
+    icon: "fa-solid fa-circle-nodes",
+    loadType: "none",
+    loadLimit: null
+  },
+  {
+    id: "untrained",
+    label: "TRISKEL.Item.SpellPreparation.Untrained.Label",
+    description: "TRISKEL.Item.SpellPreparation.Untrained.Description",
+    defaultActive: false,
+    icon: "fa-solid fa-book",
+    loadType: "none",
+    loadLimit: null
+  }
+];
+
 export const TRISKEL_GEAR_ARCHETYPES = [
   {
     id: "held",
@@ -518,6 +548,7 @@ export const { codex: TRISKEL_CODEX, index: TRISKEL_CODEX_INDEX } = createCodexC
   itemCategories: TRISKEL_ITEM_CATEGORIES,
   actionCategories: TRISKEL_ACTION_CATEGORIES,
   carryLocations: TRISKEL_CARRY_LOCATIONS,
+  spellPreparationStates: TRISKEL_SPELL_PREPARATION_STATES,
   gearArchetypes: TRISKEL_GEAR_ARCHETYPES,
   skillCategories: TRISKEL_SKILL_CATEGORIES,
   skills: TRISKEL_SKILLS,
@@ -539,6 +570,7 @@ export const TRISKEL_TIERS_BY_ID = TRISKEL_CODEX_INDEX.tiers;
 export const TRISKEL_ITEM_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.itemCategories;
 export const TRISKEL_ACTION_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.actionCategories;
 export const TRISKEL_CARRY_LOCATIONS_BY_ID = TRISKEL_CODEX_INDEX.carryLocations;
+export const TRISKEL_SPELL_PREPARATION_STATES_BY_ID = TRISKEL_CODEX_INDEX.spellPreparationStates;
 export const TRISKEL_GEAR_ARCHETYPES_BY_ID = TRISKEL_CODEX_INDEX.gearArchetypes;
 export const TRISKEL_SKILL_CATEGORIES_BY_ID = TRISKEL_CODEX_INDEX.skillCategories;
 export const TRISKEL_SKILLS_BY_ID = TRISKEL_CODEX_INDEX.skills;

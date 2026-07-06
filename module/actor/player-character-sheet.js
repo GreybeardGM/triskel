@@ -2,6 +2,7 @@ import {
   getTriskelCodex,
   getTriskelIndex,
   getGearCarryLocationOptions,
+  getSpellPreparationStateOptions,
   getActionBucket,
   asHTMLElement,
   getItemFromTarget,
@@ -72,6 +73,31 @@ async function updateItemCarryLocation(sheet, item, locationId) {
     });
   }
   await sheet.render({ parts: ["gear"] });
+  return true;
+}
+
+async function updateSpellPreparationState(sheet, item, stateId) {
+  if (!sheet || !item || !stateId) return false;
+
+  const stateOptions = getSpellPreparationStateOptions(item);
+  const selectedState = stateOptions.find(option => option.id === stateId) ?? null;
+  if (!selectedState) return false;
+  const active = Boolean(selectedState?.defaultActive);
+
+  const actor = sheet.document;
+  if (actor?.updateEmbeddedDocuments) {
+    await actor.updateEmbeddedDocuments("Item", [{
+      _id: item.id,
+      "system.preparationState": stateId,
+      "system.active": active
+    }]);
+  } else {
+    await item.update({
+      "system.preparationState": stateId,
+      "system.active": active
+    });
+  }
+  await sheet.render({ parts: ["spells"] });
   return true;
 }
 
@@ -407,7 +433,7 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   _onGearDragOver(event) {
     super._onDragOver?.(event);
-    const location = event.target?.closest?.(".inventory-location[data-carry-location-id]");
+    const location = event.target?.closest?.(".inventory-location[data-carry-location-id], .inventory-location[data-preparation-state-id]");
     if (!location) {
       if (this._activeDropLocation) {
         this._activeDropLocation.classList.remove("is-drop-target");
@@ -415,11 +441,11 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
       }
       return;
     }
-    const locationId = normalizeKeyword(location.dataset.carryLocationId ?? "", "");
+    const locationId = normalizeKeyword(location.dataset.carryLocationId ?? location.dataset.preparationStateId ?? "", "");
     const draggedItem = this._draggedGearItemId
       ? this.document?.items?.get(this._draggedGearItemId)
       : null;
-    const isValidTarget = this._isValidCarryLocationForItem(draggedItem, locationId);
+    const isValidTarget = this._isValidInventoryLocationForItem(draggedItem, locationId);
     if (!isValidTarget) {
       if (this._activeDropLocation) {
         this._activeDropLocation.classList.remove("is-drop-target");
@@ -439,14 +465,14 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   async _onGearDrop(event) {
-    const location = event.target?.closest?.(".inventory-location[data-carry-location-id]");
+    const location = event.target?.closest?.(".inventory-location[data-carry-location-id], .inventory-location[data-preparation-state-id]");
     if (!location) {
       this._clearDragState();
       return super._onDrop?.(event);
     }
 
     event.preventDefault();
-    const droppedLocationId = normalizeKeyword(location.dataset.carryLocationId ?? "", "");
+    const droppedLocationId = normalizeKeyword(location.dataset.carryLocationId ?? location.dataset.preparationStateId ?? "", "");
     const { itemId: movedItemId, actorId: sourceActorId } = this._extractGearMoveData(event);
 
     if (!droppedLocationId || !movedItemId) {
@@ -456,16 +482,20 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const isSameActorMove = !sourceActorId || sourceActorId === this.document?.id;
     const item = isSameActorMove ? this.document?.items?.get(movedItemId) : null;
-    if (!item || item.type !== "gear") {
+    if (!item || !["gear", "spell"].includes(item.type)) {
       this._clearDragState();
       return super._onDrop?.(event);
     }
 
-    const wasUpdated = await updateItemCarryLocation(this, item, droppedLocationId);
+    const wasUpdated = item.type === "spell"
+      ? await updateSpellPreparationState(this, item, droppedLocationId)
+      : await updateItemCarryLocation(this, item, droppedLocationId);
     if (!wasUpdated) {
       ui.notifications?.warn?.(
-        game.i18n?.localize?.("TRISKEL.Item.CarryLocation.InvalidDrop")
-        ?? "Ungültiger Trageort für dieses Item."
+        (item.type === "spell"
+          ? game.i18n?.localize?.("TRISKEL.Item.SpellPreparation.InvalidDrop")
+          : game.i18n?.localize?.("TRISKEL.Item.CarryLocation.InvalidDrop"))
+        ?? "Ungültiger Zielbereich für dieses Item."
       );
     }
     this._clearDragState();
@@ -518,10 +548,17 @@ export class PlayerCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV
     return { itemId, actorId, isValid };
   }
 
-  _isValidCarryLocationForItem(item, locationId) {
-    if (!item || item.type !== "gear" || !locationId) return false;
-    const locationOptions = getGearCarryLocationOptions(item);
-    return locationOptions.some(option => option.id === locationId);
+  _isValidInventoryLocationForItem(item, locationId) {
+    if (!item || !locationId) return false;
+    if (item.type === "gear") {
+      const locationOptions = getGearCarryLocationOptions(item);
+      return locationOptions.some(option => option.id === locationId);
+    }
+    if (item.type === "spell") {
+      const stateOptions = getSpellPreparationStateOptions(item);
+      return stateOptions.some(option => option.id === locationId);
+    }
+    return false;
   }
 
   // -- Rendering ------------------------------------------------------------

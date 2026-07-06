@@ -573,6 +573,14 @@
     "camp";
 }
 
+.triskel .inventory-category--spell-preparations {
+  display: grid;
+  grid-template-areas:
+    "prepared"
+    "ritual"
+    "untrained";
+}
+
 .triskel .inventory-location__title {
   display: flex;
   align-items: center;

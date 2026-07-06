@@ -93,3 +93,23 @@
     </div>
   </div>
 </section>
+<section
+  class="tab item-panel {{tabs.base.id}} {{tabs.base.cssClass}} {{#unless isSpellType}}is-hidden{{/unless}}"
+  data-tab="{{tabs.base.id}}"
+  data-group="{{tabs.base.group}}"
+>
+  <h2>{{localize "TRISKEL.Item.SpellPreparation.Label"}}</h2>
+  <div class="form-group">
+    <label for="spell-complexity">{{localize "TRISKEL.Item.Field.Complexity"}}</label>
+    <div class="form-fields">
+      <input
+        id="spell-complexity"
+        type="number"
+        name="system.complexity"
+        value="{{system.complexity}}"
+        min="0"
+        step="1"
+      />
+    </div>
+  </div>
+</section>
