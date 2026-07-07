@@ -1,8 +1,9 @@
 <section
-  class="tab item-panel {{tabs.base.id}} {{tabs.base.cssClass}} {{#unless isGearType}}is-hidden{{/unless}}"
+  class="tab item-panel {{tabs.base.id}} {{tabs.base.cssClass}}"
   data-tab="{{tabs.base.id}}"
   data-group="{{tabs.base.group}}"
 >
+  {{#if isGearType}}
   <h2>{{localize "TRISKEL.Item.Archetype.Label"}}</h2>
   <div class="form-group">
     <label for="gear-archetype-select">{{localize "TRISKEL.Item.Archetype.Label"}}</label>
@@ -92,12 +93,8 @@
       />
     </div>
   </div>
-</section>
-<section
-  class="tab item-panel {{tabs.base.id}} {{tabs.base.cssClass}} {{#unless isSpellType}}is-hidden{{/unless}}"
-  data-tab="{{tabs.base.id}}"
-  data-group="{{tabs.base.group}}"
->
+  {{else}}
+  {{#if isSpellType}}
   <h2>{{localize "TRISKEL.Item.SpellPreparation.Label"}}</h2>
   <div class="form-group">
     <label for="spell-complexity">{{localize "TRISKEL.Item.Field.Complexity"}}</label>
@@ -112,4 +109,6 @@
       />
     </div>
   </div>
+  {{/if}}
+  {{/if}}
 </section>
