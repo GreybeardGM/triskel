@@ -307,14 +307,14 @@ export const TRISKEL_ADVANCED_ACTIONS = [
   {
     id: "loadArrow",
     label: "TRISKEL.Action.Advanced.LoadArrow.Label",
-    type: "impact",
+    type: "setup",
     category: "combat",
     skill: null,
     reserve: null,
     cost: 0,
     range: "ranged_weapon",
     description: "TRISKEL.Action.Advanced.LoadArrow.Description",
-    keywords: ["action", "ranged", "archery", "load"]
+    keywords: ["setup", "ranged", "archery", "load"]
   },
   {
     id: "raiseShield",
