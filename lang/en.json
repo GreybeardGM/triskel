@@ -31,7 +31,7 @@
           "Label": "Quick Load"
         },
         "RaiseShield": {
-          "Description": "Raise a shield as a Setup action to gain +1 Guard and +1 Evasion.",
+          "Description": "Raise a shield as a Setup action to gain Fortified 1.",
           "Label": "Raise Shield"
         },
         "Shoot": {
@@ -61,7 +61,7 @@
           "Label": "Expose"
         },
         "Grapple": {
-          "Description": "Seize a foe within reach with Control and Power.",
+          "Description": "Seize a foe within reach with Control and Power. [0] Pinned; [3] Grabbed.",
           "Label": "Grapple"
         },
         "HoldTheLine": {
@@ -113,7 +113,7 @@
           "Label": "Switchgear"
         },
         "TakeCover": {
-          "Description": "Move into available cover.",
+          "Description": "Move into available cover and gain Cover equal to the terrain modifier.",
           "Label": "Take Cover"
         },
         "TraverseHazard": {
@@ -490,42 +490,22 @@
         "Label": "Convictions",
         "Virtue": {
           "Description": "Discipline, constancy, self-control, moral resolve, and civilized order.",
-          "Label": "Virtue",
-          "Steps": {
-            "Constancy": "Constancy",
-            "Discipline": "Discipline",
-            "Integrity": "Integrity"
-          }
+          "Label": "Virtue"
         },
         "Reverence": {
           "Description": "Awe, boundaries, taboos, protection, older powers, nature, spirits, and places.",
-          "Label": "Reverence",
-          "Steps": {
-            "Presence": "Presence",
-            "Renewal": "Renewal",
-            "Stewardship": "Stewardship"
-          }
+          "Label": "Reverence"
         }
       },
       "Corruption": {
         "Label": "Corruption",
         "Vice": {
           "Description": "Infernal corruption through temptation, self-justification, entanglement, guilt, bargains, status, possessions, relationships, reputation, and dependence.",
-          "Label": "Vice",
-          "Steps": {
-            "Decay": "Decay",
-            "Depravity": "Depravity",
-            "Indulgence": "Indulgence"
-          }
+          "Label": "Vice"
         },
         "Ruin": {
           "Description": "Abyssal corruption through destruction, desecration, hunger, dissolution, mutation, loss of control, and damnation.",
-          "Label": "Ruin",
-          "Steps": {
-            "Desire": "Desire",
-            "Despair": "Despair",
-            "Righteousness": "Righteousness"
-          }
+          "Label": "Ruin"
         }
       }
     },
@@ -545,7 +525,7 @@
     },
     "Form": {
       "BreakStance": {
-        "Description": "Spend 1 Power to turn a Strike into a stance-breaking blow.",
+        "Description": "Spend 1 Power to reduce a status effect by 1 per success.",
         "Label": "Break Stance"
       },
       "Counterguard": {
@@ -597,7 +577,7 @@
         "Label": "Warding Runes"
       },
       "ShieldPull": {
-        "Description": "Spend 1 Grace to gain +2 when binding or opening an opponent's shield or cover.",
+        "Description": "Spend 1 Grace to gain +2 Expose by opening an opponent's shield or cover.",
         "Label": "Shield Pull"
       },
       "TrippingHook": {
