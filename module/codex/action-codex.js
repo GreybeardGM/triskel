@@ -307,14 +307,14 @@ export const TRISKEL_ADVANCED_ACTIONS = [
   {
     id: "loadArrow",
     label: "TRISKEL.Action.Advanced.LoadArrow.Label",
-    type: "setup",
+    type: "impact",
     category: "combat",
     skill: null,
     reserve: null,
     cost: 0,
     range: "ranged_weapon",
     description: "TRISKEL.Action.Advanced.LoadArrow.Description",
-    keywords: ["setup", "ranged", "archery", "load"]
+    keywords: ["action", "ranged", "archery", "load"]
   },
   {
     id: "raiseShield",
@@ -350,10 +350,22 @@ export const TRISKEL_SPELLS = [
     category: "spell",
     skill: "manifest",
     reserve: "will",
-    cost: 1,
-    range: "near",
+    cost: 2,
+    range: "near_target",
     description: "TRISKEL.Action.Spell.Arc.Description",
     keywords: ["spell", "arcane", "action", "manifestation", "lightning"]
+  },
+  {
+    id: "fireball",
+    label: "TRISKEL.Action.Spell.Fireball.Label",
+    type: "impact",
+    category: "spell",
+    skill: "manifest",
+    reserve: "will",
+    cost: 4,
+    range: "far_zone",
+    description: "TRISKEL.Action.Spell.Fireball.Description",
+    keywords: ["spell", "arcane", "action", "manifestation", "fire"]
   },
   {
     id: "glue",
@@ -362,8 +374,8 @@ export const TRISKEL_SPELLS = [
     category: "spell",
     skill: "manifest",
     reserve: "will",
-    cost: 3,
-    range: "near",
+    cost: 2,
+    range: "near_zone",
     description: "TRISKEL.Action.Spell.Glue.Description",
     keywords: ["spell", "arcane", "action", "manifestation"]
   },
@@ -372,10 +384,10 @@ export const TRISKEL_SPELLS = [
     label: "TRISKEL.Action.Spell.DancingLight.Label",
     type: "setup",
     category: "spell",
-    skill: "manifest",
+    skill: null,
     reserve: "will",
     cost: 1,
-    range: "near",
+    range: "self_or_close_target",
     description: "TRISKEL.Action.Spell.DancingLight.Description",
     keywords: ["spell", "arcane", "setup", "manifestation", "light"]
   },
@@ -386,8 +398,8 @@ export const TRISKEL_SPELLS = [
     category: "spell",
     skill: "manifest",
     reserve: "will",
-    cost: 0,
-    range: "near",
+    cost: 1,
+    range: "near_target",
     description: "TRISKEL.Action.Spell.Prestidigitation.Description",
     keywords: ["spell", "arcane", "action", "manifestation", "utility"]
   },
@@ -398,19 +410,20 @@ export const TRISKEL_SPELLS = [
     category: "spell",
     skill: "compel",
     reserve: "will",
-    cost: 3,
-    range: "self",
+    cost: 2,
+    range: "near_zone",
     description: "TRISKEL.Action.Spell.RebukeEvil.Description",
-    keywords: ["spell", "divine", "action", "transposition"]
+    keywords: ["spell", "divine", "action", "compel"]
   },
   {
     id: "protectivePrayer",
     label: "TRISKEL.Action.Spell.ProtectivePrayer.Label",
     type: "setup",
     category: "spell",
+    skill: null,
     reserve: "will",
-    cost: 2,
-    range: "near",
+    cost: 1,
+    range: "close_target",
     description: "TRISKEL.Action.Spell.ProtectivePrayer.Description",
     keywords: ["spell", "divine", "setup", "warding"]
   },
@@ -419,12 +432,48 @@ export const TRISKEL_SPELLS = [
     label: "TRISKEL.Action.Spell.Sanctify.Label",
     type: "setup",
     category: "spell",
-    skill: "ward",
+    skill: null,
     reserve: "will",
     cost: 1,
     range: "touch",
     description: "TRISKEL.Action.Spell.Sanctify.Description",
     keywords: ["spell", "divine", "setup", "warding", "cleansing"]
+  },
+  {
+    id: "blessing",
+    label: "TRISKEL.Action.Spell.Blessing.Label",
+    type: "impact",
+    category: "spell",
+    skill: null,
+    reserve: "will",
+    cost: 3,
+    range: "near_zone",
+    description: "TRISKEL.Action.Spell.Blessing.Description",
+    keywords: ["spell", "divine", "action", "favour", "focus"]
+  },
+  {
+    id: "bountifulBloom",
+    label: "TRISKEL.Action.Spell.BountifulBloom.Label",
+    type: "setup",
+    category: "spell",
+    skill: null,
+    reserve: "will",
+    cost: 1,
+    range: "close_zone",
+    description: "TRISKEL.Action.Spell.BountifulBloom.Description",
+    keywords: ["spell", "divine", "setup", "plants", "cover"]
+  },
+  {
+    id: "allmothersFavour",
+    label: "TRISKEL.Action.Spell.AllmothersFavour.Label",
+    type: "setup",
+    category: "spell",
+    skill: null,
+    reserve: "will",
+    cost: 1,
+    range: "close_target",
+    description: "TRISKEL.Action.Spell.AllmothersFavour.Description",
+    keywords: ["spell", "divine", "setup", "favour", "hernia"]
   }
 ];
 

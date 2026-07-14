@@ -95,7 +95,7 @@ export const TRISKEL_FORMS = [
     label: "TRISKEL.Form.ShieldPull.Label",
     cost: 1,
     reserve: "grace",
-    keyword: "bind",
+    keyword: "expose",
     modifier: { skill: 2 },
     description: "TRISKEL.Form.ShieldPull.Description"
   },

@@ -479,23 +479,13 @@ export const TRISKEL_CONVICTIONS = [
     id: "virtue",
     label: "TRISKEL.Actor.Conviction.Virtue.Label",
     description: "TRISKEL.Actor.Conviction.Virtue.Description",
-    tags: ["Good", "Moralistic"],
-    steps: [
-      { tier: 1, label: "TRISKEL.Actor.Conviction.Virtue.Steps.Discipline" },
-      { tier: 2, label: "TRISKEL.Actor.Conviction.Virtue.Steps.Constancy" },
-      { tier: 3, label: "TRISKEL.Actor.Conviction.Virtue.Steps.Integrity" }
-    ]
+    tags: ["Good", "Moralistic"]
   },
   {
     id: "reverence",
     label: "TRISKEL.Actor.Conviction.Reverence.Label",
     description: "TRISKEL.Actor.Conviction.Reverence.Description",
-    tags: ["Good", "Naturalistic"],
-    steps: [
-      { tier: 1, label: "TRISKEL.Actor.Conviction.Reverence.Steps.Presence" },
-      { tier: 2, label: "TRISKEL.Actor.Conviction.Reverence.Steps.Stewardship" },
-      { tier: 3, label: "TRISKEL.Actor.Conviction.Reverence.Steps.Renewal" }
-    ]
+    tags: ["Good", "Naturalistic"]
   }
 ];
 
@@ -504,23 +494,13 @@ export const TRISKEL_CORRUPTION = [
     id: "vice",
     label: "TRISKEL.Actor.Corruption.Vice.Label",
     description: "TRISKEL.Actor.Corruption.Vice.Description",
-    tags: ["Evil", "Moralistic"],
-    steps: [
-      { tier: 1, label: "TRISKEL.Actor.Corruption.Vice.Steps.Indulgence" },
-      { tier: 2, label: "TRISKEL.Actor.Corruption.Vice.Steps.Decay" },
-      { tier: 3, label: "TRISKEL.Actor.Corruption.Vice.Steps.Depravity" }
-    ]
+    tags: ["Evil", "Moralistic"]
   },
   {
     id: "ruin",
     label: "TRISKEL.Actor.Corruption.Ruin.Label",
     description: "TRISKEL.Actor.Corruption.Ruin.Description",
-    tags: ["Evil", "Naturalistic"],
-    steps: [
-      { tier: 1, label: "TRISKEL.Actor.Corruption.Ruin.Steps.Desire" },
-      { tier: 2, label: "TRISKEL.Actor.Corruption.Ruin.Steps.Despair" },
-      { tier: 3, label: "TRISKEL.Actor.Corruption.Ruin.Steps.Righteousness" }
-    ]
+    tags: ["Evil", "Naturalistic"]
   }
 ];
 

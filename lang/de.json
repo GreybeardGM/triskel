@@ -23,101 +23,101 @@
     "Action": {
       "Advanced": {
         "LoadArrow": {
-          "Description": "Der Charakter legt einen neuen Pfeil auf und spannt die Bogensehne.",
+          "Description": "Lege als Wirkungsaktion einen neuen Pfeil auf und spanne die Bogensehne.",
           "Label": "Pfeil auflegen"
         },
         "QuickLoad": {
-          "Description": "Mit dem Schnellspanner einer Armbrust spannt der Charakter die Sehne und bereitet den nächsten Bolzen vor.",
-          "Label": "Schnellspannen"
+          "Description": "Nutze als Ansatzaktion den Schnellspanner einer Armbrust, um die Sehne zu spannen und den nächsten Bolzen vorzubereiten.",
+          "Label": "Schnellladen"
         },
         "RaiseShield": {
-          "Description": "Der Charakter positioniert seinen Schild gegen Nah- und Fernkampfangriffe.",
+          "Description": "Hebe als Ansatzaktion einen Schild, um Gefestigt 1 zu erhalten.",
           "Label": "Schild heben"
         },
         "Shoot": {
-          "Description": "Löst einen gezielten Fernangriff mit Ziel und Timing aus.",
+          "Description": "Führe einen Fernkampfangriff mit Zielen und Anmut aus.",
           "Label": "Schießen"
         },
         "Throw": {
-          "Description": "Schleudert eine Waffe oder ein Objekt, um aus der Distanz zu treffen.",
+          "Description": "Schleudere eine Waffe oder einen Gegenstand mit Zielen und Kraft.",
           "Label": "Werfen"
         }
       },
       "Base": {
         "Brace": {
-          "Description": "Nimmt eine feste Haltung ein; verringert eingehende Kontrolleffekte.",
+          "Description": "Widerstehe Wucht, Verschiebung oder Kontrolle mit Standhalten und Kraft.",
           "Label": "Standhalten"
         },
         "Break": {
-          "Description": "Schüttelt negative Zustände ab; reduziert Gebunden, Offen oder Zurückgedrängt.",
+          "Description": "Verringere Gebunden, Offen oder Zurückgedrängt mit Standhalten und Kraft.",
           "Label": "Lösen"
         },
         "Evade": {
-          "Description": "Der Charakter verteidigt sich, indem er sich aus der Angriffslinie bewegt.",
+          "Description": "Entgehe einem Angriff mit Ausweichen und Anmut.",
           "Label": "Ausweichen"
         },
         "Expose": {
-          "Description": "Erzwingt eine Lücke in der Verteidigung des Gegners und verhängt Offen(X).",
+          "Description": "Öffne mit Kontrolle und Anmut eine Lücke in der Verteidigung eines Gegners und verhänge Offen.",
           "Label": "Öffnen"
         },
         "Grapple": {
-          "Description": "Unbewaffnetes Greifen des Gegners.",
+          "Description": "Greife einen Gegner in Reichweite mit Kontrolle und Kraft. [0] Festgesetzt; [3] Gepackt.",
           "Label": "Ringen"
         },
         "HoldTheLine": {
-          "Description": "Der Charakter positioniert sich im Weg seiner Gegner. Bis zu seiner nächsten Aktivierung kann der Charakter Nahkampfangriffe auf sich lenken, darf aber nicht mehr ausweichen.",
+          "Description": "Blockiere den Weg des Gegners. Bis zu deiner nächsten Aktivierung darfst du Nahkampfangriffe auf dich lenken, aber nicht ausweichen.",
           "Label": "Linie halten"
         },
         "Grit": {
-          "Description": "Eine reflexhafte Abhärtung, die sich auf die körperliche Robustheit stützt.",
+          "Description": "Widerstehe Schmerz, Gift oder körperlicher Härte durch Zähigkeit.",
           "Label": "Zähigkeit"
         },
         "Guard": {
-          "Description": "Der Charakter verteidigt sich, indem er den Angriff abfängt oder umleitet.",
+          "Description": "Fange einen Angriff mit Parade und Anmut ab oder lenke ihn um.",
           "Label": "Parade"
         },
         "Unleash": {
-          "Description": "Verbrauche den gesamten aktuellen Favour-Vorrat über Ehrfurcht. Ehrfurcht begrenzt die Konvertierung.",
+          "Description": "Kanalisiere Wildheit und alte Mächte. Addiere den niedrigeren Wert aus aktuellem Favour und Ehrfurcht auf deinen folgenden Wirkungswurf und setze Favour danach auf 0.",
           "Label": "Entfesseln"
         },
         "Focus": {
-          "Description": "Verbrauche den gesamten aktuellen Favour-Vorrat über Tugend. Tugend begrenzt die Konvertierung.",
+          "Description": "Kanalisiere Disziplin und innere Ordnung. Stelle nach deiner folgenden Wirkungsaktion Reserven in Höhe des niedrigeren Werts aus aktuellem Favour und Tugend wieder her und verteile sie frei, bevor durch die Action ausgelöster Strain markiert wird. Setze Favour danach auf 0.",
           "Label": "Fokus"
         },
         "Move": {
-          "Description": "Du bewegst dich in eine neue Region des Schlachtfelds.",
+          "Description": "Bewege dich in eine andere gültige Zone.",
           "Label": "Bewegen"
         },
         "Push": {
-          "Description": "Drängt den Gegner zurück und verhängt Zurückgedrängt(X).",
+          "Description": "Dränge einen Gegner mit Schlag und Kraft zurück und verhänge Zurückgedrängt.",
           "Label": "Stoßen"
         },
         "Resolve": {
-          "Description": "Ein mentaler Ruck, der die Entschlossenheit des Charakters festigt.",
+          "Description": "Widerstehe Furcht, Einfluss oder Verzweiflung durch Entschlossenheit.",
           "Label": "Willenskraft"
         },
         "SecurePassage": {
-          "Description": "Stabilisiert oder räumt den Weg, damit andere sicher passieren können.",
+          "Description": "Nutze eine Wirkungsaktion, um einen Weg zu sichern oder freizuräumen, damit andere ihn gefahrlos passieren können.",
           "Label": "Weg sichern"
         },
         "Snap": {
-          "Description": "Schnelle instinktive Reaktionen auf plötzliche Bedrohungen.",
+          "Description": "Reagiere mit einem unmittelbaren Reflex auf eine plötzliche Bedrohung.",
           "Label": "Reflex"
         },
         "Strike": {
-          "Description": "Direkter Angriff. Zusätzliche Kraft erhöht die Wucht.",
+          "Description": "Führe einen Nahkampfangriff mit Schlag und Kraft aus.",
           "Label": "Schlag"
         },
         "Switchgear": {
-          "Description": "Der Charakter wechselt die geführten Gegenstände.",
+          "Description": "Tausche als Ansatzaktion gehaltene Gegenstände gegen Ausrüstung in Bereit.",
           "Label": "Wechseln"
         },
         "TakeCover": {
-          "Description": "Du machst dich klein und bewegst dich in eine nahegelegene Deckung.",
+          "Description": "Bewege dich in verfügbare Deckung und erhalte Deckung in Höhe des Geländemodifikators.",
           "Label": "In Deckung gehen"
         },
         "TraverseHazard": {
-          "Description": "Eile durch ein gefährliches Hindernis.",
+          "Description": "Durchquere eine Gefahr sicher mit Athletik und Anmut.",
           "Label": "Gefahr durchqueren"
         }
       },
@@ -135,49 +135,65 @@
       },
       "Spell": {
         "Arc": {
-          "Description": "Triff ein Ziel mit einem kurzen Lichtbogen. Das Ziel widersteht mit Reflex.\nSkalierung: [1] Beeinträchtigt +1; [4] Schaden +1",
+          "Description": "Triff ein Ziel mit einem kurzen Lichtbogen. Das Ziel widersteht mit Reflex.\nEffekt: [1] Beeinträchtigt +1; [4] Schaden +1.",
           "Label": "Lichtbogen"
         },
+        "Fireball": {
+          "Description": "Manifestiere heiße Flammen in einer ganzen Zone. Die Flammen entzünden nur leicht brennbares Material und erlöschen sonst sofort.\nEffekt: [1] Schaden 1 +1/2.",
+          "Label": "Feuerball"
+        },
         "Glue": {
-          "Description": "Erzeuge einen kleinen Bereich aus haftender Flüssigkeit.\nSkalierung: [1] Beeinträchtigt 1; [3] Festgesetzt; [5] Fixiert",
+          "Description": "Erzeuge einen kleinen Bereich aus haftender Flüssigkeit.\nEffekt: [1] Beeinträchtigt 1; [3] Festgesetzt; [5] Fixiert.",
           "Label": "Leim"
         },
         "DancingLight": {
-          "Description": "Du erschaffst ein schwebendes Licht, das dir oder einem willigen Verbündeten folgt. Für 1 zusätzlichen Willen kannst du es stattdessen anweisen, einer anderen Kreatur zu folgen oder sich zu einem Punkt in Sichtweite zu bewegen.\nDauer: Bis zur nächsten Verschnaufpause",
+          "Description": "Erschaffe ein schwebendes Licht, das dir oder einem willigen Verbündeten folgt. Für 1 zusätzlichen Willen kannst du es einer anderen Kreatur folgen oder zu einem Punkt in Sichtweite bewegen lassen.\nDauer: bis zur nächsten Atempause.",
           "Label": "Tanzendes Licht"
         },
         "Prestidigitation": {
-          "Description": "Du erzeugst eine kleine, breit nützliche magische Wirkung: Funken, einen scharfen Knall, einen kurzen Geruch, ein grobes Bild oder einen einfachen Gegenstand. Die Wirkung ist nicht gefährlicher als ein kleiner Knallkörper, nicht überzeugender als eine Wachsmalzeichnung und nicht haltbarer als Modelliermasse.\n\nVor dem Wirken kannst du Willen ausgeben. Der Zauber kann nicht mehr Erfolge erzeugen als den auf diese Weise ausgegebenen Willen. Wenn keine Erfolge erforderlich sind, gelingt er automatisch.",
+          "Description": "Erzeuge eine kleine magische Wirkung: Funken, einen scharfen Knall, einen kurzen Geruch, ein grobes Bild oder einen einfachen Gegenstand. Sie ist nicht gefährlicher als ein Knallkörper, überzeugender als eine Wachsmalzeichnung oder haltbarer als Modelliermasse. Vor dem Wirken kannst du Wille ausgeben; der Zauber kann nicht mehr Erfolge erzeugen als den ausgegebenen Wille. Sind keine Erfolge nötig, gelingt er automatisch.",
           "Label": "Zaubertrick"
         },
         "ProtectivePrayer": {
-          "Description": "Verleihe einem Verbündeten für eine Runde Gefestigt. Jeder ausgegebene Punkt Willenskraft erhöht Gefestigt um 1, bis zu deinem Tier.",
+          "Description": "Verleihe einem Verbündeten für eine Runde Gefestigt. Jeder ausgegebene Punkt Wille erhöht Gefestigt um 1, bis zu deinem Tier. Eine freie Hand ist nicht erforderlich.",
           "Label": "Schutzgebet"
         },
         "Sanctify": {
-          "Description": "Reinige eine Kreatur oder einen Gegenstand von Schmutz, üblen Gerüchen oder Nässe. Eine Kreatur, die von einer Substanz bedeckt ist, wird sofort davon befreit. Wenn du dafür etwas Gefährliches berühren musst – etwa Säure, brennendes Öl oder giftigen Schleim –, erleidest du einmal die Wirkung dieser Substanz, bevor die Reinigung greift.\n\nWird der Zauber auf eine verfluchte Kreatur oder einen verfluchten Gegenstand gewirkt, schlägt er auf unmittelbar bemerkbare Weise fehl.",
+          "Description": "Reinige eine Kreatur oder einen Gegenstand von Schmutz, üblen Gerüchen oder Nässe. Eine bedeckte Kreatur wird von der Substanz befreit. Ist deren Berührung gefährlich, erleidest du ihre Wirkung einmal, bevor die Reinigung greift. Bei einem verfluchten Ziel schlägt der Zauber unmittelbar bemerkbar fehl.",
           "Label": "Weihen"
         },
         "RebukeEvil": {
-          "Description": "Versetzt alle Wesen mit bösen Absichten in der Nähe in Furcht.\nSkalierung: [0] Verängstigt 1 +1/2",
+          "Description": "Versetze alle nahen Wesen mit bösen Absichten in Furcht.\nEffekt: [0] Verängstigt 1 +1/2.",
           "Label": "Böses Zurückweisen"
+        },
+        "Blessing": {
+          "Description": "Erlaube jedem Verbündeten in einer nahen Zone, Favour wie bei Fokus in Reserven umzuwandeln.",
+          "Label": "Segen"
+        },
+        "BountifulBloom": {
+          "Description": "Pflanzen schießen mannshoch empor und gewähren in der Zone des Zaubernden Deckung 2. Abhängig von Umgebung und vorherrschender Flora lässt sich der Bewuchs später für Nahrung oder Vorräte ernten.",
+          "Label": "Üppige Blüte"
+        },
+        "AllmothersFavour": {
+          "Description": "Gewähre einem Verbündeten in der Zone des Zaubernden 1 Favour. Jeder ausgegebene Punkt Wille erhöht den gewährten Favour um 1, bis zu deinem Tier.",
+          "Label": "Gunst der Allmutter"
         }
       },
       "Type": {
         "Defense": {
-          "Description": "Wenn eine abwehrende Handlung durch einen externen Einfluss ausgelöst wird.",
+          "Description": "Reagiert schützend auf eine Bedrohung.",
           "Label": "Verteidigung"
         },
         "Impact": {
-          "Description": "Das wirkungsvolle Handeln während der eigenen Runde.",
+          "Description": "Setzt die entscheidende Handlung um.",
           "Label": "Wirkung"
         },
         "Position": {
-          "Description": "Wenn der Spielercharakter seine Stellung verändert.",
+          "Description": "Verändert Stand, Lage oder Platzierung auf dem Schlachtfeld.",
           "Label": "Position"
         },
         "Setup": {
-          "Description": "Eine Vorbereitung auf die kommende Wirkung oder auf kommende Reaktionen.",
+          "Description": "Verändert die folgende Wirkungsaktion oder die nächste Runde. Pro Aktivierung steht nur eine Ansatzaktion zur Verfügung; Ansatzaktionen lassen sich daher nicht kombinieren.",
           "Label": "Ansatz"
         }
       }
@@ -185,23 +201,23 @@
     "StatusEffect": {
       "Impaired": {
         "Label": "Beeinträchtigt",
-        "Description": "Das Ziel erleidet einen Malus auf alle Aktionswürfe. Zähigkeit, Reflex und Willenskraft bleiben unverändert."
+        "Description": "Das Ziel erleidet einen Malus in Höhe des Effektwerts auf alle Aktionswürfe. Zähigkeit, Reflex und Willenskraft bleiben unverändert."
       },
       "Exposed": {
         "Label": "Offen",
-        "Description": "Das Ziel erleidet einen Malus auf Parade und Ausweichen."
+        "Description": "Das Ziel erleidet einen Malus in Höhe des Effektwerts auf Parade und Ausweichen."
       },
       "Bound": {
         "Label": "Gebunden",
-        "Description": "Das Ziel erleidet einen Malus auf Schlag und Parade."
+        "Description": "Das Ziel erleidet einen Malus in Höhe des Effektwerts auf Schlag und Parade."
       },
       "Pushed": {
         "Label": "Zurückgedrängt",
-        "Description": "Das Ziel erleidet einen Malus auf Standhalten und Parade."
+        "Description": "Das Ziel erleidet einen Malus in Höhe des Effektwerts auf Standhalten und Parade."
       },
       "Frightened": {
         "Label": "Verängstigt",
-        "Description": "Das Ziel erleidet einen Malus auf Schlag und Kontrolle."
+        "Description": "Das Ziel erleidet einen Malus in Höhe des Effektwerts auf Schlag und Kontrolle."
       },
       "Pinned": {
         "Label": "Festgesetzt",
@@ -213,11 +229,11 @@
       },
       "Fortified": {
         "Label": "Gefestigt",
-        "Description": "Das Ziel erhält einen Bonus auf Standhalten, Parade und Ausweichen."
+        "Description": "Das Ziel erhält einen Bonus in Höhe des Effektwerts auf Standhalten, Parade und Ausweichen."
       },
       "Cover": {
         "Label": "Deckung",
-        "Description": "Das Ziel ist für Fernkämpfer teilweise verdeckt und schwerer zu treffen."
+        "Description": "Das Ziel erhält einen Bonus in Höhe des Effektwerts auf Ausweichen."
       }
     },
     "Codex": {
@@ -256,12 +272,12 @@
       },
       "Reserve": {
         "Grace": {
-          "Description": "Präzision, Bewegung, Koordination.",
+          "Description": "Präzision, Bewegung und Koordination.",
           "Label": "Anmut"
         },
         "Label": "Reserven",
         "Power": {
-          "Description": "Körperliche Stärke und Anstrengung.",
+          "Description": "Körperliche Stärke, Belastbarkeit und Anstrengung.",
           "Label": "Kraft"
         },
         "Strain": {
@@ -289,7 +305,7 @@
           }
         },
         "Will": {
-          "Description": "Fokus, Absicht, mentaler Druck, Durchsetzung.",
+          "Description": "Fokus, Absicht, mentaler Druck und Durchsetzung.",
           "Label": "Wille"
         }
       },
@@ -324,11 +340,11 @@
       },
       "Skill": {
         "Academia": {
-          "Description": "Erwirbt höheres Wissen und analysiert komplexe Zusammenhänge.",
+          "Description": "Ruft gelehrtes Wissen ab und untersucht komplexe Themen.",
           "Label": "Gelehrsamkeit"
         },
         "Aim": {
-          "Description": "Setzt präzise Fernkampfangriffe um.",
+          "Description": "Führt präzise Fernkampfangriffe aus.",
           "Label": "Zielen"
         },
         "Alter": {
@@ -369,7 +385,7 @@
           "Label": "Ausweichen"
         },
         "Folklore": {
-          "Description": "Kennt alles von lokalen Gerüchten bis zu Heldensagen und begreift Traditionen und ihre Bezüge.",
+          "Description": "Kennt örtliche Geschichten, Sagen, Traditionen und ihre Zusammenhänge.",
           "Label": "Sagenkunde"
         },
         "Guard": {
@@ -377,11 +393,11 @@
           "Label": "Parade"
         },
         "HandleBeasts": {
-          "Description": "Führt Reittiere und Tiere, beruhigt oder lenkt Kreaturen.",
+          "Description": "Führt Reit- und Nutztiere, beruhigt oder lenkt Kreaturen.",
           "Label": "Tiere führen"
         },
         "Impress": {
-          "Description": "Formt den Eindruck, den andere von dir haben, durch Auftreten und Wirkung.",
+          "Description": "Formt durch Auftreten oder Darbietung den Eindruck anderer.",
           "Label": "Beeindrucken"
         },
         "Influence": {
@@ -473,119 +489,99 @@
       "Conviction": {
         "Label": "Überzeugungen",
         "Virtue": {
-          "Description": "Fähigkeit zu Disziplin und moralischer Beständigkeit.",
-          "Label": "Tugend",
-          "Steps": {
-            "Constancy": "Beständigkeit",
-            "Discipline": "Disziplin",
-            "Integrity": "Integrität"
-          }
+          "Description": "Disziplin, Beständigkeit, Selbstbeherrschung, moralische Standhaftigkeit und zivilisierte Ordnung.",
+          "Label": "Tugend"
         },
         "Reverence": {
-          "Description": "Einklang mit den naturalistischen Mächten des Kosmos und ihrer Heiligkeit.",
-          "Label": "Ehrfurcht",
-          "Steps": {
-            "Presence": "Präsenz",
-            "Renewal": "Erneuerung",
-            "Stewardship": "Verantwortung"
-          }
+          "Description": "Ehrfurcht, Grenzen, Tabus, Schutz, alte Mächte, Natur, Geister und Orte.",
+          "Label": "Ehrfurcht"
         }
       },
       "Corruption": {
         "Label": "Verderbnis",
         "Vice": {
-          "Description": "Zug zu Impuls, Schwäche und Selbstvergnügen.",
-          "Label": "Laster",
-          "Steps": {
-            "Decay": "Verfall",
-            "Depravity": "Verderbtheit",
-            "Indulgence": "Genuss"
-          }
+          "Description": "Teuflische Verderbnis durch Versuchung, Selbstrechtfertigung, Verstrickung, Schuld, Verträge, Status, Besitz, Beziehungen, Ruf und Abhängigkeit.",
+          "Label": "Laster"
         },
         "Ruin": {
-          "Description": "Bruch, Verfall, das Zerbrechen des Selbst.",
-          "Label": "Ruin",
-          "Steps": {
-            "Desire": "Begierde",
-            "Despair": "Verzweiflung",
-            "Righteousness": "Selbstgerechtigkeit"
-          }
+          "Description": "Abyssale Verderbnis durch Zerstörung, Entweihung, Hunger, Auflösung, Mutation, Kontrollverlust und Verdammnis.",
+          "Label": "Ruin"
         }
       }
     },
     "Attunement": {
       "Blackmagic": {
-        "Description": "Der Zauberer legt ein Stück seiner Lebenskraft in den Zauber.",
+        "Description": "Gib 1 Kraft aus, um Lebenskraft in eine Manifestation zu legen und +2 Manifestieren zu erhalten.",
         "Label": "Schwarze Magie"
       },
       "Stormcaller": {
-        "Description": "Der Zaubernde bindet Sturmenergie an seinen Willen und stärkt Blitzmagie.",
+        "Description": "Gib 1 Wille aus, um Sturmenergie an einen Blitzzauber zu binden und +2 auf seinen Wurf zu erhalten.",
         "Label": "Sturmruf"
       },
       "Emanation": {
-        "Description": "Der Zauber breitet sich auf alle gültigen Ziele in einer Zone aus, trifft Verbündete und Feinde gleichermaßen und ist auf einen Erfolgsgrad begrenzt.",
+        "Description": "Gib 1 Wille aus, um alle gültigen Ziele in einer Zone zu treffen, Verbündete wie Gegner. Werte den Effekt nur mit einem Erfolgsgrad aus.",
         "Label": "Ausstrahlung"
       }
     },
     "Form": {
       "BreakStance": {
-        "Description": "Verwandelt einen schweren Schlag in einen stellungsbrechenden Hieb, der das Ziel offener zurücklässt.",
+        "Description": "Gib 1 Kraft aus, um einen Statuseffekt pro Erfolg um 1 zu verringern.",
         "Label": "Standbruch"
       },
       "Counterguard": {
-        "Description": "Gekonntes Abfangen eines gegnerischen Angriffs, das den Hebelarm der Waffe nutzt.",
+        "Description": "Gib 1 Anmut aus, um mit dem Hebel der Waffe +2 Parade zu erhalten.",
         "Label": "Gegenwache"
       },
       "Drag": {
-        "Description": "Die Waffe verfügt über einen Haken, mit dem du einen Gegner heranziehen kannst, anstatt ihn wegzudrücken.",
+        "Description": "Gib 1 Anmut aus, um +1 Stoßen zu erhalten und das Ziel heranzuziehen, statt es wegzudrängen.",
         "Label": "Heranziehen"
       },
       "Deny": {
-        "Description": "Bei einer erfolgreichen Parade verursacht der erste Erfolg Gebunden 1.",
+        "Description": "Gib 1 Anmut aus. Bei einer erfolgreichen Parade verursacht der erste Erfolg Gebunden 1.",
         "Label": "Verwehren"
       },
       "Intercept": {
-        "Description": "Bei einer erfolgreichen Parade verursacht der erste Erfolg Gebunden 1.",
+        "Description": "Gib 2 Anmut aus. Bei einer erfolgreichen Parade verursacht der erste Erfolg Gebunden 1.",
         "Label": "Abfangen"
       },
       "PowerStrike": {
-        "Description": "Gibt Kraft aus, um einen Schlag wesentlich härter treffen zu lassen als gewöhnlich.",
+        "Description": "Gib 1 Kraft aus, um +2 Schlag zu erhalten.",
         "Label": "Kraftschlag"
       },
       "PrecisionThrust": {
-        "Description": "Wandelt einen Schlag in einen genauen Stoß, der kurzzeitig zusätzliche Treffgenauigkeit gewinnt.",
+        "Description": "Gib 1 Anmut aus, um mit einem präzisen Stoß +2 Schlag zu erhalten.",
         "Label": "Präzisionsstoß"
       },
       "Quickshot": {
-        "Description": "Der Schütze legt in einer fließenden Bewegung schnell ein Geschoss ein und schießt direkt los. Dadurch kann die Waffe auch im ungeladenen Zustand mit dem Angriff schießen.",
+        "Description": "Gib 1 Anmut aus, um in einer Bewegung zu laden und zu schießen, selbst wenn die Waffe ungeladen beginnt.",
         "Label": "Schnellschuss"
       },
       "SureStrike": {
-        "Description": "Führt kontrollierte, gezielte Hiebe aus.",
+        "Description": "Gib 1 Anmut aus, um +1 Schlag zu erhalten.",
         "Label": "Sicherer Schlag"
       },
       "PushThrough": {
-        "Description": "Treibt ein Stoßen stärker voran und zwingt das Ziel weiter zurück als eine normale Kontrollaktion.",
+        "Description": "Gib 1 Kraft aus, um +2 Stoßen zu erhalten und das Ziel weiter zurückzudrängen.",
         "Label": "Durchdrücken"
       },
       "ShieldCover": {
-        "Description": "Du duckst dich hinter das Schild weg, um dich zu schützen.",
+        "Description": "Gib 1 Anmut aus, um hinter dem Schild +2 Ausweichen zu erhalten.",
         "Label": "Schilddeckung"
       },
       "ShieldBrace": {
-        "Description": "Stemme dich hinter das Schild, um selbst schwere Angriffe abzuwehren.",
+        "Description": "Gib 2 Kraft aus, um dich hinter dem Schild gegen schwere Angriffe zu stemmen.",
         "Label": "Schildstemmen"
       },
       "WardingRunes": {
-        "Description": "Schutzrunen lenken Willenskraft in Widerstand.",
+        "Description": "Gib 1 Wille aus, um durch Schutzrunen +1 auf einen Resistenzwurf zu erhalten.",
         "Label": "Schutzrunen"
       },
       "ShieldPull": {
-        "Description": "Mit der Waffe lässt sich ein Schild aufreißen und sogleich binden.",
+        "Description": "Gib 1 Anmut aus, um durch das Öffnen eines gegnerischen Schilds oder einer Deckung +2 Öffnen zu erhalten.",
         "Label": "Schildreißer"
       },
       "TrippingHook": {
-        "Description": "Hakt mit einem langen Haken in die Extremitäten eines Gegners ein, um ihn aus dem Gleichgewicht zu bringen oder zu Fall zu reißen.",
+        "Description": "Gib 1 Anmut aus, um mit einer Hakenwaffe +2 Öffnen zu erhalten.",
         "Label": "Stolperhaken"
       }
     },
@@ -616,28 +612,28 @@
       },
       "CarryLocation": {
         "Camp": {
-          "Description": "Gegenstände, die im Lager verstaut sind und nicht getragen werden.",
+          "Description": "Ausrüstung, die im Lager liegt und nicht auf den Vorstoß mitgenommen wird.",
           "Label": "Lager"
         },
         "Dropped": {
-          "Description": "Gegenstände am Boden, derzeit nicht nutzbar.",
+          "Description": "Ausrüstung am Boden, die nicht einsatzbereit ist.",
           "Label": "Fallen gelassen"
         },
         "Hand": {
-          "Description": "In der Hand gehalten und sofort verfügbar.",
-          "Label": "Hand"
+          "Description": "Ausrüstung in einer der 2 Hände des Charakters ist sofort verwendbar. Hände können nicht überladen werden.",
+          "Label": "Hände"
         },
         "Label": "Trageort",
         "Pack": {
-          "Description": "Im Pack verstaut und schwerer zugänglich.",
+          "Description": "Ausrüstung im Rucksack mit Kapazität in Höhe von Kraft. Wirf den Rucksack ab und nutze eine Wirkungsaktion, um darauf zuzugreifen. Er kann überladen werden.",
           "Label": "Rucksack"
         },
         "Ready": {
-          "Description": "Freie Gegenstände, die der Charakter griff- bzw. einsatzbereit am Körper trägt.",
+          "Description": "Bis zu 10 PL Ausrüstung in Griffweite. Der Zugriff kostet eine Ansatzaktion. Bereit kann nicht überladen werden.",
           "Label": "Bereit"
         },
         "Worn": {
-          "Description": "Am Körper getragen als Teil der Ausrüstung.",
+          "Description": "Kleidung und Rüstung am Körper mit Kapazität in Höhe von Kraft. Getragen kann überladen werden.",
           "Label": "Getragen"
         }
       },
@@ -674,15 +670,15 @@
         "Label": "Vorbereitungszustand",
         "Prepared": {
           "Label": "Vorbereitet",
-          "Description": "Vorbereitete Zauber sind aktiv und zählen mit ihrer Complexity gegen Will."
+          "Description": "Vorbereitete Zauber sind aktiv; ihre Complexity zählt gegen Wille. Die Auswahl wird normalerweise nur im Lager geändert."
         },
         "Ritual": {
           "Label": "Ritual",
-          "Description": "Der Zauber wurde verinnerlicht, aber kann aktuell nur in einem aufwendigen Ritual vollzogen werden."
+          "Description": "Ritualzauber sind für Rituale bekannt, aber nicht als reguläre Actions aktiv. Ihre gesamte Complexity ist nicht begrenzt."
         },
         "Untrained": {
-          "Label": "Untrained",
-          "Description": "Der Zauber wurde noch nicht verinnerlicht und steht noch nicht zur Verfügung."
+          "Label": "Ungelernt",
+          "Description": "Ungelernte Zauber stehen noch nicht zur Verfügung und zählen nicht gegen Vorbereitungsgrenzen."
         },
         "InvalidDrop": "Ungültiger Vorbereitungszustand für diesen Zauber."
       }

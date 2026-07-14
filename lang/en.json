@@ -23,101 +23,101 @@
     "Action": {
       "Advanced": {
         "LoadArrow": {
-          "Description": "The character sets a new arrow and draws the bowstring.",
+          "Description": "Set a new arrow and draw the bowstring as an Impact action.",
           "Label": "Load Arrow"
         },
         "QuickLoad": {
-          "Description": "With a crossbow's quick-loader, the character spans the string and readies the next bolt.",
-          "Label": "Quick-Load"
+          "Description": "Use a crossbow's quick-loader to span the string and ready the next bolt as a Setup action.",
+          "Label": "Quick Load"
         },
         "RaiseShield": {
-          "Description": "The character positions their shield against melee and ranged attacks.",
+          "Description": "Raise a shield as a Setup action to gain Fortified 1.",
           "Label": "Raise Shield"
         },
         "Shoot": {
-          "Description": "Loose a precise ranged attack with aim and timing.",
+          "Description": "Make a ranged attack with Aim and Grace.",
           "Label": "Shoot"
         },
         "Throw": {
-          "Description": "Hurl a weapon or object to strike at distance.",
+          "Description": "Hurl a weapon or object with Aim and Power.",
           "Label": "Throw"
         }
       },
       "Base": {
         "Brace": {
-          "Description": "Sets a firm stance; reduces incoming control effects.",
+          "Description": "Resist force, displacement, or control with Brace and Power.",
           "Label": "Brace"
         },
         "Break": {
-          "Description": "Shakes off negative states; reduces bound/exposed/pushed.",
+          "Description": "Reduce Bound, Exposed, or Pushed with Brace and Power.",
           "Label": "Break"
         },
         "Evade": {
-          "Description": "The character defends by moving out of the line of attack.",
+          "Description": "Avoid an attack by moving clear with Evasion and Grace.",
           "Label": "Evade"
         },
         "Expose": {
-          "Description": "Forces an opening in the opponent’s defense and applies exposed(X).",
+          "Description": "Open a gap in a foe's defense with Control and Grace, applying Exposed.",
           "Label": "Expose"
         },
         "Grapple": {
-          "Description": "Unarmed grab of an opponent.",
+          "Description": "Seize a foe within reach with Control and Power. [0] Pinned; [3] Grabbed.",
           "Label": "Grapple"
         },
         "HoldTheLine": {
-          "Description": "The character positions themself in the path of their enemies. Until their next activation, the character can draw melee attacks onto themself, but can no longer evade.",
+          "Description": "Block the enemy's path. Until your next activation, you may draw melee attacks onto yourself but cannot Evade.",
           "Label": "Hold the Line"
         },
         "Grit": {
-          "Description": "A reflexive brace drawing on the character's raw toughness.",
+          "Description": "Resist pain, poison, or physical hardship with raw toughness.",
           "Label": "Grit"
         },
         "Guard": {
-          "Description": "The character defends by catching or redirecting the attack.",
+          "Description": "Catch or redirect an attack with Guard and Grace.",
           "Label": "Guard"
         },
         "Unleash": {
-          "Description": "Consume the entire current Favour pool through Reverence. Reverence limits the conversion.",
+          "Description": "Channel wildness and older powers. Add the lower of your current Favour and Reverence to your following Impact roll, then set Favour to 0.",
           "Label": "Unleash"
         },
         "Focus": {
-          "Description": "Consume the entire current Favour pool through Virtue. Virtue limits the conversion.",
+          "Description": "Channel discipline and inner order. After your following Impact action, recover reserves equal to the lower of your current Favour and Virtue and distribute them freely before marking Strain triggered by that action. Then set Favour to 0.",
           "Label": "Focus"
         },
         "Move": {
-          "Description": "Shift into a new region of the battlefield.",
+          "Description": "Move to another valid zone.",
           "Label": "Move"
         },
         "Push": {
-          "Description": "Drives the opponent back and applies pushed(X).",
+          "Description": "Drive a foe back with Strike and Power, applying Pushed.",
           "Label": "Push"
         },
         "Resolve": {
-          "Description": "A mental rally that steels the character's will.",
+          "Description": "Resist fear, influence, or despair through mental resolve.",
           "Label": "Resolve"
         },
         "SecurePassage": {
-          "Description": "Stabilize or clear the way so others can move through safely.",
+          "Description": "Spend an Impact action to stabilize or clear a route so others can pass safely.",
           "Label": "Secure Passage"
         },
         "Snap": {
-          "Description": "Quick instinctive reflexes that answer sudden threats.",
+          "Description": "Answer a sudden threat with an immediate reflex.",
           "Label": "Snap"
         },
         "Strike": {
-          "Description": "A direct attack. Extra power increases its force.",
+          "Description": "Make a melee attack with Strike and Power.",
           "Label": "Strike"
         },
         "Switchgear": {
-          "Description": "The character changes which items they are holding.",
+          "Description": "Spend a Setup action to exchange held items with gear in Ready.",
           "Label": "Switchgear"
         },
         "TakeCover": {
-          "Description": "Hunker down and slip into nearby cover.",
+          "Description": "Move into available cover and gain Cover equal to the terrain modifier.",
           "Label": "Take Cover"
         },
         "TraverseHazard": {
-          "Description": "Rush through a dangerous hazard.",
+          "Description": "Cross a hazard safely with Athletics and Grace.",
           "Label": "Traverse Hazard"
         }
       },
@@ -135,49 +135,65 @@
       },
       "Spell": {
         "Arc": {
-          "Description": "Strike a target with a short arc of energy. The target resists with Snap.\nScaling: [1] Impaired +1; [4] Damage +1",
+          "Description": "Strike a target with a short arc of energy. The target resists with Snap.\nEffect: [1] Impaired +1; [4] Damage +1.",
           "Label": "Arc"
         },
+        "Fireball": {
+          "Description": "Manifest hot flame across an entire zone. The flames ignite only volatile material and otherwise go out immediately.\nEffect: [1] Damage 1 +1/2.",
+          "Label": "Fireball"
+        },
         "Glue": {
-          "Description": "Create a small area of adhesive fluid.\nScaling: [1] Impaired 1; [3] Pinned; [5] Grabbed",
+          "Description": "Create a small area of adhesive fluid.\nEffect: [1] Impaired 1; [3] Pinned; [5] Grabbed.",
           "Label": "Glue"
         },
         "DancingLight": {
-          "Description": "You create a floating light that follows you or a willing ally. For 1 additional Will, you may instead command it to follow another creature or move to a point within sight.\nDuration: Until the next Breather",
+          "Description": "Create a floating light that follows you or a willing ally. For 1 additional Will, command it to follow another creature or move to a point within sight.\nDuration: until the next Breather.",
           "Label": "Dancing Light"
         },
         "Prestidigitation": {
-          "Description": "You produce a small, broadly useful magical effect: sparks, a sharp report, a brief scent, a crude image, or a simple object. The effect is no more dangerous than a small firecracker, no more convincing than a crayon drawing, and no more durable than modelling clay.\n\nBefore casting, you may spend Will. The spell can create no more successes than the Will spent this way. If no successes are required, it succeeds automatically.",
+          "Description": "Produce a small magical effect: sparks, a sharp report, a brief scent, a crude image, or a simple object. It is no more dangerous than a firecracker, convincing than a crayon drawing, or durable than modelling clay. Before casting, you may spend Will; the spell cannot create more successes than the Will spent. If no successes are required, it succeeds automatically.",
           "Label": "Prestidigitation"
         },
         "ProtectivePrayer": {
-          "Description": "Grant an ally Fortified for one round. Each point of Will spent increases Fortified by 1, up to your Tier.",
+          "Description": "Grant an ally Fortified for one round. Each Will spent increases Fortified by 1, up to your Tier. No free hand is required.",
           "Label": "Protective Prayer"
         },
         "Sanctify": {
-          "Description": "Cleanse a creature or object of dirt, foul odors, or wetness. A creature covered in a substance is immediately freed of it. If you must touch something hazardous to do so—such as acid, burning oil, or venomous slime—you suffer that substance’s effect once before the cleansing takes hold.\n\nWhen cast on a cursed creature or object, the spell fails in an immediately noticeable way.",
+          "Description": "Cleanse a creature or object of dirt, foul odors, or wetness. A creature covered in a substance is freed of it. If touching the substance is hazardous, suffer its effect once before the cleansing takes hold. On a cursed target, the spell fails in an immediately noticeable way.",
           "Label": "Sanctify"
         },
         "RebukeEvil": {
-          "Description": "Instills dread in all nearby beings with evil intent.\nScaling: [0] Frightened 1 +1/2",
+          "Description": "Instill dread in all nearby beings with evil intent.\nEffect: [0] Frightened 1 +1/2.",
           "Label": "Rebuke Evil"
+        },
+        "Blessing": {
+          "Description": "Allow each ally in a Near Zone to convert Favour into reserves as if using Focus.",
+          "Label": "Blessing"
+        },
+        "BountifulBloom": {
+          "Description": "Plants burst upward and bloom man-high, granting Cover 2 throughout the caster's zone. Depending on the environment and dominant flora, the growth may later be harvested for food or supplies.",
+          "Label": "Bountiful Bloom"
+        },
+        "AllmothersFavour": {
+          "Description": "Grant 1 Favour to an ally in the caster's zone. Each Will spent increases the Favour granted by 1, up to your Tier.",
+          "Label": "Allmother's Favour"
         }
       },
       "Type": {
         "Defense": {
-          "Description": "Protective responses triggered by an external influence or event.",
+          "Description": "Responds protectively to a threat.",
           "Label": "Defense"
         },
         "Impact": {
-          "Description": "Carries out the decisive action during the character's turn.",
+          "Description": "Carries out the decisive action.",
           "Label": "Impact"
         },
         "Position": {
-          "Description": "Shifts the character's stance or placement.",
+          "Description": "Changes stance, location, or placement on the battlefield.",
           "Label": "Position"
         },
         "Setup": {
-          "Description": "Prepares for upcoming impact or reactive options.",
+          "Description": "Changes the following Impact action or the next round. Only one Setup action is available per activation, so Setup actions cannot be combined.",
           "Label": "Setup"
         }
       }
@@ -185,23 +201,23 @@
     "StatusEffect": {
       "Impaired": {
         "Label": "Impaired",
-        "Description": "The target takes a penalty to all Action Rolls. Grit, Snap, and Resolve are unaffected."
+        "Description": "The target takes a penalty equal to the effect's value on all Action rolls. Grit, Snap, and Resolve are unaffected."
       },
       "Exposed": {
         "Label": "Exposed",
-        "Description": "The target takes a penalty to Guard and Evade."
+        "Description": "The target takes a penalty equal to the effect's value on Guard and Evade."
       },
       "Bound": {
         "Label": "Bound",
-        "Description": "The target takes a penalty to Strike and Guard."
+        "Description": "The target takes a penalty equal to the effect's value on Strike and Guard."
       },
       "Pushed": {
         "Label": "Pushed",
-        "Description": "The target takes a penalty to Brace and Guard."
+        "Description": "The target takes a penalty equal to the effect's value on Brace and Guard."
       },
       "Frightened": {
         "Label": "Frightened",
-        "Description": "The target takes a penalty to Strike and Control."
+        "Description": "The target takes a penalty equal to the effect's value on Strike and Control."
       },
       "Pinned": {
         "Label": "Pinned",
@@ -213,11 +229,11 @@
       },
       "Fortified": {
         "Label": "Fortified",
-        "Description": "The target gains a bonus to Brace, Guard, and Evade."
+        "Description": "The target gains a bonus equal to the effect's value on Brace, Guard, and Evade."
       },
       "Cover": {
         "Label": "Cover",
-        "Description": "The target is partially obscured from ranged attackers and harder to hit."
+        "Description": "The target gains a bonus equal to the effect's value on Evasion."
       }
     },
     "Codex": {
@@ -256,12 +272,12 @@
       },
       "Reserve": {
         "Grace": {
-          "Description": "Precision, movement, coordination.",
+          "Description": "Precision, movement, and coordination.",
           "Label": "Grace"
         },
         "Label": "Reserves",
         "Power": {
-          "Description": "Physical force and exertion.",
+          "Description": "Physical strength, endurance, and exertion.",
           "Label": "Power"
         },
         "Strain": {
@@ -289,7 +305,7 @@
           }
         },
         "Will": {
-          "Description": "Focus, intent, mental pressure, assertion.",
+          "Description": "Focus, intent, mental pressure, and assertion.",
           "Label": "Will"
         }
       },
@@ -324,11 +340,11 @@
       },
       "Skill": {
         "Academia": {
-          "Description": "Acquire elevated knowledge and analyze complex connections.",
+          "Description": "Recall scholarly knowledge and analyze complex subjects.",
           "Label": "Academia"
         },
         "Aim": {
-          "Description": "Execute accurate ranged attacks.",
+          "Description": "Make precise ranged attacks.",
           "Label": "Aim"
         },
         "Alter": {
@@ -369,7 +385,7 @@
           "Label": "Evasion"
         },
         "Folklore": {
-          "Description": "Learn and recite everything from local rumors to legendary heroics, grasping traditions and their ties.",
+          "Description": "Recall local tales, legends, traditions, and the links between them.",
           "Label": "Folklore"
         },
         "Guard": {
@@ -377,11 +393,11 @@
           "Label": "Guard"
         },
         "HandleBeasts": {
-          "Description": "Manage mounts and animals, calm or direct creatures.",
+          "Description": "Handle mounts and animals; calm or direct creatures.",
           "Label": "Handle Beasts"
         },
         "Impress": {
-          "Description": "Shape how others perceive you through presence and impact.",
+          "Description": "Shape how others perceive you through presence or display.",
           "Label": "Impress"
         },
         "Influence": {
@@ -473,119 +489,99 @@
       "Conviction": {
         "Label": "Convictions",
         "Virtue": {
-          "Description": "Capacity for discipline and moral steadiness.",
-          "Label": "Virtue",
-          "Steps": {
-            "Constancy": "Constancy",
-            "Discipline": "Discipline",
-            "Integrity": "Integrity"
-          }
+          "Description": "Discipline, constancy, self-control, moral resolve, and civilized order.",
+          "Label": "Virtue"
         },
         "Reverence": {
-          "Description": "Attunement to naturalistic cosmic powers and their sanctity.",
-          "Label": "Reverence",
-          "Steps": {
-            "Presence": "Presence",
-            "Renewal": "Renewal",
-            "Stewardship": "Stewardship"
-          }
+          "Description": "Awe, boundaries, taboos, protection, older powers, nature, spirits, and places.",
+          "Label": "Reverence"
         }
       },
       "Corruption": {
         "Label": "Corruption",
         "Vice": {
-          "Description": "Pull toward impulse, weakness, self-indulgence.",
-          "Label": "Vice",
-          "Steps": {
-            "Decay": "Decay",
-            "Depravity": "Depravity",
-            "Indulgence": "Indulgence"
-          }
+          "Description": "Infernal corruption through temptation, self-justification, entanglement, guilt, bargains, status, possessions, relationships, reputation, and dependence.",
+          "Label": "Vice"
         },
         "Ruin": {
-          "Description": "Fracture, decay, the breaking of the self.",
-          "Label": "Ruin",
-          "Steps": {
-            "Desire": "Desire",
-            "Despair": "Despair",
-            "Righteousness": "Righteousness"
-          }
+          "Description": "Abyssal corruption through destruction, desecration, hunger, dissolution, mutation, loss of control, and damnation.",
+          "Label": "Ruin"
         }
       }
     },
     "Attunement": {
       "Blackmagic": {
-        "Description": "The caster folds a sliver of their life force into the spell.",
+        "Description": "Spend 1 Power to fold life force into a manifestation and gain +2 Manifest.",
         "Label": "Blackmagic"
       },
       "Stormcaller": {
-        "Description": "The caster binds storm energy to their will, sharpening lightning spells.",
+        "Description": "Spend 1 Will to bind storm energy to a lightning spell and gain +2 to its roll.",
         "Label": "Stormcaller"
       },
       "Emanation": {
-        "Description": "The caster spreads a spell to all valid targets in a zone, allies and enemies alike, limiting the effect to a single degree of success.",
+        "Description": "Spend 1 Will to affect all valid targets in a zone, allies and enemies alike. Resolve the effect at only one degree of success.",
         "Label": "Emanation"
       }
     },
     "Form": {
       "BreakStance": {
-        "Description": "Turn a heavy strike into a stance-breaking blow that leaves the target more exposed.",
+        "Description": "Spend 1 Power to reduce a status effect by 1 per success.",
         "Label": "Break Stance"
       },
       "Counterguard": {
-        "Description": "Skillfully catch an enemy attack by using the weapon's leverage.",
+        "Description": "Spend 1 Grace to gain +2 Guard with the weapon's leverage.",
         "Label": "Counterguard"
       },
       "Drag": {
-        "Description": "Use the weapon’s hook to yank a target toward you instead of shoving them away.",
+        "Description": "Spend 1 Grace to gain +1 Push and pull the target toward you instead of driving it away.",
         "Label": "Drag"
       },
       "Deny": {
-        "Description": "On a successful Guard, the first success applies Bound 1.",
+        "Description": "Spend 1 Grace. On a successful Guard, the first success applies Bound 1.",
         "Label": "Deny"
       },
       "Intercept": {
-        "Description": "On a successful Guard, the first success applies Bound 1.",
+        "Description": "Spend 2 Grace. On a successful Guard, the first success applies Bound 1.",
         "Label": "Intercept"
       },
       "PowerStrike": {
-        "Description": "Spend power to make a strike hit much harder than usual.",
+        "Description": "Spend 1 Power to gain +2 Strike.",
         "Label": "Power Strike"
       },
       "PrecisionThrust": {
-        "Description": "Turn a strike into a precise thrust that gains extra accuracy for a brief moment.",
+        "Description": "Spend 1 Grace to gain +2 Strike with a precise thrust.",
         "Label": "Precision Thrust"
       },
       "Quickshot": {
-        "Description": "The shooter loads a projectile in one flowing motion and fires immediately. This allows the weapon to shoot with the attack even while unloaded.",
+        "Description": "Spend 1 Grace to load and shoot in one motion, even when the weapon begins unloaded.",
         "Label": "Quickshot"
       },
       "SureStrike": {
-        "Description": "Deliver controlled, deliberate strikes with careful aim.",
+        "Description": "Spend 1 Grace to gain +1 Strike.",
         "Label": "Sure Strike"
       },
       "PushThrough": {
-        "Description": "Drive a push harder, forcing the target back farther than a normal control move would.",
+        "Description": "Spend 1 Power to gain +2 Push and drive the target farther back.",
         "Label": "Push Through"
       },
       "ShieldCover": {
-        "Description": "Duck behind the shield to cover yourself from harm.",
+        "Description": "Spend 1 Grace to gain +2 Evasion behind the shield.",
         "Label": "Shield Cover"
       },
       "ShieldBrace": {
-        "Description": "Brace behind the shield to block even heavy strikes.",
+        "Description": "Spend 2 Power to brace behind the shield against heavy attacks.",
         "Label": "Shield Brace"
       },
       "WardingRunes": {
-        "Description": "Protective runes channel willpower into resistance.",
+        "Description": "Spend 1 Will to gain +1 on a Resistance roll through protective runes.",
         "Label": "Warding Runes"
       },
       "ShieldPull": {
-        "Description": "Rip open and bind an opponent’s shield with the weapon’s leverage.",
+        "Description": "Spend 1 Grace to gain +2 Expose by opening an opponent's shield or cover.",
         "Label": "Shield Pull"
       },
       "TrippingHook": {
-        "Description": "Catch the extremities of a foe with a long hook to wrench them off balance or send them sprawling.",
+        "Description": "Spend 1 Grace to gain +2 Expose by catching a foe with a hooked weapon.",
         "Label": "Tripping Hook"
       }
     },
@@ -616,28 +612,28 @@
       },
       "CarryLocation": {
         "Camp": {
-          "Description": "Items stored at camp and not carried.",
+          "Description": "Gear stored at camp and not carried on an expedition.",
           "Label": "Camp"
         },
         "Dropped": {
-          "Description": "Items on the ground and not currently usable.",
+          "Description": "Gear on the ground and not ready for use.",
           "Label": "Dropped"
         },
         "Hand": {
-          "Description": "Items held in hand and immediately available.",
-          "Label": "Hand"
+          "Description": "Gear held in either of the character's 2 hands and immediately usable. Hands cannot be overloaded.",
+          "Label": "Hands"
         },
         "Label": "Carry location",
         "Pack": {
-          "Description": "Items stored in a pack and harder to access.",
-          "Label": "Pack"
+          "Description": "Gear stored in the Backpack, with capacity equal to Power. Drop the Backpack, then spend an Impact action to access it. It can be overloaded.",
+          "Label": "Backpack"
         },
         "Ready": {
-          "Description": "Loose items carried on the body, ready to grab or use.",
+          "Description": "Up to 10 PL of gear carried within easy reach. Accessing it costs a Setup action. Ready cannot be overloaded.",
           "Label": "Ready"
         },
         "Worn": {
-          "Description": "Items worn on the body as part of the outfit.",
+          "Description": "Clothing and armor worn on the body, with capacity equal to Power. Worn can be overloaded.",
           "Label": "Worn"
         }
       },
@@ -674,15 +670,15 @@
         "Label": "Preparation state",
         "Prepared": {
           "Label": "Prepared",
-          "Description": "Prepared spells are active and count against Will by complexity."
+          "Description": "Prepared spells are active; their Complexity counts against Will. The selection normally changes only in camp."
         },
         "Ritual": {
           "Label": "Ritual",
-          "Description": "Ritual spells are known for ritual use, inactive, and have no size limit."
+          "Description": "Ritual spells are known for ritual use but inactive as regular actions. Their total Complexity is not limited."
         },
         "Untrained": {
           "Label": "Untrained",
-          "Description": "Untrained spells are inactive and have no size limit."
+          "Description": "Untrained spells are not yet available and do not count against preparation limits."
         },
         "InvalidDrop": "Invalid preparation state for this spell."
       }
