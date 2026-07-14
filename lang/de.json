@@ -31,7 +31,7 @@
           "Label": "Schnellladen"
         },
         "RaiseShield": {
-          "Description": "Hebe als Ansatzaktion einen Schild, um +1 Parade und +1 Ausweichen zu erhalten.",
+          "Description": "Hebe als Ansatzaktion einen Schild, um Gefestigt 1 zu erhalten.",
           "Label": "Schild heben"
         },
         "Shoot": {
@@ -61,7 +61,7 @@
           "Label": "Öffnen"
         },
         "Grapple": {
-          "Description": "Greife einen Gegner in Reichweite mit Kontrolle und Kraft.",
+          "Description": "Greife einen Gegner in Reichweite mit Kontrolle und Kraft. [0] Festgesetzt; [3] Gepackt.",
           "Label": "Ringen"
         },
         "HoldTheLine": {
@@ -113,7 +113,7 @@
           "Label": "Wechseln"
         },
         "TakeCover": {
-          "Description": "Bewege dich in verfügbare Deckung.",
+          "Description": "Bewege dich in verfügbare Deckung und erhalte Deckung in Höhe des Geländemodifikators.",
           "Label": "In Deckung gehen"
         },
         "TraverseHazard": {
@@ -490,42 +490,22 @@
         "Label": "Überzeugungen",
         "Virtue": {
           "Description": "Disziplin, Beständigkeit, Selbstbeherrschung, moralische Standhaftigkeit und zivilisierte Ordnung.",
-          "Label": "Tugend",
-          "Steps": {
-            "Constancy": "Beständigkeit",
-            "Discipline": "Disziplin",
-            "Integrity": "Integrität"
-          }
+          "Label": "Tugend"
         },
         "Reverence": {
           "Description": "Ehrfurcht, Grenzen, Tabus, Schutz, alte Mächte, Natur, Geister und Orte.",
-          "Label": "Ehrfurcht",
-          "Steps": {
-            "Presence": "Präsenz",
-            "Renewal": "Erneuerung",
-            "Stewardship": "Verantwortung"
-          }
+          "Label": "Ehrfurcht"
         }
       },
       "Corruption": {
         "Label": "Verderbnis",
         "Vice": {
           "Description": "Teuflische Verderbnis durch Versuchung, Selbstrechtfertigung, Verstrickung, Schuld, Verträge, Status, Besitz, Beziehungen, Ruf und Abhängigkeit.",
-          "Label": "Laster",
-          "Steps": {
-            "Decay": "Verfall",
-            "Depravity": "Verderbtheit",
-            "Indulgence": "Genuss"
-          }
+          "Label": "Laster"
         },
         "Ruin": {
           "Description": "Abyssale Verderbnis durch Zerstörung, Entweihung, Hunger, Auflösung, Mutation, Kontrollverlust und Verdammnis.",
-          "Label": "Ruin",
-          "Steps": {
-            "Desire": "Begierde",
-            "Despair": "Verzweiflung",
-            "Righteousness": "Selbstgerechtigkeit"
-          }
+          "Label": "Ruin"
         }
       }
     },
@@ -545,7 +525,7 @@
     },
     "Form": {
       "BreakStance": {
-        "Description": "Gib 1 Kraft aus, um einen Schlag in einen stellungsbrechenden Hieb zu verwandeln.",
+        "Description": "Gib 1 Kraft aus, um einen Statuseffekt pro Erfolg um 1 zu verringern.",
         "Label": "Standbruch"
       },
       "Counterguard": {
@@ -597,7 +577,7 @@
         "Label": "Schutzrunen"
       },
       "ShieldPull": {
-        "Description": "Gib 1 Anmut aus, um +2 beim Binden oder Aufreißen eines Schilds oder einer Deckung zu erhalten.",
+        "Description": "Gib 1 Anmut aus, um durch das Öffnen eines gegnerischen Schilds oder einer Deckung +2 Öffnen zu erhalten.",
         "Label": "Schildreißer"
       },
       "TrippingHook": {
