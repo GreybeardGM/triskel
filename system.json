@@ -2,7 +2,7 @@
   "id": "triskel",
   "title": "Triskel",
   "description": "Triskel Playtest",
-  "version": "0.1.0",
+  "version": "0.1.0-dev.1",
   "type": "system",
   "compatibility": {
     "minimum": "13",
