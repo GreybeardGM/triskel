@@ -484,7 +484,22 @@
       },
       "Type": {
         "Character": "Spielercharakter",
-        "NPC": "NSC"
+        "NPC": "NSC",
+        "Party": "Gruppe"
+      },
+      "Party": {
+        "Members": "Gruppenmitglieder",
+        "Consumption": "Gruppenverbrauch",
+        "DropHint": "Spielercharaktere hierher ziehen.",
+        "CompanionDropHint": "Companions hierher ziehen.",
+        "NoCompanions": "Diese Gruppe hat noch keine Companions.",
+        "Empty": "Diese Gruppe hat noch keine Mitglieder.",
+        "Active": "{name} ist aktiv",
+        "Remove": "{name} aus der Gruppe entfernen",
+        "Unavailable": "Spielercharakter nicht verfügbar",
+        "InvalidDrop": "Füge der Gruppe einen Spielercharakter hinzu.",
+        "InvalidCompanionDrop": "Füge der Gruppe hier ein Companion-Item hinzu.",
+        "UpdateFailed": "Die Gruppenliste konnte nicht gespeichert werden."
       },
       "Conviction": {
         "Label": "Überzeugungen",
@@ -640,7 +655,15 @@
       "Category": {
         "Ability": "Fähigkeiten",
         "Gear": "Ausrüstung",
-        "Spell": "Zauber"
+        "Spell": "Zauber",
+        "Companion": "Companions"
+      },
+      "Companion": {
+        "Role": "Rolle",
+        "Complication": "Komplikation",
+        "Consumption": "Verbrauch",
+        "EditPortrait": "Porträt bearbeiten",
+        "Open": "{name} öffnen"
       },
       "Field": {
         "PackLoad": "Packlast",
@@ -656,10 +679,15 @@
         "Edit": "Gegenstand bearbeiten",
         "TypeLabel": "Typ"
       },
+      "Placement": {
+        "PartyCompanionsOnly": "Gruppen können nur Companion-Items aufnehmen.",
+        "CompanionBlockedForCharacter": "Companion-Items sind für Spielercharaktere gesperrt."
+      },
       "Type": {
         "Ability": "Fähigkeit",
         "Gear": "Ausrüstung",
-        "Spell": "Zauber"
+        "Spell": "Zauber",
+        "Companion": "Companion"
       },
       "Tab": {
         "Actions": "Aktionen",

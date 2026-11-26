@@ -1,0 +1,28 @@
+<section class="companion-details">
+  {{#if editable}}
+    <button
+      type="button"
+      class="companion-details__portrait"
+      data-action="editImage"
+      aria-label="{{localize "TRISKEL.Item.Companion.EditPortrait"}}"
+    >
+      <img src="{{document.img}}" alt="" />
+    </button>
+  {{else}}
+    <img class="companion-details__portrait" src="{{document.img}}" alt="{{document.name}}" />
+  {{/if}}
+  <div class="companion-details__fields">
+    <label>
+      <span>{{localize "TRISKEL.Item.Companion.Role"}}</span>
+      <input name="system.role" type="text" value="{{document.system.role}}" />
+    </label>
+    <label>
+      <span>{{localize "TRISKEL.Item.Companion.Complication"}}</span>
+      <textarea name="system.complication" rows="2">{{document.system.complication}}</textarea>
+    </label>
+    <label>
+      <span>{{localize "TRISKEL.Item.Companion.Consumption"}}</span>
+      <input name="system.consumption" type="number" step="any" value="{{document.system.consumption}}" />
+    </label>
+  </div>
+</section>

@@ -2,7 +2,8 @@
   "Actor": {
     "types": [
       "character",
-      "npc"
+      "npc",
+      "party"
     ],
     "templates": {
       "base": {
@@ -112,13 +113,17 @@
           "max": 1
         }
       }
+    },
+    "party": {
+      "members": {}
     }
   },
   "Item": {
     "types": [
       "gear",
       "ability",
-      "spell"
+      "spell",
+      "companion"
     ],
     "templates": {
       "base": {
@@ -175,6 +180,12 @@
         "complexity": 1,
         "preparationState": "untrained"
       }
+    },
+    "companion": {
+      "active": true,
+      "role": "",
+      "complication": "",
+      "consumption": 0
     }
   }
 }

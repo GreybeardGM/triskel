@@ -484,7 +484,22 @@
       },
       "Type": {
         "Character": "Player Character",
-        "NPC": "NPC"
+        "NPC": "NPC",
+        "Party": "Party"
+      },
+      "Party": {
+        "Members": "Party members",
+        "Consumption": "Party consumption",
+        "DropHint": "Drag player characters here.",
+        "CompanionDropHint": "Drag companions here.",
+        "NoCompanions": "This party has no companions yet.",
+        "Empty": "This party has no members yet.",
+        "Active": "{name} is active",
+        "Remove": "Remove {name} from the party",
+        "Unavailable": "Player character unavailable",
+        "InvalidDrop": "Drop a player character to add them to the party.",
+        "InvalidCompanionDrop": "Drop a companion item here to add it to the party.",
+        "UpdateFailed": "The party roster could not be saved."
       },
       "Conviction": {
         "Label": "Convictions",
@@ -640,7 +655,15 @@
       "Category": {
         "Ability": "Abilities",
         "Gear": "Gear",
-        "Spell": "Spells"
+        "Spell": "Spells",
+        "Companion": "Companions"
+      },
+      "Companion": {
+        "Role": "Role",
+        "Complication": "Complication",
+        "Consumption": "Consumption",
+        "EditPortrait": "Edit portrait",
+        "Open": "Open {name}"
       },
       "Field": {
         "PackLoad": "Pack load",
@@ -656,10 +679,15 @@
         "Edit": "Edit item",
         "TypeLabel": "Type"
       },
+      "Placement": {
+        "PartyCompanionsOnly": "Parties can only hold companion items.",
+        "CompanionBlockedForCharacter": "Companion items are unavailable to player characters."
+      },
       "Type": {
         "Ability": "Ability",
         "Gear": "Gear",
-        "Spell": "Spells"
+        "Spell": "Spells",
+        "Companion": "Companion"
       },
       "Tab": {
         "Actions": "Actions",
