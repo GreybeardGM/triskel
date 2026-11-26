@@ -201,7 +201,7 @@ export const cleanupTriskelTokenBars = token => {
 };
 
 export const drawTriskelTokenBars = token => {
-  if (!token?.actor) {
+  if (!token?.actor || token.actor.type === "party") {
     removeExistingBars(token);
     return;
   }

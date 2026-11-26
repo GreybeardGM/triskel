@@ -23,6 +23,14 @@ const getEmptyPreparedBundle = () => ({
 });
 
 export class TriskelActor extends Actor {
+  get partyMemberEntries() {
+    return Object.entries(this.system.members).filter(([, member]) => member?.uuid);
+  }
+
+  get partyCompanions() {
+    return this.items.filter(item => item.type === "companion");
+  }
+
   /** @override */
   prepareBaseData() {
     super.prepareBaseData();
@@ -32,6 +40,14 @@ export class TriskelActor extends Actor {
   /** @override */
   prepareDerivedData() {
     super.prepareDerivedData();
+    if (this.type === "party") {
+      const companionConsumption = this.partyCompanions.reduce(
+        (total, companion) => total + toFiniteNumber(companion.system.consumption),
+        0
+      );
+      this.system.consumption = this.partyMemberEntries.length + companionConsumption;
+      return;
+    }
 
     // Gebündelte Vorbereitung für abgeleitete Charakterdaten.
     this._prepareCharacterDerivedData();
@@ -239,6 +255,7 @@ export class TriskelActor extends Actor {
     // Grundstruktur für Assets nach Item-Kategorien mit Labeln aufbauen.
     const itemCategories = getTriskelIndex().itemCategories ?? {};
     const assets = Object.entries(itemCategories).reduce((collection, [id, category]) => {
+      if (id === "companion") return collection;
       collection[id] = {
         id,
         label: category.label ?? id,

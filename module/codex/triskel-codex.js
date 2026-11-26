@@ -52,6 +52,11 @@ export const TRISKEL_ITEM_CATEGORIES = [
     id: "spell",
     label: "TRISKEL.Item.Type.Spell",
     labelPlural: "TRISKEL.Item.Category.Spell"
+  },
+  {
+    id: "companion",
+    label: "TRISKEL.Item.Type.Companion",
+    labelPlural: "TRISKEL.Item.Category.Companion"
   }
 ];
 
