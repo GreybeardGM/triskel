@@ -1,10 +1,11 @@
 <section class="party-companions" aria-label="{{localize "TRISKEL.Item.Category.Companion"}}">
   <h2>{{localize "TRISKEL.Item.Category.Companion"}}</h2>
   {{#if companions.length}}
-    <div class="party-roster__member party-roster__member--companion party-companions__columns" aria-hidden="true">
+    <div class="party-roster__member party-roster__member--companion party-roster__columns" aria-hidden="true">
+      <span>{{localize "TRISKEL.Misc.Sheet.Name"}}</span>
       <span>{{localize "TRISKEL.Item.Companion.Role"}}</span>
       <span>{{localize "TRISKEL.Item.Companion.Complication"}}</span>
-      <span>{{localize "TRISKEL.Item.Companion.Consumption"}}</span>
+      <span class="party-roster__cost">{{localize "TRISKEL.Item.Companion.Consumption"}}</span>
     </div>
     <ul class="party-roster__members">
       {{#each companions}}
@@ -19,23 +20,34 @@
             <button
               type="button"
               data-action="openCompanion"
-              aria-label="{{localize "TRISKEL.Item.Companion.Open" name=name}}"
-              title="{{localize "TRISKEL.Item.Companion.Open" name=name}}"
+              aria-label="{{localize "TRISKEL.Misc.Sheet.Open" name=name}}"
             >
               <img src="{{portrait}}" alt="" />
             </button>
           </span>
+          <span>
+            <button type="button" class="party-roster__open-name" data-action="openCompanion">{{name}}</button>
+          </span>
           <span>{{role}}</span>
           <span class="party-companions__complication">{{complication}}</span>
-          <span>{{consumption}}</span>
+          <span class="party-roster__cost">{{consumption}}</span>
+          {{#if ../editable}}
+            <button
+              type="button"
+              class="party-roster__remove"
+              data-action="removeCompanion"
+              aria-label="{{localize "TRISKEL.Actor.Party.Remove" name=name}}"
+              title="{{localize "TRISKEL.Actor.Party.Remove" name=name}}"
+            >
+              <i class="fa-solid fa-trash" aria-hidden="true"></i>
+            </button>
+          {{/if}}
         </li>
       {{/each}}
     </ul>
-  {{/if}}
-
-  {{#if editable}}
+  {{else if editable}}
     <p class="party-roster__hint">{{localize "TRISKEL.Actor.Party.CompanionDropHint"}}</p>
-  {{else unless companions.length}}
-    <p class="party-roster__hint">{{localize "TRISKEL.Actor.Party.NoCompanions"}}</p>
+  {{else}}
+    <p>{{localize "TRISKEL.Actor.Party.NoCompanions"}}</p>
   {{/if}}
 </section>

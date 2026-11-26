@@ -489,6 +489,7 @@
       },
       "Party": {
         "Members": "Party members",
+        "MemberClass": "Class",
         "Consumption": "Party consumption",
         "DropHint": "Drag player characters here.",
         "CompanionDropHint": "Drag companions here.",
@@ -661,9 +662,7 @@
       "Companion": {
         "Role": "Role",
         "Complication": "Complication",
-        "Consumption": "Consumption",
-        "EditPortrait": "Edit portrait",
-        "Open": "Open {name}"
+        "Consumption": "Consumption"
       },
       "Field": {
         "PackLoad": "Pack load",
@@ -713,6 +712,9 @@
     },
     "Misc": {
       "Sheet": {
+        "EditPortrait": "Edit portrait",
+        "Name": "Name",
+        "Open": "Open {name}",
         "Item": "Triskel Item",
         "NPC": "NPC",
         "PlayerCharacter": "Player Character"

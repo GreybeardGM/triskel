@@ -3,6 +3,11 @@
     <strong>{{localize "TRISKEL.Actor.Party.Consumption"}}</strong> {{consumption}}
   </p>
   {{#if members.length}}
+    <div class="party-roster__member party-roster__columns" aria-hidden="true">
+      <span>{{localize "TRISKEL.Misc.Sheet.Name"}}</span>
+      <span>{{localize "TRISKEL.Actor.Party.MemberClass"}}</span>
+      <span class="party-roster__cost">{{localize "TRISKEL.Item.Companion.Consumption"}}</span>
+    </div>
     <ul class="party-roster__members">
       {{#each members}}
         <li class="party-roster__member" data-member-key="{{key}}">
@@ -14,13 +19,29 @@
             {{#unless ../editable}}disabled{{/unless}}
           />
           <span class="party-roster__portrait">
-            {{#if portrait}}<img src="{{portrait}}" alt="" />{{/if}}
+            {{#if portrait}}
+              <button
+                type="button"
+                data-action="openPartyMember"
+                aria-label="{{localize "TRISKEL.Misc.Sheet.Open" name=name}}"
+              >
+                <img src="{{portrait}}" alt="" />
+              </button>
+            {{/if}}
           </span>
-          <span class="party-roster__name">{{name}}</span>
-          <span class="party-roster__class">{{className}}</span>
+          <span>
+            {{#if available}}
+              <button type="button" class="party-roster__open-name" data-action="openPartyMember">{{name}}</button>
+            {{else}}
+              {{name}}
+            {{/if}}
+          </span>
+          <span>{{className}}</span>
+          <span class="party-roster__cost">{{../memberConsumption}}</span>
           {{#if ../editable}}
             <button
               type="button"
+              class="party-roster__remove"
               data-action="removePartyMember"
               aria-label="{{localize "TRISKEL.Actor.Party.Remove" name=name}}"
               title="{{localize "TRISKEL.Actor.Party.Remove" name=name}}"
@@ -31,11 +52,9 @@
         </li>
       {{/each}}
     </ul>
-  {{/if}}
-
-  {{#if editable}}
+  {{else if editable}}
     <p class="party-roster__hint">{{localize "TRISKEL.Actor.Party.DropHint"}}</p>
-  {{else unless members.length}}
-    <p class="party-roster__hint">{{localize "TRISKEL.Actor.Party.Empty"}}</p>
+  {{else}}
+    <p>{{localize "TRISKEL.Actor.Party.Empty"}}</p>
   {{/if}}
 </section>

@@ -60,6 +60,8 @@ export const TRISKEL_ITEM_CATEGORIES = [
   }
 ];
 
+export const TRISKEL_PARTY_MEMBER_CONSUMPTION = 1;
+
 export const TRISKEL_ACTION_CATEGORIES = [
   {
     id: "combat",

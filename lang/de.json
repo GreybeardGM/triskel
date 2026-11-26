@@ -489,6 +489,7 @@
       },
       "Party": {
         "Members": "Gruppenmitglieder",
+        "MemberClass": "Klasse",
         "Consumption": "Gruppenverbrauch",
         "DropHint": "Spielercharaktere hierher ziehen.",
         "CompanionDropHint": "Companions hierher ziehen.",
@@ -661,9 +662,7 @@
       "Companion": {
         "Role": "Rolle",
         "Complication": "Komplikation",
-        "Consumption": "Verbrauch",
-        "EditPortrait": "Porträt bearbeiten",
-        "Open": "{name} öffnen"
+        "Consumption": "Verbrauch"
       },
       "Field": {
         "PackLoad": "Packlast",
@@ -713,6 +712,9 @@
     },
     "Misc": {
       "Sheet": {
+        "EditPortrait": "Porträt bearbeiten",
+        "Name": "Name",
+        "Open": "{name} öffnen",
         "Item": "Triskel-Gegenstand",
         "NPC": "NSC",
         "PlayerCharacter": "Spielercharakter"
