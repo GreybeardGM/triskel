@@ -20,6 +20,9 @@ export class CompanionSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   };
 
   static PARTS = {
+    header: {
+      template: "systems/triskel/templates/shared/profile-header.hbs"
+    },
     details: {
       template: "systems/triskel/templates/item/companion-details.hbs"
     }

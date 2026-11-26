@@ -1,4 +1,5 @@
-import { getItemFromTarget } from "./sheet-helpers.js";
+import { TRISKEL_PARTY_MEMBER_CONSUMPTION } from "../codex/triskel-codex.js";
+import { getItemFromTarget, onEditImage } from "./sheet-helpers.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -11,10 +12,17 @@ async function resolveCharacter(uuid) {
 
 export class PartySheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
+    tag: "form",
     classes: ["triskel", "sheet", "actor", "party"],
+    form: {
+      submitOnChange: true
+    },
     actions: {
+      editImage: onEditImage,
+      openPartyMember: this.#onOpenMember,
       removePartyMember: this.#onRemoveMember,
-      openCompanion: this.#onOpenCompanion
+      openCompanion: this.#onOpenCompanion,
+      removeCompanion: this.#onRemoveCompanion
     },
     window: {
       resizable: true,
@@ -27,6 +35,9 @@ export class PartySheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   static PARTS = {
+    header: {
+      template: "systems/triskel/templates/shared/profile-header.hbs"
+    },
     roster: {
       template: "systems/triskel/templates/actor/party-roster.hbs"
     },
@@ -38,10 +49,12 @@ export class PartySheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.consumption = this.document.system.consumption;
+    context.memberConsumption = TRISKEL_PARTY_MEMBER_CONSUMPTION;
     context.members = await Promise.all(this.document.partyMemberEntries.map(async ([key, member]) => {
       const character = await resolveCharacter(member.uuid);
       return {
         key,
+        available: Boolean(character),
         active: member.active !== false,
         portrait: character?.img,
         name: character ? character.name : game.i18n.localize("TRISKEL.Actor.Party.Unavailable"),
@@ -148,6 +161,22 @@ export class PartySheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onOpenCompanion(event, target) {
     const companion = getItemFromTarget(this, target);
     if (companion?.type === "companion") await companion.sheet?.render(true);
+  }
+
+  static async #onOpenMember(event, target) {
+    const key = target.closest("[data-member-key]").dataset.memberKey;
+    const member = this.document.system.members[key];
+    if (!member?.uuid) return;
+
+    const character = await resolveCharacter(member.uuid);
+    await character?.sheet?.render(true);
+  }
+
+  static async #onRemoveCompanion(event, target) {
+    if (!this.isEditable) return;
+    const companion = getItemFromTarget(this, target);
+    if (companion?.type !== "companion") return;
+    await this.#saveRosterChange(() => this.document.deleteEmbeddedDocuments("Item", [companion.id]));
   }
 
   static async #onRemoveMember(event, target) {

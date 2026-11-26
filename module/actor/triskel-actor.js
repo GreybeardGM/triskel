@@ -6,6 +6,7 @@ import {
   toFiniteNumber
 } from "../util/normalization.js";
 import { chatOutput } from "../util/chat-output.js";
+import { TRISKEL_PARTY_MEMBER_CONSUMPTION } from "../codex/triskel-codex.js";
 import { TriskelDieTerm } from "../dice/triskel-die-term.js";
 import { getCachedCollator } from "../util/collator.js";
 import { getTriskelCodex, getTriskelIndex } from "./sheet-helpers.js";
@@ -45,7 +46,7 @@ export class TriskelActor extends Actor {
         (total, companion) => total + toFiniteNumber(companion.system.consumption),
         0
       );
-      this.system.consumption = this.partyMemberEntries.length + companionConsumption;
+      this.system.consumption = this.partyMemberEntries.length * TRISKEL_PARTY_MEMBER_CONSUMPTION + companionConsumption;
       return;
     }
 

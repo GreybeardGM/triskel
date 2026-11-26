@@ -1,0 +1,22 @@
+<header class="sheet-profile">
+  {{#if editable}}
+    <button
+      type="button"
+      class="sheet-profile__portrait"
+      data-action="editImage"
+      aria-label="{{localize "TRISKEL.Misc.Sheet.EditPortrait"}}"
+    >
+      <img src="{{document.img}}" alt="" />
+    </button>
+  {{else}}
+    <img class="sheet-profile__portrait" src="{{document.img}}" alt="" />
+  {{/if}}
+  <input
+    class="sheet-profile__name"
+    name="name"
+    type="text"
+    value="{{document.name}}"
+    aria-label="{{localize "TRISKEL.Misc.Sheet.Name"}}"
+    {{#unless editable}}readonly{{/unless}}
+  />
+</header>
